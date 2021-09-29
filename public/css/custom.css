@@ -1,0 +1,27 @@
+.center{ text-align: center; }
+.forget-password{ font-weight: 600; font-size: 0.8571em; text-transform: uppercase; }
+.card-footer a { text-decoration: none; }
+.select2 { width: 100% !important; }
+.upper {text-transform: uppercase !important; }
+.font-25 {font-size: 25px;}
+.font-12 {font-size: 12px !important;}
+.nounderline, .violet{
+    color: #7c4dff !important;
+}
+.btn-dark {
+    background-color: #68B3C8 !important;
+    border-color: #68B3C8 !important;
+}
+.btn-dark .file-upload {
+    width: 100%;
+    padding: 10px 0px;
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+.profile-img img{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}  
