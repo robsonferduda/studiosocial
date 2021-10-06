@@ -11,13 +11,10 @@ class HashTag{
 
     public function pullMedias()
     {
-        $access_token = "EAAInyDkHeeYBAFIDRakpEhFGUQUrpoJIynjagOP3apS3G4mZARchKcdtU3UcXUdZBrj63BHBYt2LUzPhN9cK3uEmsvJeOH2KR8tAgL3W4Nc3OcjJCFD6jZAqjHsN6aL3zsLEt5vhhwrI2fcAryJw9ZAOwDu1XCB6X36Nik1iRMs04R4nZB6DicjGGU3ZAxp6edr3ehbvNTTwZDZD";
+        $access_token = "EAAInyDkHeeYBAGMurYEoQIuSQQY0QS3MMcPNuwmZA6ocyEwmoQZBwjNIb6jDZAyPOfoI4xI6s4JmP4ZB1ZBaaHFyhgR6tWLBp3QV6cmZAUUJeVvO7KKblo74N7tziyZAKP78y7hcssvQu4AZAviCkoBHTuDCZBpZB7RbUxrW4DYZA6f1p4WKqA12wqGgC6vZBr2kIAgW0y6nHPc1Jq1Q1XTa45Di";
         $id_user_id = '17841437726599322';
         $after = '';
 
-        while (@ob_end_flush());      
-        ob_implicit_flush(true);
-    
         $ig_hash_tag = new IGHashTag($id_user_id);
         $params = [
             'q' => 'trilhasemsc',
@@ -42,10 +39,6 @@ class HashTag{
 
             foreach ($medias['data'] as $media) {
 
-                echo "<pre>";
-                print_r($media);
-                echo "<br />";
-
                 $media = Media::updateOrCreate(
                 ['media_id' => $media['id']],    
                 [
@@ -59,8 +52,6 @@ class HashTag{
                     'permalink' => $media['permalink']
                 ]);
             }
-
-            sleep(2);
 
             $after = $ig_hash_tag->getAfter($medias);
 
