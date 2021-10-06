@@ -11,7 +11,7 @@ class HashTag{
 
     public function pullMedias()
     {
-        $access_token = "EAAInyDkHeeYBADjWQ8hZAUZBkZBYLP4y2StgpGenjHtBHqaxvaZCZCyFTeFt8sQDWTyfmRUleiPdmyf2PMjcbzACIS5vtjV5ke9ZCHU8XfbYnZCW7IElVHLZCppNUP2AqMZAhSyKApS4sKJPe6p1ZB8w2042P8fdP7jDdXVVF6xecZBnwZDZD";
+        $access_token = "EAAInyDkHeeYBALHnRHCTB7sH9EcvwITZCnKwowxvfRNtl8md8GdRy9aBZCIOqWJqABYfDWUcuCkB0ljipZBPOW4iHRuIfZAtngULvWZCdLfDcsvrl5Mh2lUYZCRKvzI4HPAOWULl9VjZCNBP2TZAA8AZA0DCcUbrLkK2TWLWKGzdY5AZDZD";
         $id_user_id = '17841437726599322';
         $after = '';
 
