@@ -11,7 +11,7 @@ class HashTag{
 
     public function pullMedias()
     {
-        $access_token = "EAAInyDkHeeYBAGMurYEoQIuSQQY0QS3MMcPNuwmZA6ocyEwmoQZBwjNIb6jDZAyPOfoI4xI6s4JmP4ZB1ZBaaHFyhgR6tWLBp3QV6cmZAUUJeVvO7KKblo74N7tziyZAKP78y7hcssvQu4AZAviCkoBHTuDCZBpZB7RbUxrW4DYZA6f1p4WKqA12wqGgC6vZBr2kIAgW0y6nHPc1Jq1Q1XTa45Di";
+        $access_token = "EAAInyDkHeeYBACjX8cwf471Mu5hIZALOxTUQkZCBwDqng2vIjdyyDZABp1YlH4QgWe6ijLmwSviRJDT7p1D3uQHgZBQG9eu9xzZAHpZB4DZBuNfSZAVL2sQiNswSaw3TLMGYvLWTEOCutU17H8SH60hBZBMGrZBZBIrBuZB1cDrnoa1Ig2NbATDB5Q2CntnMePYZAZBgjezOStdQUUgguSoGHvyRCN";
         $id_user_id = '17841437726599322';
         $after = '';
 
@@ -51,7 +51,7 @@ class HashTag{
                     'timestamp' =>  $media['timestamp'],
                     'permalink' => $media['permalink']
                 ]);
-            }
+            }            
 
             $after = $ig_hash_tag->getAfter($medias);
 
