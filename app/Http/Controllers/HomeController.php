@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,6 +16,7 @@ class HomeController extends Controller
 
     public function index()
     {
-        return view('index');
+        $user = new User();
+        return view('index', compact('user'));
     }
 }
