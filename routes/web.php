@@ -15,5 +15,9 @@ Route::get('relatorios','RelatorioController@index');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
-
 Route::resource('usuario', 'UserController');
+
+Route::get('/test-api', 'TestApiController@test');
+
+
+
