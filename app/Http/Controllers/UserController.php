@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Utils;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
+use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Session;
 
 class UserController extends Controller
@@ -17,7 +19,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $usuarios = User::orderBy('name')->get();
+        $usuarios = User::whereNull('client_id')->orderBy('name')->get();
         return view('usuarios/index', compact('usuarios'));
     }
 
@@ -39,12 +41,74 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        return view('usuarios/editar');
+        $user = User::find($id);
+        return view('usuarios/editar',compact('user'));
     }
 
-    public function destroy(User $user)
+    public function store(UserRequest $request)
     {
-        Flash::warning("Dados de teste! Não é possível excluir o usuário.");
-        return redirect('usuarios');
+        try {
+            
+            User::create($request->all());
+            $retorno = array('flag' => true,
+                             'msg' => "Dados inseridos com sucesso");
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+
+        } catch (Exception $e) {
+            
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao inserir o registro");
+        }
+
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('usuarios')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect('usuario/create')->withInput();
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+        $flag = $request->is_active == true ? true : false;
+        $request->merge(['is_active' => $flag]);
+    
+        try {
+        
+            $user->update($request->all());
+            $retorno = array('flag' => true,
+                             'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+        } catch (Exception $e) {
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao atualizar o registro");
+        }
+
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('usuarios')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect()->route('usuario.edit', $user->id)->withInput();
+        }
+    }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        if($user->delete())
+            Flash::success('<i class="fa fa-check"></i> Usuário <strong>'.$user->name.'</strong> excluído com sucesso');
+        else
+            Flash::error("Erro ao excluir o registro");
+
+        return redirect('usuarios')->withInput();;
     }
 }

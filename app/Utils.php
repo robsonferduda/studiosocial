@@ -73,15 +73,15 @@ class Utils
         switch ($errorCode) {
             
             case '23502':
-                return 'A restrição de valores não nulos foi violada';
+                return '<i class="fa fa-times"></i> A restrição de valores não nulos foi violada';
                 break;
 
             case '23505':
-                return 'Violação de restrição de valor único';
+                return '<i class="fa fa-times"></i> Violação de restrição de valor único';
                 break;
             
             default:
-                return 'Código de erro desconhecido: '.$errorCode;
+                return '<i class="fa fa-times"></i> Código de erro desconhecido: '.$errorCode;
                 break;
         }
     }
