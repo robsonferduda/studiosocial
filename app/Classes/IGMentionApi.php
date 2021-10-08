@@ -5,7 +5,7 @@ namespace App\Classes;
 use App\EndPoints;
 use App\Fields\IGMentionFields;
 
-class IGMention extends IGApi{
+class IGMentionApi extends IGApi{
 
     function __construct(String $id) {
         $this->id = $id;

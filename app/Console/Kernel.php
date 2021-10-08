@@ -4,7 +4,7 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Classes\HashTag;
+use App\Classes\IGHashTag;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Kernel extends ConsoleKernel
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->call(function () {
-            (new HashTag())->pullMedias();
+            (new IGHashTag())->pullMedias();
         })->between('8:00', '22:00');
     }
 

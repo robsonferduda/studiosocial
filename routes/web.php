@@ -19,6 +19,9 @@ Route::get('usuarios','UserController@index');
 Route::resource('clientes', 'ClientController');
 Route::resource('usuario', 'UserController');
 
+Route::get('login/facebook', 'FacebookController@redirectToProvider');
+Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
+
 Route::get('/test-api', 'TestApiController@test');
 
 
