@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
-use Illuminate\Support\Facades\Session;
+use App\Enums\SocialMedia;
+use App\FbAccount;
 use Laravel\Socialite\Facades\Socialite;
 
 class FacebookController extends Controller
@@ -17,6 +17,15 @@ class FacebookController extends Controller
     {
         try {
             $user_facebook = Socialite::driver('facebook')->stateless()->user();
+            
+            $fb_account = FbAccount::created([
+                'social_media_id' => SocialMedia::FACEBOOK,
+                'clients_id' => 1,
+                'name' => $user_facebook->name,
+                'user_id' => $user_facebook->id,
+                'token' => $user_facebook->token,
+                'token_expires' => $user_facebook->expiresIn
+            ]);
             
             dd($user_facebook);
             
