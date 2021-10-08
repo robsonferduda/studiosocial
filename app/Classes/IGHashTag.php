@@ -12,7 +12,7 @@ class IGHashTag{
 
     public function pullMedias()
     {
-        $access_token = Session::get('token');
+        $access_token = 'EAAInyDkHeeYBADUrK195TLh2GbjuL9KStQuvIfO1B9ij2QWzntZCmW6bxm5pN3qktJjCD5nUzopif1Lehdhf8QuZC2DEocIHA4l8ZAaKVeO5J8Aya6VvSMgxcJUJV8RJjKLFxoHPSNLYsPSrP6iiOb8SHIaw1mu';
         $id_user_id = '17841437726599322';
         $after = '';
 
