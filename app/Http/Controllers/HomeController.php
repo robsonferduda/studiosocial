@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -16,7 +17,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        $user = new User();
-        return view('index', compact('user'));
+        $users = User::whereNull('client_id')->count();
+        $clientes = Client::count();
+        return view('index', compact('users','clientes'));
     }
 }

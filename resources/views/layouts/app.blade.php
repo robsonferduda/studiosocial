@@ -38,6 +38,12 @@
                     <p>DASHBOARD</p>
                     </a>
                 </li>
+                <li class="{{ (Session::has('url') and Session::get('url') == 'clientes') ? 'active' : '' }}">
+                  <a href="{{ url('clientes') }}">
+                  <i class="nc-icon nc-briefcase-24"></i>
+                  <p>CLIENTES</p>
+                  </a>
+                </li>
                 <li class="{{ (Session::has('url') and Session::get('url') == 'monitoramento') ? 'active' : '' }}">
                   <a href="{{ url('monitoramento') }}">
                   <i class="nc-icon nc-sound-wave"></i>
@@ -196,6 +202,7 @@
       
       $('#datatable').DataTable({
         "pagingType": "full_numbers",
+        "order": false,
         "lengthMenu": [
           [10, 25, 50, -1],
           [10, 25, 50, "All"]
@@ -203,7 +210,7 @@
         responsive: true,
         language: {
           search: "_INPUT_",
-          searchPlaceholder: "Search records",
+          searchPlaceholder: "Filtrar",
         }
 
       });
