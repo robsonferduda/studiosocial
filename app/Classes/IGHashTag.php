@@ -1,55 +1,61 @@
 <?php
 
 namespace App\Classes;
+use App\Media;
 
-use App\EndPoints;
-
-class IGHashTag extends IGApi{
+class IGHashTag{
 
     function __construct() {
         
     }
 
-    public function getIdHashTag(Array $params): String
+    public function pullMedias()
     {
-        $url = EndPoints::getSearchIdHashTagLink();
-        
-        $response = $this->makeApiCall($url,$params);
+        $access_token = "EAAInyDkHeeYBAG2ewfVGDLHcQVEzB1zpiRNd52RQCZCE8PSTdcnkQFcaftLVm1Nb6EqzPlWzhX8NIDSJ4KDjZADgSl4TKDLBYjHoY4Cbjde7aZB8pdfxF9vS5LJ784ViA34Xl2bPDkVGpTDL1oFZBbcsstP4BdE6LyY8GEaLQfKVeHemjwyT54NyrrLL5seBBdToaSLXrgZDZD";
+        $id_user_id = '17841437726599322';
+        $after = '';
 
-        if($response->successful()) {
-            return $response->json()['data'][0]['id'];
-        }
-        
-        return '';
-    }
-
-    public function getRecentMediaByHashTag(String $id ,Array $params): Array
-    {
-        $url = EndPoints::getRecentMediaByHashTagLink($id);
-    
-        $response = $this->makeApiCall($url,$params);
-        
-        if($response->successful()) {
-            return $response->json();
-        }
-        
-        return [];
-    }
-
-    public function getIGHashTagFields(): String 
-    {
-        $fields = [
-            'caption',
-            'comments_count',
-            'media_product_type',
-            'id',
-            'like_count',
-            'media_type',
-            'media_url',
-            'permalink',
-            'timestamp'
+        $ig_hash_tag = new IGHashTagApi($id_user_id);
+        $params = [
+            'q' => 'trilhasemsc',
+            'access_token' => $access_token,
+            'user_id' =>  $id_user_id,
+            'after' => $after
         ];
 
-        return implode(',',$fields);
+        $ig_hash_tag = new IGHashTagApi();
+        $id_hash_tag = $ig_hash_tag->getIdHashTag($params);
+    
+        do {
+        
+            $params = [
+                'fields' => $ig_hash_tag->getIGHashTagFields(),
+                'access_token' => $access_token,
+                'after' => $after,
+                'user_id' => $id_user_id
+            ];
+
+            $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
+
+            foreach ($medias['data'] as $media) {
+
+                $media = Media::updateOrCreate(
+                ['media_id' => $media['id']],    
+                [
+                    'caption' => $media['caption'],
+                    'comments_count' => $media['comments_count'],
+                    'media_product_type' => $media['media_product_type'],                    
+                    'like_count' => $media['like_count'],
+                    'media_type' => $media['media_type'],
+                    'media_url' => $media['media_url'],
+                    'timestamp' =>  $media['timestamp'],
+                    'permalink' => $media['permalink'],
+                    'client_id' => 1
+                ]);
+            }            
+
+            $after = $ig_hash_tag->getAfter($medias);
+
+        } while($ig_hash_tag->hasAfter($medias));
     }
 }

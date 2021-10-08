@@ -16,6 +16,7 @@ class Media extends Model
                             'media_type',
                             'media_url',
                             'timestamp',
-                            'permalink'
+                            'permalink',
+                            'client_id'
                         ];
 }
