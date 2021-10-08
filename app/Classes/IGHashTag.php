@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 use App\Media;
+use Illuminate\Support\Facades\Session;
 
 class IGHashTag{
 
@@ -11,7 +12,7 @@ class IGHashTag{
 
     public function pullMedias()
     {
-        $access_token = "EAAInyDkHeeYBAG2ewfVGDLHcQVEzB1zpiRNd52RQCZCE8PSTdcnkQFcaftLVm1Nb6EqzPlWzhX8NIDSJ4KDjZADgSl4TKDLBYjHoY4Cbjde7aZB8pdfxF9vS5LJ784ViA34Xl2bPDkVGpTDL1oFZBbcsstP4BdE6LyY8GEaLQfKVeHemjwyT54NyrrLL5seBBdToaSLXrgZDZD";
+        $access_token = Session::get('token');
         $id_user_id = '17841437726599322';
         $after = '';
 

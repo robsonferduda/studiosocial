@@ -1,11 +1,10 @@
 version: "3.7"
 services:
   apache:
-    image: rafael01costa/php:7.3-apache 
+    image: rafael01costa/php:7.3-apache-ssl
     container_name: studiosocial
     restart: always
     expose:
-      - "80"
       - "443"
     volumes:
       - ./:/var/www/html

@@ -18,12 +18,8 @@ class FacebookController extends Controller
         try {
             $user_facebook = Socialite::driver('facebook')->stateless()->user();
             
-            dd($user_facebook);
-
-            Auth::login($user);
-
-            return redirect('login');
-
+            Session::put('token', $$user_facebook->token);
+            
         } catch (Exception $e) {
             var_dump($e->getMessage());
         }
