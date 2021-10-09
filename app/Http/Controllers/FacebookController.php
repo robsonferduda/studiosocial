@@ -49,7 +49,7 @@ class FacebookController extends Controller
     {
         $url = EndPoints::getFBPagesLink();
 
-        $params = ['token' => $token];
+        $params = ['access_token' => $token];
 
         $reponse =  Http::get($url,$params);
 
