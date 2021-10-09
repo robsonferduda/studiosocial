@@ -50,7 +50,7 @@ class FacebookController extends Controller
                 );
 
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
-                dd($ig_business_account);
+                dd($ig_business_account->json());
             }
             
         } catch (Exception $e) {
