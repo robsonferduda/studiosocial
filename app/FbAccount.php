@@ -9,7 +9,7 @@ class FbAccount extends Model
     protected $table = 'fb_accounts';
 
     protected $fillable = [ 'social_media_id',
-                            'clients_id',
+                            'client_id',
                             'name',
                             'user_id',
                             'token',

@@ -10,6 +10,6 @@ class IgPage extends Model
 
     protected $fillable = [ 'name',
                             'page_id',
-                            'fb_pages_id'
+                            'fb_page_id'
                         ];
 }

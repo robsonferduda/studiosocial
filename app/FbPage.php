@@ -10,6 +10,6 @@ class FbPage extends Model
 
     protected $fillable = [ 'name',
                             'page_id',
-                            'fb_accounts_id'
+                            'fb_account_id'
                         ];
 }

@@ -6,6 +6,7 @@ use App\EndPoints;
 use App\Enums\SocialMedia;
 use App\FbAccount;
 use App\FbPage;
+use App\IgPage;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use stdClass;
@@ -30,10 +31,12 @@ class FacebookController extends Controller
             // $user_facebook->name = 'Rafael Costa';
 
             $fb_account = FbAccount::updateOrcreate(
-            ['user_id' => $user_facebook->id],
+            [
+                'user_id' => $user_facebook->id,
+                'client_id' => 1
+            ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
-                'clients_id' => 1,
                 'name' => $user_facebook->name,
                 'token' => $user_facebook->token,
                 'token_expires' => $user_facebook->expiresIn
@@ -43,14 +46,31 @@ class FacebookController extends Controller
 
             foreach ($fbPages['data'] as $fbPage) {
                 $fb_page = FbPage::updateOrCreate(
-                    ['page_id' => $fbPage['id']],
-                    ['fb_accounts_id' => $fb_account->id,
+                    [
+                        'page_id' => $fbPage['id'],
+                        'fb_account_id' => $fb_account->id
+                    ],
+                    [
                      'name' => $fbPage['name']
                     ]
                 );
 
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
-                dd($ig_business_account->json());
+
+                if(isset($ig_business_account['instagram_business_account']['id'])) {
+                    $ig_page = IgPage::updateOrCreate(
+                        [
+                            'page_id' => $ig_business_account['instagram_business_account']['id'],
+                            'fb_page_id' => $fb_page->id
+                        ],
+                        [
+                            'name' => $ig_business_account['instagram_business_account']['username']
+                        ]
+                        );
+
+                }
+
+                
             }
             
         } catch (Exception $e) {
