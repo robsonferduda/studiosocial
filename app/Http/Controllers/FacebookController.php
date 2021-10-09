@@ -43,9 +43,9 @@ class FacebookController extends Controller
 
             foreach ($fbPages['data'] as $fbPage) {
                 $fb_page = FbPage::updateOrCreate(
-                    ['page_id' => $fbPage->id],
+                    ['page_id' => $fbPage['id']],
                     ['fb_accounts_id' => $fb_account->id,
-                     'name' => $fbPage->name
+                     'name' => $fbPage['name']
                     ]
                 );
 
