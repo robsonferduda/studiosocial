@@ -73,7 +73,7 @@ class FacebookController extends Controller
 
         $params = [
                     'access_token' => $token,
-                    'fields' => 'instagram_business_account'
+                    'fields' => 'instagram_business_account{username}'
                   ];
 
         return Http::get($url,$params);
