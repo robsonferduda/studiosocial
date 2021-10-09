@@ -8,6 +8,7 @@ class EndPoints
     const MENTION_URL = '{ig_user_id}/tags';
     const SEARCH_ID_HASHTAG_URL = 'ig_hashtag_search';
     const RECENT_MEDIA_BY_HASHTAG_URL = '{ig_hashtag_id}/recent_media';
+    const FB_PAGES = 'me/accounts';
     
     public static function getMetionsLink($ig_user_id)
     {
@@ -22,5 +23,10 @@ class EndPoints
     public static function getRecentMediaByHashTagLink($ig_hashtag_id)
     {
         return str_replace('{ig_hashtag_id}', urlencode($ig_hashtag_id), static::BASE_URL.static::RECENT_MEDIA_BY_HASHTAG_URL);
+    }
+
+    public static function getFBPagesLink()
+    {
+        return  static::BASE_URL.static::FB_PAGES;
     }
 }
