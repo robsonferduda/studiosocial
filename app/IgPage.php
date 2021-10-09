@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class IgPages extends Model
+class IgPage extends Model
 {
     protected $table = 'ig_pages';
 

@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FbPages extends Model
+class FbPage extends Model
 {
     protected $table = 'fb_pages';
 

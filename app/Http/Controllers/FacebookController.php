@@ -37,8 +37,13 @@ class FacebookController extends Controller
                 'token' => $user_facebook->token,
                 'token_expires' => $user_facebook->expiresIn
             ]);
-            //dd($fb_account);
-            $this->getFBPages($fb_account->token);
+            
+            $fbPages = $this->getFBPages($fb_account->token);
+
+            foreach ($fbPages['data'] as $fbPage) {
+                
+            }
+
             
         } catch (Exception $e) {
             var_dump($e->getMessage());
@@ -51,8 +56,6 @@ class FacebookController extends Controller
 
         $params = ['access_token' => $token];
 
-        $reponse =  Http::get($url,$params);
-
-        dd($reponse->json());
+        return Http::get($url,$params);
     }
 }
