@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\EndPoints;
 use App\Enums\SocialMedia;
 use App\FbAccount;
+use App\FbPage;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 use stdClass;
@@ -41,9 +42,16 @@ class FacebookController extends Controller
             $fbPages = $this->getFBPages($fb_account->token);
 
             foreach ($fbPages['data'] as $fbPage) {
-                
-            }
+                $fb_page = FbPage::updateOrCreate(
+                    ['page_id' => $fbPage->id],
+                    ['fb_accounts_id' => $fb_account->id,
+                     'name' => $fbPage->name
+                    ]
+                );
 
+                $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
+                dd($ig_business_account);
+            }
             
         } catch (Exception $e) {
             var_dump($e->getMessage());
@@ -55,6 +63,18 @@ class FacebookController extends Controller
         $url = EndPoints::getFBPagesLink();
 
         $params = ['access_token' => $token];
+
+        return Http::get($url,$params);
+    }
+
+    private function getIGBusinessAccount(String $fb_page_id, String $token)
+    {
+        $url = EndPoints::getIGBusinessAccountLink($fb_page_id);
+
+        $params = [
+                    'access_token' => $token,
+                    'fields' => 'instagram_business_account'
+                  ];
 
         return Http::get($url,$params);
     }
