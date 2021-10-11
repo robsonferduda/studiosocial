@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
-        })->between('8:00', '22:00');
+        })->hourly();
     }
 
     /**
