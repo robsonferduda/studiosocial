@@ -19,4 +19,9 @@ class Media extends Model
                             'permalink',
                             'client_id'
                         ];
+
+    public function mediaHashtags()
+    {
+        return $this->belongsToMany(Hashtag::class, 'media_hashtag', 'media_id', 'hashtag_id')->withTimestamps();
+    }                        
 }

@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Classes;
+
+use App\Client;
 use App\Media;
-use App\FbAccount;
 
 class IGHashTag{
 
@@ -12,53 +13,68 @@ class IGHashTag{
 
     public function pullMedias()
     {
-        $fbAccount = FbAccount::find(6);
+        $clients = Client::all();
 
-        $access_token = $fbAccount->token;
-        $id_user_id = '17841437726599322';
-        $after = '';
+        foreach ($clients as $client) {
+            foreach ($client->fbAccounts as $fbAccount) {
+                foreach ($fbAccount->fbPages as $fbPage) {
 
-        $ig_hash_tag = new IGHashTagApi($id_user_id);
-        $params = [
-            'q' => 'trilhasemsc',
-            'access_token' => $access_token,
-            'user_id' =>  $id_user_id,
-            'after' => $after
-        ];
+                    if(isset($fbPage->igPage)){
 
-        $ig_hash_tag = new IGHashTagApi();
-        $id_hash_tag = $ig_hash_tag->getIdHashTag($params);
-    
-        do {
+                        $access_token = $fbAccount->token;
+                        $id_user_id = $fbPage->igPage->page_id;
+                        
+                        foreach ($client->hashtags as $hashtag) {                            
+                            $after = '';
+
+                            $ig_hash_tag = new IGHashTagApi($id_user_id);
+                            $params = [
+                                'q' => $hashtag->hashtag,
+                                'access_token' => $access_token,
+                                'user_id' =>  $id_user_id,
+                                'after' => $after
+                            ];
         
-            $params = [
-                'fields' => $ig_hash_tag->getIGHashTagFields(),
-                'access_token' => $access_token,
-                'after' => $after,
-                'user_id' => $id_user_id
-            ];
+                            $ig_hash_tag = new IGHashTagApi();
+                            $id_hash_tag = $ig_hash_tag->getIdHashTag($params);
+                        
+                            do {
+                            
+                                $params = [
+                                    'fields' => $ig_hash_tag->getIGHashTagFields(),
+                                    'access_token' => $access_token,
+                                    'after' => $after,
+                                    'user_id' => $id_user_id
+                                ];
+        
+                                $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
+        
+                                foreach ($medias['data'] as $media) {
+        
+                                    $media = Media::updateOrCreate(
+                                    ['media_id' => $media['id']],    
+                                    [
+                                        'caption' => $media['caption'],
+                                        'comments_count' => $media['comments_count'],
+                                        'media_product_type' => $media['media_product_type'],                    
+                                        'like_count' => $media['like_count'],
+                                        'media_type' => $media['media_type'],
+                                        'media_url' => $media['media_url'],
+                                        'timestamp' =>  $media['timestamp'],
+                                        'permalink' => $media['permalink'],
+                                        'client_id' => $client->id
+                                    ]);
 
-            $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
-
-            foreach ($medias['data'] as $media) {
-
-                $media = Media::updateOrCreate(
-                ['media_id' => $media['id']],    
-                [
-                    'caption' => $media['caption'],
-                    'comments_count' => $media['comments_count'],
-                    'media_product_type' => $media['media_product_type'],                    
-                    'like_count' => $media['like_count'],
-                    'media_type' => $media['media_type'],
-                    'media_url' => $media['media_url'],
-                    'timestamp' =>  $media['timestamp'],
-                    'permalink' => $media['permalink'],
-                    'client_id' => 1
-                ]);
-            }            
-
-            $after = $ig_hash_tag->getAfter($medias);
-
-        } while($ig_hash_tag->hasAfter($medias));
+                                    $media->mediaHashtags()->syncWithoutDetaching($hashtag->id);
+                                }            
+        
+                                $after = $ig_hash_tag->getAfter($medias);
+        
+                            } while($ig_hash_tag->hasAfter($medias));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

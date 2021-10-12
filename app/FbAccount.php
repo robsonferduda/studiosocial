@@ -14,5 +14,9 @@ class FbAccount extends Model
                             'user_id',
                             'token',
                             'token_expires'
-                        ];
+                        ];                      
+    public function fbPages()
+    {
+        return $this->hasMany(FbPage::class, 'fb_account_id', 'id');
+    }                        
 }
