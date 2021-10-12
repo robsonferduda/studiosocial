@@ -15,8 +15,9 @@ Route::get('relatorios','RelatorioController@index');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
+Route::get('clientes','ClientController@index');
 
-Route::resource('clientes', 'ClientController');
+Route::resource('client', 'ClientController');
 Route::resource('usuario', 'UserController');
 
 Route::get('login/facebook', 'FacebookController@redirectToProvider');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
 use App\User;
 use App\Utils;
 use Laracasts\Flash\Flash;
@@ -19,7 +20,8 @@ class UserController extends Controller
 
     public function index()
     {
-        $usuarios = User::whereNull('client_id')->orderBy('name')->get();
+       // $usuarios = User::whereNull('client_id')->orderBy('name')->get();
+        $usuarios = User::all();
         return view('usuarios/index', compact('usuarios'));
     }
 
@@ -48,7 +50,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try {
-            
+            $request->merge(['password' => \Hash::make($request->password)]);
             User::create($request->all());
             $retorno = array('flag' => true,
                              'msg' => "Dados inseridos com sucesso");
@@ -77,7 +79,10 @@ class UserController extends Controller
     {
         $user = User::find($id);
         $flag = $request->is_active == true ? true : false;
+        $flag_senha = $request->is_password == true ? true : false;
         $request->merge(['is_active' => $flag]);
+
+        if(!$flag_senha) $request->request->remove('password');
     
         try {
         

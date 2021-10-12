@@ -8,7 +8,7 @@
                     <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> Clientes</h4>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ url('clientes/create') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-plus"></i> Novo</a>
+                    <a href="{{ url('client/create') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-plus"></i> Novo</a>
                 </div>
             </div>
         </div>
@@ -37,9 +37,9 @@
                             <td>{{ $c->name }}</td>
                             <td>{{ $c->email }}</td>
                             <td class="text-center">
-                                <a title="Dados do Usuário" href="{{ url('clientes',$c->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
-                                <a title="Editar" href="{{ route('clientes.edit',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>
-                                <form class="form-delete" style="display: inline;" action="{{ route('clientes.destroy',$c->id) }}" method="POST">
+                                <a title="Dados do Usuário" href="{{ url('client',$c->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
+                                <a title="Editar" href="{{ route('client.edit',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>
+                                <form class="form-delete" style="display: inline;" action="{{ route('client.destroy',$c->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove" title="Delete">

@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Hash;
+use App\User;
 use App\Client;
+use App\Role;
+use App\Utils;
+use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
+use App\Http\Requests\ClientRequest;
 use Illuminate\Support\Facades\Session;
 
 class ClientController extends Controller
@@ -20,13 +26,96 @@ class ClientController extends Controller
         return view('clientes/index', compact('clientes'));
     }
 
-    public function show(Client $cliente)
+    public function show(Client $client)
     {
-        return view('clientes/detalhes', compact('cliente'));
+        return view('clientes/detalhes', compact('client'));
     }
 
     public function create(Request $request)
     {
         return view('clientes/novo');
+    }
+
+    public function edit(Client $client)
+    {
+        $client = Client::with('user')->find($client->id);
+        return view('clientes/editar',compact('client'));
+    }
+
+    public function store(ClientRequest $request)
+    {
+        try {
+            $request->merge(['password' => \Hash::make($request->password)]);
+            $cliente = Client::create($request->all());
+            if($cliente){
+
+                $request->merge(['client_id' => $cliente->id]);
+                $user = User::create($request->all());
+
+                $role = Role::where('name','cliente')->first();
+
+                if(!$user->hasRole($role->name))
+                    $user->attachRole($role); 
+
+                $retorno = array('flag' => true,
+                                 'msg' => "Dados inseridos com sucesso");
+            }
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+
+        } catch (Exception $e) {
+            
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao inserir o registro");
+        }
+
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('clientes')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect('client/create')->withInput();
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+        $flag = $request->is_active == true ? true : false;
+        $request->merge(['is_active' => $flag]);
+    
+        try {
+        
+            $user->update($request->all());
+            $retorno = array('flag' => true,
+                             'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+        } catch (Exception $e) {
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao atualizar o registro");
+        }
+
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('clientes')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect()->route('client.edit', $user->id)->withInput();
+        }
+    }
+
+    public function destroy(Client $client)
+    {
+        if($client->delete())
+            Flash::success('<i class="fa fa-check"></i> Usuário <strong>'.$client->name.'</strong> excluído com sucesso');
+        else
+            Flash::error("Erro ao excluir o registro");
+
+        return redirect('clientes')->withInput();;
     }
 }
