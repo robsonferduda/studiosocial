@@ -7,6 +7,7 @@ use App\User;
 use App\Client;
 use App\Role;
 use App\Utils;
+use App\SocialMedia;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use App\Http\Requests\ClientRequest;
@@ -128,6 +129,7 @@ class ClientController extends Controller
     public function getHashtags($client)
     {
         $client = Client::with('hashtags')->find($client);
-        return view('clientes/hashtags', compact('client'));
+        $social_medias = SocialMedia::orderBy('name')->get();
+        return view('clientes/hashtags', compact('client','social_medias'));
     }
 }
