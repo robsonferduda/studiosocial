@@ -21,6 +21,7 @@
                     <tr>
                       <th>Nome</th>
                       <th>Email</th>
+                      <th class="disabled-sorting text-center">Conexões</th>
                       <th class="disabled-sorting text-center">Ações</th>
                     </tr>
                 </thead>
@@ -28,6 +29,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th class="disabled-sorting text-center">Conexões</th>
                         <th class="disabled-sorting text-center">Ações</th>
                     </tr>
                 </tfoot>
@@ -37,6 +39,10 @@
                             <td>{{ $c->name }}</td>
                             <td>{{ $c->email }}</td>
                             <td class="text-center">
+                                <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>
+                            </td>
+                            <td class="text-center">
+                                <a title="Hashtags do Usuário" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>
                                 <a title="Dados do Usuário" href="{{ url('client',$c->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
                                 <a title="Editar" href="{{ route('client.edit',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>
                                 <form class="form-delete" style="display: inline;" action="{{ route('client.destroy',$c->id) }}" method="POST">

@@ -17,6 +17,16 @@ class Client extends Model
         return $this->hasOne('App\User', 'client_id', 'id');
     } 
 
+    public function fbAccount()
+    {
+        return $this->hasMany('App\FbAccount', 'client_id', 'id');
+    } 
+
+    public function hashtags()
+    {
+        return $this->hasMany('App\Hashtag', 'client_id', 'id');
+    } 
+
     public static function boot() {
         
         parent::boot();

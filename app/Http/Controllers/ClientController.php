@@ -118,4 +118,16 @@ class ClientController extends Controller
 
         return redirect('clientes')->withInput();;
     }
+
+    public function getFacebookAccounts($client)
+    {
+        $client = Client::with('fbAccount')->find($client);
+        return view('clientes/conexoes', compact('client'));
+    }
+
+    public function getHashtags($client)
+    {
+        $client = Client::with('hashtags')->find($client);
+        return view('clientes/hashtags', compact('client'));
+    }
 }
