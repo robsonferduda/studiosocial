@@ -68,7 +68,7 @@ class IGHashTag{
                                         'client_id' => $client->id
                                     ]);
                                   
-                                    $media->mediaHashtags()->syncWithoutDetaching($hashtag->id);                                   
+                                    $media->hashtags()->syncWithoutDetaching($hashtag->id);                                   
                                 }            
                                
                                 $after = $ig_hash_tag->getAfter($medias);
