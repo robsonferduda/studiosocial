@@ -14,14 +14,14 @@ class IGApi{
         return Http::get($url,$params);
     }
 
-    public function getAfter($response): String
+    protected function getAfter($response): String
     {
         return isset($response['paging']['cursors']['after'])
           ? $response['paging']['cursors']['after']
           : '';
     }
 
-    public function hasAfter($response): Bool
+    protected function hasAfter($response): Bool
     {
         return isset($response['paging']['cursors']['after'])
           ? true

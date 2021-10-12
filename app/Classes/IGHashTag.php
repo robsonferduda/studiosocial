@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 use App\Media;
-use Illuminate\Support\Facades\Session;
+use App\FbAccount;
 
 class IGHashTag{
 
@@ -12,7 +12,9 @@ class IGHashTag{
 
     public function pullMedias()
     {
-        $access_token = Session::get('token');
+        $fbAccount = FbAccount::find(6);
+
+        $access_token = $fbAccount->token;
         $id_user_id = '17841437726599322';
         $after = '';
 
