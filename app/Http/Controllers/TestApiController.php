@@ -11,6 +11,8 @@ class TestApiController extends Controller
 
     public function test()
     {
+
+        (new IGHashTag())->pullMedias();
         /* // Mentions
 
         $igMention = new IGMention($id_user_id);
