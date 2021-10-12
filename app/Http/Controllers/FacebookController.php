@@ -20,6 +20,7 @@ class FacebookController extends Controller
     public function handleProviderCallback()
     {
         try {
+            
             $user_facebook = Socialite::driver('facebook')->stateless()->user();
             
             $fb_account = FbAccount::updateOrcreate(
