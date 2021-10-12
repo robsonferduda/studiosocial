@@ -5,7 +5,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> <a href="{{ url('clientes') }}">Clientes</a> > Detalhes > {{ $cliente->name }}</h4>
+                    <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> <a href="{{ url('clientes') }}">Clientes</a> > Detalhes > {{ $client->name }}</h4>
                 </div>
                 <div class="col-md-6">
                     <a href="{{ url('clientes') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-table"></i> Clientes</a>

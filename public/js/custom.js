@@ -44,7 +44,12 @@ $(document).ready(function() {
         });
     });
     
-    var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-        removeItemButton: true
+    $("#is_password").change(function(){
+
+        if($(this).is(':checked'))
+            $('.box-password').css("display","block");
+        else
+            $('.box-password').css("display","none");
+
     });
 });
