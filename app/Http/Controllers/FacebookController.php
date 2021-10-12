@@ -30,8 +30,8 @@ class FacebookController extends Controller
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
                 'name' => $user_facebook->name,
-                'token' => $user_facebook->token,
-                'token_expires' => $user_facebook->expiresIn
+                'token' => $user_facebook->access_token,
+                'token_expires' => $user_facebook->expires_in
             ]);
             
             $fbPages = $this->getFBPages($fb_account->token);
