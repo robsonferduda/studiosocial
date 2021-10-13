@@ -2,6 +2,7 @@
 
 namespace App\Classes;
 
+use App\ResponseApiLog;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
 
@@ -11,7 +12,13 @@ class IGApi{
 
     protected function makeApiCall($url, $params): Response
     {     
-        return Http::get($url,$params);
+        $response = Http::get($url,$params);
+        
+        if(!$response->successful()) {
+            return $this->log($response, $url, $params);
+        }
+        
+        return $response;
     }
 
     public function getAfter($response): String
@@ -31,5 +38,17 @@ class IGApi{
     protected function getId(): String
     {
         return $this->id;
+    }
+
+    private function log(Response $response, String $url, Array $params)
+    {
+        ResponseApiLog::create([
+            'status_code' => $response->status(),
+            'content' => json_encode($response->json()),
+            'url' => $url,
+            'params' => json_encode($params)
+        ]);
+
+        return $response;
     }
 }

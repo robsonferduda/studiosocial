@@ -17,7 +17,9 @@ class IGHashTag{
         $clients = Client::get();
 
         foreach ($clients as $client) {
+            
             foreach ($client->fbAccounts as $fbAccount) {
+
                 foreach ($fbAccount->fbPages as $fbPage) {
 
                     if(isset($fbPage->igPage)){
@@ -41,6 +43,9 @@ class IGHashTag{
                             $ig_hash_tag = new IGHashTagApi();
                             $id_hash_tag = $ig_hash_tag->getIdHashTag($params);
                         
+                            if(empty($id_hash_tag))
+                                continue;
+
                             do {
                             
                                 $params = [
@@ -52,6 +57,9 @@ class IGHashTag{
         
                                 $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
                                
+                                if(!isset($medias['data']))
+                                    break;
+
                                 foreach ($medias['data'] as $media) {
         
                                     $media = Media::updateOrCreate(
