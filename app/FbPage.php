@@ -10,7 +10,8 @@ class FbPage extends Model
 
     protected $fillable = [ 'name',
                             'page_id',
-                            'fb_account_id'
+                            'fb_account_id',
+                            'token'
                         ];
 
     public function igPage()
