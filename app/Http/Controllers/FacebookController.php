@@ -44,7 +44,8 @@ class FacebookController extends Controller
                         'fb_account_id' => $fb_account->id
                     ],
                     [
-                     'name' => $fbPage['name']
+                     'name' => $fbPage['name'],
+                     'token' => $fbPage['access_token']
                     ]
                 );
 
