@@ -14,7 +14,7 @@ class FacebookController extends Controller
 {
     public function redirectToProvider()
     {
-        return Socialite::driver('facebook')->scopes(['instagram_basic', 'pages_show_list'])->redirect();
+        return Socialite::driver('facebook')->scopes(['instagram_basic', 'pages_show_list', 'pages_read_engagement', 'pages_read_user_content'])->redirect();
     }
 
     public function handleProviderCallback()
