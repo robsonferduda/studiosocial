@@ -27,8 +27,11 @@ class TokenController extends Controller
             ]);
         }
             
+        $date = date("Y-m-d H:i:s ", $response->json()['data']['data_access_expires_at']);
+
         return json_encode([
-            'is_valid' => true
+            'is_valid' => true,
+            'expires_at' => $date
         ]);
     } 
 
