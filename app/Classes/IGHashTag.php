@@ -52,7 +52,8 @@ class IGHashTag{
                                     'fields' => $ig_hash_tag->getIGHashTagFields(),
                                     'access_token' => $access_token,
                                     'after' => $after,
-                                    'user_id' => $id_user_id
+                                    'user_id' => $id_user_id,
+                                    'limit' => 50
                                 ];
         
                                 $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
