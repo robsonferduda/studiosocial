@@ -14,6 +14,11 @@ class IGHashTag{
 
     public function pullMedias()
     {
+
+        $hashtags_pulled = [];
+
+        $passou = 0;
+
         $clients = Client::get();
 
         foreach ($clients as $client) {
@@ -24,12 +29,17 @@ class IGHashTag{
 
                     if(isset($fbPage->igPage)){
 
-                        $access_token = $fbAccount->token;
+                        $access_token = 'EAAInyDkHeeYBAOwfzHR85aVzzsoDTYEWq2VM12gkHjf7Qw8q1KEI8jFWD542vEA9MSZB35pyNAsxKOnjXPZCHFbI11SKj3W4ShZB5ny4FkfMUMHNDexc1GwHbZBFXZB4yjL2g6RPNUvlbX1t2vWAEeUM58lmVH9kHqpeiTFjRmPjt66nvOIWGAm97dLCtT1F5Iiz7cbmgfwZDZD';//$fbAccount->token;
                         $id_user_id = $fbPage->igPage->page_id;
                         
                         $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->get();
 
-                        foreach ($hashtags as $hashtag) {                            
+                        foreach ($hashtags as $hashtag) {     
+                            
+                            if(in_array($hashtag->hashtag, $hashtags_pulled)){
+                                continue;
+                            }
+
                             $after = '';
 
                             $ig_hash_tag = new IGHashTagApi($id_user_id);
@@ -58,9 +68,16 @@ class IGHashTag{
         
                                 $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
                                
-                                if(!isset($medias['data']))
-                                    break;
+                                $passou++;
 
+                                if(!isset($medias['data'])) {
+                                    break;
+                                } else {
+                                    if(!in_array($hashtag->hashtag, $hashtags_pulled)){
+                                        $hashtags_pulled[] = $hashtag->hashtag;
+                                    }
+                                }
+                                                                    
                                 foreach ($medias['data'] as $media) {
         
                                     $media = Media::updateOrCreate(
@@ -87,6 +104,8 @@ class IGHashTag{
                     }
                 }
             }
+
+            dd($passou);
         }
     }
 }
