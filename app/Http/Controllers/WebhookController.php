@@ -9,7 +9,9 @@ class WebhookController extends Controller
 
     public function receive(Request $request)
     {
-        dd($request);
+        \Log::info($request);
+
+        return $request->hub_challenge;
 
     }
    
