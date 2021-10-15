@@ -91,7 +91,8 @@ class IGHashTag{
                                         'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
                                         'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
                                         'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-                                        'client_id' => $client->id
+                                        'client_id' => $client->id,
+                                        'hashtagged' => 'S'
                                     ]);
                                   
                                     $media->hashtags()->syncWithoutDetaching($hashtag->id);                                   
