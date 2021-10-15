@@ -14,10 +14,7 @@ class IGHashTag{
 
     public function pullMedias()
     {
-
         $hashtags_pulled = [];
-
-        $passou = 0;
 
         $clients = Client::get();
 
@@ -29,7 +26,7 @@ class IGHashTag{
 
                     if(isset($fbPage->igPage)){
 
-                        $access_token = 'EAAInyDkHeeYBAOwfzHR85aVzzsoDTYEWq2VM12gkHjf7Qw8q1KEI8jFWD542vEA9MSZB35pyNAsxKOnjXPZCHFbI11SKj3W4ShZB5ny4FkfMUMHNDexc1GwHbZBFXZB4yjL2g6RPNUvlbX1t2vWAEeUM58lmVH9kHqpeiTFjRmPjt66nvOIWGAm97dLCtT1F5Iiz7cbmgfwZDZD';//$fbAccount->token;
+                        $access_token = $fbAccount->token;
                         $id_user_id = $fbPage->igPage->page_id;
                         
                         $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->get();
@@ -67,10 +64,8 @@ class IGHashTag{
                                 ];
         
                                 $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
-                               
-                                $passou++;
 
-                                if(!isset($medias['data'])) {
+                                if(!isset($medias['data']) OR empty($medias['data'])) {
                                     break;
                                 } else {
                                     if(!in_array($hashtag->hashtag, $hashtags_pulled)){
@@ -100,13 +95,11 @@ class IGHashTag{
                                
                                 $after = $ig_hash_tag->getAfter($medias);
         
-                            } while($ig_hash_tag->hasAfter($medias));
+                            } while($ig_hash_tag->hasAfter($medias) && count($medias['data']) >= 50);
                         }
                     }
                 }
             }
-
-            dd($passou);
         }
     }
 }
