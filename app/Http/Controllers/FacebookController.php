@@ -20,7 +20,8 @@ class FacebookController extends Controller
                                                         'instagram_manage_comments',
                                                         'pages_show_list',
                                                         'pages_read_engagement',
-                                                        'pages_read_user_content'
+                                                        'pages_read_user_content',
+                                                        'pages_manage_metadata'
                                                     ])->redirect();
     }
 
@@ -56,7 +57,7 @@ class FacebookController extends Controller
                     ]
                 );
 
-                dd($this->subscribeApps($fbPage['id'], $fbPage['access_token'])->json());
+                //dd($this->subscribeApps($fbPage['id'], $fbPage['access_token'])->json());
 
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
 
@@ -70,6 +71,8 @@ class FacebookController extends Controller
                             'name' => $ig_business_account['instagram_business_account']['username']
                         ]
                         );
+
+                        dd($ig_business_account);
 
                 }
 
