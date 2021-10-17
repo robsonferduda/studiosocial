@@ -57,6 +57,8 @@ class FacebookController extends Controller
                     ]
                 );
 
+                dd($this->subscribeApps($fbPage['id'], $fbPage['access_token'])->json());
+
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
 
                 if(isset($ig_business_account['instagram_business_account']['id'])) {
@@ -69,7 +71,7 @@ class FacebookController extends Controller
                             'name' => $ig_business_account['instagram_business_account']['username']
                         ]
                         );
-                    dd($this->subscribeApps($ig_business_account['instagram_business_account']['id'], $user_facebook->token)->json());
+
                 }
 
                 
@@ -107,7 +109,7 @@ class FacebookController extends Controller
 
         $params = [
             'access_token' => $token,
-            'subscribed_fields' => 'mentions, story_insights'
+            'subscribed_fields' => 'mentions'
         ];
 
         return Http::post($url,$params);
