@@ -56,7 +56,7 @@ class FacebookController extends Controller
                     ]
                 );
 
-                dd($this->subscribeApps($fbPage['id'], $fbPage['access_token']));
+                dd($this->subscribeApps($fbPage['id'], $fbPage['access_token'])->json());
 
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
 
