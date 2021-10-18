@@ -29,9 +29,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
-        })->hourly();
-
-        $schedule->call(function () {
             (new IGMention())->pullMedias();
         })->hourly();
     }
