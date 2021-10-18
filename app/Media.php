@@ -19,7 +19,9 @@ class Media extends Model
                             'permalink',
                             'client_id',
                             'hashtagged',
-                            'mentioned'
+                            'mentioned',
+                            'username',
+                            'video_title'
                         ];
     
     public function hashtags()
