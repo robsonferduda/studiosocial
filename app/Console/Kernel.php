@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Twitter\TwitterCollect;
 use App\Classes\IGHashTag;
 use App\Classes\IGMention;
 use Illuminate\Console\Scheduling\Schedule;
@@ -30,6 +31,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
             (new IGMention())->pullMedias();
+        })->hourly();
+
+        $schedule->call(function () {
+            (new TwitterCollect())->pullMedias();
         })->hourly();
     }
 

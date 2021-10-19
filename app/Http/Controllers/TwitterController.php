@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Twitter\TwitterCollect;
 use App\MediaTwitter;
 use App\TwitterAPIExchange;
 use Illuminate\Http\Request;
@@ -19,6 +20,9 @@ class TwitterController extends Controller
 
     public function index()
     {
+        (new TwitterCollect())->pullMedias();
+
+        /*
         $settings = array(
             'oauth_access_token' => 'rHn2F4BIhJ17s7jTPJyZ0SrKU', 
             'oauth_access_token_secret' => 'URmePiavhe5NIFSMKpYuHDIaUvW007tGt2SJlDdgykyGWt5FgM', 
@@ -74,6 +78,7 @@ class TwitterController extends Controller
            
         }*/
         
+        /*
         $query = array(
             "q" => "Adão Negro",
             "count" => 1000,
@@ -115,5 +120,6 @@ class TwitterController extends Controller
 
             $tweet = MediaTwitter::updateOrCreate($chave, $dados);
         }
+        */
     }
 }
