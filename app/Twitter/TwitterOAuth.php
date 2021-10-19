@@ -207,7 +207,7 @@ class TwitterOAuth extends Config
             $this->token,
             $method,
             $url,
-            $parameters,
+            $parameters
         );
 
         $authorization =
@@ -217,7 +217,7 @@ class TwitterOAuth extends Config
             $request->getNormalizedHttpUrl(),
             $method,
             $authorization,
-            $parameters,
+            $parameters
         );
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
