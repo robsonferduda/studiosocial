@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
             (new IGMention())->pullMedias();
-        })->cron('* * * * *');
+        })->hourly();
 
         /*
         $schedule->call(function () {
