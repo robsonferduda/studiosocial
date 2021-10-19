@@ -337,7 +337,7 @@ class TwitterOAuth extends Config
             ($file = file_get_contents($parameters['media'])) === false
         ) {
             throw new \InvalidArgumentException(
-                'You must supply a readable file',
+                'You must supply a readable file'
             );
         }
         $parameters['media'] = base64_encode($file);
