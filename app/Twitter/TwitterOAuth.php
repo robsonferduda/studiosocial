@@ -207,7 +207,7 @@ class TwitterOAuth extends Config
             $this->token,
             $method,
             $url,
-            $parameters
+            $parameters,
         );
 
         $authorization =
@@ -217,7 +217,7 @@ class TwitterOAuth extends Config
             $request->getNormalizedHttpUrl(),
             $method,
             $authorization,
-            $parameters
+            $parameters,
         );
         $response = JsonDecoder::decode($result, $this->decodeJsonAsArray);
         $this->response->setBody($response);
@@ -318,7 +318,7 @@ class TwitterOAuth extends Config
                 'command' => 'STATUS',
                 'media_id' => $media_id,
             ],
-            false
+            false,
         );
     }
 
@@ -337,7 +337,7 @@ class TwitterOAuth extends Config
             ($file = file_get_contents($parameters['media'])) === false
         ) {
             throw new \InvalidArgumentException(
-                'You must supply a readable file'
+                'You must supply a readable file',
             );
         }
         $parameters['media'] = base64_encode($file);
@@ -346,7 +346,7 @@ class TwitterOAuth extends Config
             self::UPLOAD_HOST,
             $path,
             $parameters,
-            false
+            false,
         );
     }
 
@@ -365,7 +365,7 @@ class TwitterOAuth extends Config
             self::UPLOAD_HOST,
             $path,
             $this->mediaInitParameters($parameters),
-            false
+            false,
         );
         // Append
         $segmentIndex = 0;
@@ -383,7 +383,7 @@ class TwitterOAuth extends Config
                         fread($media, $this->chunkSize),
                     ),
                 ],
-                false
+                false,
             );
         }
         fclose($media);
@@ -396,7 +396,7 @@ class TwitterOAuth extends Config
                 'command' => 'FINALIZE',
                 'media_id' => $init->media_id_string,
             ],
-            false
+            false,
         );
         return $finalize;
     }
@@ -485,7 +485,7 @@ class TwitterOAuth extends Config
             $this->apiUrl($host, $path),
             $method,
             $parameters,
-            $json
+            $json,
         );
     }
 
@@ -506,7 +506,7 @@ class TwitterOAuth extends Config
             $host,
             $this->apiVersion,
             $path,
-            $this->extension()
+            $this->extension(),
         );
     }
 
@@ -575,7 +575,7 @@ class TwitterOAuth extends Config
             $method,
             $url,
             $parameters,
-            $json
+            $json,
         );
         if (array_key_exists('oauth_callback', $parameters)) {
             // Twitter doesn't like oauth_callback as a parameter.
@@ -601,7 +601,7 @@ class TwitterOAuth extends Config
             $method,
             $authorization,
             $parameters,
-            $json
+            $json,
         );
     }
 
