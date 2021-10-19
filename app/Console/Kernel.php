@@ -33,9 +33,11 @@ class Kernel extends ConsoleKernel
             (new IGMention())->pullMedias();
         })->hourly();
 
+        /*
         $schedule->call(function () {
             (new TwitterCollect())->pullMedias();
         })->hourly();
+        */
     }
 
     /**
