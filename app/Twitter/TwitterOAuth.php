@@ -197,6 +197,11 @@ class TwitterOAuth extends Config
         $this->resetLastResponse();
         $this->response->setApiPath($path);
         $url = sprintf('%s/%s', self::API_HOST, $path);
+
+        dd("Teste");
+        dd($url);
+        dd($this->consumer);
+
         $request = Request::fromConsumerAndToken(
             $this->consumer,
             $this->token,
@@ -204,6 +209,7 @@ class TwitterOAuth extends Config
             $url,
             $parameters,
         );
+
         $authorization =
             'Authorization: Basic ' .
             $this->encodeAppAuthorization($this->consumer);

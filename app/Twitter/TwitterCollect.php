@@ -31,7 +31,7 @@ class TwitterCollect{
             "retweeted" => false,
             "tweet_mode" => "extended"
         );
-
+        
         $tweets = $this->conn->get('search/tweets', $query);
 
         foreach ($tweets->statuses as $tweet) {
