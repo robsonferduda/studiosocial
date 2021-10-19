@@ -28,5 +28,5 @@ Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback
 
 Route::get('/test-api', 'TestApiController@test');
 
-
+Route::get('twitter', 'TwitterController@index');
 
