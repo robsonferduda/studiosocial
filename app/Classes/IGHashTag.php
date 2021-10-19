@@ -14,10 +14,14 @@ class IGHashTag{
 
     public function pullMedias()
     {
+        $hashtags_pulled = [];
+
         $clients = Client::get();
 
         foreach ($clients as $client) {
+            
             foreach ($client->fbAccounts as $fbAccount) {
+
                 foreach ($fbAccount->fbPages as $fbPage) {
 
                     if(isset($fbPage->igPage)){
@@ -27,7 +31,12 @@ class IGHashTag{
                         
                         $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->get();
 
-                        foreach ($hashtags as $hashtag) {                            
+                        foreach ($hashtags as $hashtag) {     
+                            
+                            if(in_array($hashtag->hashtag, $hashtags_pulled)){
+                                continue;
+                            }
+
                             $after = '';
 
                             $ig_hash_tag = new IGHashTagApi($id_user_id);
@@ -41,17 +50,29 @@ class IGHashTag{
                             $ig_hash_tag = new IGHashTagApi();
                             $id_hash_tag = $ig_hash_tag->getIdHashTag($params);
                         
+                            if(empty($id_hash_tag))
+                                continue;
+
                             do {
                             
                                 $params = [
                                     'fields' => $ig_hash_tag->getIGHashTagFields(),
                                     'access_token' => $access_token,
                                     'after' => $after,
-                                    'user_id' => $id_user_id
+                                    'user_id' => $id_user_id,
+                                    'limit' => 50
                                 ];
         
                                 $medias = $ig_hash_tag->getRecentMediaByHashTag($id_hash_tag, $params);
-                               
+
+                                if(!isset($medias['data']) OR empty($medias['data'])) {
+                                    break;
+                                } else {
+                                    if(!in_array($hashtag->hashtag, $hashtags_pulled)){
+                                        $hashtags_pulled[] = $hashtag->hashtag;
+                                    }
+                                }
+                                                                    
                                 foreach ($medias['data'] as $media) {
         
                                     $media = Media::updateOrCreate(
@@ -65,7 +86,8 @@ class IGHashTag{
                                         'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
                                         'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
                                         'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-                                        'client_id' => $client->id
+                                        'client_id' => $client->id,
+                                        'hashtagged' => 'S'
                                     ]);
                                   
                                     $media->hashtags()->syncWithoutDetaching($hashtag->id);                                   
@@ -73,7 +95,7 @@ class IGHashTag{
                                
                                 $after = $ig_hash_tag->getAfter($medias);
         
-                            } while($ig_hash_tag->hasAfter($medias));
+                            } while($ig_hash_tag->hasAfter($medias) && count($medias['data']) >= 50);
                         }
                     }
                 }

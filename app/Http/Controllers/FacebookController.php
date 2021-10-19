@@ -14,7 +14,15 @@ class FacebookController extends Controller
 {
     public function redirectToProvider()
     {
-        return Socialite::driver('facebook')->scopes(['instagram_basic', 'pages_show_list'])->redirect();
+        return Socialite::driver('facebook')->scopes([
+                                                        'instagram_basic',
+                                                        'instagram_manage_insights',
+                                                        'instagram_manage_comments',
+                                                        'pages_show_list',
+                                                        'pages_read_engagement',
+                                                        'pages_read_user_content',
+                                                        'pages_manage_metadata'
+                                                    ])->redirect();
     }
 
     public function handleProviderCallback()
@@ -44,7 +52,8 @@ class FacebookController extends Controller
                         'fb_account_id' => $fb_account->id
                     ],
                     [
-                     'name' => $fbPage['name']
+                     'name' => $fbPage['name'],
+                     'token' => $fbPage['access_token']
                     ]
                 );
 
@@ -90,5 +99,17 @@ class FacebookController extends Controller
                   ];
 
         return Http::get($url,$params);
+    }
+
+    private function subscribeApps(String $fb_page_id, String $token)
+    {
+        $url = EndPoints::getSubscribeAppsLink($fb_page_id);
+
+        $params = [
+            'access_token' => $token,
+            'subscribed_fields' => 'mentions'
+        ];
+
+        return Http::post($url,$params);
     }
 }

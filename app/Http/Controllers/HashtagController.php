@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Hashtag;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
 
 class HashtagController extends Controller
 {

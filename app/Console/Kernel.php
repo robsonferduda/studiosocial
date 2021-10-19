@@ -2,10 +2,11 @@
 
 namespace App\Console;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use App\Classes\IGHashTag;
+use App\Classes\IGMention;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
@@ -28,6 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
+            (new IGMention())->pullMedias();
         })->hourly();
     }
 

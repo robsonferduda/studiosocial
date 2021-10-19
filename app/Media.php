@@ -17,7 +17,11 @@ class Media extends Model
                             'media_url',
                             'timestamp',
                             'permalink',
-                            'client_id'
+                            'client_id',
+                            'hashtagged',
+                            'mentioned',
+                            'username',
+                            'video_title'
                         ];
     
     public function hashtags()
