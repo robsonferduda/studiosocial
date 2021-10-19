@@ -15,7 +15,8 @@ class TwitterCollect{
         define('ACCESS_TOKEN', '725986202-o9342d5gnK1JTn3Rgn5VNoqPSacr6KSHCnGtnbQh');
         define('ACCESS_TOKEN_SECRET','fHb4L1jR2qbSv94A5DByuP26rC7IM4bD5YvwrMTXB4DgI');
        
-        $this->conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        //$this->conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        $this->conn = new TwitterOAuth('rHn2F4BIhJ17s7jTPJyZ0SrKU', 'URmePiavhe5NIFSMKpYuHDIaUvW007tGt2SJlDdgykyGWt5FgM', '725986202-o9342d5gnK1JTn3Rgn5VNoqPSacr6KSHCnGtnbQh', 'fHb4L1jR2qbSv94A5DByuP26rC7IM4bD5YvwrMTXB4DgI');
 
     }
 
