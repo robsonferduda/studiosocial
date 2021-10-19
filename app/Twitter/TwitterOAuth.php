@@ -198,10 +198,6 @@ class TwitterOAuth extends Config
         $this->response->setApiPath($path);
         $url = sprintf('%s/%s', self::API_HOST, $path);
 
-        dd("Teste");
-        dd($url);
-        dd($this->consumer);
-
         $request = Request::fromConsumerAndToken(
             $this->consumer,
             $this->token,

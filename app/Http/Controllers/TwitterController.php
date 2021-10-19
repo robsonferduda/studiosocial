@@ -20,7 +20,7 @@ class TwitterController extends Controller
 
     public function index()
     {
-        phpinfo();
+        //phpinfo();
         (new TwitterCollect())->pullMedias();
 
         /*
