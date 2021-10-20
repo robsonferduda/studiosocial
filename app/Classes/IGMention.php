@@ -59,7 +59,10 @@ class IGMention{
                                 } else {
                                  
                                     $media = Media::updateOrCreate(
-                                        ['media_id' => $media['id']],    
+                                        [
+                                            'media_id' => $media['id'],
+                                            'client_id' => $client->id
+                                        ],    
                                         [
                                             'caption' => isset($media['caption']) ? $media['caption']: null,
                                             'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
@@ -70,8 +73,7 @@ class IGMention{
                                             'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
                                             'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
                                             'username' =>  isset($media['username']) ? $media['username']: null,
-                                            'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,
-                                            'client_id' => $client->id,
+                                            'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                        
                                             'mentioned' => 'S'
                                         ]);                                  
                                     $medias_limit_not_ordered = 0;
@@ -85,7 +87,10 @@ class IGMention{
                         foreach($medias_buffer as $media) {
 
                             $media = Media::updateOrCreate(
-                                ['media_id' => $media['id']],    
+                                [
+                                    'media_id' => $media['id'],
+                                    'client_id' => $client->id
+                                ],    
                                 [
                                     'caption' => isset($media['caption']) ? $media['caption']: null,
                                     'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
@@ -96,8 +101,7 @@ class IGMention{
                                     'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
                                     'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
                                     'username' =>  isset($media['username']) ? $media['username']: null,
-                                    'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,
-                                    'client_id' => $client->id,
+                                    'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
                                     'mentioned' => 'S'
                             ]);                                 
                         }

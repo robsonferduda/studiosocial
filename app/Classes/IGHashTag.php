@@ -76,7 +76,10 @@ class IGHashTag{
                                 foreach ($medias['data'] as $media) {
         
                                     $media = Media::updateOrCreate(
-                                    ['media_id' => $media['id']],    
+                                    [
+                                        'media_id' => $media['id'],
+                                        'client_id' => $client->id
+                                    ],    
                                     [
                                         'caption' => isset($media['caption']) ? $media['caption']: null,
                                         'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
@@ -85,8 +88,7 @@ class IGHashTag{
                                         'media_type' => isset($media['media_type']) ? $media['media_type']: null,
                                         'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
                                         'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
-                                        'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-                                        'client_id' => $client->id,
+                                        'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,                                        
                                         'hashtagged' => 'S'
                                     ]);
                                   
