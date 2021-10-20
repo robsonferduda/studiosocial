@@ -25,7 +25,7 @@ class IGWebhookController extends Controller
             Log::info($request);
             return $request->hub_challenge;
         }
-        return false;
+        return '';
     }
    
 }
