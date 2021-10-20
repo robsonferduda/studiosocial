@@ -11,7 +11,11 @@ class IGWebhookController extends Controller
     public function receive(Request $request)
     {
         
-        Log::info($request);
+        foreach($request['entry'] as $entry) {
+            foreach($entry['changes'] as $change) {
+                Log::error($change);
+            }
+        }
 
         return $request->hub_challenge;
 
@@ -24,7 +28,7 @@ class IGWebhookController extends Controller
         if($request->hub_mode == 'subscribe' && $request->hub_verify_token == $token) {
             return $request->hub_challenge;
         }
-        
+
         return '';
     }
    
