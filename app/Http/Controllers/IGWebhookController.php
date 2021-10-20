@@ -17,7 +17,7 @@ class IGWebhookController extends Controller
 
     }
 
-    public function validation(Request $request)
+    public function urlValidade(Request $request)
     {
         $token = 'a1b2C3d4e5f6';
         Log::info($request);
