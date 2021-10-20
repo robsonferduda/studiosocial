@@ -13,8 +13,6 @@ class IGWebhookController extends Controller
         
         Log::info($request);
 
-        return $request->hub_challenge;
-
     }
 
     public function urlValidade(Request $request)
