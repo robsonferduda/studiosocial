@@ -17,7 +17,7 @@ class IGWebhookController extends Controller
 
     }
 
-    public function validate(Request $request)
+    public function validation(Request $request)
     {
         $token = '$a1b2C3d4e5f6$';
         if($request->hub_mode == 'subscribe' && $request->hub_verify_token == $token) {
