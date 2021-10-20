@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\IGMention;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -41,7 +42,7 @@ class IGWebhookController extends Controller
 
     private function mention($id, $changes)
     {
-        Log::error($id);
+        (new IGMention())->getMediaWebHook($id, $changes);
     }
    
 }

@@ -104,9 +104,4 @@ class IGHashTag{
             }
         }
     }
-
-    // public function getMediaWebHook()
-    // {
-        
-    // }
 }

@@ -4,7 +4,6 @@ namespace App\Classes;
 
 use App\Media;
 use App\Client;
-use App\Enums\SocialMedia;
 
 class IGMention{
 
@@ -14,8 +13,6 @@ class IGMention{
 
     public function pullMedias()
     {
-        $hashtags_pulled = [];
-
         $clients = Client::get();
 
         foreach ($clients as $client) {
@@ -109,5 +106,10 @@ class IGMention{
                 }
             }
         }
+    }
+
+    public function getMediaWebHook($id, $changes)
+    {
+        die();
     }
 }
