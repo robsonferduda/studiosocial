@@ -21,6 +21,8 @@ class IGWebhookController extends Controller
     {
         $token = '$a1b2C3d4e5f6$';
         if($request->hub_mode == 'subscribe' && $request->hub_verify_token == $token) {
+
+            Log::info($request);
             return $request->hub_challenge;
         }
         return false;
