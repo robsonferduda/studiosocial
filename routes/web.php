@@ -28,6 +28,7 @@ Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback
 
 Route::get('check/token/{token}', 'TokenController@checkFacebookToken');
 
+Route::get('ig-webhook', 'IGWebhookController@validate');
 Route::post('ig-webhook', 'IGWebhookController@receive');
 
 Route::get('/test-api', 'TestApiController@test');
