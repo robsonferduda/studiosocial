@@ -19,13 +19,12 @@ class IGWebhookController extends Controller
 
     public function urlValidade(Request $request)
     {
-        $token = 'a1b2C3d4e5f6';
-        Log::info($request);
+        $token = '$a1b2C3d4e5f6$';
+        
         if($request->hub_mode == 'subscribe' && $request->hub_verify_token == $token) {
-
-            Log::info($request);
             return $request->hub_challenge;
         }
+        
         return '';
     }
    
