@@ -13,6 +13,13 @@ class IGWebhookController extends Controller
         
         foreach($request['entry'] as $entry) {
             foreach($entry['changes'] as $change) {
+                
+                switch($change['field']){
+                    case 'mentions': 
+                        $this->mention($entry['id'], $change['value']);
+                        break;
+                }
+
                 Log::error($change);
             }
         }
@@ -30,6 +37,11 @@ class IGWebhookController extends Controller
         }
 
         return '';
+    }
+
+    private function mention($id, $changes)
+    {
+        Log::error($id);
     }
    
 }
