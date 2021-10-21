@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Abraham\TwitterOAuth;
+namespace App\Twitter;
 
 /**
  * @author Abraham Williams <abraham@abrah.am>
