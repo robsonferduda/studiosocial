@@ -5,7 +5,6 @@ namespace App\Classes;
 use App\Media;
 use App\Client;
 use App\IgPage;
-use Illuminate\Support\Facades\Log;
 
 class IGMention{
 
@@ -112,8 +111,8 @@ class IGMention{
 
     public function getMediaWebHook($id, $changes)
     {
-        $changes['media_id'] = '18194579986190935';
-        $id = '17841437726599322';
+        //$changes['media_id'] = '18194579986190935';
+        //$id = '17841437726599322';
 
         $ig_mention = new IGMentionApi($id);
 
@@ -128,8 +127,6 @@ class IGMention{
             $media = $ig_mention->getMetionHooked($params);
 
             $media = $media['mentioned_media'];
-
-            Log::warning($media);
 
             $media = Media::updateOrCreate(
                 [
