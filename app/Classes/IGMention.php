@@ -110,6 +110,16 @@ class IGMention{
 
     public function getMediaWebHook($id, $changes)
     {
-        die();
+        $ig_mention = new IGMentionApi($id);
+
+        dd(`mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`);
+
+        $params = [
+            'fields' => `mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`,
+
+        ];
+
+        $response = $ig_mention->getMetionHooked($params);
+
     }
 }
