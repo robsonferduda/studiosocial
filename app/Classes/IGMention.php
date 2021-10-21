@@ -127,8 +127,25 @@ class IGMention{
             ];
     
             $media = $ig_mention->getMetionHooked($params);
-        }
 
-        
+            $media = Media::updateOrCreate(
+                [
+                    'media_id' => $media['id'],
+                    'client_id' => $igPage->fbPage->fbAccount->client_id
+                ],    
+                [
+                    'caption' => isset($media['caption']) ? $media['caption']: null,
+                    'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
+                    'media_product_type' => isset($media['media_product_type']) ? $media['media_product_type']: null,                    
+                    'like_count' => isset($media['like_count']) ? $media['like_count']: null,
+                    'media_type' => isset($media['media_type']) ? $media['media_type']: null,
+                    'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
+                    'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
+                    'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
+                    'username' =>  isset($media['username']) ? $media['username']: null,
+                    'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
+                    'mentioned' => 'S'
+            ]);        
+        }
     }
 }
