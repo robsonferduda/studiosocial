@@ -113,14 +113,16 @@ class IGMention{
     {
         $ig_mention = new IGMentionApi($id);
 
-        Log::warning("mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}");
+        $changes['media_id'] = '18194579986190935';
 
         $params = [
-            'fields' => `mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`,
+            'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
 
         ];
 
-        $response = $ig_mention->getMetionHooked($params);
+        $media = $ig_mention->getMetionHooked($params);
+
+        Log::warning($media);
 
     }
 }
