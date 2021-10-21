@@ -24,6 +24,20 @@ class IGMentionApi extends IGApi{
         return [];
     }
 
+    public function getMetionHooked(Array $params = []) : Array
+    {
+        $url = EndPoints::getMetionWebhookLink($this->getId());
+
+        $response = $this->makeApiCall($url,$params);
+        
+        if($response->successful()) {
+            return $response->json();
+        }
+        
+        return [];
+    }
+
+
     public function getIGMentionFields()
     {
         $fields = [
