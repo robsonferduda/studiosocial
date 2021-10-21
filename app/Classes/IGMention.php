@@ -112,11 +112,13 @@ class IGMention{
 
     public function getMediaWebHook($id, $changes)
     {
-        $ig_mention = new IGMentionApi($id);
 
         $changes['media_id'] = '18194579986190935';
+        $id = '17841437726599322';
 
-        $igPages =  IgPage::where('page_id', $changes['media_id'])->get();
+        $ig_mention = new IGMentionApi($id);
+
+        $igPages =  IgPage::where('page_id', $id)->get();
 
         foreach($igPages as $igPage) {
             $params = [
