@@ -12,4 +12,9 @@ class IgPage extends Model
                             'page_id',
                             'fb_page_id'
                         ];
+
+    public function fbPage()
+    {
+        return $this->hasOne(FbPage::class, 'id', 'fb_page_id');
+    }
 }

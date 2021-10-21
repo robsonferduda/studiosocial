@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Media;
 use App\Client;
+use App\IgPage;
 use Illuminate\Support\Facades\Log;
 
 class IGMention{
@@ -115,14 +116,19 @@ class IGMention{
 
         $changes['media_id'] = '18194579986190935';
 
-        $params = [
-            'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
+        $igPages =  IgPage::where('page_id', $changes['media_id'])->get();
 
-        ];
+        foreach($igPages as $igPage) {
+            $params = [
+                'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
+               // 'access_token' => 
+            ];
+    
+            Log::warning($igPage->fbPag->fbAccount->token);
 
-        $media = $ig_mention->getMetionHooked($params);
+            $media = $ig_mention->getMetionHooked($params);
+        }
 
-        Log::warning($media);
-
+        
     }
 }

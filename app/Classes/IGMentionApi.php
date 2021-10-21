@@ -27,7 +27,7 @@ class IGMentionApi extends IGApi{
     public function getMetionHooked(Array $params = []) : Array
     {
         $url = EndPoints::getMetionWebhookLink($this->getId());
-
+   
         $response = $this->makeApiCall($url,$params);
         
         \Log::warning($response);
