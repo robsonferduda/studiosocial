@@ -30,6 +30,8 @@ class IGMentionApi extends IGApi{
 
         $response = $this->makeApiCall($url,$params);
         
+        \Log::warning($response->json());
+
         if($response->successful()) {
             return $response->json();
         }
