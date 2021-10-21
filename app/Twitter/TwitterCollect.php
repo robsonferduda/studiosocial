@@ -2,7 +2,9 @@
 
 namespace App\Twitter;
 
+use App\Hashtag;
 use App\MediaTwitter;
+use App\Enums\SocialMedia;
 
 class TwitterCollect{
 
@@ -20,34 +22,39 @@ class TwitterCollect{
 
     public function pullMedias()
     {
-        $query = array(
-            "q" => "Atlético/MG",
-            "count" => 1000,
-            "lang" => 'pt',
-            "result_type" => "recent",
-            "exclude_replies" => true,
-            "retweeted" => false,
-            "tweet_mode" => "extended"
-        );
+        $hashtags_ativas = Hashtag::where('social_media_id', SocialMedia::TWITTER)->where('is_active',true)->get();
 
-        $tweets = $this->conn->get('search/tweets', $query);
-
-        foreach ($tweets->statuses as $tweet) {
-
-            $chave = array('twitter_id' => $tweet->id);
-            $dados = array('full_text' => $tweet->full_text,
-                        'retweet_count' => $tweet->retweet_count,
-                        'favorite_count' => $tweet->favorite_count,
-                        'user_id' => $tweet->user->id,
-                        'user_name' => $tweet->user->screen_name,
-                        'user_screen_name' => $tweet->user->screen_name,
-                        'user_location' => $tweet->user->location,
-                        'user_followers_count' => $tweet->user->followers_count,
-                        'user_friends_count' => $tweet->user->friends_count,
-                        'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
-                        );
-
-            $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
-        }   
+        foreach ($hashtags_ativas as $hashtag) {
+            
+            $query = array(
+                "q" => "#".$hashtag->hashtag,
+                "count" => 100,
+                "lang" => 'pt',
+                "result_type" => "recent",
+                "exclude_replies" => true,
+                "retweeted" => false,
+                "tweet_mode" => "extended"
+            );
+    
+            $tweets = $this->conn->get('search/tweets', $query);
+    
+            foreach ($tweets->statuses as $tweet) {
+    
+                $chave = array('twitter_id' => $tweet->id);
+                $dados = array('full_text' => $tweet->full_text,
+                            'retweet_count' => $tweet->retweet_count,
+                            'favorite_count' => $tweet->favorite_count,
+                            'user_id' => $tweet->user->id,
+                            'user_name' => $tweet->user->screen_name,
+                            'user_screen_name' => $tweet->user->screen_name,
+                            'user_location' => $tweet->user->location,
+                            'user_followers_count' => $tweet->user->followers_count,
+                            'user_friends_count' => $tweet->user->friends_count,
+                            'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
+                            );
+    
+                $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
+            }   
+        }
     }
 }
