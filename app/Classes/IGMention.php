@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Media;
 use App\Client;
+use Illuminate\Support\Facades\Log;
 
 class IGMention{
 
@@ -112,7 +113,7 @@ class IGMention{
     {
         $ig_mention = new IGMentionApi($id);
 
-        dd("mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}");
+        Log::warning("mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}");
 
         $params = [
             'fields' => `mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`,
