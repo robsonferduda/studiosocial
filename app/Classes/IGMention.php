@@ -126,7 +126,7 @@ class IGMention{
                // 'access_token' => 
             ];
     
-            Log::warning($igPage->fbPag->fbAccount->token);
+            Log::warning($igPage->fbPage->fbAccount->token);
 
             $media = $ig_mention->getMetionHooked($params);
         }
