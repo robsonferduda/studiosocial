@@ -123,11 +123,9 @@ class IGMention{
         foreach($igPages as $igPage) {
             $params = [
                 'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
-               // 'access_token' => 
+                'access_token' => $igPage->fbPage->fbAccount->token
             ];
     
-            Log::warning($igPage->fbPage->fbAccount->token);
-
             $media = $ig_mention->getMetionHooked($params);
         }
 
