@@ -22,6 +22,7 @@
                     <tr>
                         <th>Mídia Social</th>
                         <th>Hashtag</th>
+                        <th>Situação</th>
                         <th class="text-right">Menções</th>
                     </tr>
                 </thead>
@@ -30,6 +31,7 @@
                         <tr>
                             <td>{{ $hashtag->socialMedia->name }}</td>
                             <td><a href="{{ url('hashtag/medias/'.$hashtag->id) }}">#{{ $hashtag->hashtag }}</a></td>
+                            <td>{!! ($hashtag->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</td>
                             <td class="text-right">{{ $hashtag->medias->count() }}</td>
                         </tr>
                     @endforeach
