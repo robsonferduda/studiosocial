@@ -112,7 +112,6 @@ class IGMention{
 
     public function getMediaWebHook($id, $changes)
     {
-
         $changes['media_id'] = '18194579986190935';
         $id = '17841437726599322';
 
@@ -128,9 +127,9 @@ class IGMention{
     
             $media = $ig_mention->getMetionHooked($params);
 
-            Log::warning($media);
+            $media = $media['mentioned_media'];
 
-            exit;
+            Log::warning($media);
 
             $media = Media::updateOrCreate(
                 [
