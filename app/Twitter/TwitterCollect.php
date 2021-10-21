@@ -21,8 +21,8 @@ class TwitterCollect{
     public function pullMedias()
     {
         $query = array(
-            "q" => "Atlético/MG",
-            "count" => 1000,
+            "q" => "#VerdadesSecretas",
+            "count" => 100,
             "lang" => 'pt',
             "result_type" => "recent",
             "exclude_replies" => true,
