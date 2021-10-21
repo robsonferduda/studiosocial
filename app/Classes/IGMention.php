@@ -112,7 +112,7 @@ class IGMention{
     {
         $ig_mention = new IGMentionApi($id);
 
-        dd(`mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`);
+        dd("mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}})";
 
         $params = [
             'fields' => `mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}`,
