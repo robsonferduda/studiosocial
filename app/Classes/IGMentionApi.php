@@ -3,7 +3,6 @@
 namespace App\Classes;
 
 use App\EndPoints;
-use App\Fields\IGMentionFields;
 
 class IGMentionApi extends IGApi{
 
@@ -30,8 +29,6 @@ class IGMentionApi extends IGApi{
    
         $response = $this->makeApiCall($url,$params);
         
-        \Log::warning($response);
-
         if($response->successful()) {
             return $response->json();
         }
