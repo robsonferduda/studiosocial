@@ -17,6 +17,7 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
+            <p><i class="nc-icon nc-alert-circle-i"></i> Clique sobre a <strong>Situação</strong> para alterar seu valor</p>
             <table class="table">
                 <thead class="">
                     <tr>
