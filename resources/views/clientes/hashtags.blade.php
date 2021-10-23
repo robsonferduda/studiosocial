@@ -33,7 +33,17 @@
                             <td>{{ $hashtag->socialMedia->name }}</td>
                             <td><a href="{{ url('hashtag/medias/'.$hashtag->id) }}">#{{ $hashtag->hashtag }}</a></td>
                             <td class="text-center"><a href="{{ url('hashtag/situacao', $hashtag->id) }}">{!! ($hashtag->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</a></td>
-                            <td class="text-right">{{ $hashtag->medias->count() }}</td>
+                            <td class="text-right">
+                                @switch($hashtag->social_media_id)
+                                    @case(App\Enums\SocialMedia::INSTAGRAM)
+                                        {{ $hashtag->medias->count() }}
+                                        @break
+                                    @case(App\Enums\SocialMedia::TWITTER)
+                                        {{ $hashtag->socialMedia->count() }}
+                                        @break
+                                    @default                                        
+                                @endswitch
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
