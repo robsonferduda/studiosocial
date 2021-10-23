@@ -18,6 +18,11 @@ class Hashtag extends Model
         return $this->belongsToMany('App\Media','media_hashtag','hashtag_id','media_id')->withTimestamps();
     }
 
+    public function mediasTwitter()
+    {
+        return $this->belongsToMany('App\MediaTwitter','twitter_hashtag','hashtag_id','media_id')->withTimestamps();
+    }
+
     public function socialMedia()
     {
         return $this->belongsTo('App\SocialMedia', 'social_media_id', 'id');

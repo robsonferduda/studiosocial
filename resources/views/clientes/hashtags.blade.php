@@ -39,7 +39,7 @@
                                         {{ $hashtag->medias->count() }}
                                         @break
                                     @case(App\Enums\SocialMedia::TWITTER)
-                                        {{ $hashtag->socialMedia->count() }}
+                                        {{ $hashtag->mediasTwitter->count() }}
                                         @break
                                     @default                                        
                                 @endswitch

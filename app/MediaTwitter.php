@@ -25,4 +25,9 @@ class MediaTwitter extends Model
                             'place_name',
                             'created_tweet_at'
                         ];
+
+    public function hashtags()
+    {
+        return $this->belongsToMany('App\Hashtag','twitter_hashtag','media_id','hashtag_id')->withTimestamps();
+    }
 }
