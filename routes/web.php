@@ -18,6 +18,8 @@ Route::get('usuarios','UserController@index');
 Route::get('clientes','ClientController@index');
 Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');
 Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
+
+Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');
 
 Route::resource('client', 'ClientController');
@@ -34,4 +36,3 @@ Route::post('ig-webhook', 'IGWebhookController@receive');
 Route::get('/test-api', 'TestApiController@test');
 
 Route::get('twitter', 'TwitterController@index');
-

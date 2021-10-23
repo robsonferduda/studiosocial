@@ -16,6 +16,15 @@ class HashtagController extends Controller
         
     }
 
+    public function atualizarSituacao($hashtag)
+    {
+        $hashtag = Hashtag::find($hashtag);
+        $hashtag->is_active = !$hashtag->is_active;
+        $hashtag->save();
+        
+        return redirect('client/hashtags/'.$hashtag->client->id);
+    }
+
     public function medias($hashtag)
     {
         $hashtag = Hashtag::find($hashtag);
