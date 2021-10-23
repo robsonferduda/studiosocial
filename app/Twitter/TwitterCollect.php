@@ -54,6 +54,7 @@ class TwitterCollect{
                             );
     
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
+                $tweet->hashtags()->syncWithoutDetaching($hashtag->id);
             }   
         }
     }
