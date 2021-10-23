@@ -17,5 +17,10 @@ class FbPage extends Model
     public function igPage()
     {
         return $this->hasOne(IgPage::class, 'fb_page_id', 'id');
-    }                             
+    }   
+    
+    public function fbAccount()
+    {
+        return $this->hasOne(FbAccount::class, 'id', 'fb_account_id');
+    }   
 }

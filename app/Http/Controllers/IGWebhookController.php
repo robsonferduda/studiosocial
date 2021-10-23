@@ -20,8 +20,6 @@ class IGWebhookController extends Controller
                         $this->mention($entry['id'], $change['value']);
                         break;
                 }
-
-                Log::error($change);
             }
         }
 

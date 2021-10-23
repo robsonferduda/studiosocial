@@ -3,7 +3,6 @@
 namespace App\Classes;
 
 use App\EndPoints;
-use App\Fields\IGMentionFields;
 
 class IGMentionApi extends IGApi{
 
@@ -27,7 +26,7 @@ class IGMentionApi extends IGApi{
     public function getMetionHooked(Array $params = []) : Array
     {
         $url = EndPoints::getMetionWebhookLink($this->getId());
-
+   
         $response = $this->makeApiCall($url,$params);
         
         if($response->successful()) {
