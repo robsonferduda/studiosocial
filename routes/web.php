@@ -21,6 +21,7 @@ Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
 
 Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');
+Route::post('hashtag/create','HashtagController@create');
 
 Route::resource('client', 'ClientController');
 Route::resource('usuario', 'UserController');

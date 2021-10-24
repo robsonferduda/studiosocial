@@ -8,7 +8,7 @@ class Hashtag extends Model
 {
     protected $table = 'hashtags';
 
-    protected $fillable = [ 'hasttag',
+    protected $fillable = [ 'hashtag',
                             'client_id',
                             'social_media_id'
                         ];
