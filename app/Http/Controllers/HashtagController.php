@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Hashtag;
+use App\Enums\SocialMedia;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -31,7 +32,45 @@ class HashtagController extends Controller
     public function medias($hashtag)
     {
         $hashtag = Hashtag::find($hashtag);
-        return view('hashtags/medias', compact('hashtag'));
+        $medias = array();
+
+        switch ($hashtag->social_media_id) {
+            case SocialMedia::INSTAGRAM:
+                $medias_temp = $hashtag->medias;
+                foreach ($medias_temp as $key => $media) {
+                    
+                    $medias[] = array('id' => $media->media_id,
+                                      'text' => $media->caption,
+                                      'username' => '',
+                                      'created_at' => $media->timestamp,
+                                      'like_count' => $media->like_count,
+                                      'comments_count' => $media->like_count,
+                                      'social_media_id' => $media->social_media_id);
+
+                }
+                break;
+
+            case SocialMedia::TWITTER:
+                $medias_temp = $hashtag->mediasTwitter;
+                foreach ($medias_temp as $key => $media) {
+                    
+                    $medias[] = array('id' => $media->twitter_id,
+                                      'text' => $media->full_text,
+                                      'username' => $media->user_name,
+                                      'created_at' => $media->created_tweet_at,
+                                      'like_count' => $media->favorite_count,
+                                      'comments_count' => 0,
+                                      'social_media_id' => $media->social_media_id);
+
+                }
+                break;
+            
+            default:
+                //
+                break;
+        }
+
+        return view('hashtags/medias', compact('hashtag','medias'));
     }
 
     public function create(Request $request)
