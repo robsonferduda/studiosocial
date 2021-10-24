@@ -21,6 +21,7 @@
             <table class="table">
                 <thead class="">
                     <tr>
+                        <th>Data da Criação</th>
                         <th>Mídia Social</th>
                         <th>Hashtag</th>
                         <th class="text-center">Situação</th>
@@ -30,6 +31,7 @@
                 <tbody>
                     @foreach($client->hashtags->sortBy('hashtag') as $key => $hashtag)
                         <tr>
+                            <td>{{ Carbon\Carbon::parse($hashtag->created_at)->format('d/m/Y H:i') }}</td>
                             <td>{{ $hashtag->socialMedia->name }}</td>
                             <td><a href="{{ url('hashtag/medias/'.$hashtag->id) }}">#{{ $hashtag->hashtag }}</a></td>
                             <td class="text-center"><a href="{{ url('hashtag/situacao', $hashtag->id) }}">{!! ($hashtag->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</a></td>
