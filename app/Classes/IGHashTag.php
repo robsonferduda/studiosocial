@@ -29,7 +29,7 @@ class IGHashTag{
                         $access_token = $fbAccount->token;
                         $id_user_id = $fbPage->igPage->page_id;
                         
-                        $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->get();
+                        $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->where('is_active',true)->get();
 
                         foreach ($hashtags as $hashtag) {     
                             
