@@ -50,6 +50,7 @@ class TwitterCollect{
                             'user_location' => $tweet->user->location,
                             'user_followers_count' => $tweet->user->followers_count,
                             'user_friends_count' => $tweet->user->friends_count,
+                            'created_tweet_at' => $tweet->created_at,
                             'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
                             );
     
