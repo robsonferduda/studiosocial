@@ -2,11 +2,11 @@
 
 namespace App\Console;
 
-use App\Twitter\TwitterCollect;
+use App\Classes\FBMention;
 use App\Classes\IGHashTag;
 use App\Classes\IGMention;
+use App\Twitter\TwitterCollect;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -32,13 +32,8 @@ class Kernel extends ConsoleKernel
             (new IGHashTag())->pullMedias();
             (new IGMention())->pullMedias();
             (new TwitterCollect())->pullMedias();
+            (new FBMention())->pullMedias();
         })->hourly();
-
-        /*
-        $schedule->call(function () {
-            (new TwitterCollect())->pullMedias();
-        })->hourly();
-        */
     }
 
     /**
