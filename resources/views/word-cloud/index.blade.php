@@ -14,7 +14,7 @@
         $('body').loader('show');
 
 
-        fetch('/public/nuvem-palavras/words', {
+        fetch('/nuvem-palavras/words', {
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
