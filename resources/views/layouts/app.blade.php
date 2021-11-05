@@ -19,6 +19,8 @@
   <link href="{{ asset('css/custom.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/schedule.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/croppie.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/jqcloud.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/jquery.loader.min.css') }}" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
@@ -60,6 +62,12 @@
                   <a href="{{ url('relatorios') }}">
                   <i class="nc-icon nc-chart-bar-32"></i>
                   <p>RELATÓRIOS</p>
+                  </a>
+                </li>
+                <li class="{{ (Session::has('url') and Session::get('url') == 'nuvem-palavras') ? 'active' : '' }}">
+                  <a href="{{ url('nuvem-palavras') }}">
+                  <i class="nc-icon nc-chart-bar-32"></i>
+                  <p>NUVEM PALAVRAS</p>
                   </a>
                 </li>
                 <hr/>
@@ -161,6 +169,8 @@
   <script src="{{ asset('js/plugins/jquery.dataTables.min.js') }}"></script>
   <script src="{{ asset('js/plugins/bootstrap-datetimepicker.js') }}"></script>
   <script src="{{ asset('js/plugins/jquery.validate.min.js') }}"></script>
+  <script src="{{ asset('js/plugins/jqcloud.min.js') }}"></script>
+  <script src="{{ asset('js/plugins/jquery.loader.min.js') }}"></script>
   <script src="{{ asset('js/sweetalert2.js') }}"></script>
   <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
   <script src="{{ asset('demo/demo.js') }}"></script>
@@ -169,7 +179,7 @@
   <script src="{{ asset('js/upload-image.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
-<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
   
   <script>
     function setFormValidation(id) {
@@ -216,6 +226,7 @@
       });
     });
   </script>
+  @yield('script')
 </body>
 
 </html>
