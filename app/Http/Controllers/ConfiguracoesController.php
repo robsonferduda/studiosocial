@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Configs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,6 +16,7 @@ class ConfiguracoesController extends Controller
 
     public function index()
     {
-        return view('configuracoes/index');
+        $configs = Configs::all();
+        return view('configuracoes/index', compact('configs'));
     }
 }
