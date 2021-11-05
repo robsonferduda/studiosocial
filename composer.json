@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.2.5",
+        "axisofstevil/stop-words": "^0.1.0",
         "bensampo/laravel-enum": "v2.2.0",
         "beyondcode/laravel-websockets": "^1.12",
         "composer/ca-bundle": "^1.2",
@@ -24,7 +25,8 @@
         "maatwebsite/excel": "^3.1",
         "niklasravnsborg/laravel-pdf": "^4.0",
         "predis/predis": "^1.1",
-        "santigarcor/laratrust": "^6.1"
+        "santigarcor/laratrust": "^6.1",
+        "voku/stop-words": "^2.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
