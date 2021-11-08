@@ -39,3 +39,6 @@ Route::post('ig-webhook', 'IGWebhookController@receive');
 Route::get('/test-api', 'TestApiController@test');
 
 Route::get('twitter', 'TwitterController@index');
+
+Route::get('nuvem-palavras', 'WordCloudController@render');
+Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
