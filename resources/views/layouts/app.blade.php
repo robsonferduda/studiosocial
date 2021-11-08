@@ -114,11 +114,14 @@
               </button>
             </div>
             <a class="navbar-brand upper" href="{{ url('dashboard') }}">Studio Social</a>
-            @if(Session::get('cliente'))
-              <p>{{ Session::get('cliente')['nome'] }}</p>
-            @else
-              <p>Nenhum cliente selecionado</p>
-            @endif
+            <div>
+              @if(Session::get('cliente'))
+                <p>{{ Session::get('cliente')['nome'] }}</p>
+              @else
+                <p>Nenhum cliente selecionado</p>
+              @endif
+              <span class="troca_cliente"><i class="fa fa-refresh ml-1"></i></span>
+            </div>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>

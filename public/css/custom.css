@@ -29,5 +29,6 @@
     display: none;
 }
 .text-pink{ color: #e91ea1; }
+.troca_cliente:hover{ cursor: pointer; }
 
 .cloud-word{ cursor: pointer; }

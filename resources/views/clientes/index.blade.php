@@ -39,7 +39,11 @@
                             <td>{{ $c->name }}</td>
                             <td>{{ $c->email }}</td>
                             <td class="text-center">
-                                <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>
+                                @if($c->accounts)
+                                    <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>
+                                @else
+                                    <span>Conectar</span>
+                                @endif
                             </td>
                             <td class="text-center">
                                 <a title="Hashtags do Usuário" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>
