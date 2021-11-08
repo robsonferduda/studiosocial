@@ -43,6 +43,39 @@ $(document).ready(function() {
             }
         });
     });
+
+    var inputOptionsPromise = new Promise(function (resolve) {
+        
+        
+        
+          resolve({
+            '#FF0000': 'Red',
+            '#00FF00': 'Green',
+            '#0000FF': 'Blue'
+          })
+       
+      })
+
+    $('body').on("click", ".troca_cliente", function(e) {
+        e.preventDefault();
+        var link = $(this).attr('href');
+
+        Swal.fire({
+            title: "Selecione um cliente",
+            input: 'select',
+            inputOptions: inputOptionsPromise,
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: "Confirmar",
+            cancelButtonText: "Cancelar"
+        }).then(function(result) {
+            if (result.value) {
+                
+
+
+            }
+        });
+    });
     
     $("#is_password").change(function(){
 
