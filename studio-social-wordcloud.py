@@ -32,14 +32,20 @@ for client in clients:
     cur.execute(sql)
     medias_f = cur.fetchall()
 
-    df_t = pd.DataFrame (medias_t)
-    text_t = df_t.dropna(subset=['full_text'], axis=0)['full_text']
+    text_t = ''
+    if len(medias_t) > 0:
+        df_t = pd.DataFrame (medias_t)
+        text_t = df_t.dropna(subset=['full_text'], axis=0)['full_text']
 
-    df_f = pd.DataFrame (medias_f)
-    text_f = df_f.dropna(subset=['message'], axis=0)['message']
+    text_f = ''
+    if len(medias_f) > 0:
+        df_f = pd.DataFrame (medias_f)
+        text_f = df_f.dropna(subset=['message'], axis=0)['message']
 
-    df = pd.DataFrame (medias)
-    text_i = df.dropna(subset=['caption'], axis=0)['caption']
+    text_i = ''
+    if len(medias) > 0:
+        df = pd.DataFrame (medias)
+        text_i = df.dropna(subset=['caption'], axis=0)['caption']
 
     text_i = " ".join(c.lstrip("#").lower() for c in text_i)
     text_t = " ".join(c.lstrip("#").lower() for c in text_t)
