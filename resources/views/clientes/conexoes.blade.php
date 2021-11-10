@@ -22,7 +22,7 @@
                         <tr>
                             <th>Data da Conexão</th>
                             <th>Conta</th>
-                            <th class="text-left">Páginas</th>
+                            <th>Páginas</th>
                         </tr>
                     </thead>
                     <tbody>

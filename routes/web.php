@@ -10,7 +10,6 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 Auth::routes();
 
 Route::get('configuracoes','ConfiguracoesController@index');
-Route::get('monitoramento','MonitoramentoController@index');
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
 Route::get('relatorios','RelatorioController@index');
@@ -30,6 +29,9 @@ Route::resource('usuario', 'UserController');
 
 Route::get('login/facebook', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
+
+Route::get('monitoramento','MonitoramentoController@index');
+Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
 Route::get('check/token/{token}', 'TokenController@checkFacebookToken');
 

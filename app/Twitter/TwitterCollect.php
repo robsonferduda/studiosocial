@@ -43,6 +43,7 @@ class TwitterCollect{
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
                             'retweet_count' => $tweet->retweet_count,
+                            'client_id' => $hashtag->client_id,
                             'favorite_count' => $tweet->favorite_count,
                             'user_id' => $tweet->user->id,
                             'user_name' => $tweet->user->screen_name,

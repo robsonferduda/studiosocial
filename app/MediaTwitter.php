@@ -23,7 +23,8 @@ class MediaTwitter extends Model
                             'user_friends_count',
                             'user_location',
                             'place_name',
-                            'created_tweet_at'
+                            'created_tweet_at',
+                            'client_id'
                         ];
 
     public function hashtags()

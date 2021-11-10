@@ -17,4 +17,9 @@ class MonitoramentoController extends Controller
     {
         return view('monitoramento/index');
     }
+
+    public function seleciona()
+    {
+        return view('monitoramento/medias');
+    }
 }
