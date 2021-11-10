@@ -16,11 +16,30 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
-
-            @foreach($client->fbAccount as $key => $account)
-                <h5>{{ $account->name }} ({{ $account->user_id }})</h5>  
-            @endforeach
-           
+            <div class="col-md-12">
+                <table class="table">
+                    <thead class="">
+                        <tr>
+                            <th>Data da Conexão</th>
+                            <th>Conta</th>
+                            <th class="text-left">Páginas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($client->fbAccount as $key => $account)
+                            <tr>
+                                <td>{{ date('d/m/Y H:i:s', strtotime($account->name)) }}</td>
+                                <td>{{ $account->name }}</td>
+                                <td>
+                                    @foreach($account->fbPages as $key => $page)
+                                        <p><i class="fa fa-facebook"></i> {{ $page->name }}</p>
+                                    @endforeach
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>   
+            </div>        
         </div>
     </div>
 </div> 
