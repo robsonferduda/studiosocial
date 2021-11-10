@@ -26,7 +26,7 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Instagram</p>
-                                        <p class="card-title"><a href="{{ url('monitoramento/media/facebook') }}">TOTAL</a></p>
+                                        <p class="card-title"><a href="{{ url('monitoramento/media/instagram') }}">{{ $totais['total_insta'] }}</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -45,7 +45,7 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Facebook</p>
-                                        <p class="card-title"><a href="{{ url('monitoramento/media/facebook') }}">TOTAL</a></p>
+                                        <p class="card-title"><a href="{{ url('monitoramento/media/facebook') }}">{{ $totais['total_face'] }}</a></p>
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Twitter</p>
-                                        <p class="card-title"><a href="{{ url('monitoramento/media/facebook') }}">TOTAL</a></p>
+                                        <p class="card-title"><a href="{{ url('monitoramento/media/twitter') }}">{{ $totais['total_twitter'] }}</a></p>
                                     </div>
                                 </div>
                             </div>
