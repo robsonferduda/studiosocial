@@ -32,7 +32,12 @@
                                 <td>{{ $account->name }}</td>
                                 <td>
                                     @foreach($account->fbPages as $key => $page)
-                                        <p><i class="fa fa-facebook"></i> {{ $page->name }}</p>
+                                        <p>
+                                            <i class="fa fa-facebook"></i> {{ $page->name }}
+                                            @if($page->igPage)
+                                                <i class="fa fa-instagram"></i> {{ $page->igPage->name }}
+                                            @endif
+                                        </p>
                                     @endforeach
                                 </td>
                             </tr>
