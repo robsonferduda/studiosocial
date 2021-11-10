@@ -66,7 +66,7 @@
                 </li>
                 <li class="{{ (Session::has('url') and Session::get('url') == 'nuvem-palavras') ? 'active' : '' }}">
                   <a href="{{ url('nuvem-palavras') }}">
-                  <i class="nc-icon nc-chart-bar-32"></i>
+                  <i class="fa fa-cloud"></i>
                   <p>NUVEM PALAVRAS</p>
                   </a>
                 </li>
