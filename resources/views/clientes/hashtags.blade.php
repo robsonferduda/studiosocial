@@ -44,7 +44,7 @@
                                         @case(App\Enums\SocialMedia::TWITTER)
                                             {{ $hashtag->mediasTwitter->count() }}
                                             @break
-                                        @default                                        
+                                        @default                        
                                     @endswitch
                                 </td>
                             </tr>
