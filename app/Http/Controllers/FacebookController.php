@@ -14,7 +14,7 @@ use Laravel\Socialite\Facades\Socialite;
 
 class FacebookController extends Controller
 {
-    public function redirectToProvider($client)
+    public function redirectToProvider()
     {
         return Socialite::driver('facebook')
        // ->with(['client' => $client ]) 
