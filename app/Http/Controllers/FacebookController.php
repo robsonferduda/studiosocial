@@ -17,7 +17,7 @@ class FacebookController extends Controller
     public function redirectToProvider($client)
     {
         return Socialite::driver('facebook')
-        ->with(['client' => $client ]) 
+       // ->with(['client' => $client ]) 
         ->scopes([
                 'instagram_basic',
                 'instagram_manage_insights',
