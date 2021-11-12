@@ -19,6 +19,10 @@ class FBMention{
             
             foreach ($client->fbAccounts as $fbAccount) {
 
+                if($fbAccount->mention === false) {
+                    continue;
+                }
+
                 foreach ($fbAccount->fbPages as $fbPage) {
 
                     $access_token = $fbPage->token;
