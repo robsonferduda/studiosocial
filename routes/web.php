@@ -16,7 +16,7 @@ Route::get('relatorios','RelatorioController@index');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
-Route::get('clientes','ClientController@index');
+Route::get('clientes','ClientController@index')->name('clientes.index');
 Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');
 Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
 

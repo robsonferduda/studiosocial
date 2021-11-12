@@ -75,13 +75,14 @@ class FacebookController extends Controller
                         );
 
                 }
-
                 
             }
             
         } catch (Exception $e) {
             var_dump($e->getMessage());
         }
+
+        return redirect()->route('clientes.index');
     }
 
     private function getFBPages(String $token)
