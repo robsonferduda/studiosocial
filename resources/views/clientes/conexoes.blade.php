@@ -23,6 +23,7 @@
                             <th>Data da Conexão</th>
                             <th>Conta</th>
                             <th>Páginas</th>
+                            <th>Coletar Menções?</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,16 @@
                                             @endif
                                         </p>
                                     @endforeach
+                                </td>
+                                <td>
+                                    <div class="form-check mt-3">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input data-accountid="{{ $account->id }}"  {{  $account->mention ? 'checked' : '' }}  class="form-check-input" type="checkbox" name="mencao">   
+                                                <span class="form-check-sign"></span>                                                                                            
+                                            </label>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -69,6 +80,29 @@
 @section('script')
 <script>
     $( document ).ready(function() {
+
+        const APP_URL = {!! json_encode(url('/')) !!}
+
+        $('input[name="mencao"]').click(function(){
+
+            let checked = false;
+            const account_id = $(this).data('accountid');
+            const _token = $('meta[name="csrf-token"]').attr('content');
+
+            if($(this).is(':checked')) {
+                checked = true;
+            } 
+        
+            fetch(APP_URL+'/account/collect/mention', {
+                    method: 'POST', 
+                    body: JSON.stringify({ _token: _token, account_id: account_id, checked: checked }),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+            });
+        });
+
         $('.info-pagina').click(function(){
 
             $('body').loader('show');
@@ -87,8 +121,6 @@
             }
 
             $('#info-pagina').find('.modal-title').html(text);
-
-            var APP_URL = {!! json_encode(url('/')) !!}
 
             fetch(APP_URL+'/check/token', {
                     method: 'POST', 

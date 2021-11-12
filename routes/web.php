@@ -44,3 +44,6 @@ Route::get('twitter', 'TwitterController@index');
 
 Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
+
+Route::post('account/collect/mention', 'AccountController@isToCollectMention');
+
