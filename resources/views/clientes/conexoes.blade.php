@@ -102,14 +102,15 @@
                     //words = JSON.stringify(words);
 
             }).then(function(response){
-                
+                let html = '';
                 if(response.is_valid === true){
-
-                    let html = '<p>O login é válido até: '+response.expires_at+'</p>';
-
-                    $('#info-pagina').find('.modal-body').html(html);
+                    html = '<p>O login é válido até: '+response.expires_at+'.</p>';
+                } else {
+                    html = '<p>Login inválido. Realize novamente a conexão com o Facebook.</p>';
                 }
                 
+                $('#info-pagina').find('.modal-body').html(html);
+
                 $('body').loader('hide');
                 $('#info-pagina').modal('show');
             });
