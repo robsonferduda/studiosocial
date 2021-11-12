@@ -31,7 +31,6 @@ class FacebookController extends Controller
 
     public function handleProviderCallback(Request $request)
     {
-        dd($request);
         try {
             
             $user_facebook = Socialite::driver('facebook')->stateless()->user();
@@ -39,7 +38,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => $request->client
+                'client_id' => 1
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
