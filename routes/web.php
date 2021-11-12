@@ -27,7 +27,7 @@ Route::post('hashtag/create','HashtagController@create');
 Route::resource('client', 'ClientController');
 Route::resource('usuario', 'UserController');
 
-Route::get('login/facebook/{client}', 'FacebookController@redirectToProvider');
+Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
 Route::get('monitoramento','MonitoramentoController@index');
