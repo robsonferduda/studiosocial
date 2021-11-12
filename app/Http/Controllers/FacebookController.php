@@ -11,13 +11,16 @@ use App\Client;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Session;
+
 
 class FacebookController extends Controller
 {
-    public function redirectToProvider()
+    public function redirectToProvider($client)
     {
+        Session::put('id-cliente-login-facebook',$client);
+
         return Socialite::driver('facebook')
-       // ->with(['client' => $client ]) 
         ->scopes([
                 'instagram_basic',
                 'instagram_manage_insights',
@@ -38,7 +41,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => 1
+                'client_id' => Session::get('id-cliente-login-facebook');
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
