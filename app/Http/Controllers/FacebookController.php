@@ -7,6 +7,7 @@ use App\Enums\SocialMedia;
 use App\FbAccount;
 use App\FbPage;
 use App\IgPage;
+use App\Client;
 use Illuminate\Support\Facades\Http;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -25,8 +26,9 @@ class FacebookController extends Controller
                                                     ])->redirect();
     }
 
-    public function handleProviderCallback()
+    public function handleProviderCallback($client)
     {
+
         try {
             
             $user_facebook = Socialite::driver('facebook')->stateless()->user();
@@ -34,7 +36,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => 1
+                'client_id' => $client
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,

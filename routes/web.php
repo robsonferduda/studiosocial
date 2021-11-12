@@ -27,13 +27,13 @@ Route::post('hashtag/create','HashtagController@create');
 Route::resource('client', 'ClientController');
 Route::resource('usuario', 'UserController');
 
-Route::get('login/facebook', 'FacebookController@redirectToProvider');
+Route::get('login/facebook/{cliente}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
 Route::get('monitoramento','MonitoramentoController@index');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
-Route::get('check/token/{token}', 'TokenController@checkFacebookToken');
+Route::post('check/token', 'TokenController@checkFacebookToken');
 
 Route::get('ig-webhook', 'IGWebhookController@urlValidade');
 Route::post('ig-webhook', 'IGWebhookController@receive');

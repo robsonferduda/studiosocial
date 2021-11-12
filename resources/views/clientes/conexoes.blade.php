@@ -28,14 +28,14 @@
                     <tbody>
                         @foreach($client->fbAccount as $key => $account)
                             <tr>
-                                <td>{{ date('d/m/Y H:i:s', strtotime($account->name)) }}</td>
+                                <td>{{ date('d/m/Y H:i:s', strtotime($account->updated_at)) }}</td>
                                 <td>{{ $account->name }}</td>
                                 <td>
                                     @foreach($account->fbPages as $key => $page)
                                         <p>
-                                            <i class="fa fa-facebook"></i> {{ $page->name }}
+                                            <a href="" class='info-pagina' data-tipo='page'  data-token={{ $page->token }}><strong><i class="fa fa-facebook"></i> {{ $page->name }}</strong></a>
                                             @if($page->igPage)
-                                                <i class="fa fa-instagram"></i> {{ $page->igPage->name }}
+                                                <a href="" class='info-pagina' data-tipo='instagram' data-token={{ $account->token }}><i class="fa fa-instagram"></i> {{ $page->igPage->name }}</a>
                                             @endif
                                         </p>
                                     @endforeach
@@ -48,4 +48,74 @@
         </div>
     </div>
 </div> 
+
+<div class="modal fade" id="info-pagina" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+    </div>
+  </div>
+</div>
+
+@endsection
+@section('script')
+<script>
+    $( document ).ready(function() {
+        $('.info-pagina').click(function(){
+
+            $('body').loader('show');
+
+            let text = $(this).text();
+            const tipo = $(this).data('tipo');
+            const _token = $('meta[name="csrf-token"]').attr('content');
+            const page_token = $(this).data('token');
+
+            if(tipo == 'page') {
+                text = '<i class="fa fa-facebook">'+text+'</i>';
+            }
+
+            if(tipo == 'instagram') {
+                text = '<i class="fa fa-instagram">'+text+'</i>';
+            }
+
+            $('#info-pagina').find('.modal-title').html(text);
+
+            var APP_URL = {!! json_encode(url('/')) !!}
+
+            fetch(APP_URL+'/check/token', {
+                    method: 'POST', 
+                    body: JSON.stringify({_token: _token, page_token: page_token}),
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+            }).then(function(response) {
+                    return response.json();
+                    //words = JSON.stringify(words);
+
+            }).then(function(response){
+                
+                if(response.is_valid === true){
+
+                    let html = '<p>O login é válido até: '+response.expires_at+'</p>';
+
+                    $('#info-pagina').find('.modal-body').html(html);
+                }
+                
+                $('body').loader('hide');
+                $('#info-pagina').modal('show');
+            });
+
+            return false;
+        });
+    });
+</script>
 @endsection
