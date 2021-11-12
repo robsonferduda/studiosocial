@@ -9,24 +9,27 @@ use App\FbPage;
 use App\IgPage;
 use App\Client;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
 
 class FacebookController extends Controller
 {
-    public function redirectToProvider()
+    public function redirectToProvider($client)
     {
-        return Socialite::driver('facebook')->scopes([
-                                                        'instagram_basic',
-                                                        'instagram_manage_insights',
-                                                        'instagram_manage_comments',
-                                                        'pages_show_list',
-                                                        'pages_read_engagement',
-                                                        'pages_read_user_content',
-                                                        'pages_manage_metadata'
-                                                    ])->redirect();
+        return Socialite::driver('facebook')
+        ->with(['client' => $client ]) 
+        ->scopes([
+                'instagram_basic',
+                'instagram_manage_insights',
+                'instagram_manage_comments',
+                'pages_show_list',
+                'pages_read_engagement',
+                'pages_read_user_content',
+                'pages_manage_metadata'
+        ])->redirect();
     }
 
-    public function handleProviderCallback($client)
+    public function handleProviderCallback(Request $request)
     {
 
         try {
@@ -36,7 +39,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => $client
+                'client_id' => $request->client
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
