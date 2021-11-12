@@ -41,7 +41,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => Session::get('id-cliente-login-facebook');
+                'client_id' => Session::get('id-cliente-login-facebook')
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
