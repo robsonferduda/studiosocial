@@ -12,6 +12,8 @@ class IGWebhookController extends Controller
     public function receive(Request $request)
     {
         
+        Log::warning($request);
+
         foreach($request['entry'] as $entry) {
             foreach($entry['changes'] as $change) {
                 
