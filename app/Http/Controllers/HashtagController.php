@@ -36,7 +36,8 @@ class HashtagController extends Controller
 
         switch ($hashtag->social_media_id) {
             case SocialMedia::INSTAGRAM:
-                $medias_temp = $hashtag->medias;
+                $medias_temp = $hashtag->medias()->orderBy('timestamp', 'DESC')->paginate(20);
+                
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->media_id,
@@ -51,7 +52,7 @@ class HashtagController extends Controller
                 break;
 
             case SocialMedia::TWITTER:
-                $medias_temp = $hashtag->mediasTwitter;
+                $medias_temp = $hashtag->mediasTwitter()->orderBy('created_tweet_at', 'DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->twitter_id,
@@ -70,7 +71,7 @@ class HashtagController extends Controller
                 break;
         }
 
-        return view('hashtags/medias', compact('hashtag','medias'));
+        return view('hashtags/medias', compact('hashtag','medias','medias_temp'));
     }
 
     public function create(Request $request)
