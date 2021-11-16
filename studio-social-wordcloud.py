@@ -24,7 +24,7 @@ for client in clients:
     cur.execute(sql)
     medias = cur.fetchall()
 
-    sql = 'select * from media_twitter'
+    sql = 'select * from media_twitter where client_id ='+str(client['id'])
     cur.execute(sql)
     medias_t = cur.fetchall()
 

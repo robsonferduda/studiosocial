@@ -13,8 +13,9 @@
 
         $('body').loader('show');
 
+        var APP_URL = {!! json_encode(url('/')) !!}
 
-        fetch('/nuvem-palavras/words', {
+        fetch(APP_URL+'/nuvem-palavras/words', {
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',

@@ -27,11 +27,12 @@ class WordCloudController extends Controller
         return view('word-cloud/index');
     }
 
-    public function getWords() {
+    public function getWords() 
+    {
 
         if(isset($this->cliente['id'])) {
 
-            $file = Storage::disk('wordcloud')->get('cliente-1-wordclould.json');
+            $file = Storage::disk('wordcloud')->get("cliente-{$this->cliente['id']}-wordclould.json");
 
             $words = json_decode($file);
             
