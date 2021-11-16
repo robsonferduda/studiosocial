@@ -1581,26 +1581,35 @@ demo = {
     myChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        labels: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
         datasets: [
 
           {
-            label: "Data",
-            borderColor: '#fcc468',
+            label: "Instagram",
+            borderColor: '#e91ea1',
             fill: true,
-            backgroundColor: '#fcc468',
+            backgroundColor: '#e91ea1',
             hoverBorderColor: '#fcc468',
             borderWidth: 8,
             data: [100, 120, 80, 100, 90, 130, 110, 100, 80, 110, 130, 140, 130, 120, 130, 80, 100, 90, 120, 130],
           },
           {
-            label: "Data",
-            borderColor: '#4cbdd7',
+            label: "Facebook",
+            borderColor: '#3f51b5',
             fill: true,
-            backgroundColor: '#4cbdd7',
-            hoverBorderColor: '#4cbdd7',
+            backgroundColor: '#3f51b5',
+            hoverBorderColor: '#3f51b5',
             borderWidth: 8,
             data: [80, 140, 50, 120, 50, 150, 60, 130, 50, 130, 150, 100, 110, 80, 140, 50, 140, 50, 110, 150],
+          },
+          {
+            label: "Twitter",
+            borderColor: '#51bcda',
+            fill: true,
+            backgroundColor: '#51bcda',
+            hoverBorderColor: '#51bcda',
+            borderWidth: 8,
+            data: [56, 135, 85, 175, 12, 175, 27, 145, 75, 158, 169, 175, 132, 58, 174, 86, 111, 80, 156, 177],
           }
         ]
       },

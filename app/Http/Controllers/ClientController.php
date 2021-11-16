@@ -43,6 +43,19 @@ class ClientController extends Controller
         return view('clientes/editar',compact('client'));
     }
 
+    public function json()
+    {
+        $clientes = Client::select('id','name')->orderBy('name')->get();
+        return response()->json($clientes);
+    }
+
+    public function selecionar(Request $request)
+    {
+        $cliente = Client::find($request->cliente);
+        $cliente_session = array('id' => $cliente->id, 'nome' => $cliente->name);
+        Session::put('cliente', $cliente_session);
+    }
+
     public function store(ClientRequest $request)
     {
         try {

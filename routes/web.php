@@ -17,8 +17,10 @@ Route::get('relatorios','RelatorioController@index');
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
 Route::get('clientes','ClientController@index');
+Route::get('cliente/get/json','ClientController@json');
 Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');
 Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
+Route::post('cliente/selecionar','ClientController@selecionar');
 
 Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');

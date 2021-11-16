@@ -44,22 +44,28 @@ $(document).ready(function() {
         });
     });
 
+    var host =  $('meta[name="base-url"]').attr('content');
+
     var inputOptionsPromise = new Promise(function (resolve) {
         
-        
-        
-          resolve({
-            '#FF0000': 'Red',
-            '#00FF00': 'Green',
-            '#0000FF': 'Blue'
-          })
-       
-      })
+        var options = {};
+        $.ajax({
+            url: host+'/cliente/get/json',
+            type: 'GET',
+            success: function(response) {
+
+                $.map(response,
+                    function(o) {
+                        options[o.id] = o.name;
+                    });
+
+                resolve(options)               
+            }
+        });
+    });
 
     $('body').on("click", ".troca_cliente", function(e) {
         e.preventDefault();
-        var link = $(this).attr('href');
-
         Swal.fire({
             title: "Selecione um cliente",
             input: 'select',
@@ -69,10 +75,24 @@ $(document).ready(function() {
             confirmButtonText: "Confirmar",
             cancelButtonText: "Cancelar"
         }).then(function(result) {
-            if (result.value) {
-                
+            if (result.isConfirmed) {
 
+                var cliente = $(".swal2-select").val();
 
+                $.ajax({
+                    url: host+'/cliente/selecionar',
+                       type: 'POST',
+                       data: {
+                            "_token": $('meta[name="csrf-token"]').attr('content'),
+                            "cliente": cliente
+                    },
+                    success: function(response) {
+                        window.location.reload();                                
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
             }
         });
     });
