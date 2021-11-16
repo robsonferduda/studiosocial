@@ -13,7 +13,8 @@ class FbAccount extends Model
                             'name',
                             'user_id',
                             'token',
-                            'token_expires'
+                            'token_expires',
+                            'mention'
                         ];    
                                           
     public function fbPages()

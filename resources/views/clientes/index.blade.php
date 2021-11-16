@@ -40,12 +40,11 @@
                             <td>{{ $c->email }}</td>
                             <td class="text-center">
                                 @if(count($c->fbAccounts))
-                                    <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon btn-social btn-facebook"><i class="fa fa-facebook font-25"></i></a>
-                                @else
-                                    <a href="https://studiosocial.ga/login/facebook" class="btn btn-social btn-facebook">
-                                        <i class="fa fa-facebook fa-fw"></i> CONECTAR Facebook
-                                    </a>
+                                    <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon btn-social btn-facebook"><i  class="fa fa-plug font-25"></i></a>
                                 @endif
+                                <a href="https://studiosocial.ga/login/facebook/client/{{ $c->id }}" class="btn btn-social btn-facebook">
+                                    <i class="fa fa-facebook fa-fw"></i> CONECTAR Facebook
+                                </a>
                             </td>
                             <td class="text-center">
                                 <a title="Hashtags do Usuário" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>

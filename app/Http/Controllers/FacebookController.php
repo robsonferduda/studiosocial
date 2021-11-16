@@ -7,25 +7,32 @@ use App\Enums\SocialMedia;
 use App\FbAccount;
 use App\FbPage;
 use App\IgPage;
+use App\Client;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Request;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Session;
+
 
 class FacebookController extends Controller
 {
-    public function redirectToProvider()
+    public function redirectToProvider($client)
     {
-        return Socialite::driver('facebook')->scopes([
-                                                        'instagram_basic',
-                                                        'instagram_manage_insights',
-                                                        'instagram_manage_comments',
-                                                        'pages_show_list',
-                                                        'pages_read_engagement',
-                                                        'pages_read_user_content',
-                                                        'pages_manage_metadata'
-                                                    ])->redirect();
+        Session::put('id-cliente-login-facebook',$client);
+
+        return Socialite::driver('facebook')
+        ->scopes([
+                'instagram_basic',
+                'instagram_manage_insights',
+                'instagram_manage_comments',
+                'pages_show_list',
+                'pages_read_engagement',
+                'pages_read_user_content',
+                'pages_manage_metadata'
+        ])->redirect();
     }
 
-    public function handleProviderCallback()
+    public function handleProviderCallback(Request $request)
     {
         try {
             
@@ -34,7 +41,7 @@ class FacebookController extends Controller
             $fb_account = FbAccount::updateOrcreate(
             [
                 'user_id' => $user_facebook->id,
-                'client_id' => 1
+                'client_id' => Session::get('id-cliente-login-facebook')
             ],
             [
                 'social_media_id' => SocialMedia::FACEBOOK,
@@ -71,13 +78,14 @@ class FacebookController extends Controller
                         );
 
                 }
-
                 
             }
             
         } catch (Exception $e) {
             var_dump($e->getMessage());
         }
+
+        return redirect()->route('clientes.index');
     }
 
     private function getFBPages(String $token)

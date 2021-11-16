@@ -20,6 +20,10 @@ class IGMention{
             
             foreach ($client->fbAccounts as $fbAccount) {
 
+                if($fbAccount->mention === false) {
+                    continue;
+                }
+
                 foreach ($fbAccount->fbPages as $fbPage) {
 
                     if(isset($fbPage->igPage)){

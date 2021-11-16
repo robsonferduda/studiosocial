@@ -145,4 +145,5 @@ class ClientController extends Controller
         $social_medias = SocialMedia::orderBy('name')->get();
         return view('clientes/hashtags', compact('client','social_medias'));
     }
+
 }

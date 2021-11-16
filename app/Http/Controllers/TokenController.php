@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class TokenController extends Controller
 {
 
-    public function checkFacebookToken(String $token)
+    public function checkFacebookToken(Request $request)
     {
         $token_app = $this->getTokenApp();
 
         $url = "https://graph.facebook.com/debug_token";
         $params = [
-            'input_token' => $token,
+            'input_token' => $request->page_token,
             'access_token' => $token_app
 
         ];
@@ -27,7 +28,7 @@ class TokenController extends Controller
             ]);
         }
             
-        $date = date("Y-m-d H:i:s ", $response->json()['data']['data_access_expires_at']);
+        $date = date("d-m-Y H:i:s ", $response->json()['data']['data_access_expires_at']);
 
         return json_encode([
             'is_valid' => true,
