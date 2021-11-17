@@ -16,7 +16,8 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
-            <h6 class="ml-3">Total de mídias coletadas: {{ count($medias) }}</h6>
+            <h6 class="ml-3">Mostrando {{ $medias_temp->count() }} de {{ $medias_temp->total() }} mídias coletadas</h6>
+            {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
             @foreach($medias as $key => $media)
                 <div class="card">
                     <div class="card-body">
@@ -56,6 +57,7 @@
                     </div>
                 </div>
             @endforeach
+            {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
         </div>
     </div>
 </div> 

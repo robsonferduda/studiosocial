@@ -37,7 +37,7 @@ class MonitoramentoController extends Controller
 
         switch ($rede) {
             case 'instagram':
-                $medias_temp = Media::where('client_id', $client_id)->get();
+                $medias_temp = Media::where('client_id', $client_id)->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->media_id,
@@ -53,7 +53,7 @@ class MonitoramentoController extends Controller
                 break;
 
             case 'facebook':
-                $medias_temp = FbPost::where('client_id', $client_id)->get();
+                $medias_temp = FbPost::where('client_id', $client_id)->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->id,
@@ -69,7 +69,7 @@ class MonitoramentoController extends Controller
                 break;
             
             case 'twitter':
-                $medias_temp = MediaTwitter::where('client_id', $client_id)->get();
+                $medias_temp = MediaTwitter::where('client_id', $client_id)->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->twitter_id,
@@ -85,6 +85,6 @@ class MonitoramentoController extends Controller
             break;
         }
 
-        return view('monitoramento/medias', compact('medias'));
+        return view('monitoramento/medias', compact('medias', 'medias_temp'));
     }
 }
