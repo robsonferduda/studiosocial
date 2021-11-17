@@ -39,10 +39,10 @@
                                 <td class="text-right">
                                     @switch($hashtag->social_media_id)
                                         @case(App\Enums\SocialMedia::INSTAGRAM)
-                                            {{ $hashtag->medias->count() }}
+                                            {{ $hashtag->medias_count }}
                                             @break
                                         @case(App\Enums\SocialMedia::TWITTER)
-                                            {{ $hashtag->mediasTwitter->count() }}
+                                            {{ $hashtag->medias_twitter_count }}
                                             @break
                                         @default                        
                                     @endswitch
