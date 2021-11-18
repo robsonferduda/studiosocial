@@ -64,7 +64,9 @@ class FacebookController extends Controller
                     ]
                 );
 
-                //$teste = $this->subscribeApps($fbPage['id'], $fbPage['access_token']);
+                $teste = $this->subscribeApps($fbPage['id'], $fbPage['access_token']);
+
+                dd($teste);
 
                 $ig_business_account = $this->getIGBusinessAccount($fb_page->page_id, $fb_account->token);
 
@@ -117,7 +119,7 @@ class FacebookController extends Controller
 
         $params = [
             'access_token' => $token,
-            'subscribed_fields' => 'mentions'
+            'subscribed_fields' => 'field,mention'
         ];
 
         return Http::post($url,$params);
