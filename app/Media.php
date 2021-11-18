@@ -21,7 +21,8 @@ class Media extends Model
                             'hashtagged',
                             'mentioned',
                             'username',
-                            'video_title'
+                            'video_title',
+                            'hooked'
                         ];
     
     public function hashtags()

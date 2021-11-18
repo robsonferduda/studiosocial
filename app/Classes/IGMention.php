@@ -148,7 +148,8 @@ class IGMention{
                     'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
                     'username' =>  isset($media['username']) ? $media['username']: null,
                     'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
-                    'mentioned' => 'S'
+                    'mentioned' => 'S',
+                    'hooked' => 'S'
             ]);        
         }
     }
