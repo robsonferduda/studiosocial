@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\Media;
 use App\Client;
 use App\IgPage;
+use App\IgComment;
 
 class IGMention{
 
@@ -130,6 +131,8 @@ class IGMention{
     
             $media = $ig_mention->getMetionHooked($params);
 
+            dd($media);
+
             $media = $media['mentioned_media'];
 
             $media = Media::updateOrCreate(
@@ -150,7 +153,14 @@ class IGMention{
                     'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
                     'mentioned' => 'S',
                     'hooked' => 'S'
-            ]);        
+            ]); 
+            
+            // if(isset($changes['comment_id'])) {
+
+            // }
+            
+
+
         }
     }
 }
