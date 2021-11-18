@@ -6,6 +6,7 @@ use App\Media;
 use App\Client;
 use App\IgPage;
 use App\IgComment;
+use Illuminate\Support\Facades\Log;
 
 class IGMention{
 
@@ -131,7 +132,7 @@ class IGMention{
     
             $media = $ig_mention->getMetionHooked($params);
 
-            dd($media);
+            Log::warning($media);
 
             $media = $media['mentioned_media'];
 
