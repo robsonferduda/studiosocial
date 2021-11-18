@@ -41,6 +41,9 @@ Route::post('check/token', 'TokenController@checkFacebookToken');
 Route::get('ig-webhook', 'IGWebhookController@urlValidade');
 Route::post('ig-webhook', 'IGWebhookController@receive');
 
+Route::get('fb-webhook', 'FBWebhookController@urlValidade');
+Route::post('fb-webhook', 'FBWebhookController@receive');
+
 Route::get('/test-api', 'TestApiController@test');
 
 Route::get('twitter', 'TwitterController@index');
