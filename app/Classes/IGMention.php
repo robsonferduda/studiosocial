@@ -137,8 +137,6 @@ class IGMention{
 
                 $media = $comment['mentioned_comment']['media'];  
                 $comment =  $comment['mentioned_comment'];              
-
-                $metioned = null;
                 
             } else {
 
@@ -150,11 +148,8 @@ class IGMention{
                 $media = $ig_mention->getMetionHooked($params);
 
                 $media = $media['mentioned_media'];
-
-                $metioned = 'S';
             }
             
-
             Log::warning($media);           
 
             $media = Media::updateOrCreate(
@@ -173,7 +168,7 @@ class IGMention{
                     'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
                     'username' =>  isset($media['username']) ? $media['username']: null,
                     'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
-                    'mentioned' => $metioned,
+                    'mentioned' => 'S',
                     'hooked' => 'S'
             ]); 
             
