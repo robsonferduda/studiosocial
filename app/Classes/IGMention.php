@@ -125,16 +125,37 @@ class IGMention{
         $igPages =  IgPage::where('page_id', $id)->get();
 
         foreach($igPages as $igPage) {
-            $params = [
-                'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
-                'access_token' => $igPage->fbPage->fbAccount->token
-            ];
-    
-            $media = $ig_mention->getMetionHooked($params);
+                   
+            if(isset($changes['comment_id'])) {
 
-            Log::warning($media);
+                $params = [
+                    'fields' => "mentioned_comment.comment_id({$changes['comment_id']}){text,timestamp,id,media{{$ig_mention->getIGMentionFields()}}}",
+                    'access_token' => $igPage->fbPage->fbAccount->token
+                ];
 
-            $media = $media['mentioned_media'];
+                $comment = $ig_mention->getMetionHooked($params);
+
+                $media = $media['mentioned_comment']['media'];  
+                $comment =  $media['mentioned_comment'];              
+
+                $metioned = null;
+                
+            } else {
+
+                $params = [
+                    'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
+                    'access_token' => $igPage->fbPage->fbAccount->token
+                ];
+
+                $media = $ig_mention->getMetionHooked($params);
+
+                $media = $media['mentioned_media'];
+
+                $metioned = 'S';
+            }
+            
+
+            Log::warning($media);           
 
             $media = Media::updateOrCreate(
                 [
@@ -152,16 +173,21 @@ class IGMention{
                     'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
                     'username' =>  isset($media['username']) ? $media['username']: null,
                     'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
-                    'mentioned' => 'S',
+                    'mentioned' => $metioned,
                     'hooked' => 'S'
             ]); 
             
-            // if(isset($changes['comment_id'])) {
-
-            // }
-            
-
-
+            if(isset($changes['comment_id'])) {
+                $comment = IgComment::updateOrCreate(
+                    [
+                        'media_id' => $media['id'],
+                        'comment_id' => $comment['id']
+                    ],    
+                    [
+                        'text' => isset($comment['text']) ? $comment['text']: null,
+                        'timestamp' => isset($comment['timestamp']) ? $comment['timestamp']: null
+                ]); 
+            }        
         }
     }
 }
