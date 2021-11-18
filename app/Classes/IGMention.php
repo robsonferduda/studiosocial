@@ -148,9 +148,7 @@ class IGMention{
                 $media = $ig_mention->getMetionHooked($params);
 
                 $media = $media['mentioned_media'];
-            }
-            
-            Log::warning($media);           
+            }                               
 
             $media = Media::updateOrCreate(
                 [

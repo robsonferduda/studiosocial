@@ -29,4 +29,9 @@ class Media extends Model
     {
         return $this->belongsToMany('App\Hashtag','media_hashtag','media_id','hashtag_id')->withTimestamps();
     }
+
+    public function comments()
+    {
+        return $this->hasMany('App\IgComment','media_id','id');
+    }
 }

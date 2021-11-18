@@ -37,9 +37,16 @@ class MonitoramentoController extends Controller
 
         switch ($rede) {
             case 'instagram':
-                $medias_temp = Media::where('client_id', $client_id)->paginate(20);
+                $medias_temp = Media::with('comments')->where('client_id', $client_id)->orderBy('timestamp','DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
+                    $bag_comments = [];
+                    if ($media->comments) {
+                        foreach($media->comments as $comment) {
+                            $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
+                        }
+                    }
+
                     $medias[] = array('id' => $media->media_id,
                                       'text' => $media->caption,
                                       'username' => '',
@@ -47,7 +54,10 @@ class MonitoramentoController extends Controller
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
                                       'social_media_id' => $media->social_media_id,
-                                      'tipo' => 'instagram');
+                                      'tipo' => 'instagram',
+                                      'comments' => $bag_comments,
+                                      'link' => $media->permalink
+                                    );
 
                 }
                 break;
@@ -63,7 +73,8 @@ class MonitoramentoController extends Controller
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
                                       'social_media_id' => $media->social_media_id,
-                                     'tipo' => 'facebook');
+                                      'tipo' => 'facebook',
+                                      'link' => $media->permalink_url);
 
                 }
                 break;

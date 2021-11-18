@@ -49,9 +49,22 @@
                                     <span class="badge badge-pill badge-info">
                                         <i class="fa fa-users"></i> {{ $media['comments_count'] }}
                                     </span> 
+                                    <span class="badge badge-pill badge-warning">
+                                        <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
+                                    </span>
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media['text'] }}</p>
+                                @if(!empty($media['comments']))
+                                    <div class="card">
+                                        <div class="card-body">
+                                        <h6 class="card-subtitle mb-2 text-muted">Comentários Mencionados: </h6>
+                                        @foreach($media['comments'] as $comment)                                                                               
+                                            <p>{{ $comment['text'] }}</p>                                                                                                                                                      
+                                        @endforeach
+                                        </div>  
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
