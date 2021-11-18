@@ -14,8 +14,6 @@ class FBWebhookController extends Controller
         
         Log::warning($request);
 
-        exit;
-
         foreach($request['entry'] as $entry) {
             foreach($entry['changes'] as $change) {
                 
