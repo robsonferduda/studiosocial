@@ -135,8 +135,8 @@ class IGMention{
 
                 $comment = $ig_mention->getMetionHooked($params);
 
-                $media = $media['mentioned_comment']['media'];  
-                $comment =  $media['mentioned_comment'];              
+                $media = $comment['mentioned_comment']['media'];  
+                $comment =  $comment['mentioned_comment'];              
 
                 $metioned = null;
                 
