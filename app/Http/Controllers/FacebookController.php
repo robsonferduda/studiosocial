@@ -119,7 +119,7 @@ class FacebookController extends Controller
 
         $params = [
             'access_token' => $token,
-            'subscribed_fields' => 'field,mention'
+            'subscribed_fields' => 'feed,mention'
         ];
 
         return Http::post($url,$params);
