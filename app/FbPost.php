@@ -19,4 +19,9 @@ class FbPost extends Model
                             'share_count',
                             'comment_count'
                         ];
+
+    public function reactions()
+    {
+        return $this->belongsToMany('App\FbReaction','fb_post_reaction','post_id','reaction_id')->withTimestamps();
+    }
 }
