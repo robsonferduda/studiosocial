@@ -72,7 +72,7 @@ class FBMention{
                                     if($qtd > 0) {
 
                                         $reaction = constant('App\Enums\FbReaction::'. $type);
-                                        $post->reactions()->sync([$reaction => ['count' => $qtd]]);
+                                        $post->reactions()->syncWithoutDetaching([$reaction => ['count' => $qtd]]);
                                     }                                    
                                 }
 
