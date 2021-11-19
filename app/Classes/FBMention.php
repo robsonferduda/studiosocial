@@ -60,7 +60,9 @@ class FBMention{
                                             'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                    
                                             'tagged_time' => isset($post['tagged_time']) ? $post['tagged_time']: null,                            
                                             'mentioned' => 'S'
-                                        ]);                                                                                         
+                                        ]);    
+                                        
+                                $this->getReactions($post['id'], $fb_mention, $access_token);
                         }            
                                
                         $after = $fb_mention->getAfter($posts);
