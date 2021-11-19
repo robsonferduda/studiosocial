@@ -62,7 +62,9 @@ class FBMention{
                                             'mentioned' => 'S'
                                         ]);    
                                         
-                                $this->getReactions($post['post_id'], $fb_mention, $access_token);
+                                $reactions = $this->getReactions($post['post_id'], $fb_mention, $access_token);
+
+                                dd($reactions);
                         }            
                                
                         $after = $fb_mention->getAfter($posts);
@@ -83,7 +85,22 @@ class FBMention{
 
         $post_reactions = $fb_mention->getFBPostReactions($post_id,$params);
 
-        dd($post_reactions);
+        $reactions = [
+            'id' => $post_reactions['id'],
+            'qtd_shares' => $post_reactions['shares']['count'],
+            'qtd_comments' => $post_reactions['comments']['summary']['total_count'],
+            'qtd_like' => $post_reactions['LIKE']['summary']['total_count'],
+            'qtd_love' => $post_reactions['LOVE']['summary']['total_count'],
+            'qtd_wow' => $post_reactions['WOW']['summary']['total_count'],
+            'qtd_haha' => $post_reactions['HAHA']['summary']['total_count'],
+            'qtd_sad' => $post_reactions['SAD']['summary']['total_count'],
+            'qtd_angry' => $post_reactions['ANGRY']['summary']['total_count'],
+            'qtd_thankful' => $post_reactions['THANKFUL']['summary']['total_count']
+
+        ];
+
+
+        return $reactions;
         
     }
 
