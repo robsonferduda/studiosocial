@@ -62,7 +62,7 @@ class FBMention{
                                             'mentioned' => 'S'
                                         ]);    
                                         
-                                $this->getReactions($post['id'], $fb_mention, $access_token);
+                                $this->getReactions($post['post_id'], $fb_mention, $access_token);
                         }            
                                
                         $after = $fb_mention->getAfter($posts);

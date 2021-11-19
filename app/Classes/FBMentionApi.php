@@ -27,8 +27,6 @@ class FBMentionApi extends IGApi{
     {
         $url = EndPoints::getFBPostReactionsLink($post_id);
     
-        dd($post_id);
-
         $response = $this->makeApiCall($url,$params);
         
         if($response->successful()) {
