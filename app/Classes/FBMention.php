@@ -66,7 +66,7 @@ class FBMention{
                                             'share_count' => $reactions['qtd_shares'],
                                         ]);    
 
-                                foreach ($reactions['types'] as $type) {
+                                foreach ($reactions['types'] as $type => $qtd) {
 
                                     dd($type);
                                     //$post->reactions()->sync();
