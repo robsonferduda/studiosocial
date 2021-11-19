@@ -71,7 +71,7 @@ class FBMention{
 
                                     if($qtd > 0) {
 
-                                        dd(FbReaction::{$type});
+                                        dd(constant('FbReaction::'. $type));
 
                                         //$post->reactions()->sync();
                                     }                                    
