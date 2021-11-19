@@ -14,6 +14,9 @@ class FbPost extends Model
                             'tagged_time',
                             'client_id',
                             'post_id',
-                            'mentioned'
+                            'mentioned',
+                            'hooked',
+                            'share_count',
+                            'comment_count'
                         ];
 }

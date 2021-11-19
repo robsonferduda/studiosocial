@@ -48,6 +48,8 @@ class FBMention{
 
                                 $strtotime_date_tagged =  strtotime($date_tagged->format('Y-m-d'));
                                 $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
+
+                                $reactions = $this->getReactions($post['id'], $fb_mention, $access_token);
                                                                
                                 $post = FbPost::updateOrCreate(
                                         [
@@ -59,12 +61,10 @@ class FBMention{
                                             'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
                                             'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                    
                                             'tagged_time' => isset($post['tagged_time']) ? $post['tagged_time']: null,                            
-                                            'mentioned' => 'S'
+                                            'mentioned' => 'S',
+                                            'comment_count' => $reactions['qtd_comments'],
+                                            'share_count' => $reactions['qtd_shares'],
                                         ]);    
-                                        
-                                $reactions = $this->getReactions($post['post_id'], $fb_mention, $access_token);
-
-                                dd($reactions);
                         }            
                                
                         $after = $fb_mention->getAfter($posts);
@@ -98,7 +98,6 @@ class FBMention{
             'qtd_thankful' => $post_reactions['THANKFUL']['summary']['total_count']
 
         ];
-
 
         return $reactions;
         
