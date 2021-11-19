@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\Client;
 use App\FbPost;
+use App\Enums\FbReaction;
 
 class FBMention{
 
@@ -68,8 +69,12 @@ class FBMention{
 
                                 foreach ($reactions['types'] as $type => $qtd) {
 
-                                    dd($type);
-                                    //$post->reactions()->sync();
+                                    if($qtd > 0) {
+
+                                        dd(FbReaction::${$type});
+
+                                        //$post->reactions()->sync();
+                                    }                                    
                                 }
 
 
