@@ -23,6 +23,19 @@ class FBMentionApi extends IGApi{
         return [];
     }
 
+    public function getFBPostReactions($post_id, Array $params = []): Array
+    {
+        $url = EndPoints::getFBPostReactionsLink($post_id);
+    
+        $response = $this->makeApiCall($url,$params);
+        
+        if($response->successful()) {
+            return $response->json();
+        }
+        
+        return [];
+    }
+
     // public function getMetionHooked(Array $params = []) : Array
     // {
     //     $url = EndPoints::getMetionWebhookLink($this->getId());
@@ -45,6 +58,23 @@ class FBMentionApi extends IGApi{
             'permalink_url',
             'updated_time',
             'tagged_time'
+        ];
+
+        return implode(',',$fields);
+    }
+
+    public function getFBReactionsFields()
+    {
+        $fields = [
+            'shares',
+            'comments.summary(true)',
+            'reactions.type(LIKE).limit(0).summary(true).as(LIKE)',
+            'reactions.type(LOVE).limit(0).summary(true).as(LOVE)',
+            'reactions.type(WOW).limit(0).summary(true).as(WOW)',
+            'reactions.type(HAHA).limit(0).summary(true).as(HAHA)',
+            'reactions.type(SAD).limit(0).summary(true).as(SAD)',
+            'reactions.type(ANGRY).limit(0).summary(true).as(ANGRY)',
+            'reactions.type(THANKFUL).limit(0).summary(true).as(THANKFUL)'
         ];
 
         return implode(',',$fields);

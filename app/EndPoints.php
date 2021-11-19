@@ -13,6 +13,7 @@ class EndPoints
     const IG_BUSINESS_ACCOUNT_URL = '{fb_page_id}';
     const SUBSCRIBE_APPS_URL = '{page_id}/subscribed_apps';
     const FB_PAGE_TAGGED = '{fb_page_id}/tagged';
+    const FB_POST_REACTIONS = '{fb_post_id}';
 
     
     public static function getMetionsLink($ig_user_id)
@@ -53,5 +54,10 @@ class EndPoints
     public static function getFBPagesTaggedLink($fb_page_id)
     {
         return str_replace('{fb_page_id}', urlencode($fb_page_id), static::BASE_URL.static::FB_PAGE_TAGGED);
+    }
+
+    public static function getFBPostReactionsLink($post_id)
+    {
+        return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_REACTIONS);
     }
 }

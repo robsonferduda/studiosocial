@@ -72,6 +72,19 @@ class FBMention{
         }
     }
 
+    public function getReactions($post_id, $fb_mention, $access_token) {
+
+        $params = [
+            'fields' => $fb_mention->getFBReactionsFields($post_id),
+            'access_token' => $access_token
+        ];
+
+        $post_reactions = $fb_mention->getFBPostReactions($post_id,$params);
+
+        dd($post_reactions);
+        
+    }
+
     // public function getMediaWebHook($id, $changes)
     // {
     //     //$changes['media_id'] = '18194579986190935';
