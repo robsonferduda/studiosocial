@@ -87,15 +87,15 @@ class FBMention{
 
         $reactions = [
             'id' => $post_reactions['id'],
-            'qtd_shares' => $post_reactions['shares']['count'],
-            'qtd_comments' => $post_reactions['comments']['summary']['total_count'],
-            'qtd_like' => $post_reactions['LIKE']['summary']['total_count'],
-            'qtd_love' => $post_reactions['LOVE']['summary']['total_count'],
-            'qtd_wow' => $post_reactions['WOW']['summary']['total_count'],
-            'qtd_haha' => $post_reactions['HAHA']['summary']['total_count'],
-            'qtd_sad' => $post_reactions['SAD']['summary']['total_count'],
-            'qtd_angry' => $post_reactions['ANGRY']['summary']['total_count'],
-            'qtd_thankful' => $post_reactions['THANKFUL']['summary']['total_count']
+            'qtd_shares' => isset($post_reactions['shares']['count']) ? $post_reactions['shares']['count'] : null,
+            'qtd_comments' => isset($post_reactions['comments']['summary']['total_count']) ? $post_reactions['comments']['summary']['total_count'] : null,
+            'qtd_like' => isset($post_reactions['LIKE']['summary']['total_count']) ? $post_reactions['LIKE']['summary']['total_count'] : null,
+            'qtd_love' => isset($post_reactions['LOVE']['summary']['total_count']) ? $post_reactions['LOVE']['summary']['total_count'] : null,
+            'qtd_wow' => isset($post_reactions['WOW']['summary']['total_count']) ? $post_reactions['WOW']['summary']['total_count'] : null,
+            'qtd_haha' => isset($post_reactions['HAHA']['summary']['total_count']) ? $post_reactions['HAHA']['summary']['total_count'] : null,
+            'qtd_sad' => isset($post_reactions['SAD']['summary']['total_count']) ? $post_reactions['SAD']['summary']['total_count'] : null,
+            'qtd_angry' => isset($post_reactions['ANGRY']['summary']['total_count']) ? $post_reactions['ANGRY']['summary']['total_count'] : null,
+            'qtd_thankful' => isset($post_reactions['THANKFUL']['summary']['total_count']) ? $post_reactions['THANKFUL']['summary']['total_count'] : null
 
         ];
 
