@@ -73,7 +73,7 @@ class FBMention{
                                     if($qtd > 0) {
 
                                         $reaction = constant('App\Enums\FbReaction::'. $type);
-                                        $reaction_buffer[] = [$reaction => ['count' => $qtd]];
+                                        $reaction_buffer[$reaction] = ['count' => $qtd];
                                        
                                     }                                    
                                 }
