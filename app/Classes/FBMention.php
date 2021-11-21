@@ -67,16 +67,20 @@ class FBMention{
                                             'share_count' => $reactions['qtd_shares'],
                                         ]);    
 
+                                $reaction_buffer = [];
                                 foreach ($reactions['types'] as $type => $qtd) {
 
                                     if($qtd > 0) {
 
                                         $reaction = constant('App\Enums\FbReaction::'. $type);
-                                        $post->reactions()->sync([$reaction => ['count' => $qtd]]);
+                                        $reaction_buffer = [$reaction => ['count' => $qtd]];
+                                       
                                     }                                    
                                 }
 
-
+                                if (!empty($reaction_buffer)) {
+                                    $post->reactions()->sync($reaction_buffer);
+                                }
                         }            
                                
                         $after = $fb_mention->getAfter($posts);
