@@ -204,10 +204,7 @@ class FBMention{
                         'text' => isset($changes['message']) ? $changes['message']: null,
                         'created_time' => isset($changes['created_time']) ?  date('Y-m-d H:i:s', $changes['created_time']) : null
                 ]); 
-            }         
-            
-            Log::warning($comment);
-                     
+            }                      
         }
     }
 }
