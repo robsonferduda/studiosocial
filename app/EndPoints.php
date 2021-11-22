@@ -62,7 +62,7 @@ class EndPoints
         return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_REACTIONS);
     }
 
-    public static getPostMetionWebhookLink($post_id)
+    public static function getPostMetionWebhookLink($post_id)
     {   
         return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_METION_HOOKED);
     }
