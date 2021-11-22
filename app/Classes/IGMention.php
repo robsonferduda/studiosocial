@@ -122,10 +122,12 @@ class IGMention{
 
         $ig_mention = new IGMentionApi($id);
 
-        $igPages =  IgPage::where('page_id', $id)->get();
+        $igPages =  IgPage::with('fbPage.fbAccount')->where('page_id', $id)->get();
 
         foreach($igPages as $igPage) {
-                   
+
+            Log::warning($igPage);
+            
             if(isset($changes['comment_id'])) {
 
                 $params = [
