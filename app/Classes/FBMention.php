@@ -129,19 +129,39 @@ class FBMention{
 
         foreach($fbPages as $fbPage) {
 
+            $access_token = $fbPage->token;
+            $client_id = $fbPage->fbAccount->client_id;
+
             if($fbPage->fbAccount->mention === false) {
                 continue;
             }
-            
-            $access_token = $fbPage->token;
-            $client_id    = $fbPage->client_id;
+
+            $params = [
+                'fields' => $fb_mention->getFbPostFields(),
+                'access_token' => $access_token,
+            ];
+
+            $post = $fb_mention->getPostMetionHooked($changes['post_id'], $params);
 
             $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
 
-            
-            Log::warning($reactions);
-            
-          
+            $post = FbPost::updateOrCreate(
+                [
+                    'post_id' => $post['id'],
+                    'client_id' => $client_id
+                ],    
+                [
+                    'message' => isset($post['message']) ? $post['message']: null,
+                    'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
+                    'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                                                                
+                    'mentioned' => 'S',
+                    'hooked' => 'S',
+                    'comment_count' => $reactions['qtd_comments'],
+                    'share_count' => $reactions['qtd_shares'],
+                ]);    
+                    
+            Log::warning($post);
+                     
         }
     }
 }

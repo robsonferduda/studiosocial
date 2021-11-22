@@ -36,18 +36,18 @@ class FBMentionApi extends IGApi{
         return [];
     }
 
-    // public function getPostMetionHooked($post_id, Array $params = []) : Array
-    // {
-    //     $url = EndPoints::getPostMetionWebhookLink($post_id);
+    public function getPostMetionHooked($post_id, Array $params = []) : Array
+    {
+        $url = EndPoints::getPostMetionWebhookLink($post_id);
    
-    //     $response = $this->makeApiCall($url,$params);
+        $response = $this->makeApiCall($url,$params);
         
-    //     if($response->successful()) {
-    //         return $response->json();
-    //     }
+        if($response->successful()) {
+            return $response->json();
+        }
         
-    //     return [];
-    // }
+        return [];
+    }
 
     public function getFbMentionFields()
     {
