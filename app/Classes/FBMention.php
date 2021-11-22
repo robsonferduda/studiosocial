@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\Client;
 use App\FbPost;
 use App\FbPage;
+use Illuminate\Support\Facades\Log;
 
 class FBMention{
 
@@ -133,7 +134,9 @@ class FBMention{
 
             $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
 
-            dd($reactions);
+            
+            Log::warning($reactions);
+            
           
         }
     }
