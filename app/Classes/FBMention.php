@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use App\Client;
+use App\FbComment;
 use App\FbPost;
 use App\FbPage;
 use Illuminate\Support\Facades\Log;
@@ -143,8 +144,6 @@ class FBMention{
 
             $post = $fb_mention->getPostMetionHooked($changes['post_id'], $params);
 
-            Log::warning($post);
-
             $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
 
             $post = FbPost::updateOrCreate(
@@ -162,7 +161,20 @@ class FBMention{
                     'share_count' => $reactions['qtd_shares'],
                 ]);    
                     
-            Log::warning($post);
+            
+            if(isset($changes['comment_id'])) {
+                $comment = FbComment::updateOrCreate(
+                    [
+                        'post_id' => $post['id'],
+                        'comment_id' => $changes['comment_id']
+                    ],    
+                    [
+                        'text' => isset($changes['message']) ? $changes['message']: null,
+                        'created_time' => isset($changes['created_time']) ?  date('Y-m-d H:i:s', $changes['created_time']) : null
+                ]); 
+            }         
+            
+            Log::warning($comment);
                      
         }
     }
