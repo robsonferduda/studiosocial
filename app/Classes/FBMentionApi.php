@@ -65,7 +65,7 @@ class FBMentionApi extends IGApi{
     public function getFbPostFields()
     {
         $fields = [
-            'post_id',
+            'id',
             'message',
             'permalink_url',
             'updated_time'
