@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use App\Client;
 use App\FbPost;
-use App\Enums\FbReaction;
+use App\FbPage;
 
 class FBMention{
 
@@ -120,43 +120,21 @@ class FBMention{
         
     }
 
-    // public function getMediaWebHook($id, $changes)
-    // {
-    //     //$changes['media_id'] = '18194579986190935';
-    //     //$id = '17841437726599322';
+    public function getPostWebHook($id, $changes)
+    {
+        $fb_mention = new FBMentionApi($id);
 
-    //     $ig_mention = new IGMentionApi($id);
+        $fbPages =  FbPage::where('page_id', $id)->get();
 
-    //     $igPages =  IgPage::where('page_id', $id)->get();
+        foreach($fbPages as $fbPage) {
+            
+            $access_token = $fbPage->token;
+            $client_id    = $fbPage->client_id;
 
-    //     foreach($igPages as $igPage) {
-    //         $params = [
-    //             'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
-    //             'access_token' => $igPage->fbPage->fbAccount->token
-    //         ];
-    
-    //         $media = $ig_mention->getMetionHooked($params);
+            $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
 
-    //         $media = $media['mentioned_media'];
-
-    //         $media = Media::updateOrCreate(
-    //             [
-    //                 'media_id' => $media['id'],
-    //                 'client_id' => $igPage->fbPage->fbAccount->client_id
-    //             ],    
-    //             [
-    //                 'caption' => isset($media['caption']) ? $media['caption']: null,
-    //                 'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
-    //                 'media_product_type' => isset($media['media_product_type']) ? $media['media_product_type']: null,                    
-    //                 'like_count' => isset($media['like_count']) ? $media['like_count']: null,
-    //                 'media_type' => isset($media['media_type']) ? $media['media_type']: null,
-    //                 'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
-    //                 'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
-    //                 'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-    //                 'username' =>  isset($media['username']) ? $media['username']: null,
-    //                 'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
-    //                 'mentioned' => 'S'
-    //         ]);        
-    //     }
-    // }
+            dd($reactions);
+          
+        }
+    }
 }
