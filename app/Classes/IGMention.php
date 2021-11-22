@@ -126,6 +126,10 @@ class IGMention{
 
         foreach($igPages as $igPage) {
 
+            if($igPage->fbPage->fbAccount->mention === false) {
+                continue;
+            }
+            
             Log::warning($igPage);
             
             if(isset($changes['comment_id'])) {
