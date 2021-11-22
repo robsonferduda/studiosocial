@@ -125,9 +125,13 @@ class FBMention{
     {
         $fb_mention = new FBMentionApi($id);
 
-        $fbPages =  FbPage::where('page_id', $id)->get();
+        $fbPages =  FbPage::with('fbAccount')->where('page_id', $id)->get();
 
         foreach($fbPages as $fbPage) {
+
+            if($fbPage->fbAccount->mention === false) {
+                continue;
+            }
             
             $access_token = $fbPage->token;
             $client_id    = $fbPage->client_id;
