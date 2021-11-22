@@ -143,6 +143,8 @@ class FBMention{
 
             $post = $fb_mention->getPostMetionHooked($changes['post_id'], $params);
 
+            Log::warning($post);
+
             $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
 
             $post = FbPost::updateOrCreate(
