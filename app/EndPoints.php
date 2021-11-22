@@ -14,6 +14,7 @@ class EndPoints
     const SUBSCRIBE_APPS_URL = '{page_id}/subscribed_apps';
     const FB_PAGE_TAGGED = '{fb_page_id}/tagged';
     const FB_POST_REACTIONS = '{fb_post_id}';
+    const FB_POST_METION_HOOKED = '{fb_post_id}';
 
     
     public static function getMetionsLink($ig_user_id)
@@ -59,5 +60,10 @@ class EndPoints
     public static function getFBPostReactionsLink($post_id)
     {
         return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_REACTIONS);
+    }
+
+    public static getPostMetionWebhookLink($post_id)
+    {   
+        return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_METION_HOOKED);
     }
 }
