@@ -184,7 +184,7 @@ class FBMention{
 
                 $post = FbPost::updateOrCreate(
                     [
-                        'post_id' => '9999999999_9999999999',
+                        'post_id' => '99_'.$changes['comment_id'],
                         'client_id' => $client_id
                     ],    
                     [
