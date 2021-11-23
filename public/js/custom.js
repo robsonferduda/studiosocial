@@ -5,6 +5,25 @@ $(document).ready(function() {
     $('#dt_termino_atividade_ati').mask('00/00/0000 00:00');
     $('#nu_orcid_pes').mask('0000-0000-0000-0000');
 
+    $('body').on("click", ".button-remove-hashtag", function(e) {
+        e.preventDefault();
+        var form = $(this).closest("form");
+        Swal.fire({
+            title: "Tem certeza que deseja excluir a hashtag?",
+            text: "Essa ação irá excluir a hashtag, mas não o conteúdo relacionado a ela durante a coleta.",
+            type: "warning",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: "Sim, excluir!",
+            cancelButtonText: "Cancelar"
+        }).then(function(result) {
+            if (result.value) {
+                form.submit();
+            }
+        });
+    }); 
+
     $('body').on("click", ".button-remove", function(e) {
         e.preventDefault();
         var form = $(this).closest("form");

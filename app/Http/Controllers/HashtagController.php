@@ -93,4 +93,16 @@ class HashtagController extends Controller
         }
         return redirect('client/hashtags/'.$request->client_id);
     }
+
+    public function destroy($id)
+    {
+        $hashtag = Hashtag::with('client')->find($id);
+        
+        if($hashtag->delete())
+            Flash::success('<i class="fa fa-check"></i> Hashtag <strong>'.$hashtag->hashtag.'</strong> excluída com sucesso');
+        else
+            Flash::error("Erro ao excluir a hashtag");
+
+        return redirect('client/hashtags/'.$hashtag->client->id);
+    }
 }

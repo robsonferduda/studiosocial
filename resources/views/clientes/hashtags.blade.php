@@ -26,7 +26,8 @@
                             <th>Mídia Social</th>
                             <th>Hashtag</th>
                             <th class="text-center">Situação</th>
-                            <th class="text-right">Menções</th>
+                            <th class="text-center">Menções</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,7 +37,7 @@
                                 <td>{{ $hashtag->socialMedia->name }}</td>
                                 <td><a href="{{ url('hashtag/medias/'.$hashtag->id) }}">#{{ $hashtag->hashtag }}</a></td>
                                 <td class="text-center"><a href="{{ url('hashtag/situacao', $hashtag->id) }}">{!! ($hashtag->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</a></td>
-                                <td class="text-right">
+                                <td class="text-center">
                                     @switch($hashtag->social_media_id)
                                         @case(App\Enums\SocialMedia::INSTAGRAM)
                                             {{ $hashtag->medias_count }}
@@ -46,6 +47,15 @@
                                             @break
                                         @default                        
                                     @endswitch
+                                </td>
+                                <td class="text-center">
+                                    <form class="form-delete" style="display: inline;" action="{{ route('hashtag.destroy',$hashtag->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove-hashtag" title="Delete">
+                                            <i class="fa fa-times fa-2x"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
