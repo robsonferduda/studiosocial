@@ -3,8 +3,10 @@
 namespace App\Classes;
 
 use App\Client;
+use App\FbComment;
 use App\FbPost;
-use App\Enums\FbReaction;
+use App\FbPage;
+use Illuminate\Support\Facades\Log;
 
 class FBMention{
 
@@ -67,16 +69,20 @@ class FBMention{
                                             'share_count' => $reactions['qtd_shares'],
                                         ]);    
 
+                                $reaction_buffer = [];
                                 foreach ($reactions['types'] as $type => $qtd) {
 
                                     if($qtd > 0) {
 
                                         $reaction = constant('App\Enums\FbReaction::'. $type);
-                                        $post->reactions()->syncWithoutDetaching([$reaction => ['count' => $qtd]]);
+                                        $reaction_buffer[$reaction] = ['count' => $qtd];
+                                       
                                     }                                    
                                 }
 
-
+                                if (!empty($reaction_buffer)) {
+                                    $post->reactions()->sync($reaction_buffer);
+                                }
                         }            
                                
                         $after = $fb_mention->getAfter($posts);
@@ -116,43 +122,89 @@ class FBMention{
         
     }
 
-    // public function getMediaWebHook($id, $changes)
-    // {
-    //     //$changes['media_id'] = '18194579986190935';
-    //     //$id = '17841437726599322';
+    public function getPostWebHook($id, $changes)
+    {
+        $fb_mention = new FBMentionApi($id);
 
-    //     $ig_mention = new IGMentionApi($id);
+        $fbPages =  FbPage::with('fbAccount')->where('page_id', $id)->get();
 
-    //     $igPages =  IgPage::where('page_id', $id)->get();
+        foreach($fbPages as $fbPage) {
 
-    //     foreach($igPages as $igPage) {
-    //         $params = [
-    //             'fields' => "mentioned_media.media_id({$changes['media_id']}){{$ig_mention->getIGMentionFields()}}",
-    //             'access_token' => $igPage->fbPage->fbAccount->token
-    //         ];
-    
-    //         $media = $ig_mention->getMetionHooked($params);
+            $access_token = $fbPage->token;
+            $client_id = $fbPage->fbAccount->client_id;
 
-    //         $media = $media['mentioned_media'];
+            if($fbPage->fbAccount->mention === false) {
+                continue;
+            }
 
-    //         $media = Media::updateOrCreate(
-    //             [
-    //                 'media_id' => $media['id'],
-    //                 'client_id' => $igPage->fbPage->fbAccount->client_id
-    //             ],    
-    //             [
-    //                 'caption' => isset($media['caption']) ? $media['caption']: null,
-    //                 'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
-    //                 'media_product_type' => isset($media['media_product_type']) ? $media['media_product_type']: null,                    
-    //                 'like_count' => isset($media['like_count']) ? $media['like_count']: null,
-    //                 'media_type' => isset($media['media_type']) ? $media['media_type']: null,
-    //                 'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
-    //                 'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
-    //                 'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-    //                 'username' =>  isset($media['username']) ? $media['username']: null,
-    //                 'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
-    //                 'mentioned' => 'S'
-    //         ]);        
-    //     }
-    // }
+            $params = [
+                'fields' => $fb_mention->getFbPostFields(),
+                'access_token' => $access_token,
+            ];
+
+            if(!isset($changes['comment_id'])) {
+
+                $post = $fb_mention->getPostMetionHooked($changes['post_id'], $params);
+
+                $reactions = $this->getReactions($changes['post_id'], $fb_mention, $access_token);
+
+                $post = FbPost::updateOrCreate(
+                    [
+                        'post_id' => $post['id'],
+                        'client_id' => $client_id
+                    ],    
+                    [
+                        'message' => isset($post['message']) ? $post['message']: null,
+                        'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
+                        'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                                                                
+                        'mentioned' => 'S',
+                        'hooked' => 'S',
+                        'comment_count' => $reactions['qtd_comments'],
+                        'share_count' => $reactions['qtd_shares'],
+                ]);    
+
+
+                $reaction_buffer = [];
+                foreach ($reactions['types'] as $type => $qtd) {
+
+                    if($qtd > 0) {
+
+                        $reaction = constant('App\Enums\FbReaction::'. $type);
+                        $reaction_buffer[$reaction] = ['count' => $qtd];
+                        
+                    }                                    
+                }
+
+                if (!empty($reaction_buffer)) {
+                    $post->reactions()->sync($reaction_buffer);
+                }
+            }
+                               
+            if(isset($changes['comment_id'])) {
+
+                $post = FbPost::updateOrCreate(
+                    [
+                        'post_id' => '99_'.$changes['comment_id'],
+                        'client_id' => $client_id
+                    ],    
+                    [
+                        'message' => '',
+                        'permalink_url' => '',
+                        'updated_time' => \Carbon\Carbon::now(),                                                                
+                        'mentioned' => 'S',
+                        'hooked' => 'S',
+                ]);   
+
+                $comment = FbComment::updateOrCreate(
+                    [
+                        'post_id' => $post['id'],
+                        'comment_id' => $changes['comment_id']
+                    ],    
+                    [
+                        'text' => isset($changes['message']) ? $changes['message']: null,
+                        'created_time' => isset($changes['created_time']) ?  date('Y-m-d H:i:s', $changes['created_time']) : null
+                ]); 
+            }                      
+        }
+    }
 }

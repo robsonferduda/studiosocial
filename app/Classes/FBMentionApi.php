@@ -36,19 +36,18 @@ class FBMentionApi extends IGApi{
         return [];
     }
 
-    // public function getMetionHooked(Array $params = []) : Array
-    // {
-    //     $url = EndPoints::getMetionWebhookLink($this->getId());
+    public function getPostMetionHooked($post_id, Array $params = []) : Array
+    {
+        $url = EndPoints::getPostMetionWebhookLink($post_id);
    
-    //     $response = $this->makeApiCall($url,$params);
+        $response = $this->makeApiCall($url,$params);
         
-    //     if($response->successful()) {
-    //         return $response->json();
-    //     }
+        if($response->successful()) {
+            return $response->json();
+        }
         
-    //     return [];
-    // }
-
+        return [];
+    }
 
     public function getFbMentionFields()
     {
@@ -58,6 +57,18 @@ class FBMentionApi extends IGApi{
             'permalink_url',
             'updated_time',
             'tagged_time'
+        ];
+
+        return implode(',',$fields);
+    }
+
+    public function getFbPostFields()
+    {
+        $fields = [
+            'id',
+            'message',
+            'permalink_url',
+            'updated_time'
         ];
 
         return implode(',',$fields);
