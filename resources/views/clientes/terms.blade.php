@@ -35,7 +35,7 @@
                             <tr>
                                 <td>{{ Carbon\Carbon::parse($term->created_at)->format('d/m/Y H:i') }}</td>
                                 <td>{{ $term->socialMedia->name }}</td>
-                                <td><a href="{{ url('hashtag/medias/'.$term->id) }}">{{ $term->term }}</a></td>
+                                <td><a href="{{ url('term/'.$term->id.'/medias') }}">{{ $term->term }}</a></td>
                                 <td class="text-center"><a href="{{ url('term/situacao', $term->id) }}">{!! ($term->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</a></td>
                                 <td class="text-center">
                                     @switch($term->social_media_id)

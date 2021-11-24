@@ -25,6 +25,7 @@ Route::post('cliente/selecionar','ClientController@selecionar');
 
 Route::get('terms/client/{cliente}','TermController@getTerms');
 Route::get('term/situacao/{term}','TermController@atualizarSituacao');
+Route::get('term/{term_id}/medias','TermController@medias');
 
 Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');

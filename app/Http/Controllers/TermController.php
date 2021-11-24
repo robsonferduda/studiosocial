@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Client;
 use App\Term;
+use App\Client;
 use App\SocialMedia;
+use App\Enums\SocialMedia as SM;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -38,6 +39,51 @@ class TermController extends Controller
         $term->save();
         
         return redirect('terms/client/'.$term->client->id);
+    }
+
+    public function medias($term_id)
+    {
+        $term = Term::find($term_id);
+        $medias = array();
+
+        switch ($term->social_media_id) {
+            case SM::INSTAGRAM:
+                $medias_temp = $hashtag->medias()->orderBy('timestamp', 'DESC')->paginate(20);
+                
+                foreach ($medias_temp as $key => $media) {
+                    
+                    $medias[] = array('id' => $media->media_id,
+                                      'text' => $media->caption,
+                                      'username' => '',
+                                      'created_at' => dateTimeUtcToLocal($media->timestamp),
+                                      'like_count' => $media->like_count,
+                                      'comments_count' => $media->like_count,
+                                      'social_media_id' => $media->social_media_id);
+
+                }
+                break;
+
+            case SM::TWITTER:
+                $medias_temp = $term->mediasTwitter()->orderBy('created_tweet_at', 'DESC')->paginate(20);
+                foreach ($medias_temp as $key => $media) {
+                    
+                    $medias[] = array('id' => $media->twitter_id,
+                                      'text' => $media->full_text,
+                                      'username' => $media->user_name,
+                                      'created_at' => $media->created_tweet_at,
+                                      'like_count' => $media->favorite_count,
+                                      'comments_count' => 0,
+                                      'social_media_id' => $media->social_media_id);
+
+                }
+                break;
+            
+            default:
+                //
+                break;
+        }
+
+        return view('term/medias', compact('term','medias','medias_temp'));
     }
 
     public function store(Request $request)

@@ -31,4 +31,9 @@ class MediaTwitter extends Model
     {
         return $this->belongsToMany('App\Hashtag','twitter_hashtag','media_id','hashtag_id')->withTimestamps();
     }
+
+    public function terms()
+    {
+        return $this->belongsToMany('App\Term','twitter_term','media_id','term_id')->withTimestamps();
+    }
 }
