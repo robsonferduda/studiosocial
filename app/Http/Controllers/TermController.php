@@ -108,8 +108,8 @@ class TermController extends Controller
 
     public function destroy($id)
     {
-        $term = Term::with('client')->find($id);
-        
+        $term = Term::find($id);
+ 
         if($term->delete())
             Flash::success('<i class="fa fa-check"></i> Termo <strong>'.$term->term.'</strong> excluído com sucesso');
         else
