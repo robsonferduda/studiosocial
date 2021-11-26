@@ -80,7 +80,7 @@ class HashtagController extends Controller
         {
             for ($i=0; $i < count($request->social_media); $i++) { 
                 
-                $dados = array('hashtag' => $request->hashtag,
+                $dados = array('hashtag' => strtolower($request->hashtag),
                                'client_id' => $request->client_id,
                                'social_media_id' => $request->social_media[$i] );
 
