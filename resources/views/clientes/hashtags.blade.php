@@ -70,7 +70,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h5 class="modal-title" id="myModalLabel"><i class="fa fa-hashtag"></i> <strong> Cadastrar z</strong></h5>
+                <h5 class="modal-title" id="myModalLabel"><i class="fa fa-hashtag"></i> <strong> Cadastrar</strong></h5>
             </div>
             {!! Form::open(['id' => 'frm_hashtag_create', 'url' => ['hashtag/create']]) !!}
                 <input type="hidden" name="client_id" value="{{ $client->id }}">
@@ -80,7 +80,12 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Hashtag <span class="text-danger">Obrigatório</span></label>
-                                    <input type="text" class="form-control" name="hashtag" id="hashtag" value="">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                          <span class="input-group-text" id="basic-addon1">#</span>
+                                        </div>
+                                        <input type="text" class="form-control" name="hashtag" id="hashtag" value="">
+                                    </div>
                                 </div>
                             </div>
                         </div>  
