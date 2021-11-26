@@ -20,15 +20,15 @@ clients = cur.fetchall()
 
 for client in clients:
 
-    sql = 'select * from medias where client_id ='+str(client['id'])
+    sql = 'select * from medias where deleted_at is null and client_id ='+str(client['id'])
     cur.execute(sql)
     medias = cur.fetchall()
 
-    sql = 'select * from media_twitter where client_id ='+str(client['id'])
+    sql = 'select * from media_twitter where deleted_at is null and client_id ='+str(client['id'])
     cur.execute(sql)
     medias_t = cur.fetchall()
 
-    sql = 'select * from fb_posts where client_id ='+str(client['id'])
+    sql = 'select * from fb_posts where deleted_at is null and client_id ='+str(client['id'])
     cur.execute(sql)
     medias_f = cur.fetchall()
 
