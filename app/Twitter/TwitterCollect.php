@@ -2,6 +2,7 @@
 
 namespace App\Twitter;
 
+use App\Term;
 use App\Hashtag;
 use App\MediaTwitter;
 use App\Enums\SocialMedia;
@@ -21,6 +22,12 @@ class TwitterCollect{
     }
 
     public function pullMedias()
+    {
+        $this->getMediasByHashtag();
+        $this->getMediasByTermo();
+    }
+
+    public function getMediasByHashtag()
     {
         $hashtags_ativas = Hashtag::where('social_media_id', SocialMedia::TWITTER)->where('is_active',true)->get();
 
@@ -57,6 +64,47 @@ class TwitterCollect{
     
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
                 $tweet->hashtags()->syncWithoutDetaching($hashtag->id);
+            }   
+        }
+    }
+
+    public function getMediasByTermo()
+    {
+        $termos_ativos = Term::where('social_media_id', SocialMedia::TWITTER)->where('is_active',true)->get();
+
+        foreach ($termos_ativos as $term) {
+            
+            $query = array(
+                "q" => $term->term,
+                "count" => 100,
+                "lang" => 'pt',
+                "result_type" => "recent",
+                "exclude_replies" => true,
+                "retweeted" => false,
+                "tweet_mode" => "extended"
+            );
+    
+            $tweets = $this->conn->get('search/tweets', $query);
+    
+            foreach ($tweets->statuses as $tweet) {
+    
+                $chave = array('twitter_id' => $tweet->id);
+                $dados = array('full_text' => $tweet->full_text,
+                            'retweet_count' => $tweet->retweet_count,
+                            'client_id' => $term->client_id,
+                            'favorite_count' => $tweet->favorite_count,
+                            'user_id' => $tweet->user->id,
+                            'user_name' => $tweet->user->screen_name,
+                            'user_screen_name' => $tweet->user->screen_name,
+                            'user_location' => $tweet->user->location,
+                            'user_followers_count' => $tweet->user->followers_count,
+                            'user_friends_count' => $tweet->user->friends_count,
+                            'created_tweet_at' => $tweet->created_at,
+                            'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
+                            );
+    
+                $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
+                $tweet->terms()->syncWithoutDetaching($term->id);
             }   
         }
     }

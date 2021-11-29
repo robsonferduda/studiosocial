@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Hashtag;
-use App\Enums\SocialMedia;
+use App\Term;
+use App\Client;
+use App\SocialMedia;
+use App\Enums\SocialMedia as SM;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
-class HashtagController extends Controller
+class TermController extends Controller
 {
     public function __construct()
     {
@@ -20,22 +22,32 @@ class HashtagController extends Controller
         
     }
 
-    public function atualizarSituacao($hashtag)
+    public function getTerms($client_id)
     {
-        $hashtag = Hashtag::find($hashtag);
-        $hashtag->is_active = !$hashtag->is_active;
-        $hashtag->save();
-        
-        return redirect('client/hashtags/'.$hashtag->client->id);
+        $client = Client::with(['terms' => function($query){
+            $query->withCount('mediasTwitter')->withCount('medias');
+        }])->find($client_id);
+
+        $social_medias = SocialMedia::where('fl_term',true)->orderBy('name')->get();
+        return view('clientes/terms', compact('client','social_medias'));
     }
 
-    public function medias($hashtag)
+    public function atualizarSituacao($term_id)
     {
-        $hashtag = Hashtag::find($hashtag);
+        $term = Term::find($term_id);
+        $term->is_active = !$term->is_active;
+        $term->save();
+        
+        return redirect('terms/client/'.$term->client->id);
+    }
+
+    public function medias($term_id)
+    {
+        $term = Term::find($term_id);
         $medias = array();
 
-        switch ($hashtag->social_media_id) {
-            case SocialMedia::INSTAGRAM:
+        switch ($term->social_media_id) {
+            case SM::INSTAGRAM:
                 $medias_temp = $hashtag->medias()->orderBy('timestamp', 'DESC')->paginate(20);
                 
                 foreach ($medias_temp as $key => $media) {
@@ -51,8 +63,8 @@ class HashtagController extends Controller
                 }
                 break;
 
-            case SocialMedia::TWITTER:
-                $medias_temp = $hashtag->mediasTwitter()->orderBy('created_tweet_at', 'DESC')->paginate(20);
+            case SM::TWITTER:
+                $medias_temp = $term->mediasTwitter()->orderBy('created_tweet_at', 'DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->twitter_id,
@@ -71,38 +83,38 @@ class HashtagController extends Controller
                 break;
         }
 
-        return view('hashtags/medias', compact('hashtag','medias','medias_temp'));
+        return view('term/medias', compact('term','medias','medias_temp'));
     }
 
-    public function create(Request $request)
+    public function store(Request $request)
     {
-        if($request->social_media and $request->hashtag)
+        if($request->social_media and $request->term)
         {
             for ($i=0; $i < count($request->social_media); $i++) { 
                 
-                $dados = array('hashtag' => strtolower($request->hashtag),
+                $dados = array('term' => $request->term,
                                'client_id' => $request->client_id,
                                'social_media_id' => $request->social_media[$i] );
 
-                Hashtag::create($dados);
+                Term::create($dados);
             }
-            Flash::success('<i class="fa fa-check"></i> Cadastro de hashtag realizado com sucesso');
+            Flash::success('<i class="fa fa-check"></i> Cadastro de termo realizado com sucesso');
 
         }else{
-            Flash::info('<i class="fa fa-info"></i> Informe uma hashtag e uma Mídia Social para realizar o cadastro');
+            Flash::info('<i class="fa fa-info"></i> Informe um termo e uma Mídia Social para realizar o cadastro');
         }
-        return redirect('client/hashtags/'.$request->client_id);
+        return redirect('terms/client/'.$request->client_id);
     }
 
     public function destroy($id)
     {
-        $hashtag = Hashtag::with('client')->find($id);
-        
-        if($hashtag->delete())
-            Flash::success('<i class="fa fa-check"></i> Hashtag <strong>'.$hashtag->hashtag.'</strong> excluída com sucesso');
+        $term = Term::find($id);
+ 
+        if($term->delete())
+            Flash::success('<i class="fa fa-check"></i> Termo <strong>'.$term->term.'</strong> excluído com sucesso');
         else
-            Flash::error("Erro ao excluir a hashtag");
+            Flash::error("Erro ao excluir o termo");
 
-        return redirect('client/hashtags/'.$hashtag->client->id);
+        return redirect('terms/client/'.$term->client->id);
     }
 }

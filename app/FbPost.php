@@ -24,4 +24,9 @@ class FbPost extends Model
     {
         return $this->belongsToMany('App\FbReaction','fb_post_reaction','post_id','reaction_id')->withTimestamps();
     }
+
+    public function comments()
+    {
+        return $this->hasMany('App\FbComment','post_id','id');
+    }
 }

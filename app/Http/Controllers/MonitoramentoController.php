@@ -50,7 +50,7 @@ class MonitoramentoController extends Controller
                     $medias[] = array('id' => $media->media_id,
                                       'text' => $media->caption,
                                       'username' => '',
-                                      'created_at' => $media->timestamp,
+                                      'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
                                       'social_media_id' => $media->social_media_id,
@@ -63,34 +63,44 @@ class MonitoramentoController extends Controller
                 break;
 
             case 'facebook':
-                $medias_temp = FbPost::where('client_id', $client_id)->paginate(20);
+                $medias_temp = FbPost::with('comments')->where('client_id', $client_id)->orderBy('updated_time','DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
+
+                    $bag_comments = [];
+                    if ($media->comments) {
+                        foreach($media->comments as $comment) {
+                            $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
+                        }
+                    }
                     
                     $medias[] = array('id' => $media->id,
                                       'text' => $media->message,
                                       'username' => '',
-                                      'created_at' => $media->tagged_time,
+                                      'created_at' => dateTimeUtcToLocal($media->updated_time),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'facebook',
+                                      'comments' => $bag_comments,
                                       'link' => $media->permalink_url);
 
                 }
                 break;
             
             case 'twitter':
-                $medias_temp = MediaTwitter::where('client_id', $client_id)->paginate(20);
+                $medias_temp = MediaTwitter::where('client_id', $client_id)->orderBy('created_tweet_at','DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->twitter_id,
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
-                                      'created_at' => $media->created_tweet_at,
+                                      'created_at' => dateTimeUtcToLocal($media->created_tweet_at),
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
                                       'social_media_id' => $media->social_media_id,
-                                      'tipo' => 'twitter');
+                                      'comments' => [],
+                                      'tipo' => 'twitter',
+                                      'link' => '');
 
                 }
             break;

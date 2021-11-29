@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\IGMention;
+use App\Classes\FBMention;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -18,7 +18,7 @@ class FBWebhookController extends Controller
             foreach($entry['changes'] as $change) {
                 
                 switch($change['field']){
-                    case 'mentions': 
+                    case 'mention': 
                         $this->mention($entry['id'], $change['value']);
                         break;
                 }
@@ -42,7 +42,7 @@ class FBWebhookController extends Controller
 
     private function mention($id, $changes)
     {
-        (new IGMention())->getMediaWebHook($id, $changes);
+        (new FBMention())->getPostWebHook($id, $changes);
     }
    
 }

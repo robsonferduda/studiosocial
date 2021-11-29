@@ -23,13 +23,19 @@ Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAcc
 Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
 Route::post('cliente/selecionar','ClientController@selecionar');
 
+Route::get('terms/client/{cliente}','TermController@getTerms');
+Route::get('term/situacao/{term}','TermController@atualizarSituacao');
+Route::get('term/{term_id}/medias','TermController@medias');
+
 Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');
 Route::post('hashtag/create','HashtagController@create');
 
 Route::resource('client', 'ClientController');
+Route::resource('hashtag', 'HashtagController');
 Route::resource('usuario', 'UserController');
 Route::resource('regra', 'RuleController');
+Route::resource('term', 'TermController');
 
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
