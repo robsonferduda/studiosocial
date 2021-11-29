@@ -71,6 +71,13 @@
                   <p>NUVEM PALAVRAS</p>
                   </a>
                 </li>
+                </li>
+                <li class="{{ (Session::has('url') and Session::get('url') == 'regra/create') ? 'active' : '' }}">
+                  <a href="{{ url('regra/create') }}">
+                  <i class="nc-icon fa nc-ruler-pencil"></i>
+                  <p>Regras</p>
+                  </a>
+                </li>
                 <hr/>
                 <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
                     <a href="{{ url('configuracoes') }}">
