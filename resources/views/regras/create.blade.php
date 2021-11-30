@@ -15,7 +15,7 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         @include('layouts.mensagens')
                     </div>
                 </div>
@@ -23,7 +23,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Todas as palavras <span class="text-danger"></span></label>
-                            <input type="text" class="form-control" name="name" id="name" placeholder="Ex: bitcoin, HSBC, Mercado Livre" value="{{ old('name') }}">
+                            <input type="text" class="form-control" name="name" id="tags" placeholder="Ex: bitcoin, HSBC, Mercado Livre" value="{{ old('name') }}">
                         </div>
                     </div>
                 </div>  
@@ -32,12 +32,6 @@
                         <div class="form-group">
                             <label>Senha <span class="text-danger">Obrigatório</span></label>
                             <input type="password" class="form-control" name="password" id="password" value="{{ old('password') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Confirmação de Senha <span class="text-danger">Obrigatório</span></label>
-                            <input type="password" class="form-control" name="confirm_password" id="confirm_password" value="{{ old('confirm_password') }}">
                         </div>
                     </div>
                 </div>  
@@ -62,4 +56,17 @@
         </div>
     {!! Form::close() !!} 
 </div> 
+@endsection
+@section('script')
+<script>
+
+    $(document).ready(function(){
+        $('#tags').inputTags({
+            max: 8
+        });
+    });
+
+     
+</script>
+   
 @endsection
