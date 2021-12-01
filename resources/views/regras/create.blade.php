@@ -120,8 +120,6 @@
 
                 expressao.text(expressao.text() + conector + expressoes['nenhuma']);
 
-                console.log(expressoes);             
-                //console.log($elem.tags);
             },
         });
 
