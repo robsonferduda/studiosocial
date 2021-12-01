@@ -22,32 +22,33 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Todas as palavras <span class="text-danger"></span></label>
-                            <input type="text" class="form-control" name="name" id="tags" placeholder="Ex: bitcoin, HSBC, Mercado Livre" value="{{ old('name') }}">
+                            <label>Todas essas expressões <span class="text-danger"></span></label>
+                            <input type="text" class="form-control tags" name="todas" value="{{ old('name') }}">
                         </div>
                     </div>
                 </div>  
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label>Senha <span class="text-danger">Obrigatório</span></label>
-                            <input type="password" class="form-control" name="password" id="password" value="{{ old('password') }}">
+                            <label>Algumas dessas expressões <span class="text-danger"></span></label>
+                            <input type="text" class="form-control tags" name="algumas" value="{{ old('name') }}">
                         </div>
                     </div>
                 </div>  
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-check mt-3">
-                            <div class="form-check">
-                                <label class="form-check-label">
-                                    <input class="form-check-input" {{ ( old('is_active')) ? 'checked' : '' }} type="checkbox" name="is_active" value="true">
-                                    CADASTRO ATIVO
-                                    <span class="form-check-sign"></span>
-                                </label>
-                            </div>
+                        <div class="form-group">
+                            <label>Nenhuma dessas expressões <span class="text-danger"></span></label>
+                            <input type="text" class="form-control tags" name="nenhuma" value="{{ old('name') }}">
                         </div>
                     </div>
-                </div>          
+                </div> 
+                <div class="row">
+                    <div class="col-md-6">
+                            <h4>Expressão:</h4>
+                            <p id='expressao' ></p>
+                    </div>
+                </div> 
             </div>
             <div class="card-footer text-right">
                 <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
@@ -61,8 +62,73 @@
 <script>
 
     $(document).ready(function(){
-        $('#tags').inputTags({
-            max: 8
+
+        let expressoes = [];
+        expressoes['todas'] = '';
+        expressoes['algumas'] = '';
+        expressoes['nenhuma'] = '';
+
+        $('.tags').inputTags({
+            max: 8,
+            minLength: 3,
+            maxLength: 100,
+            change: function($elem) {   
+
+               let expressao = $('#expressao');
+
+                if($elem[0].name == 'todas') {
+                    if($elem.tags.length > 0) {
+                        expressoes['todas'] = 'Todas essas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['todas'] = '';
+                    }
+                }
+
+                if($elem[0].name == 'algumas') {
+
+                    if($elem.tags.length > 0) {
+                        expressoes['algumas'] = 'Algumas dessas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['algumas'] = '';
+                    }
+                    
+                }
+
+                if($elem[0].name == 'nenhuma') {
+                    if($elem.tags.length > 0) {
+                        expressoes['nenhuma'] = 'Nenhuma dessas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['nenhuma'] = '';
+                    }
+                }
+
+                conector = ''; 
+                expressao.text(''); 
+
+                expressao.text(expressao.text() + expressoes['todas']);
+
+                if(expressoes['todas'] != '' && expressoes['algumas'] != '') {
+                    conector = ' OU ';
+                }
+
+                expressao.text(expressao.text() + conector + expressoes['algumas']);
+
+                conector = ''; 
+                if((expressoes['todas'] != '' || expressoes['algumas'] != '') && expressoes['nenhuma'] != '') {
+                    conector = ' E ';
+                }
+
+                expressao.text(expressao.text() + conector + expressoes['nenhuma']);
+
+                console.log(expressoes);             
+                //console.log($elem.tags);
+            },
+        });
+
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                return false;
+            }
         });
     });
 
