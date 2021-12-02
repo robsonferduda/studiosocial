@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <div class="col-md-12">
-    {!! Form::open(['id' => 'frm_client_create', 'url' => ['client']]) !!}
+    {!! Form::open(['id' => 'frm_regra_create', 'url' => ['regra']]) !!}
         <div class="card">
             <div class="card-header">
                 <div class="row">
@@ -22,8 +22,16 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label>Nome da regra <span class="text-danger">Obrigatório</span></label>
+                            <input type="text" class="form-control" name="nome" value="{{ old('nome') }}">
+                        </div>
+                    </div>
+                </div> 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Todas essas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="todas" value="{{ old('name') }}">
+                            <input type="text" class="form-control tags" name="todas" value="{{ old('todas') }}">
                         </div>
                     </div>
                 </div>  
@@ -31,7 +39,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Algumas dessas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="algumas" value="{{ old('name') }}">
+                            <input type="text" class="form-control tags" name="algumas" value="{{ old('algumas') }}">
                         </div>
                     </div>
                 </div>  
@@ -39,7 +47,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Nenhuma dessas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="nenhuma" value="{{ old('name') }}">
+                            <input type="text" class="form-control tags" name="nenhuma" value="{{ old('nenhuma') }}">
                         </div>
                     </div>
                 </div> 
