@@ -73,8 +73,8 @@
                   </a>
                 </li>
                 </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'regra/create') ? 'active' : '' }}">
-                  <a href="{{ url('regra/create') }}">
+                <li class="{{ (Session::has('url') and Session::get('url') == 'regras') ? 'active' : '' }}">
+                  <a href="{{ url('regras') }}">
                   <i class="nc-icon fa nc-ruler-pencil"></i>
                   <p>Regras</p>
                   </a>
