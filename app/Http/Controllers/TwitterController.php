@@ -15,13 +15,57 @@ class TwitterController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        Session::put('url','home');
+        
+        define('CONSUMER_KEY', 'rHn2F4BIhJ17s7jTPJyZ0SrKU');
+        define('CONSUMER_SECRET', 'URmePiavhe5NIFSMKpYuHDIaUvW007tGt2SJlDdgykyGWt5FgM');
+        define('ACCESS_TOKEN', '725986202-o9342d5gnK1JTn3Rgn5VNoqPSacr6KSHCnGtnbQh');
+        define('ACCESS_TOKEN_SECRET','fHb4L1jR2qbSv94A5DByuP26rC7IM4bD5YvwrMTXB4DgI');
+       
+        $this->conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
     }
 
     public function index()
     {
-        //phpinfo();
         (new TwitterCollect())->pullMedias();
+        /*
+        $statuses = $this->conn->get("statuses/user_timeline", ["screen_name" => 'Tecnoblog', "exclude_replies" => true]);
+
+        dd($statuses);
+
+        $query = array(
+            "q" => "#palmeiras",
+            "count" => 100,
+            "lang" => 'pt',
+            "result_type" => "recent",
+            "exclude_replies" => true,
+            "retweeted" => false,
+            "tweet_mode" => "extended"
+        );
+
+        $tweets = $this->conn->get('search/tweets', $query);
+
+        foreach ($tweets->statuses as $tweet) {
+
+            dd($tweet);
+
+            $chave = array('twitter_id' => $tweet->id);
+            $dados = array('full_text' => $tweet->full_text,
+                        'retweet_count' => $tweet->retweet_count,
+                        'client_id' => $hashtag->client_id,
+                        'favorite_count' => $tweet->favorite_count,
+                        'user_id' => $tweet->user->id,
+                        'user_name' => $tweet->user->screen_name,
+                        'user_screen_name' => $tweet->user->screen_name,
+                        'user_location' => $tweet->user->location,
+                        'user_followers_count' => $tweet->user->followers_count,
+                        'user_friends_count' => $tweet->user->friends_count,
+                        'created_tweet_at' => $tweet->created_at,
+                        'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
+                        );
+        }   
+
+        //phpinfo();
+        //(new TwitterCollect())->pullMedias();
 
         /*
         $settings = array(

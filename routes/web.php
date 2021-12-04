@@ -12,7 +12,11 @@ Auth::routes();
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
+
 Route::get('relatorios','RelatorioController@index');
+Route::get('relatorios/reactions','RelatorioController@reactions');
+Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
+Route::get('pdf','RelatorioController@pdf');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
