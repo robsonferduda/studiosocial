@@ -22,6 +22,7 @@
   <link href="{{ asset('css/croppie.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/jqcloud.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/jquery.loader.min.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/inputTags.css') }}" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
@@ -69,6 +70,13 @@
                   <a href="{{ url('nuvem-palavras') }}">
                   <i class="fa fa-cloud"></i>
                   <p>NUVEM PALAVRAS</p>
+                  </a>
+                </li>
+                </li>
+                <li class="{{ (Session::has('url') and Session::get('url') == 'regras') ? 'active' : '' }}">
+                  <a href="{{ url('regras') }}">
+                  <i class="nc-icon fa nc-ruler-pencil"></i>
+                  <p>Regras</p>
                   </a>
                 </li>
                 <hr/>
@@ -180,6 +188,7 @@
   <script src="{{ asset('js/plugins/jquery.validate.min.js') }}"></script>
   <script src="{{ asset('js/plugins/jqcloud.min.js') }}"></script>
   <script src="{{ asset('js/plugins/jquery.loader.min.js') }}"></script>
+  <script src="{{ asset('js/plugins/inputTags.jquery.min.js') }}"></script>
   <script src="{{ asset('js/sweetalert2.js') }}"></script>
   <script src="{{ asset('js/jquery.mask.min.js') }}"></script>
   <script src="{{ asset('demo/demo.js') }}"></script>

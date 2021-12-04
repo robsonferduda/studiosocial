@@ -58,7 +58,7 @@ class HashtagController extends Controller
                     $medias[] = array('id' => $media->twitter_id,
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
-                                      'created_at' => $media->created_tweet_at,
+                                      'created_at' => dateTimeUtcToLocal($media->created_tweet_at),
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
                                       'social_media_id' => $media->social_media_id);
@@ -80,7 +80,7 @@ class HashtagController extends Controller
         {
             for ($i=0; $i < count($request->social_media); $i++) { 
                 
-                $dados = array('hashtag' => $request->hashtag,
+                $dados = array('hashtag' => strtolower($request->hashtag),
                                'client_id' => $request->client_id,
                                'social_media_id' => $request->social_media[$i] );
 
