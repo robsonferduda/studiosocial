@@ -119,7 +119,7 @@
                                 <thead class="">
                                     <tr>
                                         <th>Mídia Social</th>
-                                        <th>Termo</th>
+                                        <th>Hashtag</th>
                                         <th class="text-center">Menções</th>
                                     </tr>
                                 </thead>
