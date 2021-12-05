@@ -108,7 +108,7 @@
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
-                        <div id='cloud' style="height: 300px;"></div>
+                        <div id='cloud' style="height: 800px;"></div>
                     </div>
                 </div>
             </div>
