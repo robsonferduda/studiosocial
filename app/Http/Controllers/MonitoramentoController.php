@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\Hashtag;
 use App\FbPost;
 use App\FbComment;
+use App\Term;
 use App\Media;
 use App\IgComment;
 use App\MediaTwitter;
@@ -13,9 +15,12 @@ use Illuminate\Support\Facades\Session;
 
 class MonitoramentoController extends Controller
 {
+    private $client;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->client = session('cliente')['id'];
         Session::put('url','monitoramento');
     }
 
@@ -23,6 +28,8 @@ class MonitoramentoController extends Controller
     {
         $totais = array();
         $client_id = Session::get('cliente')['id'];
+        $hashtags = Hashtag::where('is_active',true)->get();
+        $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client)->where('is_active',true)->orderBy('term')->get();
 
         $ig_comments_total = DB::table('ig_comments')
                             ->join('medias','medias.id','=','ig_comments.media_id')
@@ -40,7 +47,7 @@ class MonitoramentoController extends Controller
                             'total_twitter' => MediaTwitter::where('client_id',$client_id)->count());
         }
 
-        return view('monitoramento/index', compact('totais'));
+        return view('monitoramento/index', compact('totais','hashtags','terms'));
     }
 
     public function seleciona($rede)
