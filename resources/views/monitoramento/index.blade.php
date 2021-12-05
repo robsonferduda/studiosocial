@@ -5,14 +5,20 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="card-title ml-2"><i class="nc-icon nc-sound-wave"></i> Monitoramento</h4>
-                </div>
-                <div class="col-md-6">
-                    
+                    <h4 class="card-title">
+                        <i class="nc-icon nc-sound-wave"></i> Monitoramento 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Cliente 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> {{ session('cliente')['nome'] }}
+                    </h4>
                 </div>
             </div>
         </div>
         <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <p>São mostrados os resultados das coletas das redes sociais para o cliente selecionado. Utilize a opção "Regras" para filtrar os resultados de acordo com as expressões desejadas.</p>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-3 col-md-3">
                     <div class="col-lg-12 col-md-12 col-sm-12">
