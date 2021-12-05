@@ -87,7 +87,7 @@ return array (
     'normal' => $fontDir . '/fontawesome_normal_d726fe9f0eedcde03c194e171054f6d7',
   ),
   'nucleo-icons' => array(
-    'normal' => $fontDir . '/nucleo_icons_normal_ac0e30bf4a5b18ac89ae1307c83f7fe9',
+    'normal' => $fontDir . '/nucleo_icons_normal_59131733e70f47081c60e034493496bc',
   ),
 );
 }; ?>
