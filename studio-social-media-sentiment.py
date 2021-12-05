@@ -12,7 +12,7 @@ from sklearn.naive_bayes import MultinomialNB
 
 nltk.download('stopwords')
 
-df = pd.read_csv('storage/app/sentiment/base_de_testes_limpa.csv', sep=";")
+df = pd.read_csv('storage/app/sentiment/base_de_testes.csv', sep=";")
 tweets = df['mensagem']
 classes = df['sentimento']
 classes = np.array(classes.values.tolist())
