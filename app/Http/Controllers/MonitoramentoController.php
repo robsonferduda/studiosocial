@@ -31,7 +31,7 @@ class MonitoramentoController extends Controller
         $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays(7)->format('d/m/Y'),
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
-        $hashtags = Hashtag::where('is_active',true)->get();
+        $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
         $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
         $ig_comments_total = DB::table('ig_comments')
