@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use Carbon\Carbon;
 use App\Hashtag;
 use App\FbPost;
 use App\FbComment;
@@ -15,39 +16,67 @@ use Illuminate\Support\Facades\Session;
 
 class MonitoramentoController extends Controller
 {
-    private $client;
+    private $client_id;
 
     public function __construct()
     {
         $this->middleware('auth');
-        $this->client = session('cliente')['id'];
+        $this->client_id = session('cliente')['id'];
         Session::put('url','monitoramento');
     }
 
     public function index()
     {
         $totais = array();
-        $client_id = Session::get('cliente')['id'];
+        $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays(7)->format('d/m/Y'),
+                                   'data_final'   => Carbon::now()->format('d/m/Y'));
+
         $hashtags = Hashtag::where('is_active',true)->get();
-        $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client)->where('is_active',true)->orderBy('term')->get();
+        $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
         $ig_comments_total = DB::table('ig_comments')
                             ->join('medias','medias.id','=','ig_comments.media_id')
-                            ->where('medias.client_id','=',$client_id)
+                            ->where('medias.client_id','=',$this->client_id)
                             ->count();
 
         $fb_comments_total = DB::table('fb_comments')
                             ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
-                            ->where('fb_posts.client_id','=',$client_id)
+                            ->where('fb_posts.client_id','=',$this->client_id)
                             ->count();
 
-        if($client_id){
-            $totais = array('total_insta' => Media::where('client_id',$client_id)->count() + $ig_comments_total, 
-                            'total_face' => FbPost::where('client_id',$client_id)->count() + $fb_comments_total,
-                            'total_twitter' => MediaTwitter::where('client_id',$client_id)->count());
+        $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
+                        'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
+                        'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
+
+        return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio'));
+    }
+
+    public function getHistorico()
+    {
+        $data_inicial = Carbon::now()->subDays(7);
+        $dados = array();
+
+        for ($i=0; $i < 7; $i++) { 
+
+            $data = $data_inicial->addDay()->format('Y-m-d');
+            $data_formatada = $data_inicial->format('d/m/Y');
+
+            $datas[] = $data;
+            $datas_formatadas[] = $data_formatada;
+            $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            $dados_instagram[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            $dados_facebook[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            
         }
 
-        return view('monitoramento/index', compact('totais','hashtags','terms'));
+        $dados = array('data' => $datas,
+                         'data_formatada' => $datas_formatadas,
+                         'dados_twitter' => $dados_twitter,
+                         'dados_instagram' => $dados_instagram,
+                         'dados_facebook' => $dados_facebook);
+
+        return response()->json($dados);
+
     }
 
     public function seleciona($rede)

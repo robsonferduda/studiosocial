@@ -45,6 +45,7 @@ Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvi
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
 Route::get('monitoramento','MonitoramentoController@index');
+Route::get('monitoramento/medias/historico','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
