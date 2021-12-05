@@ -24,13 +24,13 @@ class MonitoramentoController extends Controller
         $totais = array();
         $client_id = Session::get('cliente')['id'];
 
-        dd(DB::table('ig_comments')
-            ->join('medias','medias.id','=','ig_comments.media_id')
-            ->where('medias.client_id','=',$client_id)
-            ->count());
+        $ig_comments_total = DB::table('ig_comments')
+                            ->join('medias','medias.id','=','ig_comments.media_id')
+                            ->where('medias.client_id','=',$client_id)
+                            ->count();
 
         if($client_id){
-            $totais = array('total_insta' => Media::where('client_id',$client_id)->count() + IgComment::count(), 
+            $totais = array('total_insta' => Media::where('client_id',$client_id)->count() + $ig_comments_total, 
                             'total_face' => FbPost::where('client_id',$client_id)->count(),
                             'total_twitter' => MediaTwitter::where('client_id',$client_id)->count());
         }
