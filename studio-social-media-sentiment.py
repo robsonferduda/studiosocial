@@ -46,8 +46,7 @@ for media in medias:
     texto = [media['full_text']]
     freq_testes = vectorizer.transform(texto)
 
-    for t, c in zip (texto,modelo.predict(freq_testes)):
-        print (t +", "+ c) 
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
         if c == 'neutro' : sent = 0
         if c == 'positivo' : sent = 1
         if c == 'negativo' : sent = -1

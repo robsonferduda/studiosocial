@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Configs;
+use DB;
 use App\User;
+use App\Term;
 use App\Client;
+use App\Configs;
+use App\Hashtag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -28,6 +31,9 @@ class HomeController extends Controller
 
         $users = User::whereNull('client_id')->count();
         $clientes = Client::count();
-        return view('index', compact('users','clientes'));
+        $hashtags = Hashtag::where('is_active',true)->get();
+        $terms = Term::where('is_active',true)->get();
+        
+        return view('index', compact('users','clientes','terms','hashtags'));
     }
 }
