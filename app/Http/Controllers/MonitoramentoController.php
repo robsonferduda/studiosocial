@@ -29,9 +29,14 @@ class MonitoramentoController extends Controller
                             ->where('medias.client_id','=',$client_id)
                             ->count();
 
+        $fb_comments_total = DB::table('fb_comments')
+                            ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
+                            ->where('fb_posts.client_id','=',$client_id)
+                            ->count();
+
         if($client_id){
             $totais = array('total_insta' => Media::where('client_id',$client_id)->count() + $ig_comments_total, 
-                            'total_face' => FbPost::where('client_id',$client_id)->count(),
+                            'total_face' => FbPost::where('client_id',$client_id)->count() + $fb_comments_total,
                             'total_twitter' => MediaTwitter::where('client_id',$client_id)->count());
         }
 
