@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use DOMPDF;
+use App\Rule;
 use App\FbPost;
 use App\FbReaction;
 use Illuminate\Http\Request;
@@ -24,21 +26,20 @@ class RelatorioController extends Controller
 
     public function getReactions()
     {
-      $posts = FbPost::with('reactions')->get();
-      foreach ($posts as $post) {
-        foreach ($post->reactions as $reaction) {
-          echo $reaction->count;
-        };
-      }
+      $reactions = DB::select('SELECT t3.name, t3.color, t3.icon, count(*) 
+                              FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
+                              WHERE t1.id = t2.post_id 
+                              AND t2.reaction_id = t3.id 
+                              GROUP BY t3.name, t3.color, t3.icon 
+                              ORDER BY t3.name');
 
-      dd("Fim");
-
+      return response()->json($reactions);
     }
 
     public function reactions()
     {
-      $reactions = FbReaction::all();
-      return view('relatorios/reactions', compact('reactions'));
+      $rules = Rule::all();
+      return view('relatorios/reactions', compact('rules'));
     }
 
     public function sentimentos()
