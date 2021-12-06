@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DOMPDF;
+use App\FbPost;
 use App\FbReaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -19,6 +20,19 @@ class RelatorioController extends Controller
     {
         $reactions = FbReaction::all();
         return view('relatorios/index', compact('reactions'));
+    }
+
+    public function getReactions()
+    {
+      $posts = FbPost::with('reactions')->get();
+      foreach ($posts as $post) {
+        foreach ($post->reactions as $reaction) {
+          echo $reaction->count;
+        };
+      }
+
+      dd("Fim");
+
     }
 
     public function reactions()
