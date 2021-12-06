@@ -1,15 +1,15 @@
 @extends('layouts.app')
 @section('content')
 <div class="col-md-12">
-    {!! Form::open(['id' => 'frm_regra_create', 'url' => ['regras']]) !!}
+    {!! Form::open(['id' => 'frm_regra_create', 'url' => ['regras', $rule->id], 'method' => 'patch']) !!}
         <div class="card">
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> <a href="{{ url('regra') }}">Regra</a> > Nova</h4>
+                        <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> <a href="{{ url('regra') }}">Regra</a> > Editar</h4>
                     </div>
                     <div class="col-md-6">
-                        <a href="{{ url('clientes') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-table"></i> Regras</a>
+                        <a href="{{ url('regras') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-table"></i> Regras</a>
                     </div>
                 </div>
             </div>
@@ -23,7 +23,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Nome da regra <span class="text-danger">Obrigatório</span></label>
-                            <input type="text" class="form-control" name="nome" value="{{ old('nome') }}">
+                            <input type="text" class="form-control" name="nome" value="{{ $rule->name }}">
                         </div>
                     </div>
                 </div> 
@@ -31,7 +31,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Todas essas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="todas" value="{{ old('todas') }}">
+                            <input type="text" class="form-control tags" id="todas" name="todas" value="{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::TODAS)->pluck('expression')->toArray()) }}">
                         </div>
                     </div>
                 </div>  
@@ -39,7 +39,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Algumas dessas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="algumas" value="{{ old('algumas') }}">
+                            <input type="text" class="form-control tags" id="algumas" name="algumas" value="{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::ALGUMAS)->pluck('expression')->toArray()) }}">
                         </div>
                     </div>
                 </div>  
@@ -47,7 +47,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Nenhuma dessas expressões <span class="text-danger"></span></label>
-                            <input type="text" class="form-control tags" name="nenhuma" value="{{ old('nenhuma') }}">
+                            <input type="text" class="form-control tags" id="nenhuma" name="nenhuma" value="{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::NENHUMA)->pluck('expression')->toArray()) }}">
                         </div>
                     </div>
                 </div> 
@@ -60,7 +60,7 @@
             </div>
             <div class="card-footer text-right">
                 <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
-                <a href="{{ url('regras') }}" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</a>
+                <a href="{{ url('usuarios') }}" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</a>
             </div>
         </div>
     {!! Form::close() !!} 
