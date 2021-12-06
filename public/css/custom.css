@@ -36,3 +36,12 @@
 .swal2-html-container {
     text-align: center;
 }
+.total_reactions{
+    width: 14%;
+    float: left;
+}
+.display_regra{
+    border: 1px solid #e1e1e1;
+    padding: 8px 8px;
+    border-radius: 4px !important;
+}

@@ -13,12 +13,12 @@ class TwitterCollect{
 
     function __construct() {
 
-        define('CONSUMER_KEY', 'rHn2F4BIhJ17s7jTPJyZ0SrKU');
-        define('CONSUMER_SECRET', 'URmePiavhe5NIFSMKpYuHDIaUvW007tGt2SJlDdgykyGWt5FgM');
-        define('ACCESS_TOKEN', '725986202-o9342d5gnK1JTn3Rgn5VNoqPSacr6KSHCnGtnbQh');
-        define('ACCESS_TOKEN_SECRET','fHb4L1jR2qbSv94A5DByuP26rC7IM4bD5YvwrMTXB4DgI');
+        $CONSUMER_KEY = 'rHn2F4BIhJ17s7jTPJyZ0SrKU';
+        $CONSUMER_SECRET = 'URmePiavhe5NIFSMKpYuHDIaUvW007tGt2SJlDdgykyGWt5FgM';
+        $ACCESS_TOKEN = '725986202-o9342d5gnK1JTn3Rgn5VNoqPSacr6KSHCnGtnbQh';
+        $ACCESS_TOKEN_SECRET = 'fHb4L1jR2qbSv94A5DByuP26rC7IM4bD5YvwrMTXB4DgI';
        
-        $this->conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
+        $this->conn = new TwitterOAuth($CONSUMER_KEY, $CONSUMER_SECRET, $ACCESS_TOKEN, $ACCESS_TOKEN_SECRET);
     }
 
     public function pullMedias()

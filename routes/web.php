@@ -12,7 +12,13 @@ Auth::routes();
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
+
 Route::get('relatorios','RelatorioController@index');
+Route::get('relatorios/reactions','RelatorioController@reactions');
+Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
+Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
+
+Route::get('pdf','RelatorioController@pdf');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
@@ -41,6 +47,7 @@ Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvi
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
 Route::get('monitoramento','MonitoramentoController@index');
+Route::get('monitoramento/medias/historico','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');

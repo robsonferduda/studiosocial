@@ -14,4 +14,8 @@ class IgComment extends Model
                             'timestamp'                         
                         ];
     
+    public function media()
+    {
+        return $this->belongsTo('App\Media', 'media_id', 'media_id');
+    }   
 }
