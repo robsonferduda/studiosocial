@@ -24,6 +24,13 @@ class RuleController extends Controller
         return view('regras/create');
     }
 
+    public function edit($id)
+    {
+        $rule = Rule::where('client_id', $this->client_id)->where('id', $id)->first();
+    
+        return view('regras/edit', compact('rule'));
+    }
+
     public function index()
     {
         $rules = Rule::where('client_id', $this->client_id)->get();

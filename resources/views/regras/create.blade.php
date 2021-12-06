@@ -129,6 +129,54 @@
                 expressao.text(expressao.text() + conector + expressoes['nenhuma']);
 
             },
+            init: function($elem) {   
+               let expressao = $('#expressao');
+
+                if($elem[0].name == 'todas') {
+                    if($elem.tags.length > 0) {
+                        expressoes['todas'] = 'Todas essas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['todas'] = '';
+                    }
+                }
+
+                if($elem[0].name == 'algumas') {
+
+                    if($elem.tags.length > 0) {
+                        expressoes['algumas'] = 'Algumas dessas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['algumas'] = '';
+                    }
+                    
+                }
+
+                if($elem[0].name == 'nenhuma') {
+                    if($elem.tags.length > 0) {
+                        expressoes['nenhuma'] = 'Nenhuma dessas expressões ( '+$elem.tags.join(' , ')+' )';
+                    } else {
+                        expressoes['nenhuma'] = '';
+                    }
+                }
+
+                conector = ''; 
+                expressao.text(''); 
+
+                expressao.text(expressao.text() + expressoes['todas']);
+
+                if(expressoes['todas'] != '' && expressoes['algumas'] != '') {
+                    conector = ' OU ';
+                }
+
+                expressao.text(expressao.text() + conector + expressoes['algumas']);
+
+                conector = ''; 
+                if((expressoes['todas'] != '' || expressoes['algumas'] != '') && expressoes['nenhuma'] != '') {
+                    conector = ' E ';
+                }
+
+                expressao.text(expressao.text() + conector + expressoes['nenhuma']);
+
+            },
         });
 
         $(document).on('keypress',function(e) {
