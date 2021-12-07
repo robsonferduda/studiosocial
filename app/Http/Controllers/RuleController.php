@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Enums\TypeRule;
 use App\ExpressionRule;
 use App\Http\Requests\RuleRequest;
+use App\Jobs\Rule as JobsRule;
 use App\Rule;
 use Illuminate\Support\Facades\Session;
+use Laracasts\Flash\Flash;
 
 class RuleController extends Controller
 {
@@ -19,9 +21,15 @@ class RuleController extends Controller
     }
 
     public function create()
-    {
-       
+    {       
         return view('regras/create');
+    }
+
+    public function edit($id)
+    {
+        $rule = Rule::where('client_id', $this->client_id)->where('id', $id)->first();
+    
+        return view('regras/edit', compact('rule'));
     }
 
     public function index()
@@ -31,49 +39,123 @@ class RuleController extends Controller
         return view('regras/index', compact('rules'));
     }
 
-
     public function store(RuleRequest $request)
     {   
         $nome    = $request->nome;
         $todas   = $request->todas ? explode(',', $request->todas) : [];
         $algumas = $request->algumas ? explode(',',  $request->algumas) : [];
         $nenhuma = $request->nenhuma ? explode(',', $request->nenhuma) : [];
+        try {
+            $rule = Rule::create([
+                'name' => $nome,
+                'client_id' => $this->client_id
+            ]);
 
-        $rule = Rule::create([
-            'name' => $nome,
-            'client_id' => $this->client_id
-        ]);
-
-       
-
-        if(count($todas) > 0) {
-            foreach($todas as $expression) {
-                ExpressionRule::create([
-                    'rule_id' => $rule->id,
-                    'type_rule_id' => TypeRule::TODAS,
-                    'expression' => $expression
-                ]);
+            if(count($todas) > 0) {
+                foreach($todas as $expression) {
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::TODAS,
+                        'expression' => $expression
+                    ]);
+                }
             }
+
+            if(count($algumas) > 0) {
+                foreach($algumas as $expression) {
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::ALGUMAS,
+                        'expression' => $expression
+                    ]);
+                }
+            }
+
+            if(count($nenhuma) > 0) {
+                foreach($nenhuma as $expression) {
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::NENHUMA,
+                        'expression' => $expression
+                    ]);
+                }
+            }
+            $retorno = array('flag' => true,
+                             'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+        } catch (Exception $e) {
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-        if(count($algumas) > 0) {
-            foreach($algumas as $expression) {
-                ExpressionRule::create([
-                    'rule_id' => $rule->id,
-                    'type_rule_id' => TypeRule::ALGUMAS,
-                    'expression' => $expression
-                ]);
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('regras')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect()->route('regras.edit', $rule->id)->withInput();
+        }
+    }
+
+    public function update($id, RuleRequest $request)
+    {   
+        $rule = Rule::where('client_id', $this->client_id)->where('id', $id)->first();
+
+        $nome    = $request->nome;
+        $todas   = $request->todas ? explode(',', $request->todas) : [];
+        $algumas = $request->algumas ? explode(',',  $request->algumas) : [];
+        $nenhuma = $request->nenhuma ? explode(',', $request->nenhuma) : [];
+        try {
+
+            $rule->update([
+                'name' => $nome
+            ]);
+
+            if(count($todas) > 0) {
+                foreach($todas as $expression) {
+                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::TODAS)->update([                   
+                        'expression' => $expression
+                    ]);
+                }
             }
+
+            if(count($algumas) > 0) {
+                foreach($algumas as $expression) {
+                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::ALGUMAS)->update([                   
+                        'expression' => $expression
+                    ]);
+                }
+            }
+
+            if(count($nenhuma) > 0) {
+                foreach($nenhuma as $expression) {
+                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::NENHUMA)->update([                   
+                        'expression' => $expression
+                    ]);
+                }
+            }
+            $retorno = array('flag' => true,
+                             'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
+        } catch (\Illuminate\Database\QueryException $e) {
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+        } catch (Exception $e) {
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-        if(count($nenhuma) > 0) {
-            foreach($nenhuma as $expression) {
-                ExpressionRule::create([
-                    'rule_id' => $rule->id,
-                    'type_rule_id' => TypeRule::NENHUMA,
-                    'expression' => $expression
-                ]);
-            }
+        JobsRule::dispatchNow();
+
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('regras')->withInput();
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect()->route('regras.edit', $rule->id)->withInput();
         }
+        
+        
     }
 }

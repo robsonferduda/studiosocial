@@ -39,9 +39,9 @@
                     @foreach($rules as $rule)
                         <tr>
                             <td>{{ $rule->name }}</td>
-                            <td>{{ implode(',', $rule->expressions(App\Enums\TypeRule::TODAS)->pluck('expression')->toArray()) }}</td>
-                            <td>{{ implode(',', $rule->expressions(App\Enums\TypeRule::ALGUMAS)->pluck('expression')->toArray()) }}</td>
-                            <td>{{ implode(',', $rule->expressions(App\Enums\TypeRule::NENHUMA)->pluck('expression')->toArray()) }}</td>                            
+                            <td>{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::TODAS)->pluck('expression')->toArray()) }}</td>
+                            <td>{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::ALGUMAS)->pluck('expression')->toArray()) }}</td>
+                            <td>{{ implode(',', $rule->expressionsType(App\Enums\TypeRule::NENHUMA)->pluck('expression')->toArray()) }}</td>                            
                             <td class="text-center">
                                 <a title="Editar" href="{{ route('regras.edit',$rule->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>
                                 <form class="form-delete" style="display: inline;" action="{{ route('client.destroy',$rule->id) }}" method="POST">
