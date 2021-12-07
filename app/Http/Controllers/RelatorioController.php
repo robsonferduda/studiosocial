@@ -42,6 +42,12 @@ class RelatorioController extends Controller
       return view('relatorios/reactions', compact('rules'));
     }
 
+    public function influenciadores()
+    {
+      $rules = Rule::all();
+      return view('relatorios/influenciadores', compact('rules'));
+    }
+
     public function sentimentos()
     {
       return view('relatorios/sentimentos');

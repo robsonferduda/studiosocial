@@ -58,6 +58,7 @@ class TwitterCollect{
                             'user_location' => $tweet->user->location,
                             'user_followers_count' => $tweet->user->followers_count,
                             'user_friends_count' => $tweet->user->friends_count,
+                            'user_profile_image_url' => $tweet->user->profile_image_url,
                             'created_tweet_at' => $tweet->created_at,
                             'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
                             );
@@ -99,6 +100,7 @@ class TwitterCollect{
                             'user_location' => $tweet->user->location,
                             'user_followers_count' => $tweet->user->followers_count,
                             'user_friends_count' => $tweet->user->friends_count,
+                            'user_profile_image_url' => $tweet->user->profile_image_url,
                             'created_tweet_at' => $tweet->created_at,
                             'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
                             );

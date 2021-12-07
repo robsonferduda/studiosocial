@@ -104,11 +104,11 @@
                 <div class="card-body text-center">
                     <div class="row">
                         <div class="col-12 col-md-12 mb-0">
-                            <a href="">
+                            <a href="{{ url('relatorios/influenciadores') }}">
                                 <div class="icon-big icon-warning">
                                     <i class="fa fa-users text-info"></i>
                                 </div>
-                                <h4 class="mt-2">Usuários Mais Engajados</h4>
+                                <h4 class="mt-2">Influenciadores</h4>
                             </a>
                         </div>
                     </div>

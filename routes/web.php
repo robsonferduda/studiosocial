@@ -14,9 +14,11 @@ Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
 
 Route::get('relatorios','RelatorioController@index');
+Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/reactions','RelatorioController@reactions');
-Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
+Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
+
 
 Route::get('pdf','RelatorioController@pdf');
 
