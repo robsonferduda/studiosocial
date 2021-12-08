@@ -16,6 +16,6 @@ class IgComment extends Model
     
     public function media()
     {
-        return $this->belongsTo('App\Media', 'media_id', 'media_id');
+        return $this->belongsTo('App\Media', 'media_id', 'id');
     }   
 }

@@ -3,27 +3,33 @@
 namespace App\Jobs;
 
 use App\Enums\TypeRule;
+use App\FbComment;
+use App\FbPost;
+use App\IgComment;
 use App\Media;
+use App\MediaTwitter;
 use App\Rule as AppRule;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Session;
 
 class Rule implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+
+    protected $client_id;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($client_id)
     {
-        $this->client_id = Session::get('cliente')['id'];
+        $this->client_id = $client_id;
     }
 
     /**
@@ -40,42 +46,205 @@ class Rule implements ShouldQueue
             $algumas = $rule->expressions()->wherePivot('type_rule_id', TypeRule::ALGUMAS)->pluck('expression')->toArray();
             $nenhuma = $rule->expressions()->wherePivot('type_rule_id', TypeRule::NENHUMA)->pluck('expression')->toArray();
 
+            // INSTAGRAM POSTS
             $medias = Media::where('client_id', $this->client_id);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
-                            $query->where('caption', 'ilike', "% {$expression} %");
+                            $query->whereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
                         }        
                     });      
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
-                             foreach($algumas as $expression) {
-                                 $query->orWhere('caption', 'ilike', "% {$expression} %");
-                             }               
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
                          });
                      }
                 });    
             }
 
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+
             if(count($nenhuma) > 0) {
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
-                     foreach($nenhuma as $expression) {
-                        $query->where('caption', 'not ilike', " %{$expression}% ");
-                     }                             
-                 });
-             }
+                    foreach($nenhuma as $expression) {
+                        $query->whereRaw(" lower(caption) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+            //dd($medias->toSql());
+            $ids = $medias->pluck('id')->toArray();
 
-             dd($medias->get()[1]);
-           
-            
-            
+            $rule->igPosts()->sync($ids);
 
-            $expression_todas = implode(' AND ', $todas);
-            dd($expression_todas);
-            //$expression_algumas =
-            //$expressions_nenhuma =
+            // INSTAGRAM COMMENTS
+            $medias = IgComment::whereHas('media', function($query){
+                            $query->where('client_id', $this->client_id);
+                        });
+            if(count($todas) > 0) {
+                $medias = $medias->where(function ($query) use ($todas, $algumas) {
+                    $query->where(function ($query) use ($todas) {
+                        foreach($todas as $expression) {
+                            $query->whereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                        }        
+                    });      
+                    if(count($algumas) > 0) {
+                        $query->orWhere(function ($query) use ($algumas) {
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
+                         });                       
+                     }
+                });    
+            }
 
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+
+            if(count($nenhuma) > 0) {
+                $medias =  $medias->where(function ($query) use ($nenhuma) {
+                    foreach($nenhuma as $expression) {
+                       $query->whereRaw(" lower(text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+
+            $ids = $medias->pluck('id')->toArray();
+
+            $rule->igComments()->sync($ids);
+
+            //FACEBOOK POSTS
+            $medias = FbPost::where('client_id', $this->client_id);
+            if(count($todas) > 0) {
+                $medias = $medias->where(function ($query) use ($todas, $algumas) {
+                    $query->where(function ($query) use ($todas) {
+                        foreach($todas as $expression) {
+                            $query->whereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                        }        
+                    });      
+                    if(count($algumas) > 0) {
+                        $query->orWhere(function ($query) use ($algumas) {
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
+                         });
+                     }
+                });    
+            }
+
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+
+            if(count($nenhuma) > 0) {
+                $medias =  $medias->where(function ($query) use ($nenhuma) {
+                    foreach($nenhuma as $expression) {
+                        $query->whereRaw(" lower(message) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+
+            $ids = $medias->pluck('id')->toArray();
+
+            $rule->fbPosts()->sync($ids);
+
+            //FACEBOOK COMMENTS
+            $medias = FbComment::whereHas('fbPost', function($query){
+                $query->where('client_id', $this->client_id);
+            });
+            if(count($todas) > 0) {
+                $medias = $medias->where(function ($query) use ($todas, $algumas) {
+                    $query->where(function ($query) use ($todas) {
+                        foreach($todas as $expression) {
+                            $query->whereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                        }        
+                    });      
+                    if(count($algumas) > 0) {
+                        $query->orWhere(function ($query) use ($algumas) {
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
+                         });
+                     }
+                });    
+            }
+
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+
+            if(count($nenhuma) > 0) {
+                $medias =  $medias->where(function ($query) use ($nenhuma) {
+                    foreach($nenhuma as $expression) {
+                        $query->whereRaw(" lower(text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+
+            $ids = $medias->pluck('id')->toArray();
+
+            $rule->fbComments()->sync($ids);
+
+             //TWITTER POSTS
+            $medias = MediaTwitter::where('client_id', $this->client_id);
+            if(count($todas) > 0) {
+                $medias = $medias->where(function ($query) use ($todas, $algumas) {
+                    $query->where(function ($query) use ($todas) {
+                        foreach($todas as $expression) {
+                            $query->whereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                        }        
+                    });      
+                    if(count($algumas) > 0) {
+                        $query->orWhere(function ($query) use ($algumas) {
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
+                        });
+                    }
+                });    
+            }
+
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+ 
+            if(count($nenhuma) > 0) {
+                $medias =  $medias->where(function ($query) use ($nenhuma) {
+                    foreach($nenhuma as $expression) {
+                        $query->whereRaw(" lower(full_text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+
+            $ids = $medias->pluck('id')->toArray();
+
+            $rule->twPosts()->sync($ids);
+    
         }
     }
 }
