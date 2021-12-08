@@ -92,6 +92,7 @@ class RuleController extends Controller
         }
 
         if ($retorno['flag']) {
+            JobsRule::dispatch($this->client_id);
             Flash::success($retorno['msg']);
             return redirect('regras')->withInput();
         } else {
@@ -157,9 +158,8 @@ class RuleController extends Controller
                              'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-        JobsRule::dispatch($this->client_id);
-
         if ($retorno['flag']) {
+            JobsRule::dispatch($this->client_id);
             Flash::success($retorno['msg']);
             return redirect('regras')->withInput();
         } else {
