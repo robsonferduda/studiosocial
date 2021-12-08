@@ -19,6 +19,6 @@ class Rule extends Model
 
     public function expressions()
     {
-        return $this->belongsToMany('App\TypeRule','expressions_rules','rule_id','type_rule_id')->withTimestamps();
+        return $this->belongsToMany('App\TypeRule','expressions_rules','rule_id','type_rule_id')->withPivot('expression')->withTimestamps();
     }    
 }

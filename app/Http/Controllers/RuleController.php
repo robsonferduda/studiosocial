@@ -113,29 +113,29 @@ class RuleController extends Controller
                 'name' => $nome
             ]);
 
-            if(count($todas) > 0) {
-                foreach($todas as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::TODAS)->update([                   
-                        'expression' => $expression
-                    ]);
-                }
-            }
+            // if(count($todas) > 0) {
+            //     foreach($todas as $expression) {
+            //         ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::TODAS)->update([                   
+            //             'expression' => $expression
+            //         ]);
+            //     }
+            // }
 
-            if(count($algumas) > 0) {
-                foreach($algumas as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::ALGUMAS)->update([                   
-                        'expression' => $expression
-                    ]);
-                }
-            }
+            // if(count($algumas) > 0) {
+            //     foreach($algumas as $expression) {
+            //         ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::ALGUMAS)->update([                   
+            //             'expression' => $expression
+            //         ]);
+            //     }
+            // }
 
-            if(count($nenhuma) > 0) {
-                foreach($nenhuma as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::NENHUMA)->update([                   
-                        'expression' => $expression
-                    ]);
-                }
-            }
+            // if(count($nenhuma) > 0) {
+            //     foreach($nenhuma as $expression) {
+            //         ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::NENHUMA)->update([                   
+            //             'expression' => $expression
+            //         ]);
+            //     }
+            // }
             $retorno = array('flag' => true,
                              'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
         } catch (\Illuminate\Database\QueryException $e) {
