@@ -34,4 +34,5 @@ class Media extends Model
     {
         return $this->hasMany('App\IgComment','media_id','id');
     }
+
 }

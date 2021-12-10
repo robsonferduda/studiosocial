@@ -7,6 +7,7 @@ use App\ExpressionRule;
 use App\Http\Requests\RuleRequest;
 use App\Jobs\Rule as JobsRule;
 use App\Rule;
+use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\Session;
 use Laracasts\Flash\Flash;
 
@@ -91,6 +92,7 @@ class RuleController extends Controller
         }
 
         if ($retorno['flag']) {
+            JobsRule::dispatch($this->client_id);
             Flash::success($retorno['msg']);
             return redirect('regras')->withInput();
         } else {
@@ -113,29 +115,39 @@ class RuleController extends Controller
                 'name' => $nome
             ]);
 
+            ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::TODAS)->delete();
             if(count($todas) > 0) {
                 foreach($todas as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::TODAS)->update([                   
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::TODAS,
                         'expression' => $expression
                     ]);
                 }
             }
 
+            ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::ALGUMAS)->delete();
             if(count($algumas) > 0) {
                 foreach($algumas as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::ALGUMAS)->update([                   
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::ALGUMAS,
                         'expression' => $expression
                     ]);
                 }
             }
 
+            ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::NENHUMA)->delete();
             if(count($nenhuma) > 0) {
                 foreach($nenhuma as $expression) {
-                    ExpressionRule::where('rule_id', $rule->id)->where('type_rule_id', TypeRule::NENHUMA)->update([                   
+                    ExpressionRule::create([
+                        'rule_id' => $rule->id,
+                        'type_rule_id' => TypeRule::NENHUMA,
                         'expression' => $expression
                     ]);
                 }
             }
+
             $retorno = array('flag' => true,
                              'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -146,9 +158,8 @@ class RuleController extends Controller
                              'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-        JobsRule::dispatchNow();
-
         if ($retorno['flag']) {
+            JobsRule::dispatch($this->client_id);
             Flash::success($retorno['msg']);
             return redirect('regras')->withInput();
         } else {

@@ -13,5 +13,10 @@ class FbComment extends Model
                             'created_time',
                             'comment_id'                        
                         ];
-    
+
+    public function fbPost()
+    {
+        return $this->hasMany('App\FbPost','id','post_id');
+    }
 }
+    
