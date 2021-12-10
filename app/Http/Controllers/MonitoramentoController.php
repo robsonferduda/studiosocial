@@ -51,12 +51,12 @@ class MonitoramentoController extends Controller
         return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio'));
     }
 
-    public function getHistorico()
+    public function getHistorico($dias)
     {
-        $data_inicial = Carbon::now()->subDays(7);
+        $data_inicial = Carbon::now()->subDays($dias);
         $dados = array();
 
-        for ($i=0; $i < 7; $i++) { 
+        for ($i=0; $i < $dias; $i++) { 
 
             $data = $data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $data_inicial->format('d/m/Y');

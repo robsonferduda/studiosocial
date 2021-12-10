@@ -24,6 +24,13 @@ class TwitterController extends Controller
         $this->conn = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET);
     }
 
+    public function getTweetByUserAndSentiment($user, $sentiment)
+    {
+        $medias = MediaTwitter::where('user_name',$user)->where('sentiment',$sentiment)->get();
+
+        return view('twitter/postagens', compact('medias'));
+    }
+
     public function index()
     {
         (new TwitterCollect())->pullMedias();
