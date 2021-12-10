@@ -17,8 +17,9 @@ Route::get('relatorios','RelatorioController@index');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
+Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
 Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
-
+Route::get('relatorios/dados/sentimentos','RelatorioController@getSentimentos');
 
 Route::get('pdf','RelatorioController@pdf');
 
@@ -48,8 +49,10 @@ Route::resource('term', 'TermController');
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
+Route::get('media/{media_id}/tipo/{tipo}/sentimento/{sentimento}/atualizar','MediaController@atualizaSentimento');
+
 Route::get('monitoramento','MonitoramentoController@index');
-Route::get('monitoramento/medias/historico','MonitoramentoController@getHistorico');
+    Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
@@ -63,6 +66,7 @@ Route::post('fb-webhook', 'FBWebhookController@receive');
 Route::get('/test-api', 'TestApiController@test');
 
 Route::get('twitter', 'TwitterController@index');
+Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterController@getTweetByUserAndSentiment');
 
 Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');

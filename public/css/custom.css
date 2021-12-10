@@ -45,3 +45,12 @@
     padding: 8px 8px;
     border-radius: 4px !important;
 }
+.op-2{
+    opacity: 0.3;
+}
+.link-relatorio:hover{
+    text-decoration: none !important;
+}
+.box-relatorio:hover h4{
+    color: #51cbce !important;
+}

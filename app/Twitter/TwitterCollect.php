@@ -76,7 +76,7 @@ class TwitterCollect{
         foreach ($termos_ativos as $term) {
             
             $query = array(
-                "q" => $term->term,
+                "q" => '"$term->term"',
                 "count" => 100,
                 "lang" => 'pt',
                 "result_type" => "recent",

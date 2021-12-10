@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class MediaTwitter extends Model
 {
-
     use SoftDeletes;
 
     protected $table = 'media_twitter';
@@ -39,22 +38,31 @@ class MediaTwitter extends Model
         return $this->belongsToMany('App\Term','twitter_term','media_id','term_id')->withTimestamps();
     }
 
+    public function getSentimentos()
+    {
+        return DB::select('SELECT sentiment, count(*) as total 
+                            FROM media_twitter 
+                            WHERE sentiment NOTNULL 
+                            GROUP BY sentiment 
+                            ORDER BY sentiment');
+    }
+
     public function getInfluenciadoresPositivos()
     {
-        return DB::select('SELECT user_name, sentiment, count(*) as total 
+        return DB::select('SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
-                            WHERE sentiment IN(-1)
-                            GROUP BY sentiment, user_name
+                            WHERE sentiment IN(1)
+                            GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
                             LIMIT 10');
     }
 
     public function getInfluenciadoresNegativos()
     {
-        return DB::select('SELECT user_name, sentiment, count(*) as total 
+        return DB::select('SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(-1)
-                            GROUP BY sentiment, user_name
+                            GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
                             LIMIT 10');
     }

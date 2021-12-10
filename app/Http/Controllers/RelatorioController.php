@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use DB;
 use DOMPDF;
+use Carbon\Carbon;
 use App\Rule;
 use App\FbPost;
 use App\FbReaction;
+use App\MediaTwitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -36,6 +38,28 @@ class RelatorioController extends Controller
       return response()->json($reactions);
     }
 
+    public function getSentimentos()
+    {
+
+      $sentimentos_twitter = (new MediaTwitter())->getSentimentos();
+
+      $sentimentos[] = array('rede_social' => "Facebook",'total_positivo' => rand(1,100),'total_negativo' => rand(1,100),'total_neutro' => rand(1,100));
+      $sentimentos[] = array('rede_social' => "Instagram",'total_positivo' => rand(1,100),'total_negativo' => rand(1,100),'total_neutro' => rand(1,100));
+      $sentimentos[] = array('rede_social' => "Twitter",'total_positivo' => $sentimentos_twitter[2]->total,'total_negativo' => $sentimentos_twitter[0]->total,'total_neutro' => $sentimentos_twitter[1]->total);
+
+      return response()->json($sentimentos);
+    }
+
+    public function evolucaoDiaria()
+    {
+      $periodo_padrao = 7;
+      $rules = Rule::all();
+      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
+                                 'data_final'   => Carbon::now()->format('d/m/Y'));
+
+      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio'));
+    }
+
     public function reactions()
     {
       $rules = Rule::all();
@@ -45,12 +69,16 @@ class RelatorioController extends Controller
     public function influenciadores()
     {
       $rules = Rule::all();
-      return view('relatorios/influenciadores', compact('rules'));
+      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos();
+      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos();
+
+      return view('relatorios/influenciadores', compact('rules','positivos','negativos'));
     }
 
     public function sentimentos()
     {
-      return view('relatorios/sentimentos');
+      $rules = Rule::all();
+      return view('relatorios/sentimentos', compact('rules'));
     }
 
     public function pdf()
