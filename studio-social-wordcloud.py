@@ -36,7 +36,7 @@ for client in clients:
     cur.execute(sql)
     comments_i = cur.fetchall()
 
-    sql = 'select * from fb_comments t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 5) inner join fb_posts t2 on (t0.post_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
+    sql = 'select * from fb_comments t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 2) inner join fb_posts t2 on (t0.post_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
     cur.execute(sql)
     comments_f = cur.fetchall()
 
