@@ -21,6 +21,15 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
+                        <div class="typography-line">                   
+                            <p class="text-danger">
+                                Aperte a tecla <strong>ENTER</strong> após escrever a expressão.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Nome da regra <span class="text-danger">Obrigatório</span></label>
                             <input type="text" class="form-control" name="nome" value="{{ $rule->name }}">
