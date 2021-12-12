@@ -36,19 +36,25 @@
                                 @endswitch
                             </div>
                             <div class="col-md-10">
-                                <div class="mb-2">
+                                <div class="mb-2">                                   
                                     <span class="badge badge-pill badge-primary">
                                         <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
                                     </span>
-                                    <span class="badge badge-pill badge-danger">
-                                        <i class="fa fa-comments"></i> {{ $media['comments_count'] }}
-                                    </span>   
-                                    <span class="badge badge-pill badge-success">
-                                        <i class="fa fa-share"></i> {{ $media['comments_count'] }}
-                                    </span> 
-                                    <span class="badge badge-pill badge-info">
-                                        <i class="fa fa-users"></i> {{ $media['comments_count'] }}
-                                    </span> 
+                                    @if($media['tipo'] == 'instagram' || $media['tipo'] == 'facebook' )
+                                        <span class="badge badge-pill badge-danger">
+                                            <i class="fa fa-comments"></i> {{ $media['comments_count'] }}
+                                        </span>   
+                                    @endif
+                                    @if($media['tipo'] == 'twitter')
+                                        <span class="badge badge-pill badge-success">
+                                            <i class="fa fa-share"></i> {{ $media['retweet_count'] }}
+                                        </span> 
+                                    @endif
+                                    @if($media['tipo'] == 'facebook')
+                                        <span class="badge badge-pill badge-info">
+                                            <i class="fa fa-users"></i> {{ $media['share_count'] }}
+                                        </span> 
+                                    @endif
                                     <span class="badge badge-pill badge-warning">
                                         <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
                                     </span>

@@ -22,7 +22,7 @@ class FbPost extends Model
 
     public function reactions()
     {
-        return $this->belongsToMany('App\FbReaction','fb_post_reaction','post_id','reaction_id')->withTimestamps();
+        return $this->belongsToMany('App\FbReaction','fb_post_reaction','post_id','reaction_id')->withTimestamps()->withPivot('count');
     }
 
     public function comments()

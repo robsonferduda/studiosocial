@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FbReaction;
 use DB;
 use Carbon\Carbon;
 use App\Hashtag;
@@ -100,18 +101,18 @@ class MonitoramentoController extends Controller
                                       'username' => '',
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
-                                      'comments_count' => $media->like_count,
+                                      'comments_count' => $media->comments_count,
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'instagram',
                                       'comments' => $bag_comments,
-                                      'link' => $media->permalink
+                                      'link' => $media->permalink                            
                                     );
 
                 }
                 break;
 
             case 'facebook':
-                $medias_temp = FbPost::with('comments')->where('client_id', $client_id)->orderBy('updated_time','DESC')->paginate(20);
+                $medias_temp = FbPost::with('comments')->with('reactions')->where('client_id', $client_id)->orderBy('updated_time','DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
 
                     $bag_comments = [];
@@ -121,16 +122,29 @@ class MonitoramentoController extends Controller
                         }
                     }
                     
+                    $likes_count = 0;
+                    $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
+                    $likes = $media->reactions()->wherePivot('reaction_id',FbReaction::LIKE)->first();
+                    if(!empty($loves)) {
+                        $likes_count += $loves->pivot->count;
+                    }
+
+                    if(!empty($likes)) {
+                        $likes_count += $likes->pivot->count;
+                    }
+
                     $medias[] = array('id' => $media->id,
                                       'text' => $media->message,
                                       'username' => '',
                                       'created_at' => dateTimeUtcToLocal($media->updated_time),
-                                      'like_count' => $media->like_count,
-                                      'comments_count' => $media->like_count,
+                                      'like_count' => $likes_count,
+                                      'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'facebook',
                                       'comments' => $bag_comments,
-                                      'link' => $media->permalink_url);
+                                      'link' => $media->permalink_url,
+                                      'share_count' => !empty($media->share_count) ? $media->share_count : 0 
+                                    );
 
                 }
                 break;
@@ -148,7 +162,9 @@ class MonitoramentoController extends Controller
                                       'social_media_id' => $media->social_media_id,
                                       'comments' => [],
                                       'tipo' => 'twitter',
-                                      'link' => '');
+                                      'link' => '',
+                                      'retweet_count' => $media->retweet_count
+                                    );
 
                 }
             break;
