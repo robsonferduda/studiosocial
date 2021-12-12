@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Classes\FBMention;
 use App\Classes\IGHashTag;
 use App\Classes\IGMention;
+use App\Classes\Rule;
 use App\Twitter\TwitterCollect;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -33,6 +34,7 @@ class Kernel extends ConsoleKernel
             (new IGMention())->pullMedias();
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
+            (new Rule())->runJob();            
         })->hourly();
     }
 
