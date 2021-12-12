@@ -53,6 +53,11 @@ $(document).ready(function() {
             type: "warning",
             icon: "warning",
             showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                  return 'You need to write something!'
+                }
+            },
             confirmButtonColor: "#28a745",
             confirmButtonText: "Sim, excluir!",
             cancelButtonText: "Cancelar"
@@ -79,6 +84,82 @@ $(document).ready(function() {
                     });
 
                 resolve(options)               
+            }
+        });
+    });
+
+    $('body').on("click", ".config_periodo", function(e) {
+
+        var periodo_atual = $(".periodo_atual").text();
+        e.preventDefault();
+        Swal.fire({
+            title: "Informe o período em dias",
+            text: "Digite ou selecione um valor",
+            input: 'number',
+            inputValue: periodo_atual,
+            showCancelButton: true,
+            inputValidator: (value) => {
+                if (!value) {
+                  return 'Você precisa informar um valor para o período'
+                }
+            },
+            confirmButtonColor: "#28a745",
+            confirmButtonText: '<i class="fa fa-check"></i> Confirmar',
+            cancelButtonText: '<i class="fa fa-times"></i> Cancelar'
+        }).then(function(result) {
+            if (result.isConfirmed) {
+
+                var periodo = $(".swal2-input").val();
+
+                $.ajax({
+                    url: host+'/configuracoes/periodo/selecionar',
+                       type: 'POST',
+                       data: {
+                            "_token": $('meta[name="csrf-token"]').attr('content'),
+                            "periodo": periodo
+                    },
+                    success: function(response) {
+                        window.location.reload();                                
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
+            }
+        });
+    });
+
+    $('body').on("click", ".config_cliente", function(e) {
+        var cliente_atual = $(".periodo_atual").text();
+        e.preventDefault();
+        Swal.fire({
+            title: "Selecione um cliente",
+            input: 'select',
+            inputValue: cliente_atual,
+            inputOptions: inputOptionsPromise,
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: '<i class="fa fa-check"></i> Confirmar',
+            cancelButtonText: '<i class="fa fa-times"></i> Cancelar'
+        }).then(function(result) {
+            if (result.isConfirmed) {
+
+                var cliente = $(".swal2-select").val();
+
+                $.ajax({
+                    url: host+'/configuracoes/cliente/selecionar',
+                       type: 'POST',
+                       data: {
+                            "_token": $('meta[name="csrf-token"]').attr('content'),
+                            "cliente": cliente
+                    },
+                    success: function(response) {
+                        window.location.reload();                                
+                    },
+                    error: function(response){
+                        console.log(response);
+                    }
+                });
             }
         });
     });

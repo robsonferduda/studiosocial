@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
         Session::put('url','usuarios');
     }
 
@@ -82,7 +82,12 @@ class UserController extends Controller
         $flag_senha = $request->is_password == true ? true : false;
         $request->merge(['is_active' => $flag]);
 
-        if(!$flag_senha) $request->request->remove('password');
+        dd(Hash::make($request->password));
+
+        if($flag_senha)
+            $request->merge(['password' => Hash::make($request->password)]);
+        else
+            unset($request['password']);
     
         try {
         

@@ -7,7 +7,7 @@
                 <div class="col-md-6">
                     <h4 class="card-title">
                         <i class="nc-icon nc-sound-wave"></i> Relatórios 
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Evolução Diária 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Evolução Por Rede Social 
                     </h4>
                 </div>
                 <div class="col-md-6">
@@ -17,7 +17,7 @@
         </div>
         <div class="card-body"> 
             @include('layouts/regra')          
-            <p class="ml-1">Volume diário de mensagens dividido por sentimentos no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>
+            <p class="ml-1">Volume diário de mensagens dividido por rede social no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="card car-chart">
@@ -52,7 +52,7 @@
         function loadDados(periodo){
 
             $.ajax({
-                url: host+'/relatorios/dados/sentimentos/periodo/'+periodo,
+                url: host+'/monitoramento/medias/historico/'+periodo,
                 type: 'GET',
                 success: function(response) {
                     if(myChart) myChart.destroy();
@@ -85,34 +85,34 @@
                     labels: dados.data_formatada,
                     datasets: [
                     {
-                        label: "Positivo",
-                            borderColor: '#4caf50',
+                        label: "Instagram",
+                            borderColor: '#e91ea1',
                             fill: true,
-                            backgroundColor: '#4caf50',
-                            hoverBorderColor: '#4caf50',
+                            backgroundColor: '#e91ea1',
+                            hoverBorderColor: '#fcc468',
                             borderWidth: 8,
                             stack: '1',
-                            data: dados.dados_positivos,
+                            data: dados.dados_instagram,
                         },
                         {
-                            label: "Negativo",
-                            borderColor: '#f44336',
+                            label: "Facebook",
+                            borderColor: '#3f51b5',
                             fill: true,
-                            backgroundColor: '#f44336',
-                            hoverBorderColor: '#f44336',
+                            backgroundColor: '#3f51b5',
+                            hoverBorderColor: '#3f51b5',
                             borderWidth: 8,
                             stack: '1',
-                            data: dados.dados_negativos,
+                            data: dados.dados_facebook,
                         },
                         {
-                            label: "Neutro",
-                            borderColor: '#ffcc33',
+                            label: "Twitter",
+                            borderColor: '#51bcda',
                             fill: true,
-                            backgroundColor: '#ffcc33',
-                            hoverBorderColor: '#ffcc33',
+                            backgroundColor: '#51bcda',
+                            hoverBorderColor: '#51bcda',
                             borderWidth: 8,
                             stack: '1',
-                            data: dados.dados_neutros
+                            data: dados.dados_twitter
                         }
                     ]
                 },

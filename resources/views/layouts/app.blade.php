@@ -31,7 +31,7 @@
         <div class="sidebar" data-color="white" data-active-color="danger">
             <div class="logo">
                 <a style="padding-left: 8px;" href="{{ url('perfil') }}" class="simple-text logo-normal">
-                  <i class="fa fa-user"></i> {{ explode(" ", Auth::user()->name)[0] }}
+                  <i class="fa fa-user"></i> {{ (Auth::user()) ? explode(" ", Auth::user()->name)[0] : 'Não identificado' }}
                 </a>
             </div>
             <div class="sidebar-wrapper">

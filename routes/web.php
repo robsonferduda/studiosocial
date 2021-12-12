@@ -10,6 +10,9 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 Auth::routes();
 
 Route::get('configuracoes','ConfiguracoesController@index');
+Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
+Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecionarPeriodo');
+
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
 
@@ -18,8 +21,10 @@ Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
+Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::get('relatorios/dados/sentimentos','RelatorioController@getSentimentos');
+Route::get('relatorios/dados/sentimentos/periodo/{dias}','RelatorioController@getSentimentosPeriodo');
 
 Route::get('pdf','RelatorioController@pdf');
 
@@ -52,7 +57,7 @@ Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback
 Route::get('media/{media_id}/tipo/{tipo}/sentimento/{sentimento}/atualizar','MediaController@atualizaSentimento');
 
 Route::get('monitoramento','MonitoramentoController@index');
-    Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
+Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');

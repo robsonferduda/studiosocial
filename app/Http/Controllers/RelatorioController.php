@@ -7,6 +7,7 @@ use DOMPDF;
 use Carbon\Carbon;
 use App\Rule;
 use App\FbPost;
+use App\Media;
 use App\FbReaction;
 use App\MediaTwitter;
 use Illuminate\Http\Request;
@@ -14,9 +15,12 @@ use Illuminate\Support\Facades\Session;
 
 class RelatorioController extends Controller
 {
+    private $client_id;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->client_id = session('cliente')['id'];
         Session::put('url','relatorios');
     }
 
@@ -50,6 +54,37 @@ class RelatorioController extends Controller
       return response()->json($sentimentos);
     }
 
+    public function getSentimentosPeriodo($dias)
+    {
+        $data_inicial = Carbon::now()->subDays($dias);
+        $dados = array();
+
+        for ($i=0; $i < $dias; $i++) { 
+
+            $data = $data_inicial->addDay()->format('Y-m-d');
+            $data_formatada = $data_inicial->format('d/m/Y');
+
+            $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+      
+            $datas[] = $data;
+            $datas_formatadas[] = $data_formatada;
+            $dados_positivos[] = $total_positivos;
+            $dados_negativos[] = $total_negativos;
+            $dados_neutros[] = $total_neutros;
+        }
+
+        $dados = array('data' => $datas,
+                         'data_formatada' => $datas_formatadas,
+                         'dados_positivos' => $dados_positivos,
+                         'dados_negativos' => $dados_negativos,
+                         'dados_neutros' => $dados_neutros);
+
+        return response()->json($dados);
+
+    }
+
     public function evolucaoDiaria()
     {
       $periodo_padrao = 7;
@@ -58,6 +93,16 @@ class RelatorioController extends Controller
                                  'data_final'   => Carbon::now()->format('d/m/Y'));
 
       return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio'));
+    }
+
+    public function evolucaoRedesSociais()
+    {
+      $periodo_padrao = 7;
+      $rules = Rule::all();
+      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
+                                 'data_final'   => Carbon::now()->format('d/m/Y'));
+
+      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio'));
     }
 
     public function reactions()

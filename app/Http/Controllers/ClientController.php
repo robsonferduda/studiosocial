@@ -100,6 +100,11 @@ class ClientController extends Controller
         $user = User::find($id);
         $flag = $request->is_active == true ? true : false;
         $request->merge(['is_active' => $flag]);
+
+        if($request->fl_senha)
+            $request->merge(['password' => Hash::make($request->password)]);
+        else
+            unset($request['password']);
     
         try {
         
