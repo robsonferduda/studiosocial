@@ -40,15 +40,23 @@
                                     <span class="badge badge-pill badge-primary">
                                         <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
                                     </span>
-                                    <span class="badge badge-pill badge-danger">
+
+                                    @if($term['social_media_id'] == App\Enums\SocialMedia::INSTAGRAM)
+                                        <span class="badge badge-pill badge-danger">
                                         <i class="fa fa-comments"></i> {{ $media['comments_count'] }}
-                                    </span>   
-                                    <span class="badge badge-pill badge-success">
-                                        <i class="fa fa-share"></i> {{ $media['comments_count'] }}
-                                    </span> 
-                                    <span class="badge badge-pill badge-info">
-                                        <i class="fa fa-users"></i> {{ $media['comments_count'] }}
-                                    </span> 
+                                        </span>   
+                                    @endif
+
+                                    @if($term['social_media_id'] == App\Enums\SocialMedia::TWITTER)
+                                        <span class="badge badge-pill badge-success">
+                                            <i class="fa fa-share"></i> {{ $media['retweet_count'] }}
+                                        </span> 
+                                    @endif
+
+                                    <span class="badge badge-pill badge-warning">
+                                        <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
+                                    </span>
+                                   
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media['text'] }}</p>

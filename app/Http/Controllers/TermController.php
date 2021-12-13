@@ -58,7 +58,8 @@ class TermController extends Controller
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
-                                      'social_media_id' => $media->social_media_id);
+                                      'social_media_id' => $media->social_media_id
+                                    );
 
                 }
                 break;
@@ -73,7 +74,10 @@ class TermController extends Controller
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
-                                      'social_media_id' => $media->social_media_id);
+                                      'social_media_id' => $media->social_media_id,
+                                      'link' => '',
+                                      'retweet_count' => $media->retweet_count)
+                                      ;
 
                 }
                 break;
