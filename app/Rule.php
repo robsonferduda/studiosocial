@@ -47,4 +47,8 @@ class Rule extends Model
         return $this->morphedByMany('App\MediaTwitter','rules' ,'rule_message', 'rule_id','message_id', 'id', 'id')->withTimestamps();
     }
 
+    public function getExpression()
+    {
+        return "Regra 1 ou regra 1 e regra 1";
+    }
 }

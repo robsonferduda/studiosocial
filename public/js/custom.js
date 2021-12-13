@@ -205,6 +205,12 @@ $(document).ready(function() {
 
     });
 
+    $(".load_expression").change(function(){
+
+        var expression = $('#regra option').filter(':selected').data('expression');
+        $(".display_regra").html(expression);
+    });
+
     var dataFinal = new Date();
     var dataInicial = new Date();    
     dataInicial.setDate(dataFinal.getDate() - 7);

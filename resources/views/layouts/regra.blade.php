@@ -27,10 +27,10 @@
     <div class="col-lg-5 col-md-5 mb-2">
         <div class="form-group">
             <label>Selecione uma regra</label>
-            <select class="form-control" name="regra" id="regra">
+            <select class="form-control load_expression" name="regra" id="regra">
                 <option value="">Selecione uma regra</option>
                 @foreach($rules as $rule)
-                    <option value="{{ $rule->id }}" data-expression="Regra 1 ou regra 1 e regra 1">{{ $rule->name }}</option>
+                    <option value="{{ $rule->id }}" data-expression="{{ $rule->getExpression() }}">{{ $rule->name }}</option>
                 @endforeach
             </select>
         </div>
