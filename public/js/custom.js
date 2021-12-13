@@ -1,10 +1,9 @@
 $(document).ready(function() {
 
     $('#nu_cpf_par').mask('000.000.000-00');
-    $('#dt_inicio_atividade_ati').mask('00/00/0000 00:00');
-    $('#dt_termino_atividade_ati').mask('00/00/0000 00:00');
-    $('#nu_orcid_pes').mask('0000-0000-0000-0000');
-
+    $('.dt_inicial_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
+    $('.dt_final_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
+   
     $('body').on("click", ".button-remove-hashtag", function(e) {
         e.preventDefault();
         var form = $(this).closest("form");
@@ -205,4 +204,24 @@ $(document).ready(function() {
             $('.box-password').css("display","none");
 
     });
+
+    var dataFinal = new Date();
+    var dataInicial = new Date();    
+    dataInicial.setDate(dataFinal.getDate() - 7);
+
+    $(".dt_inicial_relatorio").val(formataData(dataInicial));
+    $(".dt_final_relatorio").val(formataData(dataFinal));
+
+    $(".label_data_inicial").val(formataData(dataInicial));
+    $(".label_data_final").val(formataData(dataInicial));    
+
+    function formataData(data)
+    {
+        var dia = String(data.getDate()).padStart(2, '0');
+        var mes = String(data.getMonth() + 1).padStart(2, '0');
+        var ano = data.getFullYear();
+
+        return dia + '/' + mes + '/' + ano;
+    }
+    
 });

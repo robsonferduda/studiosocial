@@ -41,7 +41,8 @@
     float: left;
 }
 .display_regra{
-    border: 1px solid #e1e1e1;
+    background: #f7f7f7;
+    border: 1px solid #f7f7f7;
     padding: 8px 8px;
     border-radius: 4px !important;
 }
