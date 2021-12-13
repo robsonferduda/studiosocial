@@ -162,7 +162,7 @@ class MonitoramentoController extends Controller
                                       'social_media_id' => $media->social_media_id,
                                       'comments' => [],
                                       'tipo' => 'twitter',
-                                      'link' => '',
+                                      'link' => 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id,
                                       'retweet_count' => $media->retweet_count
                                     );
 
