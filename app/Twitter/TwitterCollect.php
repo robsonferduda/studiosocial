@@ -46,7 +46,7 @@ class TwitterCollect{
             $tweets = $this->conn->get('search/tweets', $query);
     
             foreach ($tweets->statuses as $tweet) {
-    
+              
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
                             'retweet_count' => $tweet->retweet_count,

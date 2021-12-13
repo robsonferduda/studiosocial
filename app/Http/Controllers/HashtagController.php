@@ -65,7 +65,7 @@ class HashtagController extends Controller
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
                                       'social_media_id' => $media->social_media_id,
-                                      'link' => '',
+                                      'link' => 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id,
                                       'retweet_count' => $media->retweet_count
                                     );
 
