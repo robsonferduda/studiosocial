@@ -42,12 +42,14 @@
                     <p>DASHBOARD</p>
                     </a>
                 </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'clientes') ? 'active' : '' }}">
-                  <a href="{{ url('clientes') }}">
-                  <i class="nc-icon nc-briefcase-24"></i>
-                  <p>CLIENTES</p>
-                  </a>
-                </li>
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'clientes') ? 'active' : '' }}">
+                    <a href="{{ url('clientes') }}">
+                    <i class="nc-icon nc-briefcase-24"></i>
+                    <p>CLIENTES</p>
+                    </a>
+                  </li>
+                @endrole
                 <li class="{{ (Session::has('url') and Session::get('url') == 'monitoramento') ? 'active' : '' }}">
                   <a href="{{ url('monitoramento') }}">
                   <i class="nc-icon nc-sound-wave"></i>
@@ -80,24 +82,30 @@
                   </a>
                 </li>
                 <hr/>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
-                    <a href="{{ url('configuracoes') }}">
-                    <i class="nc-icon nc-settings-gear-65"></i>
-                    <p>Configurações</p>
-                    </a>
-                </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'permissoes') ? 'active' : '' }}">
-                    <a href="{{ url('permissoes') }}">
-                    <i class="nc-icon nc-lock-circle-open"></i>
-                    <p>Permissões</p>
-                    </a>
-                </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'usuarios') ? 'active' : '' }}">
-                    <a href="{{ url('usuarios') }}">
-                    <i class="nc-icon nc-circle-10"></i>
-                    <p>Usuários</p>
-                    </a>
-                </li>                 
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
+                      <a href="{{ url('configuracoes') }}">
+                      <i class="nc-icon nc-settings-gear-65"></i>
+                      <p>Configurações</p>
+                      </a>
+                  </li>
+                @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'permissoes') ? 'active' : '' }}">
+                      <a href="{{ url('permissoes') }}">
+                      <i class="nc-icon nc-lock-circle-open"></i>
+                      <p>Permissões</p>
+                      </a>
+                  </li>
+                @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'usuarios') ? 'active' : '' }}">
+                      <a href="{{ url('usuarios') }}">
+                      <i class="nc-icon nc-circle-10"></i>
+                      <p>Usuários</p>
+                      </a>
+                  </li>  
+                @endrole               
                 <li>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                       <i class="nc-icon nc-button-power"></i>
@@ -123,14 +131,16 @@
               </button>
             </div>
             <a class="navbar-brand upper" href="{{ url('dashboard') }}">Studio Social</a>
-            <div>
-              @if(Session::get('cliente'))
-                <p>{{ Session::get('cliente')['nome'] }}</p>
-              @else
-                <p>Nenhum cliente selecionado</p>
-              @endif
-              <span class="troca_cliente"><i class="fa fa-refresh ml-1"></i></span>
-            </div>
+            @role('administradores')
+              <div>
+                @if(Session::get('cliente'))
+                  <p>{{ Session::get('cliente')['nome'] }}</p>
+                @else
+                  <p>Nenhum cliente selecionado</p>
+                @endif
+                <span class="troca_cliente"><i class="fa fa-refresh ml-1"></i></span>
+              </div>
+            @endrole
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
