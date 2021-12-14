@@ -104,18 +104,24 @@ class ClientController extends Controller
 
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-        $flag = $request->is_active == true ? true : false;
-        $request->merge(['is_active' => $flag]);
+        $client = Client::with('user')->find($id);
 
-        if($request->fl_senha)
+        $ativo = $request->is_active == true ? true : false;
+        $flag_password = $request->is_password == true ? true : false;
+
+        //Seta os valores booleanos na requisição
+        $request->merge(['is_active' => $ativo]);
+
+        if($flag_password)
             $request->merge(['password' => Hash::make($request->password)]);
         else
-            unset($request['password']);
-    
+            unset($request['password']); 
+                
         try {
         
-            $user->update($request->all());
+            $client->update($request->all());
+            $client->user->update($request->all());
+
             $retorno = array('flag' => true,
                              'msg' => '<i class="fa fa-check"></i> Dados atualizados com sucesso');
         } catch (\Illuminate\Database\QueryException $e) {
