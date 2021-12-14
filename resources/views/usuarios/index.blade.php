@@ -21,6 +21,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th>Perfil</th>
                         <th class="disabled-sorting text-center">Situação</th>
                         <th class="disabled-sorting text-center">Ações</th>
                     </tr>
@@ -29,6 +30,7 @@
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
+                        <th>Perfil</th>
                         <th class="disabled-sorting text-center">Situação</th>
                         <th class="disabled-sorting text-center">Ações</th>
                     </tr>
@@ -38,6 +40,13 @@
                         <tr>
                             <td>{{ $u->name }}</td>
                             <td>{{ $u->email }}</td>
+                            <td>
+                                @forelse($u->roles as $role)
+                                    <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
+                                @empty
+                                    Nenhum perfil associado
+                                @endforelse
+                            </td>
                             <td class="disabled-sorting text-center">{!! ($u->is_active) ? '<span class="badge badge-pill badge-success">ATIVO</span>' : '<span class="badge badge-pill badge-danger">INATIVO</span>' !!}</td>
                             <td class="text-center">
                                 <a title="Dados do Usuário" href="{{ url('usuario',$u->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
