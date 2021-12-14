@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Enums\TypeRule;
 use Illuminate\Database\Eloquent\Model;
 
 class Rule extends Model
@@ -49,6 +50,39 @@ class Rule extends Model
 
     public function getExpression()
     {
-        return "Regra 1 ou regra 1 e regra 1";
+        $todas   = implode(' E ', $this->expressionsType(TypeRule::TODAS)->pluck('expression')->toArray());
+        $todasRegra = '( '.$todas.' )';
+        $algumas = implode(' OU ', $this->expressionsType(TypeRule::ALGUMAS)->pluck('expression')->toArray());
+        $algumasRegra = '( '.$algumas.' )';
+        $nenhuma = implode(' E ', $this->expressionsType(TypeRule::NENHUMA)->pluck('expression')->toArray());
+        $nenhumaRegra = '( '.$nenhuma.' )';
+
+        $or = '';
+        $and  = '';
+        $regra = '';
+
+        if(!empty($todas) && !empty($algumas)) {
+            $or = ' OU ';
+        }
+
+        if(!empty($todas) || !empty($algumas)) {
+
+            if(empty($todas)) {
+                $todasRegra = '';
+            }
+
+            if(empty($algumas)) {
+                $algumasRegra = '';
+            }
+
+            $regra .= '( '. $todasRegra.$or.$algumasRegra.' )';
+            $and = ' E ';
+        }   
+
+        if(!empty($nenhuma)) {
+            $regra .= $and.' Não '.$nenhumaRegra;
+        }
+       
+        return $regra;
     }
 }
