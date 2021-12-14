@@ -58,6 +58,13 @@ class ClientController extends Controller
 
     public function store(ClientRequest $request)
     {
+        //Verifica se o email não é usado por um usuário ou cliente antes de inserir na base de dados
+        $user = User::where('email', $request->email)->first();
+        if($user or $user->client){
+            Flash::warning('<i class="fa fa-warning"></i> Este email já foi cadastrado no sistema.');
+            return redirect('client/create')->withInput();
+        }
+
         try {
             $request->merge(['password' => \Hash::make($request->password)]);
             $cliente = Client::create($request->all());
