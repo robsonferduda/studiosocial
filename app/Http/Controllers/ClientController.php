@@ -60,7 +60,7 @@ class ClientController extends Controller
     {
         //Verifica se o email não é usado por um usuário ou cliente antes de inserir na base de dados
         $user = User::where('email', $request->email)->first();
-        if($user or $user->client){
+        if($user or isset($user->client)){
             Flash::warning('<i class="fa fa-warning"></i> Este email já foi cadastrado no sistema.');
             return redirect('client/create')->withInput();
         }
