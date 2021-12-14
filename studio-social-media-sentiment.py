@@ -32,8 +32,8 @@ freq_tweets = vectorizer.fit_transform(tweets)
 modelo = MultinomialNB()
 modelo.fit(freq_tweets,classes)
 
-#con = psycopg2.connect(host='162.241.40.125', database='studiosocial',user='postgres', password='DMK@rr19')
-con = psycopg2.connect(host='localhost', database='studiosocial',user='postgres', password='cipplp10')
+con = psycopg2.connect(host='162.241.40.125', database='studiosocial',user='postgres', password='DMK@rr19')
+#con = psycopg2.connect(host='localhost', database='studiosocial',user='postgres', password='cipplp10')
 cur = con.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
 sql = 'select * from media_twitter'
