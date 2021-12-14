@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\TypeRule;
-use App\ExpressionRule;
-use App\Http\Requests\RuleRequest;
-use App\Jobs\Rule as JobsRule;
 use App\Rule;
+use App\Utils;
+use App\ExpressionRule;
+use App\Enums\TypeRule;
+use App\Jobs\Rule as JobsRule;
+use App\Http\Requests\RuleRequest;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Facades\Session;
 use Laracasts\Flash\Flash;
@@ -166,7 +167,6 @@ class RuleController extends Controller
             Flash::error($retorno['msg']);
             return redirect()->route('regras.edit', $rule->id)->withInput();
         }
-        
         
     }
 }

@@ -6,7 +6,10 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 class="card-title ml-2"><i class="nc-icon nc-briefcase-24"></i> <a href="{{ url('regra') }}">Regra</a> > Editar</h4>
+                        <h4 class="card-title ml-2">
+                            <i class="nc-icon nc-briefcase-24"></i> Regras 
+                            <i class="fa fa-angle-double-right" aria-hidden="true"></i> Editar
+                        </h4>
                     </div>
                     <div class="col-md-6">
                         <a href="{{ url('regras') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-table"></i> Regras</a>
@@ -20,12 +23,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="typography-line">                   
-                            <p class="text-danger">
-                                Aperte a tecla <strong>ENTER</strong> após escrever a expressão.
-                            </p>
-                        </div>
+                    <div class="col-md-12 text-left">           
+                        <p class="text-danger">
+                            Aperte a tecla <strong>ENTER</strong> após escrever a expressão.
+                        </p>
                     </div>
                 </div>
                 <div class="row">
