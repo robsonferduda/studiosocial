@@ -43,8 +43,9 @@ class Client extends Model
 
         static::deleting(function($client) { 
 
+            //Quando remover o cliente, remove também o perfil associado e o usuário
             $user = User::where('client_id',$client->id)->first();
-            $user->roles()->detach();
+            (!$user->roles()) ?? $user->roles()->detach();
             $user->delete();
         });
 
