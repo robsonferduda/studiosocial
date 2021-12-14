@@ -22,7 +22,7 @@ class IGMention{
             
             foreach ($client->fbAccounts as $fbAccount) {
 
-                if($fbAccount->mention === false) {
+                if($fbAccount->mention !== true) {
                     continue;
                 }
 
@@ -126,7 +126,7 @@ class IGMention{
 
         foreach($igPages as $igPage) {
 
-            if($igPage->fbPage->fbAccount->mention === false) {
+            if($igPage->fbPage->fbAccount->mention !== true) {
                 continue;
             }
             

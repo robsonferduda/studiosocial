@@ -22,7 +22,7 @@ class FBMention{
             
             foreach ($client->fbAccounts as $fbAccount) {
 
-                if($fbAccount->mention === false) {
+                if($fbAccount->mention !== true) {
                     continue;
                 }
 
@@ -133,7 +133,7 @@ class FBMention{
             $access_token = $fbPage->token;
             $client_id = $fbPage->fbAccount->client_id;
 
-            if($fbPage->fbAccount->mention === false) {
+            if($fbPage->fbAccount->mention !== true) {
                 continue;
             }
 
