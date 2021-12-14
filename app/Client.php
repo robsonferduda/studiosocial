@@ -45,7 +45,7 @@ class Client extends Model
 
             //Quando remover o cliente, remove também o perfil associado e o usuário
             $user = User::where('client_id',$client->id)->first();
-            (!$user->roles()) ?? $user->roles()->detach();
+            (!$user->roles) ?? $user->roles()->detach();
             $user->delete();
         });
 
