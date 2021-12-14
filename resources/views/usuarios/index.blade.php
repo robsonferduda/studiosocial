@@ -42,7 +42,7 @@
                             <td>{{ $u->email }}</td>
                             <td>
                                 @forelse($u->roles as $role)
-                                    <span class="badge badge-primary" style="background: ">{{ $role->display_name }}</span>
+                                    <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
                                 @empty
                                     Nenhum perfil associado
                                 @endforelse
