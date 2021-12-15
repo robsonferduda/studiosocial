@@ -42,10 +42,7 @@ class HashtagController extends Controller
                 
                 foreach ($medias_temp as $key => $media) {
 
-                    $hashtags = Utils::getHashtags($media->full_text);
-                    for ($i=0; $i < count($hashtags); $i++) { 
-                        $lista_hastags[] = $hashtags[$i];
-                    }
+                    $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
                     
                     $medias[] = array('id' => $media->media_id,
                                       'text' => $media->caption,
