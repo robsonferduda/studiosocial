@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Utils;
 use App\Hashtag;
 use App\Enums\SocialMedia;
 use Laracasts\Flash\Flash;
@@ -33,12 +34,15 @@ class HashtagController extends Controller
     {
         $hashtag = Hashtag::find($hashtag);
         $medias = array();
+        $lista_hastags = array();
 
         switch ($hashtag->social_media_id) {
             case SocialMedia::INSTAGRAM:
                 $medias_temp = $hashtag->medias()->orderBy('timestamp', 'DESC')->paginate(20);
                 
                 foreach ($medias_temp as $key => $media) {
+
+                    $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
                     
                     $medias[] = array('id' => $media->media_id,
                                       'text' => $media->caption,
@@ -57,6 +61,8 @@ class HashtagController extends Controller
             case SocialMedia::TWITTER:
                 $medias_temp = $hashtag->mediasTwitter()->orderBy('created_tweet_at', 'DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
+
+                    $lista_hastags = Utils::getHashtags($media->full_text, $lista_hastags);                   
                     
                     $medias[] = array('id' => $media->twitter_id,
                                       'text' => $media->full_text,
@@ -76,6 +82,8 @@ class HashtagController extends Controller
                 //
                 break;
         }
+        
+        Utils::contaOrdenaLista($lista_hastags);
 
         return view('hashtags/medias', compact('hashtag','medias','medias_temp'));
     }

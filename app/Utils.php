@@ -4,6 +4,22 @@ namespace App;
 
 class Utils
 {
+    public static function getHashtags($string, $lista_hashtags) {
+
+        preg_match_all('/#(\w+)/',$string,$matches);
+        for ($i=0; $i < count($matches[0]); $i++) { 
+            $lista_hashtags[] = $matches[0][$i];
+        }
+        return $lista_hashtags;
+    }
+
+    public static function contaOrdenaLista($array)
+    {
+        $lista_frequencia = array_count_values($array);
+        arsort($lista_frequencia);
+        return $lista_frequencia;
+    }
+
     public static function limpaCPF_CNPJ($valor)
     {
         $valor = trim($valor);

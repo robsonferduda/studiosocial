@@ -50,12 +50,14 @@
                     </a>
                   </li>
                 @endrole
-                <li class="{{ (Session::has('url') and Session::get('url') == 'monitoramento') ? 'active' : '' }}">
-                  <a href="{{ url('monitoramento') }}">
-                  <i class="nc-icon nc-sound-wave"></i>
-                  <p>MONITORAMENTO</p>
-                  </a>
-                </li>
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'monitoramento') ? 'active' : '' }}">
+                    <a href="{{ url('monitoramento') }}">
+                    <i class="nc-icon nc-sound-wave"></i>
+                    <p>MONITORAMENTO</p>
+                    </a>
+                  </li>
+                @endrole
                 <li class="{{ (Session::has('url') and Session::get('url') == 'notificacoes') ? 'active' : '' }}">
                   <a href="{{ url('notificacoes') }}">
                   <i class="nc-icon nc-send"></i>
