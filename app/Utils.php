@@ -4,6 +4,19 @@ namespace App;
 
 class Utils
 {
+    public static function getHashtags($string, $lista_hastags) {
+
+        preg_match_all('/#(\w+)/',$string,$matches);
+        $hashtags = $matches[0];
+        for ($i=0; $i < count($hashtags); $i++) { 
+            if(!in_array($hashtags[$i], $lista_hastags)){
+                $lista_hastags[] = $hashtags[$i];
+            }                        
+        } 
+        
+        return $lista_hastags;
+    }
+
     public static function limpaCPF_CNPJ($valor)
     {
         $valor = trim($valor);
