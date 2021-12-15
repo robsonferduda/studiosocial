@@ -88,7 +88,7 @@
                 <div class="card-body text-center">
                     <div class="row">
                         <div class="col-12 col-md-12 mb-0">
-                            <a class="link-relatorio" href="">
+                            <a class="link-relatorio" href="{{ url('relatorios/hashtags') }}">
                                 <div class="icon-big icon-warning">
                                     <i class="fa fa-hashtag text-default"></i>
                                 </div>

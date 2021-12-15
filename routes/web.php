@@ -20,6 +20,7 @@ Route::get('relatorios','RelatorioController@index');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
+Route::get('relatorios/hashtags','RelatorioController@hashtags');
 Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
 Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
@@ -75,5 +76,6 @@ Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterCont
 
 Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
+Route::get('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');

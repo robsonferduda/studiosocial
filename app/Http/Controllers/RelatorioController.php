@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Rule;
 use App\FbPost;
 use App\Media;
+use App\Utils;
 use App\FbReaction;
 use App\MediaTwitter;
 use Illuminate\Http\Request;
@@ -28,6 +29,28 @@ class RelatorioController extends Controller
     {
         $reactions = FbReaction::all();
         return view('relatorios/index', compact('reactions'));
+    }
+
+    public function hashtags()
+    {
+      $rules = Rule::all();
+      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
+
+      return view('relatorios/hashtags', compact('rules','lista_hashtags'));
+    }
+
+    public function getNuvemHashtags()
+    {
+      $rules = Rule::all();
+      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
+
+      echo json_encode($lista_hashtags);
+    }
+
+    public function sentimentos()
+    {
+      $rules = Rule::all();
+      return view('relatorios/sentimentos', compact('rules'));
     }
 
     public function getReactions()
@@ -120,11 +143,31 @@ class RelatorioController extends Controller
       return view('relatorios/influenciadores', compact('rules','positivos','negativos'));
     }
 
-    public function sentimentos()
+    public function getAllMedias()
     {
-      $rules = Rule::all();
-      return view('relatorios/sentimentos', compact('rules'));
+      $medias = array();
+      $lista_hastags = array();
+
+      $medias_instagram = Media::where('client_id', $this->client_id)->get();
+      $medias_facebook  = FbPost::where('client_id', $this->client_id)->get();
+      $medias_twitter = MediaTwitter::where('client_id', $this->client_id)->get();
+
+      foreach ($medias_instagram as $media) {
+        $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
+      }
+
+      foreach ($medias_facebook as $media) {
+        $lista_hastags = Utils::getHashtags($media->message, $lista_hastags);
+      }
+
+      foreach ($medias_twitter as $media) {
+        $lista_hastags = Utils::getHashtags($media->full_text, $lista_hastags);
+      }
+
+      return $lista_hastags;
     }
+
+    
 
     public function pdf()
     {
