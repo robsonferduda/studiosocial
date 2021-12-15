@@ -82,8 +82,8 @@ class HashtagController extends Controller
                 //
                 break;
         }
-
-        dd($lista_hastags);
+        
+        Utils::contaOrdenaLista($lista_hastags);
 
         return view('hashtags/medias', compact('hashtag','medias','medias_temp'));
     }
