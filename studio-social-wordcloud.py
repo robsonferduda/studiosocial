@@ -83,13 +83,13 @@ for client in clients:
 
     text = re.sub(r"http\S+", "", text)
 
-    wordcloud_words = WordCloud(stopwords=stopwords).process_text(text)
+    wordcloud_words = WordCloud(stopwords=stopwords, random_state=1).process_text(text)
 
     with open("storage/app/wordcloud/files/cliente-"+str(client['id'])+"-wordclould.json", "w") as outfile:
         json.dump(wordcloud_words, outfile)
 
     if len(wordcloud_words) > 0:
-        wordcloud = WordCloud(width = 3000, height = 2000, random_state=1, background_color='white', colormap='Set2', collocations=False, stopwords = stopwords).generate(text)
+        wordcloud = WordCloud(width = 3000, height = 2000, random_state=1, background_color='white', colormap='Set2', stopwords = stopwords).generate(text)
         wordcloud.to_file("storage/app/wordcloud/files/cliente-"+str(client['id'])+"-wordclould.png")
     
 
