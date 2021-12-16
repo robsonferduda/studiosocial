@@ -76,7 +76,7 @@ for media in medias:
     cur.execute(sql)
     con.commit() 
 
-sql = 'select * from medias where sentiment isnull'
+sql = 'select * from medias where sentiment isnull and caption notnull'
 
 cur.execute(sql)
 medias = cur.fetchall()
