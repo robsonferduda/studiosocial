@@ -94,13 +94,15 @@
         });
 
         let cloud = $('#cloud').jQCloud(words, {
-            fontSize: function (width, height, step) {
-                if (step == 1)
-                return width * 0.01 * step + 'px';
+                autoResize: true,
+                colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
+                fontSize: function (width, height, step) {
+                    if (step == 1)
+                        return width * 0.01 * step + 'px';
 
-                return width * 0.009 * step + 'px';
-            }
-        });            
+                    return width * 0.009 * step + 'px';
+                }
+            });            
     });
 });
 </script>

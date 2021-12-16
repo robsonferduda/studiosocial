@@ -32,11 +32,12 @@ freq_tweets = vectorizer.fit_transform(tweets)
 modelo = MultinomialNB()
 modelo.fit(freq_tweets,classes)
 
-con = psycopg2.connect(host='162.241.40.125', database='studiosocial',user='postgres', password='DMK@rr19')
-#con = psycopg2.connect(host='localhost', database='studiosocial',user='postgres', password='cipplp10')
+#con = psycopg2.connect(host='162.241.40.125', database='studiosocial',user='postgres', password='DMK@rr19')
+con = psycopg2.connect(host='localhost', database='studiosocial',user='postgres', password='cipplp10')
 cur = con.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
-sql = 'select * from media_twitter'
+#Atualiza mensagens do Twitter
+sql = 'select * from media_twitter where sentiment isnull'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -52,5 +53,83 @@ for media in medias:
         if c == 'negativo' : sent = -1
 
     sql = 'update media_twitter SET sentiment = '+str(sent)+' WHERE twitter_id = '+str(media['twitter_id'])
+    cur.execute(sql)
+    con.commit() 
+
+#Atualiza mensagens do Instagram
+sql = 'select * from ig_comments where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['text']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update ig_comments SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
+    cur.execute(sql)
+    con.commit() 
+
+sql = 'select * from medias where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['caption']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update medias SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
+    cur.execute(sql)
+    con.commit() 
+
+#Atualiza mensagens do Facebook
+sql = 'select * from fb_posts where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['message']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update fb_posts SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
+    cur.execute(sql)
+    con.commit() 
+
+sql = 'select * from fb_comments where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['text']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update fb_comments SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
     cur.execute(sql)
     con.commit() 
