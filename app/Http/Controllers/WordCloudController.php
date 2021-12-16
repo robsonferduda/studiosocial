@@ -40,7 +40,7 @@ class WordCloudController extends Controller
             
             arsort($words);
     
-            $words = array_slice($words, 0, 100);
+            $words = array_slice($words, 0, 200);
     
             $word_cloud = [];
             foreach($words as $word => $qtd_times) {
