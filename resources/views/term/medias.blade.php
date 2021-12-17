@@ -18,6 +18,7 @@
             </div>
             <h6 class="ml-3">Mostrando {{ $medias_temp->count() }} de {{ $medias_temp->total() }} mídias coletadas</h6>
             {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            
             @foreach($medias as $key => $media)
                 <div class="card">
                     <div class="card-body">

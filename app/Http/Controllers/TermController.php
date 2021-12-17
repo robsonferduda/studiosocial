@@ -53,6 +53,7 @@ class TermController extends Controller
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->media_id,
+                                      'type_message' => 'IG_POSTS',   
                                       'text' => $media->caption,
                                       'username' => '',
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
@@ -69,6 +70,7 @@ class TermController extends Controller
                 foreach ($medias_temp as $key => $media) {
                     
                     $medias[] = array('id' => $media->twitter_id,
+                                      'type_message' => 'TWEETS', 
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),

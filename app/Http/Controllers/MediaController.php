@@ -21,11 +21,21 @@ class MediaController extends Controller
 
     public function atualizaSentimento($id, $tipo, $sentimento)
     {
-        $media = MediaTwitter::where('twitter_id',$id)->first();
-        $media->sentiment = $sentimento;
-        $media->update();
-
-        Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
+        switch ($tipo) {
+            case 'tweets':
+                $media = MediaTwitter::where('twitter_id',$id)->first();
+                $media->sentiment = $sentimento;
+                break;
+            
+            case 'value':
+                
+                break;
+        }
+        
+        if($media->update())
+            Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
+        else
+            Flash::error('<i class="fa fa-check"></i> Erro ao atualizar o sentimento da mídia');
         return redirect()->back()->withInput();
     }
 }

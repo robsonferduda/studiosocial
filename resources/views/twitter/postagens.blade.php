@@ -26,25 +26,20 @@
                                 @else
                                     <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
                                 @endif
-                                <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $media->user_name }}" target="_BLANK">{{ $media->user_name }}</a></p>                               
+                                <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $media->user_name }}" target="_BLANK">{{ $media->user_name }}</a></p>                              
                             </div>
                             <div class="col-md-10">
                                 <div class="mb-2">
                                     <span class="badge badge-pill badge-primary">
-                                        <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
+                                        <i class="fa fa-thumbs-up"></i> {{ $media['favorite_count'] }}
                                     </span>
-                                    <span class="badge badge-pill badge-danger">
-                                        <i class="fa fa-comments"></i> {{ $media['comments_count'] }}
+                                    <span class="badge badge-pill badge-default">
+                                        <i class="fa fa-retweet"></i> {{ $media['retweet_count'] }}
                                     </span>   
-                                    <span class="badge badge-pill badge-success">
-                                        <i class="fa fa-share"></i> {{ $media['comments_count'] }}
-                                    </span> 
-                                    <span class="badge badge-pill badge-info">
-                                        <i class="fa fa-users"></i> {{ $media['comments_count'] }}
-                                    </span> 
                                     <span class="badge badge-pill badge-warning">
                                         <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
                                     </span>
+                                    <span class="badge badge-pill badge-secondary count-relation">{{ $media->user_followers_count }} Seguidores </span><span class="badge badge-pill badge-light count-relation"> {{ $media->user_friends_count }} Seguindo</span> 
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media->full_text }}</p>
@@ -52,18 +47,18 @@
                                     @switch($media->sentiment)
                                         @case(-1)
                                                 <i class="fa fa-frown-o text-danger"></i>
-                                                <a href="{{ url('media/'.$media->twitter_id.'/tipo/twitter/sentimento/0/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>
-                                                <a href=""><i class="fa fa-ban op-2"></i></a>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>
                                             @break
                                         @case(0)
-                                                <i class="fa fa-frown-o op-2"></i>
-                                                <i class="fa fa-smile-o op-2"></i>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a> 
                                                 <i class="fa fa-ban text-primary"></i>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>                                                
                                             @break
                                         @case(1)
-                                                <i class="fa fa-frown-o op-2"></i>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a>
+                                                <a href="{{ url('media/'.$media->id.'/tipo/'.$media->type_message.'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
                                                 <i class="fa fa-smile-o text-success"></i>
-                                                <i class="fa fa-ban op-2"></i>
                                             @break                                            
                                     @endswitch
                                 </h3>

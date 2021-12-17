@@ -28,6 +28,11 @@ class TwitterController extends Controller
     {
         $medias = MediaTwitter::where('user_name',$user)->where('sentiment',$sentiment)->get();
 
+        foreach($medias as $key => $media){
+            $medias[$key]->type_message = 'tweets';
+            $medias[$key]->link = 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id;
+        }
+
         return view('twitter/postagens', compact('medias'));
     }
 

@@ -55,3 +55,9 @@
 .box-relatorio:hover h4{
     color: #51cbce !important;
 }
+.badge-warning a {
+    color: white;
+}
+.count-relation{
+    background: #9e9e9e;
+}
