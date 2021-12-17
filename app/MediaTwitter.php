@@ -47,23 +47,25 @@ class MediaTwitter extends Model
                             ORDER BY sentiment');
     }
 
-    public function getInfluenciadoresPositivos()
+    public function getInfluenciadoresPositivos($client_id)
     {
-        return DB::select('SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+        return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(1)
+                            AND client_id = $client_id
                             GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
-                            LIMIT 10');
+                            LIMIT 10");
     }
 
-    public function getInfluenciadoresNegativos()
+    public function getInfluenciadoresNegativos($client_id)
     {
-        return DB::select('SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+        return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(-1)
+                            AND client_id = $client_id
                             GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
-                            LIMIT 10');
+                            LIMIT 10");
     }
 }

@@ -137,8 +137,8 @@ class RelatorioController extends Controller
     public function influenciadores()
     {
       $rules = Rule::all();
-      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos();
-      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos();
+      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
+      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
 
       return view('relatorios/influenciadores', compact('rules','positivos','negativos'));
     }
