@@ -23,7 +23,7 @@ class MediaController extends Controller
     {
         switch ($tipo) {
             case 'tweets':
-                $media = MediaTwitter::where('twitter_id',$id)->first();
+                $media = MediaTwitter::where('id',$id)->first();
                 $media->sentiment = $sentimento;
                 break;
             

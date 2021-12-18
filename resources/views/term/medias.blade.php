@@ -23,8 +23,14 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-md-2 text-center">
-                                <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+                            <div class="col-lg-2 col-md-2 text-center">
+                                @if($media['user_profile_image_url'])
+                                    <img src="{{ str_replace('normal','400x400', $media['user_profile_image_url']) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">      
+                                @else
+                                    <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+                                @endif
+                                <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $media['username'] }}" target="_BLANK">{{ $media['username'] }}</a></p> 
+
                                 <p>{{ $media['username'] }}</p>                                
                                 @switch($term['social_media_id'])
                                     @case(App\Enums\SocialMedia::INSTAGRAM)
@@ -36,7 +42,7 @@
                                     @default                                        
                                 @endswitch
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-lg-10 col-md-10">
                                 <div class="mb-2">
                                     <span class="badge badge-pill badge-primary">
                                         <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
@@ -49,18 +55,41 @@
                                     @endif
 
                                     @if($term['social_media_id'] == App\Enums\SocialMedia::TWITTER)
-                                        <span class="badge badge-pill badge-success">
-                                            <i class="fa fa-share"></i> {{ $media['retweet_count'] }}
+                                        <span class="badge badge-pill badge-default">
+                                            <i class="fa fa-retweet"></i> {{ $media['retweet_count'] }}
                                         </span> 
                                     @endif
 
                                     <span class="badge badge-pill badge-warning">
                                         <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
                                     </span>
+
+                                    @if($term['social_media_id'] == App\Enums\SocialMedia::TWITTER)
+                                        <span class="badge badge-pill badge-secondary count-relation">{{ $media['user_followers_count'] }} Seguidores </span><span class="badge badge-pill badge-light count-relation"> {{ $media['user_friends_count'] }} Seguindo</span> 
+                                    @endif
                                    
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media['text'] }}</p>
+                                <h3>
+                                    @switch($media['sentiment'])
+                                        @case(-1)
+                                                <i class="fa fa-frown-o text-danger"></i>
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>
+                                            @break
+                                        @case(0)
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a> 
+                                                <i class="fa fa-ban text-primary"></i>
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>                                                
+                                            @break
+                                        @case(1)
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a>
+                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
+                                                <i class="fa fa-smile-o text-success"></i>
+                                            @break                                            
+                                    @endswitch
+                                </h3>
                             </div>
                         </div>
                     </div>
