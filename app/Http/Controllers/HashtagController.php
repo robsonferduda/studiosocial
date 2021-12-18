@@ -44,15 +44,16 @@ class HashtagController extends Controller
 
                     $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
                     
-                    $medias[] = array('id' => $media->media_id,
+                    $medias[] = array('id' => $media->id,
+                                      'media_id' => $media_id,  
+                                      'type_message' => 'tweets',   
                                       'text' => $media->caption,
                                       'username' => '',
+                                      'sentiment' => $media->sentiment,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
-                                      'comments_count' => $media->comments_count,
-                                      'social_media_id' => $media->social_media_id,
-                                      'link' => $media->permalink        
-                                    
+                                      'comments_count' => $media->like_count,
+                                      'social_media_id' => $media->social_media_id
                                     );
 
                 }
@@ -64,16 +65,21 @@ class HashtagController extends Controller
 
                     $lista_hastags = Utils::getHashtags($media->full_text, $lista_hastags);                   
                     
-                    $medias[] = array('id' => $media->twitter_id,
+                    $medias[] = array('id' => $media->id,
+                                      'media_id' => $media->twitter_id,
+                                      'type_message' => 'tweets', 
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
+                                      'sentiment' => $media->sentiment,
+                                      'user_profile_image_url' => $media->user_profile_image_url,
+                                      'user_followers_count' => $media->user_followers_count,
+                                      'user_friends_count' => $media->user_friends_count,
                                       'social_media_id' => $media->social_media_id,
                                       'link' => 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id,
-                                      'retweet_count' => $media->retweet_count
-                                    );
+                                      'retweet_count' => $media->retweet_count);
 
                 }
                 break;

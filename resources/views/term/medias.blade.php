@@ -30,8 +30,7 @@
                                     <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
                                 @endif
                                 <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $media['username'] }}" target="_BLANK">{{ $media['username'] }}</a></p> 
-
-                                <p>{{ $media['username'] }}</p>                                
+                             
                                 @switch($term['social_media_id'])
                                     @case(App\Enums\SocialMedia::INSTAGRAM)
                                         <h3><i class="fa fa-instagram text-pink"></i></h3>

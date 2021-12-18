@@ -23,8 +23,12 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2 text-center">
-                                <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
-                                <p>{{ $media['username'] }}</p>                                
+                                @if($media['user_profile_image_url'])
+                                    <img src="{{ str_replace('normal','400x400', $media['user_profile_image_url']) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">      
+                                @else
+                                    <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+                                @endif
+                                <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $media['username'] }}" target="_BLANK">{{ $media['username'] }}</a></p>                                
                                 @switch($hashtag['social_media_id'])
                                     @case(App\Enums\SocialMedia::INSTAGRAM)
                                         <h3><i class="fa fa-instagram text-pink"></i></h3>
@@ -53,9 +57,15 @@
                                     <span class="badge badge-pill badge-warning">
                                         <i class="fa fa-link"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
                                     </span>
+
+                                    @if($hashtag['social_media_id'] == App\Enums\SocialMedia::TWITTER)
+                                        <span class="badge badge-pill badge-secondary count-relation">{{ $media['user_followers_count'] }} Seguidores </span><span class="badge badge-pill badge-light count-relation"> {{ $media['user_friends_count'] }} Seguindo</span> 
+                                    @endif
+
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
-                                <p>{{ $media['text'] }}</p>
+                                <p>{{ $media['text'] }}</p>fsdfsdf
+                                @include('layouts.sentiment')
                             </div>
                         </div>
                     </div>
