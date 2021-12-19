@@ -85,8 +85,7 @@ class TermController extends Controller
                                       'user_friends_count' => $media->user_friends_count,
                                       'social_media_id' => $media->social_media_id,
                                       'link' => 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id,
-                                      'retweet_count' => $media->retweet_count)
-                                      ;
+                                      'retweet_count' => $media->retweet_count);
 
                 }
                 break;
