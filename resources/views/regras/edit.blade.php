@@ -87,7 +87,7 @@
         expressoes['nenhuma'] = '';
 
         $('.tags').inputTags({
-            max: 8,
+            max: 15,
             minLength: 3,
             maxLength: 100,
             change: function($elem) {   
