@@ -30,10 +30,9 @@
             let words = [];
 
             $('body').loader('hide');
+            const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {
-
-                console.log(element);
 
                 words.push(
                     {
@@ -44,14 +43,55 @@
                         },
                         handlers: {
                             click: function(e) {
-                                for( var i = 0; i < words.length; i++){ 
-                                   if (words[i].text === this.textContent) { 
-                                        words.splice(i, 1); 
-                                       break; 
-                                   }
-                               }
 
-                               $('#cloud').jQCloud('update', words);
+                                let textContent = this.textContent;
+
+                                Swal.fire({
+                                    title: "Deseja excluir definitivamente essa expressão?",
+                                    text: "Você poderá reverter essa ação no menu configurações.",                                  
+                                    icon: "warning",
+                                    showCancelButton: true,
+                                    confirmButtonColor: "#28a745",
+                                    confirmButtonText: "Sim, excluir!",
+                                    cancelButtonText: "Não, somente nessa visualização."
+                                }).then(function(result) {
+
+                                    console.log(_token);
+
+                                    if (result.value) {
+                                        fetch(APP_URL+'/nuvem-palavras/remove', {
+                                            method: 'POST',
+                                            body: JSON.stringify({_token: _token, word: textContent}),
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Accept': 'application/json',
+                                            },
+                                        }).then(function(response) {
+                                            return response.json();
+                                        }).then(function(data) {
+                                            for( var i = 0; i < words.length; i++){ 
+                                                if (words[i].text === textContent) {                                                     
+                                                    words.splice(i, 1); 
+                                                    break; 
+                                                }
+                                            }
+
+                                            $('#cloud').jQCloud('update', words);
+                                        });
+                                    } else {                 
+
+                                        for( var i = 0; i < words.length; i++){ 
+                                            if (words[i].text === textContent) {                                                     
+                                                words.splice(i, 1); 
+                                                break; 
+                                            }
+                                        }
+
+                                        $('#cloud').jQCloud('update', words);
+                                    }
+                                });
+                        
+                               
 
                             }
                         },

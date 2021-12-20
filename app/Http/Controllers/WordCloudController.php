@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\FbPost;
-use App\Media;
-use App\MediaTwitter;
+use App\WordsExecption;
 use Illuminate\Support\Facades\Session;
-use Axisofstevil\StopWords\Filter;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use voku\helper\StopWords;
+use Symfony\Component\Process\Process;
 
 class WordCloudController extends Controller
 {
@@ -25,6 +23,20 @@ class WordCloudController extends Controller
     public function render()
     {        
         return view('word-cloud/index');
+    }
+
+    public function remove(Request $request) 
+    {        
+        $word = WordsExecption::create([
+            'word' => $request->word,
+            'client_id' => $this->cliente['id']
+        ]);       
+
+        $process = new Process(['python3', base_path().'/studio-social-wordcloud.py']);
+
+        $process = $process->run();
+
+        return $word;
     }
 
     public function getWords() 
