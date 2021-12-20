@@ -98,14 +98,17 @@ class MonitoramentoController extends Controller
 
                     $medias[] = array('id' => $media->media_id,
                                       'text' => $media->caption,
-                                      'username' => '',
+                                      'username' => $media->username,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
+                                      'sentiment' => $media->sentiment,
+                                      'type_message' => 'instagram',
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->comments_count,
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'instagram',
                                       'comments' => $bag_comments,
-                                      'link' => $media->permalink                            
+                                      'link' => $media->permalink,
+                                      'user_profile_image_url' => ''                            
                                     );
 
                 }
@@ -137,13 +140,16 @@ class MonitoramentoController extends Controller
                                       'text' => $media->message,
                                       'username' => '',
                                       'created_at' => dateTimeUtcToLocal($media->updated_time),
+                                      'sentiment' => $media->sentiment,
+                                      'type_message' => 'facebook',
                                       'like_count' => $likes_count,
                                       'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'facebook',
                                       'comments' => $bag_comments,
                                       'link' => $media->permalink_url,
-                                      'share_count' => !empty($media->share_count) ? $media->share_count : 0 
+                                      'share_count' => !empty($media->share_count) ? $media->share_count : 0,
+                                      'user_profile_image_url' => ''
                                     );
 
                 }
@@ -157,13 +163,16 @@ class MonitoramentoController extends Controller
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),
+                                      'sentiment' => $media->sentiment,
+                                      'type_message' => 'twitter',
                                       'like_count' => $media->favorite_count,
                                       'comments_count' => 0,
                                       'social_media_id' => $media->social_media_id,
                                       'comments' => [],
                                       'tipo' => 'twitter',
                                       'link' => 'https://twitter.com/'.$media->user_screen_name.'/status/'.$media->twitter_id,
-                                      'retweet_count' => $media->retweet_count
+                                      'retweet_count' => $media->retweet_count,
+                                      'user_profile_image_url' => $media->user_profile_image_url
                                     );
 
                 }

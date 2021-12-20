@@ -8,7 +8,7 @@
                     <h4 class="card-title ml-2"><i class="fa fa-hashtag"></i> Monitoramento </h4>
                 </div>
                 <div class="col-md-6">
-                   
+                    <a href="{{ URL::previous() }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-angle-double-left"></i> Voltar</a>
                 </div>
             </div>
         </div>
@@ -23,14 +23,23 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-2 text-center">
-                                <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
-                                <p>{{ $media['username'] }}</p>                                
+                                @if($media['user_profile_image_url'])
+                                    <img src="{{ str_replace('normal','400x400', $media['user_profile_image_url']) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">      
+                                @else
+                                    <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+                                @endif
+                                <p>{{ $media['username'] }}</p> 
+                                
+                               
                                 @switch($media['tipo'])
                                     @case('instagram')
                                         <h3><i class="fa fa-instagram text-pink"></i></h3>
                                         @break
+                                    @case('facebook')
+                                        <h3 class="text-center"><i class="fa fa-facebook text-facebook"></i></h3>
+                                        @break
                                     @case('twitter')
-                                        <h1 class="text-center"><i class="fa fa-twitter text-info"></i></h1>
+                                        <h3 class="text-center"><i class="fa fa-twitter text-info"></i></h3>
                                         @break
                                     @default                                        
                                 @endswitch
@@ -61,6 +70,7 @@
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media['text'] }}</p>
+
                                 @if(!empty($media['comments']))
                                     <div class="card">
                                         <div class="card-body">
@@ -71,6 +81,8 @@
                                         </div>  
                                     </div>
                                 @endif
+
+                                @include('layouts.sentiment')
                             </div>
                         </div>
                     </div>

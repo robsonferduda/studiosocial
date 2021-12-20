@@ -64,7 +64,7 @@
 
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
-                                <p>{{ $media['text'] }}</p>fsdfsdf
+                                <p>{{ $media['text'] }}</p>
                                 @include('layouts.sentiment')
                             </div>
                         </div>
