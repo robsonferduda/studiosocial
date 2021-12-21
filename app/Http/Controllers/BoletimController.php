@@ -29,5 +29,6 @@ class BoletimController extends Controller
     public function enviar($id)
     {
         //Implementação do envio de email
+        dd($id);
     }
 }

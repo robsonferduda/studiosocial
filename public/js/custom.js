@@ -3,6 +3,26 @@ $(document).ready(function() {
     $('#nu_cpf_par').mask('000.000.000-00');
     $('.dt_inicial_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
     $('.dt_final_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
+
+    $('body').on("click", ".btn-enviar", function(e) {
+        e.preventDefault();
+        var url = $(this).attr("href");
+
+        Swal.fire({
+            title: "Tem certeza que deseja enviar o boletim?",
+            text: "O boletim será enviado por email com os mesmos dados que aparecem em tela",
+            type: "warning",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: '<i class="fa fa-send"></i> Enviar',
+            cancelButtonText: '<i class="fa fa-times"></i> Cancelar'
+        }).then(function(result) {
+            if (result.value) {
+                window.location.href = url;
+            }
+        });
+    }); 
    
     $('body').on("click", ".button-remove-hashtag", function(e) {
         e.preventDefault();
