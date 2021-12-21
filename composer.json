@@ -28,6 +28,7 @@
         "owen-it/laravel-auditing": "^12.0",
         "predis/predis": "^1.1",
         "santigarcor/laratrust": "^6.1",
+        "symfony/process": "^5.4",
         "voku/stop-words": "^2.0"
     },
     "require-dev": {
