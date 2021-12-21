@@ -39,7 +39,7 @@
                                     @endif
                                 </td>
                                 <td class="text-center">
-                                    <a href=""><i class="fa fa-send"></i></a>
+                                    <a href="{{ url('boletim', $boletim->id) }}"><i class="fa fa-eye"></i></a>
                                 </td>
                             </tr>
                         @endforeach
