@@ -10,7 +10,7 @@ RUN docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql
 RUN docker-php-ext-configure zip --with-libzip 
 
 # Install PHP extensions
-RUN docker-php-ext-install pgsql pdo_pgsql mbstring exif pcntl bcmath gd zip
+RUN docker-php-ext-install pgsql pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer

@@ -42,8 +42,12 @@ class WordCloudController extends Controller
     public function getWords() 
     {   
         ini_set('memory_limit', '2048M');
-        
+
         if(isset($this->cliente['id'])) {
+
+            $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->get();
+
+            dd($words_execption);
 
             $rules = Rule::where('client_id', $this->cliente['id'])->get();
           
