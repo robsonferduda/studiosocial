@@ -98,7 +98,7 @@ class BoletimController extends Controller
                             radio.segundos as segundos, 
                             radio.sinopse as sinopse, 
                             radio.uf as uf, 
-                            CONCAT('','') as link, 
+                            radio.link as link, 
                             radio.status as status, 
                             '' as printurl,
                             cidade.titulo as cidade_titulo, 

@@ -74,11 +74,39 @@
                             <p style="text-transform: uppercase; font-weight: 600;">{{ $tipo_formatado }}</p>
                         @endif
 
-                        <div class="p-2 mb-2">
+                        @if($noticia->clipagem == 'tv')
+
                             <p>{{ $noticia->titulo }}</p>
-                            <p>{{ $noticia->area }}</p>
+                            <p>Emissora: {{ $noticia->INFO1 }}</p>
+                            <p>Programa: {{ $noticia->INFO2 }}</p>
                             <p>{!! $noticia->sinopse !!}</p>
-                        </div>
+
+                            <video width="320" height="240" controls>
+                                <source src="http://clipagens.com.br/fmanager/clipagem/tv/arquivo579760_1.mp4" type="video/mp4">
+                                <source src="movie.ogg" type="video/ogg">
+                              Your browser does not support the video tag.
+                            </video>
+
+                        @elseif($noticia->clipagem == 'radio')
+
+                            <div class="p-2 mb-2">
+                                <p>Emissora: {{ $noticia->INFO1 }}</p>
+                                <p>Programa: {{ $noticia->INFO2 }}</p>
+                                <p>{!! $noticia->sinopse !!}</p>
+                                <p>Link: {{ $noticia->link }}</p>
+                            </div>
+                            <audio controls>
+                                <source src="{{ $noticia->link }}" type="audio/ogg">
+                                <source src="horse.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        @else
+
+                            <div class="p-2 mb-2">
+                                <p>{{ $noticia->titulo }}</p>
+                                <p>{!! $noticia->sinopse !!}</p>
+                            </div>
+                        @endif
 
                         @php
                             $area = $noticia->area;
