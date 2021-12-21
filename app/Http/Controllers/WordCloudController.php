@@ -47,7 +47,7 @@ class WordCloudController extends Controller
 
             $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->get();
 
-            dd($words_execption);
+            //dd($words_execption);
 
             $rules = Rule::where('client_id', $this->cliente['id'])->get();
           
@@ -73,6 +73,18 @@ class WordCloudController extends Controller
                         }
                     }                   
                 }
+
+                foreach($rule->fbPosts as $post){
+                    $words_post = json_decode($post->wordcloud_expression, true);
+
+                    if(!empty($words_post)) {
+                        foreach($words_post as $key => $value) {
+                            $words[] = $key;
+                        }
+                    }                   
+                }
+
+
             }
 
             $lista_frequencia = array_count_values($words);
