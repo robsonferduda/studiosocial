@@ -83,7 +83,21 @@
                   <p>Regras</p>
                   </a>
                 </li>
+                <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
+                  <a href="{{ url('boletins') }}">
+                  <i class="fa fa-file-o"></i>
+                  <p>Boletins</p>
+                  </a>
+                </li>
                 <hr/>
+                @role('administradores')
+                <li class="{{ (Session::has('url') and Session::get('url') == 'auditoria') ? 'active' : '' }}">
+                    <a href="{{ url('auditoria') }}">
+                      <i class="fa fa-shield"></i>
+                    <p>Autidoria</p>
+                    </a>
+                </li>
+                @endrole
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
                       <a href="{{ url('configuracoes') }}">

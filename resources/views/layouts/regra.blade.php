@@ -42,3 +42,4 @@
         <span class="d-block mb-2 display_regra">Nenhuma regra selecionada</span>
     </div>
 </div>
+<p class="ml-1">{{ $mensagem }} no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>

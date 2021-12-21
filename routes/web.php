@@ -9,6 +9,11 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 
 Auth::routes();
 
+Route::get('auditoria','AuditoriaController@index');
+Route::get('boletins','BoletimController@index');
+Route::get('boletim/{id}','BoletimController@detalhes');
+Route::get('boletim/{id}/enviar','BoletimController@enviar');
+
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
 Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecionarPeriodo');

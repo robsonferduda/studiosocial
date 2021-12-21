@@ -111,36 +111,44 @@ class RelatorioController extends Controller
     public function evolucaoDiaria()
     {
       $periodo_padrao = 7;
+      $mensagem = "Volume diário de mensagens dividido por sentimentos";
       $rules = Rule::all();
       $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
                                  'data_final'   => Carbon::now()->format('d/m/Y'));
 
-      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio'));
+      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','mensagem'));
     }
 
     public function evolucaoRedesSociais()
     {
+      $mensagem = "";
       $periodo_padrao = 7;
       $rules = Rule::all();
       $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
                                  'data_final'   => Carbon::now()->format('d/m/Y'));
 
-      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio'));
+      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','mensagem'));
     }
 
     public function reactions()
     {
+      $mensagem = "";
       $rules = Rule::all();
-      return view('relatorios/reactions', compact('rules'));
+      return view('relatorios/reactions', compact('rules','mensagem'));
     }
 
     public function influenciadores()
     {
+      $mensagem = "";
+      $periodo_padrao = 7;
+      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
+                                 'data_final'   => Carbon::now()->format('d/m/Y'));
+
       $rules = Rule::all();
       $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
       $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
 
-      return view('relatorios/influenciadores', compact('rules','positivos','negativos'));
+      return view('relatorios/influenciadores', compact('rules','positivos','negativos','mensagem','periodo_relatorio'));
     }
 
     public function getAllMedias()

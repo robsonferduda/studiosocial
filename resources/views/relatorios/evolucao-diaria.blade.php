@@ -17,7 +17,6 @@
         </div>
         <div class="card-body"> 
             @include('layouts/regra')          
-            <p class="ml-1">Volume diário de mensagens dividido por sentimentos no período de <span class="label_data_inicial">{{ $periodo_relatorio['data_inicial'] }}</span> à <span class="label_data_final">{{ $periodo_relatorio['data_final'] }}</span></p>
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="card car-chart">
