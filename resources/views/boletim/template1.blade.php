@@ -158,7 +158,7 @@
                                     @if($noticia->area != $area)
                                         <div class="px-3 py-2 mb-3" style="">
                                             <p style="color: #2196f3; font-size: 20px !important; text-transform: uppercase; border-bottom: 1px solid #2196f3;"><i class="fa fa-newspaper-o" aria-hidden="true"></i>
-                                              <img src="https://zurichairport.empauta.com/mail/img/icones/zurichairport/ico_pasta.jpg">
+                                              <img src="https://studiosocial.ga/img/icone.jpg">
                                               {{ $noticia->area }}
                                             </p>
                                         @php
