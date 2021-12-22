@@ -46,6 +46,8 @@ class BoletimController extends Controller
         ->subject('Boletim de Clipagens');
             $message->from('boletins@clipagens.com.br','Studio Clipagem');
         });
+
+        return redirect('boletim/'.$id);
     }
 
     public function getDadosBoletim($id)

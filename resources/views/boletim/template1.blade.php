@@ -139,7 +139,7 @@
                        <tbody><tr style="border-collapse:collapse"> 
                         <td align="center" style="Margin:0;padding-bottom:5px;padding-left:30px;padding-right:30px;padding-top:35px">
                             <h1 style="Margin:0;line-height:58px;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:48px;font-style:normal;font-weight:normal;color:#111111">
-                                <img src="{{ asset('img/logo_zurich.png') }}">
+                                <img src="https://studiosocial.ga/img/logo_zurich.png">
                             </h1>
                         </td> 
                        </tr> 
