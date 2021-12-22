@@ -76,39 +76,7 @@
        </tr> 
        <tr style="border-collapse:collapse"> 
         <td valign="top" style="padding:0;Margin:0"> 
-         <table cellpadding="0" cellspacing="0" class="es-content" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%"> 
-           <tbody><tr style="border-collapse:collapse"> 
-            <td align="center" style="padding:0;Margin:0"> 
-             <table class="es-content-body" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:800px" cellspacing="0" cellpadding="0" align="center"> 
-               <tbody><tr style="border-collapse:collapse"> 
-                <td align="left" style="Margin:0;padding-left:10px;padding-right:10px;padding-top:15px;padding-bottom:15px"> 
-                 <!--[if mso]><table style="width:580px" cellpadding="0" cellspacing="0"><tr><td style="width:282px" valign="top"><![endif]--> 
-                 <table class="es-left" cellspacing="0" cellpadding="0" align="left" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left"> 
-                   <tbody><tr style="border-collapse:collapse"> 
-                    <td align="left" style="padding:0;Margin:0;width:282px"> 
-                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td class="es-infoblock es-m-txt-c" align="left" style="padding:0;Margin:0;line-height:14px;font-size:12px;color:#CCCCCC"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:12px;font-family:arial, 'helvetica\ neue', helvetica, sans-serif;line-height:14px;color:#CCCCCC">Put your preheader text here<br></p></td> 
-                       </tr> 
-                     </tbody></table></td> 
-                   </tr> 
-                 </tbody></table> 
-                 <!--[if mso]></td><td style="width:20px"></td><td style="width:278px" valign="top"><![endif]--> 
-                 <table class="es-right" cellspacing="0" cellpadding="0" align="right" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right"> 
-                   <tbody><tr style="border-collapse:collapse"> 
-                    <td align="left" style="padding:0;Margin:0;width:278px"> 
-                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td align="right" class="es-infoblock es-m-txt-c" style="padding:0;Margin:0;line-height:14px;font-size:12px;color:#CCCCCC"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:12px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:14px;color:#CCCCCC"><a href="https://viewstripo.email" class="view" target="_blank" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-size:12px;text-decoration:underline;color:#CCCCCC">View in browser</a></p></td> 
-                       </tr> 
-                     </tbody></table></td> 
-                   </tr> 
-                 </tbody></table> 
-                 <!--[if mso]></td></tr></table><![endif]--></td> 
-               </tr> 
-             </tbody></table></td> 
-           </tr> 
-         </tbody></table> 
+        
          <table class="es-header" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%;background-color:#FFA73B;background-repeat:repeat;background-position:center top"> 
            <tbody><tr style="border-collapse:collapse"> 
             <td align="center" style="padding:0;Margin:0"> 
@@ -168,9 +136,7 @@
                    <tbody><tr style="border-collapse:collapse"> 
                     <td valign="top" align="center" style="padding:0;Margin:0;width:800px"> 
                      <table style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;border-radius:4px;background-color:#FFFFFF" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffffff" role="presentation"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td class="es-m-txt-l" bgcolor="#ffffff" align="left" style="Margin:0;padding-top:20px;padding-bottom:20px;padding-left:30px;padding-right:30px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">We're excited to have you get started. First, you need to confirm your account. Just press the button below.</p></td> 
-                       </tr> 
+                       <tbody>
                        <tr style="border-collapse:collapse"> 
                         <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666"></p> 
                     
@@ -191,7 +157,10 @@
     
                                     @if($noticia->area != $area)
                                         <div class="px-3 py-2 mb-3" style="">
-                                            <p style="color: #2196f3; font-size: 20px !important; text-transform: uppercase; border-bottom: 1px solid #2196f3;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> {{ $noticia->area }}</p>
+                                            <p style="color: #2196f3; font-size: 20px !important; text-transform: uppercase; border-bottom: 1px solid #2196f3;"><i class="fa fa-newspaper-o" aria-hidden="true"></i>
+                                              <img src="https://zurichairport.empauta.com/mail/img/icones/zurichairport/ico_pasta.jpg">
+                                              {{ $noticia->area }}
+                                            </p>
                                         @php
                                             $flag = true;
                                         @endphp
@@ -231,12 +200,12 @@
                                     @if($noticia->clipagem == 'tv')
                                         
                                         <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
-                                            <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
     
                                             <video width="320" height="240" controls>
                                                 <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" type="video/mp4">
@@ -247,12 +216,12 @@
                                     @elseif($noticia->clipagem == 'radio')
     
                                         <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
-                                            <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                            <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Download</a></p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Download</a></p>
     
                                             <audio width="320" height="240" controls>
                                                 <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" type="audio/mpeg">
@@ -263,23 +232,23 @@
                                     @elseif($noticia->clipagem == 'web')
     
                                         <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
-                                            <p style="margin-bottom: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                            <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
                                         </div>                            
     
                                     @else
     
                                         <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
-                                            <p style="margin-bottom: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
-                                            <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                            <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
                                         </div>
                                         
                                     @endif
@@ -293,104 +262,20 @@
                             @endforeach
                         </div>
                     </td>
-                    
-                        </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">If that doesn't work, copy and paste the following link in your browser:</p></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px"><a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:18px;text-decoration:underline;color:#FFA73B">XXX.XXXXXXX.XXX / XXXXXXXXXXXXX</a></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td class="es-m-txt-l" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:30px;padding-right:30px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">If you have any questions, just reply to this email—we're always happy to help out.</p></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td class="es-m-txt-l" align="left" style="Margin:0;padding-top:20px;padding-left:30px;padding-right:30px;padding-bottom:40px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">Cheers,</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:18px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:27px;color:#666666">The Ceej Team</p></td> 
-                       </tr> 
-                     </tbody></table></td> 
+                  </tr> 
+                  <tr style="border-collapse:collapse"> 
+                    <h1 style="margin:0 auto;line-height:58px;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:48px;font-style:normal;font-weight:normal;color:#111111; text-align: center; margin-top: 15px; margin-bottom: 15px;">
+                      <img style="width: 20%;" src="http://clipagens.com.br/pages/studioclipagem/images/img/studio_clipagem.jpg">
+                    </h1>
+                  </tr> 
+                </tbody></table></td> 
                    </tr> 
                  </tbody></table></td> 
                </tr> 
              </tbody></table></td> 
            </tr> 
          </tbody></table> 
-         <table class="es-content" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%"> 
-           <tbody><tr style="border-collapse:collapse"> 
-            <td align="center" style="padding:0;Margin:0"> 
-             <table class="es-content-body" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:800px" cellspacing="0" cellpadding="0" align="center"> 
-               <tbody><tr style="border-collapse:collapse"> 
-                <td align="left" style="padding:0;Margin:0"> 
-                 <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                   <tbody><tr style="border-collapse:collapse"> 
-                    <td valign="top" align="center" style="padding:0;Margin:0;width:800px"> 
-                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td align="center" style="Margin:0;padding-top:10px;padding-bottom:20px;padding-left:20px;padding-right:20px;font-size:0"> 
-                         <table width="100%" height="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                           <tbody><tr style="border-collapse:collapse"> 
-                            <td style="padding:0;Margin:0;border-bottom:1px solid #F4F4F4;background:#FFFFFF none repeat scroll 0% 0%;height:1px;width:100%;margin:0px"></td> 
-                           </tr> 
-                         </tbody></table></td> 
-                       </tr> 
-                     </tbody></table></td> 
-                   </tr> 
-                 </tbody></table></td> 
-               </tr> 
-             </tbody></table></td> 
-           </tr> 
-         </tbody></table> 
-         <table class="es-content" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%"> 
-           <tbody><tr style="border-collapse:collapse"> 
-            <td align="center" style="padding:0;Margin:0"> 
-             <table class="es-content-body" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:800px" cellspacing="0" cellpadding="0" align="center"> 
-               <tbody><tr style="border-collapse:collapse"> 
-                <td align="left" style="padding:0;Margin:0"> 
-                 <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                   <tbody><tr style="border-collapse:collapse"> 
-                    <td valign="top" align="center" style="padding:0;Margin:0;width:800px"> 
-                     <table style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;background-color:#FFECD1;border-radius:4px" width="100%" cellspacing="0" cellpadding="0" bgcolor="#ffecd1" role="presentation"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td align="center" style="padding:0;Margin:0;padding-top:30px;padding-left:30px;padding-right:30px"><h3 style="Margin:0;line-height:24px;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:20px;font-style:normal;font-weight:normal;color:#111111">Need more help?</h3></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td esdev-links-color="#ffa73b" align="center" style="padding:0;Margin:0;padding-bottom:30px;padding-left:30px;padding-right:30px"><a target="_blank" href="https://viewstripo.email/" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:18px;text-decoration:underline;color:#FFA73B">We’re here, ready to talk</a></td> 
-                       </tr> 
-                     </tbody></table></td> 
-                   </tr> 
-                 </tbody></table></td> 
-               </tr> 
-             </tbody></table></td> 
-           </tr> 
-         </tbody></table> 
-         <table cellpadding="0" cellspacing="0" class="es-footer" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%;background-color:transparent;background-repeat:repeat;background-position:center top"> 
-           <tbody><tr style="border-collapse:collapse"> 
-            <td align="center" style="padding:0;Margin:0"> 
-             <table class="es-footer-body" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:800px"> 
-               <tbody><tr style="border-collapse:collapse"> 
-                <td align="left" style="Margin:0;padding-top:30px;padding-bottom:30px;padding-left:30px;padding-right:30px"> 
-                 <table width="100%" cellspacing="0" cellpadding="0" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                   <tbody><tr style="border-collapse:collapse"> 
-                    <td valign="top" align="center" style="padding:0;Margin:0;width:540px"> 
-                     <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
-                       <tbody><tr style="border-collapse:collapse"> 
-                        <td align="left" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:21px;color:#666666"><strong><a target="_blank" href="https://viewstripo.email" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:14px;text-decoration:underline;color:#111111">Dashboard</a> - <a target="_blank" href="https://viewstripo.email" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:14px;text-decoration:underline;color:#111111">Billing</a> - <a target="_blank" href="https://viewstripo.email" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:14px;text-decoration:underline;color:#111111">Help</a></strong></p></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td align="left" style="padding:0;Margin:0;padding-top:25px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:21px;color:#666666">You received this email because you just signed up for a new account. If it looks weird, <strong><a class="view" target="_blank" href="https://viewstripo.email" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:14px;text-decoration:underline;color:#111111">view it in your browser</a></strong>.</p></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td align="left" style="padding:0;Margin:0;padding-top:25px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:21px;color:#666666">If these emails get annoying, please feel free to&nbsp;<strong><a target="_blank" class="unsubscribe" href="" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:14px;text-decoration:underline;color:#111111">unsubscribe</a></strong>.</p></td> 
-                       </tr> 
-                       <tr style="border-collapse:collapse"> 
-                        <td align="left" style="padding:0;Margin:0;padding-top:25px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-size:14px;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;line-height:21px;color:#666666">Ceej - 1234 Main Street - Anywhere, MA - 56789</p></td> 
-                       </tr> 
-                     </tbody></table></td> 
-                   </tr> 
-                 </tbody></table></td> 
-               </tr> 
-             </tbody></table></td> 
-           </tr> 
-         </tbody></table> 
+         
          <table class="es-content" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%"> 
            <tbody><tr style="border-collapse:collapse"> 
             <td align="center" style="padding:0;Margin:0"> 
@@ -402,7 +287,8 @@
                     <td valign="top" align="center" style="padding:0;Margin:0;width:560px"> 
                      <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"> 
                        <tbody><tr style="border-collapse:collapse"> 
-                        <td class="es-infoblock made_with" align="center" style="padding:0;Margin:0;line-height:120%;font-size:0;color:#CCCCCC"><a target="_blank" href="https://viewstripo.email/?utm_source=templates&amp;utm_medium=email&amp;utm_campaign=software2&amp;utm_content=trigger_newsletter" style="-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:lato, 'helvetica neue', helvetica, arial, sans-serif;font-size:12px;text-decoration:underline;color:#CCCCCC"><img src="https://tlr.stripocdn.email/content/guids/CABINET_9df86e5b6c53dd0319931e2447ed854b/images/64951510234941531.png" alt width="125" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic"></a></td> 
+                        <td class="es-infoblock made_with" align="center" style="padding:0;Margin:0;line-height:120%;font-size:0;color:#CCCCCC">
+                        </td> 
                        </tr> 
                      </tbody></table></td> 
                    </tr> 
