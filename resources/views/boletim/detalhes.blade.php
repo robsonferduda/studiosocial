@@ -12,7 +12,7 @@
                 </div>
                 <div class="col-md-4">
                     <a href="{{ url('boletins') }}" class="btn btn-primary pull-right"><i class="fa fa-file-o"></i> Boletins</a>
-                    <a href="{{ url('boletim/123466/enviar') }}" class="btn btn-success pull-right btn-enviar"><i class="fa fa-send"></i> Enviar Newsletter</a>
+                    <a href="{{ url('boletim/'.$boletim->id.'/enviar') }}" class="btn btn-success pull-right btn-enviar"><i class="fa fa-send"></i> Enviar Newsletter</a>
                 </div>
             </div>
         </div>
@@ -115,7 +115,9 @@
                                 <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
                                 <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
-                                <img src="{{ $noticia->url }}">
+                                <div>
+                                    <img style="width: 50%" src="{{ $noticia->url }}">
+                                </div>
                             </div>                            
 
                         @else
@@ -127,9 +129,11 @@
                                 <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
                                 <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
-                                <img src="{{ $noticia->url }}">
+                                <div>
+                                    <img style="width: 50%" src="{{ $noticia->url }}">
+                                </div>
                             </div>
-                            
+
                         @endif
 
                         @php

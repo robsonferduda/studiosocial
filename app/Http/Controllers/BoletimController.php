@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use Mail;
 use App\Boletim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +13,7 @@ class BoletimController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['detalhes']]);
+        $this->middleware('auth', ['except' => ['detalhes','enviar']]);
         Session::put('url','auditoria');
     }
 
@@ -23,6 +24,31 @@ class BoletimController extends Controller
     }
 
     public function detalhes($id)
+    {   
+        $boletim = Boletim::where('id', $id)->first();
+        $dados = $this->getDadosBoletim($id);        
+    
+        return view('boletim/detalhes', compact('boletim', 'dados'));
+    }
+
+    public function enviar($id)
+    {
+        $boletim = Boletim::where('id', $id)->first();
+        $dados = $this->getDadosBoletim($id);   
+        
+        //$emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
+        $emails = ['robsonferduda@gmail.com'];
+
+        $data = array("dados"=> $dados);
+         
+        Mail::send('boletim.template1', $data, function($message) use ($emails) {
+        $message->to($emails)
+        ->subject('Boletim de Clipagens');
+            $message->from('boletins@clipagens.com.br','Studio Clipagem');
+        });
+    }
+
+    public function getDadosBoletim($id)
     {
         $tipo = null;
 
@@ -178,7 +204,7 @@ class BoletimController extends Controller
         foreach($dados as $key => $noticia){
 
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
-                
+
                 $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpg';
                 $header_response = get_headers($url, 1);
 
@@ -189,13 +215,7 @@ class BoletimController extends Controller
                 $dados[$key]->url = $url;    
             }       
         }
-    
-        return view('boletim/detalhes', compact('boletim', 'dados'));
-    }
 
-    public function enviar($id)
-    {
-        //Implementação do envio de email
-        dd($id);
+        return $dados;
     }
 }
