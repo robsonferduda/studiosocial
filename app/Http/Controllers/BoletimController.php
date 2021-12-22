@@ -66,7 +66,7 @@ class BoletimController extends Controller
                                 tv.id as id,
                                 CONCAT('','') as titulo, 
                                 tv.data as data,
-                                '' as segundos, 
+                                tv.segundos_totais as segundos, 
                                 tv.sinopse as sinopse, 
                                 tv.uf as uf, 
                                 CONCAT('','') as link, 
@@ -95,7 +95,7 @@ class BoletimController extends Controller
                             radio.id as id,
                             CONCAT('','') as titulo, 
                             radio.data as data, 
-                            radio.segundos as segundos, 
+                            radio.segundos_totais as segundos, 
                             radio.sinopse as sinopse, 
                             radio.uf as uf, 
                             radio.link as link, 
@@ -174,6 +174,18 @@ class BoletimController extends Controller
         $sql .= " ORDER BY area ASC, clipagem DESC, data DESC";
         
         $dados = DB::connection('mysql')->select($sql);
+
+        foreach($dados as $key => $noticia){
+
+            $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpg';
+            $header_response = get_headers($url, 1);
+
+            if(strpos( $header_response[0], "404" ) !== false){
+                $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg';
+            } 
+
+            $dados[$key]->url = $url;           
+        }
     
         return view('boletim/detalhes', compact('boletim', 'dados'));
     }

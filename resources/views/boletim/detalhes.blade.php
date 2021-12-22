@@ -36,7 +36,7 @@
                         @endif
 
                         @if($noticia->area != $area)
-                            <div class="px-3 py-2 mb-3" style="border: 1px solid #f9f9f9; background: #f9f9f9;">
+                            <div class="px-3 py-2 mb-3" style="">
                                 <p style="color: #2196f3; font-size: 20px !important; text-transform: uppercase; border-bottom: 1px solid #2196f3;"><i class="fa fa-newspaper-o" aria-hidden="true"></i> {{ $noticia->area }}</p>
                             @php
                                 $flag = true;
@@ -47,22 +47,22 @@
                             @switch($noticia->clipagem)
                                 @case('web')
                                     @php
-                                        $tipo_formatado = 'Clipagens de Web';
+                                        $tipo_formatado = '<i class="fa fa-globe"></i> Clipagens de Web';
                                     @endphp
                                 @break
                                 @case('tv')
                                     @php
-                                        $tipo_formatado = 'Clipagens de TV';
+                                        $tipo_formatado = '<i class="fa fa-television"></i> Clipagens de TV';
                                     @endphp
                                 @break
                                 @case('radio')
                                     @php
-                                        $tipo_formatado = 'Clipagens de Rádio';
+                                        $tipo_formatado = '<i class="fa fa-volume-up"></i> Clipagens de Rádio';
                                     @endphp
                                 @break
                                 @case('jornal')
                                     @php
-                                        $tipo_formatado = 'Clipagens de Jornal';
+                                        $tipo_formatado = '<i class="fa fa-newspaper-o"></i> Clipagens de Jornal';
                                     @endphp
                                 @break
                                 @default
@@ -71,41 +71,65 @@
                                     @endphp
                                 @break                                    
                             @endswitch
-                            <p style="text-transform: uppercase; font-weight: 600;">{{ $tipo_formatado }}</p>
+                            <p style="text-transform: uppercase; font-weight: 600;">{!! $tipo_formatado !!}</p>
                         @endif
 
                         @if($noticia->clipagem == 'tv')
+                            
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                                <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
+                                <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                <p style="margin-bottom: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
 
-                            <p>{{ $noticia->titulo }}</p>
-                            <p>Emissora: {{ $noticia->INFO1 }}</p>
-                            <p>Programa: {{ $noticia->INFO2 }}</p>
-                            <p>{!! $noticia->sinopse !!}</p>
-
-                            <video width="320" height="240" controls>
-                                <source src="http://clipagens.com.br/fmanager/clipagem/tv/arquivo579760_1.mp4" type="video/mp4">
-                                <source src="movie.ogg" type="video/ogg">
-                              Your browser does not support the video tag.
-                            </video>
+                                <video width="320" height="240" controls>
+                                    <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" type="video/mp4">
+                                    Seu navegador não suporta a execução de vídeos, faça o download para poder assitir.
+                                </video>
+                            </div>
 
                         @elseif($noticia->clipagem == 'radio')
 
-                            <div class="p-2 mb-2">
-                                <p>Emissora: {{ $noticia->INFO1 }}</p>
-                                <p>Programa: {{ $noticia->INFO2 }}</p>
-                                <p>{!! $noticia->sinopse !!}</p>
-                                <p>Link: {{ $noticia->link }}</p>
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                                <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
+                                <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
+
+                                <audio width="320" height="240" controls>
+                                    <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" type="audio/mpeg">
+                                    Seu navegador não suporta a execução de áudios, faça o download para poder ouvir.
+                                </audio>
                             </div>
-                            <audio controls>
-                                <source src="{{ $noticia->link }}" type="audio/ogg">
-                                <source src="horse.mp3" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
+                        
+                        @elseif($noticia->clipagem == 'web')
+
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                                <p style="margin-bottom: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+                                <img src="{{ $noticia->url }}">
+                            </div>                            
+
                         @else
 
-                            <div class="p-2 mb-2">
-                                <p>{{ $noticia->titulo }}</p>
-                                <p>{!! $noticia->sinopse !!}</p>
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                                <p style="margin-bottom: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                                <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
+                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+                                <img src="{{ $noticia->url }}">
                             </div>
+                            
                         @endif
 
                         @php
