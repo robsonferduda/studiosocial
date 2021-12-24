@@ -36,8 +36,8 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);   
         
-        //$emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
-        $emails = ['robsonferduda@gmail.com'];
+        $emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
+        //$emails = ['robsonferduda@gmail.com'];
 
         $data = array("dados"=> $dados);
          
