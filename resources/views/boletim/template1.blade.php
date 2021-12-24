@@ -170,22 +170,22 @@
                                         @switch($noticia->clipagem)
                                             @case('web')
                                                 @php
-                                                    $tipo_formatado = '<i class="fa fa-globe"></i> Clipagens de Web';
+                                                    $tipo_formatado = 'Web';
                                                 @endphp
                                             @break
                                             @case('tv')
                                                 @php
-                                                    $tipo_formatado = '<i class="fa fa-television"></i> Clipagens de TV';
+                                                    $tipo_formatado = 'TV';
                                                 @endphp
                                             @break
                                             @case('radio')
                                                 @php
-                                                    $tipo_formatado = '<i class="fa fa-volume-up"></i> Clipagens de Rádio';
+                                                    $tipo_formatado = 'Rádio';
                                                 @endphp
                                             @break
                                             @case('jornal')
                                                 @php
-                                                    $tipo_formatado = '<i class="fa fa-newspaper-o"></i> Clipagens de Jornal';
+                                                    $tipo_formatado = 'Jornal';
                                                 @endphp
                                             @break
                                             @default
@@ -194,7 +194,10 @@
                                                 @endphp
                                             @break                                    
                                         @endswitch
-                                        <p style="text-transform: uppercase; font-weight: 600;">{!! $tipo_formatado !!}</p>
+                                        <p style="text-transform: uppercase; font-weight: 600;">
+                                          <img class="icone" src="https://studiosocial.ga/img/icon_tv.png">
+                                          {!! $tipo_formatado !!}
+                                        </p>
                                     @endif
     
                                     @if($noticia->clipagem == 'tv')
