@@ -31,6 +31,22 @@ class BoletimController extends Controller
         return view('boletim/detalhes', compact('boletim', 'dados'));
     }
 
+    public function visualizar($id)
+    {   
+        $boletim = Boletim::where('id', $id)->first();
+        $dados = $this->getDadosBoletim($id);        
+    
+        return view('boletim/visualizar', compact('boletim', 'dados'));
+    }
+
+    public function outlook($id)
+    {   
+        $boletim = Boletim::where('id', $id)->first();
+        $dados = $this->getDadosBoletim($id);        
+    
+        return view('boletim/outlook', compact('boletim', 'dados'));
+    }
+
     public function enviar($id)
     {
         $boletim = Boletim::where('id', $id)->first();

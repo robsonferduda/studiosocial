@@ -13,6 +13,8 @@ Route::get('auditoria','AuditoriaController@index');
 Route::get('boletins','BoletimController@index');
 Route::get('boletim/{id}','BoletimController@detalhes');
 Route::get('boletim/{id}/enviar','BoletimController@enviar');
+Route::get('boletim/{id}/outlook','BoletimController@outlook');
+Route::get('boletim/{id}/visualizar','BoletimController@visualizar');
 
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
