@@ -42,8 +42,8 @@ class BoletimController extends Controller
     public function outlook($id)
     {   
         $boletim = Boletim::where('id', $id)->first();
-        $dados = $this->getDadosBoletim($id);        
-    
+        $dados = $this->getDadosBoletim($id);    
+            
         return view('boletim/outlook', compact('boletim', 'dados'));
     }
 
@@ -52,12 +52,13 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);   
         
-        $emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
+        //$emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
+        $emails = ['robsonferduda@gmail.com','alvaro@studioclipagem.com.br'];
         //$emails = ['robsonferduda@gmail.com'];
 
-        $data = array("dados"=> $dados);
+        $data = array("dados"=> $dados, "boletim" => $boletim);
          
-        Mail::send('boletim.template1', $data, function($message) use ($emails) {
+        Mail::send('boletim.outlook', $data, function($message) use ($emails) {
         $message->to($emails)
         ->subject('Boletim de Clipagens');
             $message->from('boletins@clipagens.com.br','Studio Clipagem');

@@ -12,7 +12,7 @@
 
     </style> 
 </head> 
-<body style="background: #f7f7f7; font-family: Arial,sans-serif; font-size: 12px;">
+<body style="background: #f7f7f7; font-family: Tahoma, Arial,sans-serif; font-size: 12px; padding-top: 20px; padding-bottom: 20px;">
     <div style="width: 800px; margin: 0 auto; background: white; padding: 10px 20px; margin-top: 30px;">
         <table>
             <tbody>
@@ -25,7 +25,10 @@
         </table>
         <div style="text-align: right;">
             <span>Foram encontradas {{ count($dados) }} notícias</span>
-        </div>       
+        </div>  
+        <div style="text-align: right; margin-top: 5px;">
+            <span><a href="{{ url('boletim/'.$boletim->id.'/visualizar') }}">Clique aqui</a> para ver o boletim no navagador</span>
+        </div>      
 
             @php
                 $area = "";
@@ -36,7 +39,7 @@
                 @if($noticia->area != null)
 
                     @if($noticia->area != $area)
-                        <table style="border-bottom: 1px solid #2196f3; width: 100%;"">
+                        <table style="border-bottom: 1px solid #2196f3; width: 100%; margin-bottom: 8px;">
                             <tr>
                                 <td style="width: 30px;">
                                     <img src="https://studiosocial.ga/img/icone.jpg">
@@ -95,44 +98,45 @@
 
                     @if($noticia->clipagem == 'tv')
                         
-                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Veja</a></p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Assista</a></p>
                         </div>
 
                     @elseif($noticia->clipagem == 'radio')
 
-                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Veja</a></p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Ouça</a></p>
                         </div>
                     
                     @elseif($noticia->clipagem == 'web')
 
-                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Veículo:</strong> {{ $noticia->INFO1 }}</p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong><a href="{{ $noticia->link }}" target="_BLANK"> {{ $noticia->link }}</a></p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
                         </div>                            
 
                     @else
 
-                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px;">
+                        <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
-                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Veículo:</strong> {{ $noticia->INFO1 }}</p>
+                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
                             <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
                         </div>
@@ -147,18 +151,9 @@
                 @endif
             @endforeach
         
-
-        <table>
-            <tbody>
-                <tr>
-                    <td style="text-align: center;">
-                        <div style="width: 50%; margin: 0 auto;">
-                            <img src="http://clipagens.com.br/pages/studioclipagem/images/img/logo_studio.jpg">
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div style="width: 50%; margin: 0 auto; text-align: center;">
+            <img src="https://studiosocial.ga/img/logo_studio.jpg">
+        </div>
     </div> 
   </body>
 </html>
