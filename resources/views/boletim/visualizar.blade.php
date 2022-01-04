@@ -113,7 +113,7 @@
                                         <p style="margin-bottom: 0px;"><strong>Veículo:</strong> {{ $noticia->INFO1 }}</p>
                                         <p style="margin-bottom: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                                         <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                        <p style="margin-bottom: 0px;"><strong>Link:</strong><a href="{{ $noticia->link }}" target="_BLANK"> {{ $noticia->link }}</a></p>
+                                        <p style="margin-bottom: 0px;"><strong>Link:</strong><a href="{{ $noticia->link }}" target="_BLANK"> Acesse</a></p>
                                         <p style="margin-bottom: 10px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
                                     </div>                            
 

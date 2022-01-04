@@ -122,7 +122,8 @@ class BoletimController extends Controller
                                 parte.titulo as INFO2, 
                                 parte.hora as INFOHORA, 
                                 CONCAT('tv','') as clipagem,
-                                area.titulo as area
+                                area.titulo as area,
+                                area.ordem as ordem
                         FROM app_tv as tv 
                                 LEFT JOIN app_tv_emissora as veiculo ON veiculo.id = tv.id_emissora
                                 LEFT JOIN app_tv_programa as parte ON parte.id = tv.id_programa 
@@ -151,7 +152,8 @@ class BoletimController extends Controller
                             parte.titulo as INFO2, 
                             parte.hora as INFOHORA, 
                             CONCAT('radio','') as clipagem,
-                            area.titulo as area      
+                            area.titulo as area,
+                            area.ordem as ordem      
                         FROM app_radio as radio 
                             LEFT JOIN app_radio_emissora as veiculo ON veiculo.id = radio.id_emissora
                             LEFT JOIN app_radio_programa as parte ON parte.id = radio.id_programa 
@@ -178,7 +180,8 @@ class BoletimController extends Controller
                             parte.titulo as INFO2,
                             ''  as INFOHORA,
                             CONCAT('jornal','') as clipagem,
-                            area.titulo as area      
+                            area.titulo as area,
+                            area.ordem as ordem  
                         FROM app_jornal as jornal 
                             LEFT JOIN app_jornal_impresso as veiculo ON veiculo.id = jornal.id_jornalimpresso
                             LEFT JOIN app_jornal_secao as parte ON parte.id = jornal.id_secao 
@@ -205,7 +208,8 @@ class BoletimController extends Controller
                             parte.titulo as INFO2, 
                             ''  as INFOHORA,
                             CONCAT('web','') as clipagem,
-                            area.titulo as area      
+                            area.titulo as area,
+                            area.ordem as ordem      
                         FROM app_web as web 
                         LEFT JOIN app_web_sites as veiculo ON veiculo.id = web.id_site
                         LEFT JOIN app_web_secao as parte ON parte.id = web.id_secao 
@@ -216,7 +220,7 @@ class BoletimController extends Controller
         }
                 
         $sql = implode(" UNION DISTINCT ",$sql);				
-        $sql .= " ORDER BY area ASC, clipagem DESC, data DESC";
+        $sql .= " ORDER BY ordem ASC, clipagem DESC, data DESC";
         
         $dados = DB::connection('mysql')->select($sql);
 
