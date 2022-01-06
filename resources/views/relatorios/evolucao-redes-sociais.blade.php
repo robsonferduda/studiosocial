@@ -17,7 +17,6 @@
         </div>
         <div class="card-body"> 
             @include('layouts/regra')          
-            <p class="ml-1">Volume diário de mensagens dividido por rede social no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>
             <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="card car-chart">

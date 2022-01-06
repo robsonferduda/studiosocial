@@ -4,39 +4,119 @@ namespace App\Http\Controllers;
 
 use DB;
 use DOMPDF;
-use Carbon\Carbon;
+use App\Configs;
 use App\Rule;
 use App\FbPost;
 use App\Media;
 use App\Utils;
 use App\FbReaction;
 use App\MediaTwitter;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class RelatorioController extends Controller
 {
     private $client_id;
+    private $mensagem;
+    private $periodo_padrao;
+    private $rules;
 
     public function __construct()
     {
         $this->middleware('auth');
+        $this->mensagem = "";
         $this->client_id = session('cliente')['id'];
+        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value - 1;
+        $this->rules = Rule::all();
         Session::put('url','relatorios');
     }
 
     public function index()
     {
-        $reactions = FbReaction::all();
-        return view('relatorios/index', compact('reactions'));
+      return view('relatorios/index');
+    }
+
+    public function evolucaoDiaria()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Volume diário de mensagens dividido por sentimentos";
+
+      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','mensagem'));
+    }
+
+    public function evolucaoRedesSociais()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Volume diário de mensagens dividido por rede social";
+
+      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','mensagem'));
+    }
+
+    public function sentimentos()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Volume diário de mensagens dividido por sentimentos";
+      
+      return view('relatorios/sentimentos', compact('rules','periodo_relatorio','mensagem'));
+    }
+
+    public function wordcloud()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Nuvem baseada no volume de palavras";
+      
+      return view('relatorios/wordcloud', compact('rules','periodo_relatorio','mensagem'));
+    }
+
+    public function reactions()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Total de reações nas postagens";
+
+      return view('relatorios/reactions', compact('rules','periodo_relatorio','mensagem'));
     }
 
     public function hashtags()
     {
-      $rules = Rule::all();
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Nuvem baseada no volume de hashtags";
+
       $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
 
-      return view('relatorios/hashtags', compact('rules','lista_hashtags'));
+      return view('relatorios/hashtags', compact('rules','lista_hashtags','mensagem','periodo_relatorio'));
+    }
+
+    public function influenciadores()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Influenciadores positivos e negativos";
+
+      
+      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
+      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
+
+      return view('relatorios/influenciadores', compact('rules','positivos','negativos','mensagem','periodo_relatorio'));
+    }
+
+    public function retornaDataPeriodo()
+    {
+        return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao)->format('d/m/Y'),
+                     'data_final'   => Carbon::now()->format('d/m/Y'));
     }
 
     public function getNuvemHashtags()
@@ -45,13 +125,7 @@ class RelatorioController extends Controller
       $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
 
       echo json_encode($lista_hashtags);
-    }
-
-    public function sentimentos()
-    {
-      $rules = Rule::all();
-      return view('relatorios/sentimentos', compact('rules'));
-    }
+    }    
 
     public function getReactions()
     {
@@ -106,49 +180,6 @@ class RelatorioController extends Controller
 
         return response()->json($dados);
 
-    }
-
-    public function evolucaoDiaria()
-    {
-      $periodo_padrao = 7;
-      $mensagem = "Volume diário de mensagens dividido por sentimentos";
-      $rules = Rule::all();
-      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
-                                 'data_final'   => Carbon::now()->format('d/m/Y'));
-
-      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','mensagem'));
-    }
-
-    public function evolucaoRedesSociais()
-    {
-      $mensagem = "";
-      $periodo_padrao = 7;
-      $rules = Rule::all();
-      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
-                                 'data_final'   => Carbon::now()->format('d/m/Y'));
-
-      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','mensagem'));
-    }
-
-    public function reactions()
-    {
-      $mensagem = "";
-      $rules = Rule::all();
-      return view('relatorios/reactions', compact('rules','mensagem'));
-    }
-
-    public function influenciadores()
-    {
-      $mensagem = "";
-      $periodo_padrao = 7;
-      $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($periodo_padrao)->format('d/m/Y'),
-                                 'data_final'   => Carbon::now()->format('d/m/Y'));
-
-      $rules = Rule::all();
-      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
-      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
-
-      return view('relatorios/influenciadores', compact('rules','positivos','negativos','mensagem','periodo_relatorio'));
     }
 
     public function getAllMedias()
