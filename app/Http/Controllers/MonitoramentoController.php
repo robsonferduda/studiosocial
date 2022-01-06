@@ -32,6 +32,7 @@ class MonitoramentoController extends Controller
     public function index()
     {
         $totais = array();
+        $periodo_padrao = $this->periodo_padrao;
         $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao)->format('d/m/Y'),
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
@@ -52,7 +53,7 @@ class MonitoramentoController extends Controller
                         'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
                         'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
 
-        return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio'));
+        return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
     }
 
     public function getHistorico($dias)
@@ -86,10 +87,10 @@ class MonitoramentoController extends Controller
         }
 
         $dados = array('data' => $datas,
-                         'data_formatada' => $datas_formatadas,
-                         'dados_twitter' => $dados_twitter,
-                         'dados_instagram' => $dados_instagram,
-                         'dados_facebook' => $dados_facebook);
+                        'data_formatada' => $datas_formatadas,
+                        'dados_twitter' => $dados_twitter,
+                        'dados_instagram' => $dados_instagram,
+                        'dados_facebook' => $dados_facebook);
 
         return response()->json($dados);
 
