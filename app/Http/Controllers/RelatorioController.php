@@ -19,6 +19,9 @@ class RelatorioController extends Controller
 {
     private $client_id;
     private $mensagem;
+    private $periodo;
+    private $data_inicial;
+    private $data_final;
     private $periodo_padrao;
     private $rules;
 
@@ -27,8 +30,8 @@ class RelatorioController extends Controller
         $this->middleware('auth');
         $this->mensagem = "";
         $this->client_id = session('cliente')['id'];
-        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value - 1;
-        $this->rules = Rule::all();
+        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
+        $this->rules = Rule::where('client_id', $this->client_id)->get();
         Session::put('url','relatorios');
     }
 
@@ -44,7 +47,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Volume diário de mensagens dividido por sentimentos";
 
-      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','mensagem'));
+      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
     }
 
     public function evolucaoRedesSociais()
@@ -54,7 +57,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Volume diário de mensagens dividido por rede social";
 
-      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','mensagem'));
+      return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
     }
 
     public function sentimentos()
@@ -115,8 +118,28 @@ class RelatorioController extends Controller
 
     public function retornaDataPeriodo()
     {
-        return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao)->format('d/m/Y'),
+        return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                      'data_final'   => Carbon::now()->format('d/m/Y'));
+    }
+
+    public function geraDataPeriodo($periodo, $data_inicial, $data_final)
+    {
+        if($periodo == 0){
+
+          $carbon = new Carbon();
+          $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
+          $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
+          
+          $periodo = $data_final->diffInDays($data_inicial) + 1;
+          $data_inicial = $data_inicial->subDays(1);
+
+        }else{
+          $data_inicial = Carbon::now()->subDays($periodo);
+        }
+
+        $this->periodo = $periodo;
+        $this->data_inicial = $data_inicial;
+        $this->data_final = $data_final;
     }
 
     public function getNuvemHashtags()
@@ -151,15 +174,15 @@ class RelatorioController extends Controller
       return response()->json($sentimentos);
     }
 
-    public function getSentimentosPeriodo($dias)
+    public function getSentimentosPeriodo(Request $request)
     {
-        $data_inicial = Carbon::now()->subDays($dias);
         $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
 
-        for ($i=0; $i < $dias; $i++) { 
+        for ($i=0; $i < $this->periodo; $i++) { 
 
-            $data = $data_inicial->addDay()->format('Y-m-d');
-            $data_formatada = $data_inicial->format('d/m/Y');
+            $data = $this->data_inicial->addDay()->format('Y-m-d');
+            $data_formatada = $this->data_inicial->format('d/m/Y');
 
             $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
             $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
@@ -177,6 +200,46 @@ class RelatorioController extends Controller
                          'dados_positivos' => $dados_positivos,
                          'dados_negativos' => $dados_negativos,
                          'dados_neutros' => $dados_neutros);
+
+        return response()->json($dados);
+
+    }
+
+    public function getRedesPeriodo(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
+        for ($i=0; $i < $this->periodo; $i++) { 
+
+            $data = $this->data_inicial->addDay()->format('Y-m-d');
+            $data_formatada = $this->data_inicial->format('d/m/Y');
+
+            $datas[] = $data;
+            $datas_formatadas[] = $data_formatada;
+
+            $ig_comments_total = DB::table('ig_comments')
+                                ->join('medias','medias.id','=','ig_comments.media_id')
+                                ->where('medias.client_id','=', $this->client_id)
+                                ->whereBetween('ig_comments.timestamp', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->count();
+
+            $fb_comments_total = DB::table('fb_comments')
+                                ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
+                                ->where('fb_posts.client_id','=',$this->client_id)
+                                ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->count();
+
+            $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
+            $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
+        }
+
+        $dados = array('data' => $datas,
+                        'data_formatada' => $datas_formatadas,
+                        'dados_twitter' => $dados_twitter,
+                        'dados_instagram' => $dados_instagram,
+                        'dados_facebook' => $dados_facebook);
 
         return response()->json($dados);
 

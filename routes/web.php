@@ -33,7 +33,8 @@ Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiar
 Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 Route::get('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::get('relatorios/dados/sentimentos','RelatorioController@getSentimentos');
-Route::get('relatorios/dados/sentimentos/periodo/{dias}','RelatorioController@getSentimentosPeriodo');
+Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
+Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 
 Route::get('pdf','RelatorioController@pdf');
 

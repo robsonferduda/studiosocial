@@ -31,28 +31,48 @@
 </div> 
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        var dados = null;
-        var periodo_padrao = 7;
+        var regra = 0;
+        var periodo = {{ $periodo_padrao }};
         var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
         var myChart = null;
+        var dados = null;
+        
+        loadDados(periodo, regra);
 
         $("#periodo").change(function(){
-
-            var periodo = $(this).val();
-            loadDados(periodo);
-
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
         });
 
-        loadDados(periodo_padrao);
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
+            }
+        });
 
-        function loadDados(periodo){
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
+
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
 
             $.ajax({
-                url: host+'/monitoramento/medias/historico/'+periodo,
-                type: 'GET',
+                url: host+'/relatorios/dados/redes',
+                type: 'POST',
+                data: { "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra },
                 success: function(response) {
                     if(myChart) myChart.destroy();
                     dados = response;

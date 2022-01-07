@@ -31,89 +31,48 @@
 </div> 
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        var dados = null;
-        var periodo_padrao = 7;
+        var regra = 0;
+        var periodo = {{ $periodo_padrao }};
         var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
         var myChart = null;
-
-        loadDados(periodo_padrao);
+        var dados = null;
+        
+        loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
         $("#periodo").change(function(){
-
-            var periodo = $(this).val();
-            inicializaDatas(periodo);
-            loadDados(periodo);           
-
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
         });
-
-        function calculaPeriodo(dataInicial, dataFinal)
-        {
-            var a = dataInicial.split("/");
-            var date1 = new Date(a[2], a[1] - 1, a[0]);
-
-            var b = dataFinal.split("/");
-            var date2 = new Date(b[2], b[1] - 1, b[0]);
-
-            var diffTime = Math.abs(date2 - date1);
-            var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            diffDays = (diffDays < 1) ? 1 : diffDays;
-
-            return diffDays;
-        }
 
         $(document).on('keypress',function(e) {
             if(e.which == 13) {
-            
-                var dataInicial = $(".dt_inicial_relatorio").val();
-                var dataFinal = $(".dt_final_relatorio").val();
-                
-                periodo = calculaPeriodo(dataInicial, dataFinal);
-                atualizaLabels(dataInicial, dataFinal);
-                loadDados(periodo);
-                $("#periodo").val('custom');
+                periodo = 0;
+                loadDados(periodo, regra);
             }
         });
 
-        function formataData(data)
-        {
-            var dia = String(data.getDate()).padStart(2, '0');
-            var mes = String(data.getMonth() + 1).padStart(2, '0');
-            var ano = data.getFullYear();
-
-            return dia + '/' + mes + '/' + ano;
-        }
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
         
-        function inicializaDatas(periodo)
-        {
-            var dataFinal = new Date();
-            var dataInicial = new Date();    
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
             
-            if(periodo != 'custom'){
-                dataInicial.setDate(dataFinal.getDate() - periodo);
-            }
-
-            $(".dt_inicial_relatorio").val(formataData(dataInicial));
-            $(".dt_final_relatorio").val(formataData(dataFinal));
-
-            $(".label_data_inicial").html(formataData(dataInicial));
-            $(".label_data_final").html(formataData(dataFinal));   
-        }
-
-        function atualizaLabels(dataInicial, dataFinal)
-        {
-            $(".label_data_inicial").html(dataInicial);
-            $(".label_data_final").html(dataFinal);   
-        }
-
-        function loadDados(periodo){
-
             $.ajax({
-                url: host+'/relatorios/dados/sentimentos/periodo/'+periodo,
-                type: 'GET',
+                url: host+'/relatorios/dados/sentimentos',
+                type: 'POST',
+                data: { "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra },
                 success: function(response) {
                     if(myChart) myChart.destroy();
                     dados = response;
