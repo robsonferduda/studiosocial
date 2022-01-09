@@ -4,13 +4,17 @@ namespace App;
 
 use App\Enums\TypeRule;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Rule extends Model
 {
+    use Notifiable;
+    
     protected $table = 'rules';
     protected $fillable = [
                             'name',
-                            'client_id'
+                            'client_id',
+                            'fl_process'
                         ];
 
     public function expressionsType($type)

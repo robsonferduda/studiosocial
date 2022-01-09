@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Rule;
 use App\Twitter\TwitterCollect;
 use App\MediaTwitter;
 use App\TwitterAPIExchange;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use App\Twitter\TwitterOAuth;
+use App\Notifications\RuleProcessNotification;
 
 class TwitterController extends Controller
 { 
@@ -38,7 +40,11 @@ class TwitterController extends Controller
 
     public function index()
     {
-        (new TwitterCollect())->pullMedias();
+       // (new TwitterCollect())->pullMedias();
+
+        //$rule = Rule::find(1);
+
+        //$rule->notify(new RuleProcessNotification());
         /*
         $statuses = $this->conn->get("statuses/user_timeline", ["screen_name" => 'Tecnoblog', "exclude_replies" => true]);
 
