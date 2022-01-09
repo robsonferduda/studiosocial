@@ -40,9 +40,11 @@ class TwitterController extends Controller
 
     public function index()
     {
-       // (new TwitterCollect())->pullMedias();
+       (new TwitterCollect())->pullMedias();
 
         //$rule = Rule::find(1);
+
+        //dd($rule);
 
         //$rule->notify(new RuleProcessNotification());
         /*

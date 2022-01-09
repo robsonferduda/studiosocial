@@ -14,6 +14,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Notifications\RuleProcessNotification;
 
 class Rule implements ShouldQueue
 {
@@ -245,7 +246,13 @@ class Rule implements ShouldQueue
             $ids = $medias->pluck('id')->toArray();
 
             $rule->twPosts()->sync($ids);
-    
+
+            //Bloco de atualização de rule, caso ainda não tenha sido atualizada e processada
+            if(!$rule->fl_process){
+                $rule->fl_process = true;
+                $rule->save();
+                $rule->notify(new RuleProcessNotification());   
+            } 
         }
     }
 }
