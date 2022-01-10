@@ -246,6 +246,7 @@ class Rule implements ShouldQueue
             $ids = $medias->pluck('id')->toArray();
 
             $rule->twPosts()->sync($ids);
+            $rule->updated_at = date('Y-m-d H:i:s');
 
             //Bloco de atualização de rule, caso ainda não tenha sido atualizada e processada
             if(!$rule->fl_process){
