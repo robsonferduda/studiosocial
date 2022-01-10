@@ -77,7 +77,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Nuvem baseada no volume de palavras";
       
-      return view('relatorios/wordcloud', compact('rules','periodo_relatorio','mensagem'));
+      return view('relatorios/wordcloud', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
     }
 
     public function reactions()
@@ -87,7 +87,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Total de reações nas postagens";
 
-      return view('relatorios/reactions', compact('rules','periodo_relatorio','mensagem'));
+      return view('relatorios/reactions', compact('rules','periodo_relatorio','periodo_padrao' ,'mensagem'));
     }
 
     public function hashtags()
@@ -152,14 +152,20 @@ class RelatorioController extends Controller
       echo json_encode($lista_hashtags);
     }    
 
-    public function getReactions()
+    public function getReactions(Request $request)
     {
-      $reactions = DB::select('SELECT t3.name, t3.color, t3.icon, count(*) 
+
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
+
+      $reactions = DB::select("SELECT t3.name, t3.color, t3.icon, count(*) 
                               FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
                               WHERE t1.id = t2.post_id 
                               AND t2.reaction_id = t3.id 
+                              AND tagged_time BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                               GROUP BY t3.name, t3.color, t3.icon 
-                              ORDER BY t3.name');
+                              ORDER BY t3.name");
 
       return response()->json($reactions);
     }

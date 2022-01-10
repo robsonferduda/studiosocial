@@ -40,51 +40,72 @@
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
+        var regra = 0;
         var colors = [];
         var valores = [];
-        var legensas = [];
+        var legendas = [];
         var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var periodo = {{ $periodo_padrao }};
+        var myChart = null;
+        var dados = null;
 
-        $("#regra").change(function(){
+        loadDados(periodo, regra);
 
-            var regra = $(this).val();
-            var expression = $('#regra option').filter(':selected').data('expression');
+        $("#periodo").change(function(){
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
+        });
 
-            if(regra){
-
-                $.ajax({
-                    url: host+'/relatorios/dados/reactions',
-                    type: 'GET',
-                    success: function(response) {
-                        
-                        valores = [];
-                        legendas = [];
-                        colors = [];
-                        $(".table_reactions tbody tr").empty();
-                        
-                        $.each(response, function(index, value) {
-                            valores.push(value.count);
-                            legendas.push(value.icon);
-                            colors.push(value.color);
-                            
-                            $(".table_reactions tbody").append('<tr><td>'+value.name+'</td><td class="center">'+value.icon+'</td><td class="center">'+value.count+'</td></tr>');
-                        });  
-                        
-                        $(".table_reactions").removeClass("d-none");
-                        $(".display_regra").html(expression);
-                        geraGrafico();
-                    }
-                });
-
-            }else{
-                $(".table_reactions tbody tr").empty();
-                $(".table_reactions").addClass("d-none");
-                $("#chart_reaction").html("");
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
             }
         });
+
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
+
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
+
+            $.ajax({
+                url: host+'/relatorios/dados/reactions',
+                type: 'POST',
+                data: { "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra },
+                success: function(response) {
+
+                    valores = [];
+                    legendas = [];
+                    colors = [];
+                    $(".table_reactions tbody tr").empty();
+                    if(myChart) myChart.destroy();
+
+                    $.each(response, function(index, value) {
+                        valores.push(value.count);
+                        legendas.push(value.icon);
+                        colors.push(value.color);
+                            
+                        $(".table_reactions tbody").append('<tr><td>'+value.name+'</td><td class="center">'+value.icon+'</td><td class="center">'+value.count+'</td></tr>');
+                    });  
+                        
+                    $(".table_reactions").removeClass("d-none");
+                    geraGrafico();
+                }
+            });             
+        }
 
         function geraGrafico(){
 
