@@ -124,9 +124,10 @@ class RelatorioController extends Controller
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)
     {
+        $carbon = new Carbon();
+
         if($periodo == 0){
 
-          $carbon = new Carbon();
           $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
           $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
           
@@ -135,6 +136,7 @@ class RelatorioController extends Controller
 
         }else{
           $data_inicial = Carbon::now()->subDays($periodo);
+          $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
         }
 
         $this->periodo = $periodo;
@@ -165,9 +167,11 @@ class RelatorioController extends Controller
     public function getSentimentosRede(Request $request)
     {
 
-      $sentimentos_twitter = (new MediaTwitter())->getSentimentos($request->data_inicial, $request->data_final);
-      $sentimentos_facebook = (new FbPost())->getSentimentos($request->data_inicial, $request->data_final);
-      $sentimentos_instagram = (new Media())->getSentimentos($request->data_inicial, $request->data_final);
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
+      $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final);
+      $sentimentos_facebook = (new FbPost())->getSentimentos($this->data_inicial, $this->data_final);
+      $sentimentos_instagram = (new Media())->getSentimentos($this->data_inicial, $this->data_final);
 
       $sentimentos['facebook'] = array('rede_social' => "Facebook",
                                        'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,

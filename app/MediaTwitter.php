@@ -42,10 +42,13 @@ class MediaTwitter extends Model implements Auditable
 
     public function getSentimentos($data_inicial, $data_final)
     {
+        $dt_inicial = $data_inicial->format('Y-m-d');
+        $dt_final = $data_final->format('Y-m-d');
+
         return DB::select("SELECT sentiment, count(*) as total 
                             FROM media_twitter 
                             WHERE sentiment NOTNULL 
-                            AND created_tweet_at BETWEEN '$data_inicial 00:00:00' AND '$data_final 23:59:59'
+                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             GROUP BY sentiment 
                             ORDER BY sentiment");
     }
