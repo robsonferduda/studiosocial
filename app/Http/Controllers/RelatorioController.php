@@ -67,7 +67,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Volume diário de mensagens dividido por sentimentos";
       
-      return view('relatorios/sentimentos', compact('rules','periodo_relatorio','mensagem'));
+      return view('relatorios/sentimentos', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
     }
 
     public function wordcloud()
@@ -162,15 +162,28 @@ class RelatorioController extends Controller
       return response()->json($reactions);
     }
 
-    public function getSentimentos()
+    public function getSentimentosRede(Request $request)
     {
 
-      $sentimentos_twitter = (new MediaTwitter())->getSentimentos();
+      $sentimentos_twitter = (new MediaTwitter())->getSentimentos($request->data_inicial, $request->data_final);
+      $sentimentos_facebook = (new FbPost())->getSentimentos($request->data_inicial, $request->data_final);
+      $sentimentos_instagram = (new Media())->getSentimentos($request->data_inicial, $request->data_final);
 
-      $sentimentos[] = array('rede_social' => "Facebook",'total_positivo' => rand(1,100),'total_negativo' => rand(1,100),'total_neutro' => rand(1,100));
-      $sentimentos[] = array('rede_social' => "Instagram",'total_positivo' => rand(1,100),'total_negativo' => rand(1,100),'total_neutro' => rand(1,100));
-      $sentimentos[] = array('rede_social' => "Twitter",'total_positivo' => $sentimentos_twitter[2]->total,'total_negativo' => $sentimentos_twitter[0]->total,'total_neutro' => $sentimentos_twitter[1]->total);
+      $sentimentos['facebook'] = array('rede_social' => "Facebook",
+                                       'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,
+                                       'total_negativo' => ($sentimentos_facebook) ? $sentimentos_facebook[0]->total : 0,
+                                       'total_neutro' => ($sentimentos_facebook) ? $sentimentos_facebook[1]->total : 0);
 
+      $sentimentos['instagram'] = array('rede_social' => "Instagram",
+                                        'total_positivo' => ($sentimentos_instagram) ? $sentimentos_instagram[2]->total : 0,
+                                        'total_negativo' => ($sentimentos_instagram) ? $sentimentos_instagram[0]->total : 0,
+                                        'total_neutro' => ($sentimentos_instagram) ? $sentimentos_instagram[1]->total : 0,);
+
+      $sentimentos['twitter'] = array('rede_social' => "Twitter",
+                                      'total_positivo' => ($sentimentos_twitter) ? $sentimentos_twitter[2]->total : 0,
+                                      'total_negativo' => ($sentimentos_twitter) ? $sentimentos_twitter[0]->total : 0,
+                                      'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
+      
       return response()->json($sentimentos);
     }
 
@@ -184,6 +197,7 @@ class RelatorioController extends Controller
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
 
+            //Total de sentimentos do Twitter
             $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
             $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
             $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();

@@ -42,77 +42,66 @@
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        var host =  $('meta[name="base-url"]').attr('content');
+        var regra = 0;
         var dados_positivos = [];
         var dados_negativos = [];
         var dados_neutros = [];
+        
+        var periodo = {{ $periodo_padrao }};
+        var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var myChart = null;
+        var dados = null;
+        
+        loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
-        $.ajax({
-                    url: host+'/relatorios/dados/sentimentos',
-                    type: 'GET',
-                    success: function(response) {
-                        
-                        $(".table_sentimentos tbody tr").empty();
-                        dados_positivos = [];
-                        dados_negativos = [];
-                        dados_neutros = [];
-                        
-                        $.each(response, function(index, value) {  
+        $("#periodo").change(function(){
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
+        });
 
-                            dados_positivos.push(value.total_positivo);
-                            dados_negativos.push(value.total_negativo);
-                            dados_neutros.push(value.total_neutro);
-
-                            $(".table_sentimentos tbody").append('<tr><td>'+value.rede_social+'</td><td class="center">'+value.total_positivo+'</td><td class="center">'+value.total_negativo+'</td><td class="center">'+value.total_neutro+'</td></tr>');
-                        });  
-                        
-                        $(".table_sentimentos").removeClass("d-none");
-                        
-                        geraGrafico();
-                    }
-                });
-
-        $("#regra").change(function(){
-
-            var regra = $(this).val();
-            var expression = $('#regra option').filter(':selected').data('expression');
-
-            if(regra){
-
-                $.ajax({
-                    url: host+'/relatorios/dados/sentimentos',
-                    type: 'GET',
-                    success: function(response) {
-                        
-                        $(".table_sentimentos tbody tr").empty();
-                        dados_positivos = [];
-                        dados_negativos = [];
-                        dados_neutros = [];
-                        
-                        $.each(response, function(index, value) {  
-
-                            dados_positivos.push(value.total_positivo);
-                            dados_negativos.push(value.total_negativo);
-                            dados_neutros.push(value.total_neutro);
-
-                            $(".table_sentimentos tbody").append('<tr><td>'+value.rede_social+'</td><td class="center">'+value.total_positivo+'</td><td class="center">'+value.total_negativo+'</td><td class="center">'+value.total_neutro+'</td></tr>');
-                        });  
-                        
-                        $(".table_sentimentos").removeClass("d-none");
-                        $(".display_regra").html(expression);
-                        geraGrafico();
-                    }
-                });
-
-            }else{
-                $(".table_sentimentos tbody tr").empty();
-                $(".table_sentimentos").addClass("d-none");
-                $("#chart_sentiment").html("");
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
             }
         });
+
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
+
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
+
+            $.ajax({
+                url: host+'/relatorios/dados/sentimentos/rede',
+                type: 'POST',
+                data: { "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra },
+                success: function(response) {
+                    if(myChart) myChart.destroy();
+
+                    $(".table_sentimentos tbody tr").empty();
+                    $.each(response, function(index, value) {  
+                        $(".table_sentimentos tbody").append('<tr><td>'+value.rede_social+'</td><td class="center">'+value.total_positivo+'</td><td class="center">'+value.total_negativo+'</td><td class="center">'+value.total_neutro+'</td></tr>');
+                    }); 
+                    $(".table_sentimentos").removeClass("d-none");
+
+                    dados = response;
+                    geraGrafico();
+                }
+            }); 
+        }
 
         function geraGrafico(){
 
@@ -143,7 +132,7 @@
                         backgroundColor: '#e91ea1',
                         hoverBorderColor: '#fcc468',
                         borderWidth: 8,
-                        data: dados_positivos,
+                        data: [dados.instagram.total_positivo, dados.instagram.total_negativo, dados.instagram.total_neutro],
                     },
                     {
                         label: "Facebook",
@@ -152,7 +141,7 @@
                         backgroundColor: '#3f51b5',
                         hoverBorderColor: '#3f51b5',
                         borderWidth: 8,
-                        data: dados_negativos,
+                        data: [dados.facebook.total_positivo, dados.facebook.total_negativo, dados.facebook.total_neutro],
                     },
                     {
                         label: "Twitter",
@@ -161,7 +150,7 @@
                         backgroundColor: '#51bcda',
                         hoverBorderColor: '#51bcda',
                         borderWidth: 8,
-                        data: dados_neutros,
+                        data: [dados.twitter.total_positivo, dados.twitter.total_negativo, dados.twitter.total_neutro],
                     }
                 ]
             },

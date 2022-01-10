@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Media extends Model
@@ -35,4 +36,13 @@ class Media extends Model
         return $this->hasMany('App\IgComment','media_id','id');
     }
 
+    public function getSentimentos($data_inicial, $data_final)
+    {
+        return DB::select("SELECT sentiment, count(*) as total 
+                            FROM medias 
+                            WHERE sentiment NOTNULL 
+                            AND timestamp BETWEEN '$data_inicial 00:00:00' AND '$data_final 23:59:59'
+                            GROUP BY sentiment 
+                            ORDER BY sentiment");
+    }
 }

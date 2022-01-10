@@ -2,6 +2,7 @@
 
 namespace App;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class FbPost extends Model
@@ -28,5 +29,15 @@ class FbPost extends Model
     public function comments()
     {
         return $this->hasMany('App\FbComment','post_id','id');
+    }
+
+    public function getSentimentos($data_inicial, $data_final)
+    {
+        return DB::select("SELECT sentiment, count(*) as total 
+                            FROM fb_posts 
+                            WHERE sentiment NOTNULL 
+                            AND tagged_time BETWEEN '$data_inicial 00:00:00' AND '$data_final 23:59:59'
+                            GROUP BY sentiment 
+                            ORDER BY sentiment");
     }
 }
