@@ -18,45 +18,11 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                             <h3><i class="fa fa-smile-o text-success"></i> Positivos</h3>
-                            @foreach($positivos as $user)
-                                <div class="card">
-                                    <div class="row mb-3">
-                                        <div class="col-lg-2 col-md-2 m-auto">
-                                            @if($user->user_profile_image_url)
-                                                <img src="{{ str_replace('normal','400x400', $user->user_profile_image_url) }}" alt="Imagem de Perfil" class="rounded-pill">      
-                                            @else
-                                                <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
-                                            @endif
-                                        </div>
-                                        <div class="col-md-9">
-                                            <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $user->user_name }}" target="_BLANK">{{ $user->user_name }}</a></p>
-                                            <p class="mb-1">{{ $user->total }} postagens</p>
-                                            <a class="mb-1" href="{{ url('twitter/postagens/user/'.$user->user_name.'/sentimento/1') }}">Ver Postagens</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <div class="box_positivos"></div>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <h3><i class="fa fa-frown-o text-danger"></i> Negativos</h3>
-                            @foreach($negativos as $user)
-                                <div class="card">
-                                    <div class="row mb-3">
-                                        <div class="col-lg-2 col-md-2 m-auto">
-                                            @if($user->user_profile_image_url)
-                                                <img src="{{ str_replace('normal','400x400', $user->user_profile_image_url) }}" alt="Imagem de Perfil" class="rounded-pill">      
-                                            @else
-                                                <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
-                                            @endif
-                                        </div>
-                                        <div class="col-md-9">
-                                            <p class="mb-1 mt-2"><a href="https://twitter.com/{{ $user->user_name }}" target="_BLANK">{{ $user->user_name }}</a></p>
-                                            <p class="mb-1">{{ $user->total }} postagens</p>
-                                            <a class="mb-1" href="{{ url('twitter/postagens/user/'.$user->user_name.'/sentimento/-1') }}">Ver Postagens</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endforeach
+                            <div class="box_negativos"></div>
                         </div>
                     </div>
                 </div>            
@@ -65,16 +31,91 @@
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-        $("#regra").change(function(){
+        var regra = 0;
+        var periodo = {{ $periodo_padrao }};
+        var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var myChart = null;
+        var dados = null;
+        
+        loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
-            var regra = $(this).val();
-            var expression = $('#regra option').filter(':selected').data('expression');
-
-            
+        $("#periodo").change(function(){
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
         });
+
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
+            }
+        });
+
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
+
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
+
+            $(".box_negativos").empty();
+            $(".box_positivos").empty();
+
+            $.ajax({
+                url: host+'/relatorios/dados/influenciadores',
+                type: 'POST',
+                data: { "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra },
+                success: function(response) {
+                    
+                    $.each(response.negativos, function(index, value) {
+
+                        $(".box_negativos").append('<div class="card">'+
+                                                        '<div class="row mb-3">' +
+                                                            '<div class="col-lg-2 col-md-2 m-auto">' +
+                                                                '<img src="'+value.url_image+'" alt="Imagem de Perfil" class="rounded-pill">' +
+                                                            '</div>' +
+                                                            '<div class="col-md-9">' +
+                                                                '<p class="mb-1 mt-2"><a href="'+value.url_perfil+'" target="_BLANK">'+value.user_name+'</a></p>' +
+                                                                '<p class="mb-1">'+value.total+' postagens</p>' +
+                                                                '<a class="mb-1" href="../twitter/postagens/user/'+value.user_name+'/sentimento/-1">Ver Postagens</a>' +
+                                                            '</div>' +
+                                                        '</div>' +
+                                                   '</div>');
+                        
+                        
+                    });
+
+                    $.each(response.positivos, function(index, value) {
+
+                        $(".box_positivos").append('<div class="card">'+
+                                                        '<div class="row mb-3">' +
+                                                            '<div class="col-lg-2 col-md-2 m-auto">' +
+                                                                '<img src="'+value.url_image+'" alt="Imagem de Perfil" class="rounded-pill">' +
+                                                            '</div>' +
+                                                            '<div class="col-md-9">' +
+                                                                '<p class="mb-1 mt-2"><a href="'+value.url_perfil+'" target="_BLANK">'+value.user_name+'</a></p>' +
+                                                                '<p class="mb-1">'+value.total+' postagens</p>' +
+                                                                '<a class="mb-1" href="../twitter/postagens/user/'+value.user_name+'/sentimento/1">Ver Postagens</a>' +
+                                                            '</div>' +
+                                                        '</div>' +
+                                                '</div>');
+
+
+                        });
+                }
+            }); 
+        }
     });
 </script>
 @endsection    

@@ -26,7 +26,7 @@
                                 <div class="icon-big icon-warning">
                                     <i class="fa fa-line-chart text-info"></i>
                                 </div>
-                                <h4 class="mt-2 text-dark">Evolução Por Rede Social</h4>
+                                <h4 class="mt-2 text-dark">Evolução Rede Social</h4>
                             </a>
                         </div>
                     </div>

@@ -53,23 +53,31 @@ class MediaTwitter extends Model implements Auditable
                             ORDER BY sentiment");
     }
 
-    public function getInfluenciadoresPositivos($client_id)
+    public function getInfluenciadoresPositivos($client_id, $data_inicial, $data_final)
     {
+        $dt_inicial = $data_inicial->format('Y-m-d');
+        $dt_final = $data_final->format('Y-m-d');
+
         return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(1)
                             AND client_id = $client_id
+                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
                             LIMIT 10");
     }
 
-    public function getInfluenciadoresNegativos($client_id)
+    public function getInfluenciadoresNegativos($client_id, $data_inicial, $data_final)
     {
+        $dt_inicial = $data_inicial->format('Y-m-d');
+        $dt_final = $data_final->format('Y-m-d');
+
         return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(-1)
                             AND client_id = $client_id
+                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
                             LIMIT 10");

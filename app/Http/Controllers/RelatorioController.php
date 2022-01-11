@@ -107,19 +107,43 @@ class RelatorioController extends Controller
       $rules = $this->rules;
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
-      $mensagem = "Influenciadores positivos e negativos";
-
+      $mensagem = "Influenciadores positivos e negativos do Twitter";
       
-      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
-      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
-
-      return view('relatorios/influenciadores', compact('rules','positivos','negativos','mensagem','periodo_relatorio'));
+      return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
     public function retornaDataPeriodo()
     {
         return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                      'data_final'   => Carbon::now()->format('d/m/Y'));
+    }
+
+    public function getInfluenciadores(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
+      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
+      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
+
+      foreach($dados['negativos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['negativos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['negativos'][$key]->url_image = 'img/user.png';
+        }
+        $dados['negativos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      foreach($dados['positivos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['positivos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['positivos'][$key]->url_image = '../img/user.png';
+        }
+        $dados['positivos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      return response()->json($dados);
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)
