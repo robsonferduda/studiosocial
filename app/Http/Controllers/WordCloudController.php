@@ -67,4 +67,38 @@ class WordCloudController extends Controller
         echo json_encode($word_cloud);
         
     }
+
+    public function getWordsByRule($rule) 
+    {   
+        if(isset($this->cliente['id'])) {
+
+            $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->pluck('word')->toArray();
+
+            $file = Storage::disk('wordcloud')->get("cliente-{$this->cliente['id']}-rule-{$rule}-wordclould.json");
+            //dd($words_execption);
+
+            $words = json_decode($file);
+            $words = (Array) $words;
+            arsort($words);
+
+            $words = array_slice($words, 0, 200);
+
+            $word_cloud = [];
+            foreach($words as $word => $qtd_times) {
+                if(in_array($word, $words_execption)){
+                    continue;
+                }
+
+                $word_cloud[$word] = $qtd_times;  
+            }
+
+        } else {
+                $word_cloud = ['Cliente' => 3, 'Não' => 2, 'Selecionado' => 2];               
+        }
+
+        echo json_encode($word_cloud);
+        
+    }
+
+
 }
