@@ -31,7 +31,7 @@ class RelatorioController extends Controller
         $this->mensagem = "";
         $this->client_id = session('cliente')['id'];
         $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
-        $this->rules = Rule::where('client_id', $this->client_id)->get();
+        $this->rules = Rule::where('client_id', $this->client_id)->orderBy('name')->get();
         Session::put('url','relatorios');
     }
 
