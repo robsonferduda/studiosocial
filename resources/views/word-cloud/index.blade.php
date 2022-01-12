@@ -8,7 +8,7 @@
                     <h4 class="card-title ml-2"><i class="fa fa-cloud"></i> Nuvem de Palavras</h4>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ url('regras/create') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-minus"></i> Expressões Removidas</a>
+                    <a href="{{ url('nuvem-palavras/excecoes') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-minus"></i> Expressões Removidas</a>
                 </div>
             </div>
         </div>
