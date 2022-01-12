@@ -62,6 +62,25 @@ $(document).ready(function() {
         });
     }); 
 
+    $('body').on("click", ".button-redo", function(e) {
+        e.preventDefault();
+        var form = $(this).closest("form");
+        Swal.fire({
+            title: "Tem certeza que deseja voltar com essa expressão?",
+            type: "warning",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: "Sim!",
+            cancelButtonText: "Cancelar"
+        }).then(function(result) {
+            if (result.value) {
+                form.submit();
+            }
+        });
+    }); 
+
+
     $('body').on("click", ".button-remove-evento", function(e) {
         e.preventDefault();
         var link = $(this).attr('href');
