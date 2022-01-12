@@ -84,10 +84,13 @@ Route::get('twitter', 'TwitterController@index');
 Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterController@getTweetByUserAndSentiment');
 
 Route::get('nuvem-palavras', 'WordCloudController@render');
+Route::get('nuvem-palavras/excecoes', 'WordCloudController@excecoes');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
 Route::get('nuvem-palavras/rule/{rule}/words', 'WordCloudController@getWordsByRule');
 Route::get('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 Route::post('nuvem-palavras/remove', 'WordCloudController@remove');
+Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecaoRemove')->name('excecao.remove');
+
 
 
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');

@@ -7,6 +7,7 @@ use App\WordsExecption;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Laracasts\Flash\Flash;
 use Symfony\Component\Process\Process;
 
 class WordCloudController extends Controller
@@ -97,6 +98,26 @@ class WordCloudController extends Controller
         }
 
         echo json_encode($word_cloud);
+        
+    }
+
+    public function excecoes()
+    {
+        $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->get();
+
+        return view('word-cloud/exceptions', compact('words_execption'));
+    }
+
+    public function excecaoRemove($id)
+    {
+        $word =  WordsExecption::where('id', $id)->where('client_id', $this->cliente['id'])->first();
+
+        if($word->delete())
+            Flash::success('<i class="fa fa-check"></i> Registro retornado com sucesso.');
+        else
+            Flash::error("Erro ao retornar o registro");
+
+        return redirect('nuvem-palavras/excecoes')->withInput();
         
     }
 

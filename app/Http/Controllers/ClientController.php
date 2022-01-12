@@ -148,7 +148,7 @@ class ClientController extends Controller
         else
             Flash::error("Erro ao excluir o registro");
 
-        return redirect('clientes')->withInput();;
+        return redirect('clientes')->withInput();
     }
 
     public function getFacebookAccounts($client)
