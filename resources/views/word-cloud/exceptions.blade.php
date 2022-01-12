@@ -36,7 +36,7 @@
                                 <form class="form-delete" style="display: inline;" action="{{ url('nuvem-palavras/excecao/remove/'.$exception->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button title="Refazer" type="submit" class="btn btn-link btn-icon button-redo" title="Delete">
+                                    <button title="Restaurar" type="submit" class="btn btn-link btn-icon button-redo" title="Delete">
                                         <i class="fa fa-repeat"></i>
                                     </button>
                                 </form>
