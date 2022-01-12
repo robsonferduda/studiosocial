@@ -88,7 +88,7 @@ Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterCont
 Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
 Route::get('nuvem-palavras/rule/{rule}/words', 'WordCloudController@getWordsByRule');
-Route::get('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
+Route::post('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 Route::post('nuvem-palavras/remove', 'WordCloudController@remove');
 
 

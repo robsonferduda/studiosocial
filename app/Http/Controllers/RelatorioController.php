@@ -97,9 +97,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Nuvem baseada no volume de hashtags";
 
-      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-
-      return view('relatorios/hashtags', compact('rules','lista_hashtags','mensagem','periodo_relatorio'));
+      return view('relatorios/hashtags', compact('rules', 'mensagem', 'periodo_padrao','periodo_relatorio'));
     }
 
     public function influenciadores()
@@ -168,11 +166,11 @@ class RelatorioController extends Controller
         $this->data_final = $data_final;
     }
 
-    public function getNuvemHashtags()
+    public function getNuvemHashtags(Request $request)
     {
-      $rules = Rule::all();
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      
       $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-
       echo json_encode($lista_hashtags);
     }    
 
@@ -299,9 +297,12 @@ class RelatorioController extends Controller
       $medias = array();
       $lista_hastags = array();
 
-      $medias_instagram = Media::where('client_id', $this->client_id)->get();
-      $medias_facebook  = FbPost::where('client_id', $this->client_id)->get();
-      $medias_twitter = MediaTwitter::where('client_id', $this->client_id)->get();
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
+      
+      $medias_instagram = Media::where('client_id', $this->client_id)->whereBetween('timestamp',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_facebook  = FbPost::where('client_id', $this->client_id)->whereBetween('tagged_time',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_twitter = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
 
       foreach ($medias_instagram as $media) {
         $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
