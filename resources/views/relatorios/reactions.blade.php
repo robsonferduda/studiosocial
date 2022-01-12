@@ -16,6 +16,9 @@
                 <div class="card-body">
                     @include('layouts/regra')
                     <div class="row">
+                        <div class="col-lg-12 col-md-12 msg">
+
+                        </div>
                         <div class="col-lg-6 col-md-6">
                             <table class="table table-hover table_reactions d-none">
                                 <thead class="">
@@ -87,22 +90,31 @@
                         "regra": regra },
                 success: function(response) {
 
-                    valores = [];
-                    legendas = [];
-                    colors = [];
-                    $(".table_reactions tbody tr").empty();
-                    if(myChart) myChart.destroy();
+                    $(".msg").html("");
 
-                    $.each(response, function(index, value) {
-                        valores.push(value.count);
-                        legendas.push(value.icon);
-                        colors.push(value.color);
+                    if(response.length){
+                        valores = [];
+                        legendas = [];
+                        colors = [];
+                        $(".table_reactions tbody tr").empty();
+                        if(myChart) myChart.destroy();
+
+                        $.each(response, function(index, value) {
+                            valores.push(value.count);
+                            legendas.push(value.icon);
+                            colors.push(value.color);
+                                
+                            $(".table_reactions tbody").append('<tr><td>'+value.name+'</td><td class="center">'+value.icon+'</td><td class="center">'+value.count+'</td></tr>');
+                        });  
                             
-                        $(".table_reactions tbody").append('<tr><td>'+value.name+'</td><td class="center">'+value.icon+'</td><td class="center">'+value.count+'</td></tr>');
-                    });  
-                        
-                    $(".table_reactions").removeClass("d-none");
-                    geraGrafico();
+                        $(".table_reactions").removeClass("d-none");
+                        geraGrafico();
+
+                    }else{
+                        if(myChart) myChart.destroy();
+                        $(".table_reactions").addClass("d-none");
+                        $(".msg").html('<p class="ml-1 text-primary">Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
+                    }
                 }
             });             
         }

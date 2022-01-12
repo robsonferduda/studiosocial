@@ -31,7 +31,7 @@ class RelatorioController extends Controller
         $this->mensagem = "";
         $this->client_id = session('cliente')['id'];
         $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
-        $this->rules = Rule::where('client_id', $this->client_id)->get();
+        $this->rules = Rule::where('client_id', $this->client_id)->orderBy('name')->get();
         Session::put('url','relatorios');
     }
 
@@ -107,19 +107,43 @@ class RelatorioController extends Controller
       $rules = $this->rules;
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
-      $mensagem = "Influenciadores positivos e negativos";
-
+      $mensagem = "Influenciadores positivos e negativos do Twitter";
       
-      $positivos = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id);
-      $negativos = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id);
-
-      return view('relatorios/influenciadores', compact('rules','positivos','negativos','mensagem','periodo_relatorio'));
+      return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
     public function retornaDataPeriodo()
     {
         return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                      'data_final'   => Carbon::now()->format('d/m/Y'));
+    }
+
+    public function getInfluenciadores(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
+      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
+      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
+
+      foreach($dados['negativos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['negativos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['negativos'][$key]->url_image = 'img/user.png';
+        }
+        $dados['negativos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      foreach($dados['positivos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['positivos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['positivos'][$key]->url_image = '../img/user.png';
+        }
+        $dados['positivos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      return response()->json($dados);
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)
@@ -164,6 +188,7 @@ class RelatorioController extends Controller
                               WHERE t1.id = t2.post_id 
                               AND t2.reaction_id = t3.id 
                               AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                              AND t1.client_id = $this->client_id
                               GROUP BY t3.name, t3.color, t3.icon 
                               ORDER BY t3.name");
 

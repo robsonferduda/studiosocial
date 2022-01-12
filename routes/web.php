@@ -31,6 +31,8 @@ Route::get('relatorios/hashtags','RelatorioController@hashtags');
 Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
 Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
 Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
+
+Route::post('relatorios/dados/influenciadores','RelatorioController@getInfluenciadores');
 Route::post('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimentosRede');
 Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
