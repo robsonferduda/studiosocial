@@ -10,6 +10,8 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 Auth::routes();
 
 Route::get('auditoria','AuditoriaController@index');
+Route::get('auditoria/detalhes/{id}','AuditoriaController@show');
+
 Route::get('boletins','BoletimController@index');
 Route::get('boletim/{id}','BoletimController@detalhes');
 Route::get('boletim/{id}/enviar','BoletimController@enviar');

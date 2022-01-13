@@ -17,14 +17,14 @@
                 @include('layouts.mensagens')
             </div>
             <div class="col-md-12">
-                <table class="table">
+                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Data</th>
                             <th>Nível</th>
                             <th>Usuário</th>
-                            <th>Operação</th>
-                            <th>Ações</th>
+                            <th class="text-center">Operação</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -41,8 +41,8 @@
                                     @endif
                                 </td>
                                 <td>{{ ($audit->user) ? $audit->user->name : 'Usuário não identificado' }}</td>
-                                <td>{{ ($audit->user) ? $audit->event : 'Evento não identificado' }}</td>
-                                <td>
+                                <td class="text-center">{{ ($audit->user) ? $audit->event : 'Evento não identificado' }}</td>
+                                <td class="text-center">
                                     <a href="{{ url('auditoria/detalhes', $audit->id) }}"><i class="fa fa-eye"></i> Ver</a>
                                 </td>
                             </tr>
