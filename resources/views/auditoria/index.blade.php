@@ -40,8 +40,8 @@
                                         @endforelse
                                     @endif
                                 </td>
-                                <td>{{ $audit->user->name }}</td>
-                                <td>{{ $audit->event }}</td>
+                                <td>{{ ($audit->user) ? $audit->user->name : 'Usuário não identificado' }}</td>
+                                <td>{{ ($audit->user) ? $audit->event : 'Evento não identificado' }}</td>
                                 <td>
                                     <a href="{{ url('auditoria/detalhes', $audit->id) }}"><i class="fa fa-eye"></i> Ver</a>
                                 </td>
