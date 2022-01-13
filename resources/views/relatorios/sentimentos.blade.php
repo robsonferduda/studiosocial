@@ -79,6 +79,7 @@
 
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
+            $('.card').loader('show');
 
             $.ajax({
                 url: host+'/relatorios/pdf/sentimentos/rede',
@@ -124,8 +125,10 @@
                             window.location.href = downloadUrl;
                         }
 
-                        setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                        setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
                     }
+
+                    $('.card').loader('hide');
                 }
             }); 
 

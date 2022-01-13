@@ -27,6 +27,7 @@ Route::get('permissoes','PermissaoController@index');
 
 Route::get('relatorios','RelatorioController@index');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
+Route::get('relatorios/gerenciador','RelatorioController@gerenciador');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/hashtags','RelatorioController@hashtags');

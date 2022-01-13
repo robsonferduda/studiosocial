@@ -110,6 +110,16 @@ class RelatorioController extends Controller
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
+    public function gerenciador()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Geração de relatórios em lote";
+      
+      return view('relatorios/gerenciador', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
+    }
+
     public function retornaDataPeriodo()
     {
         return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
