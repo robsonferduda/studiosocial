@@ -32,7 +32,7 @@
                             <tr>
                                 <td>{{ date('d/m/Y H:i:s', strtotime($audit->created_at)) }}</td>
                                 <td>
-                                    @if(isset($audit->user->roles()))
+                                    @if(!empty($audit->user->roles()))
                                         @forelse($audit->user->roles()->get() as $role)
                                             <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
                                         @empty
