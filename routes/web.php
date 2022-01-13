@@ -38,6 +38,8 @@ Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimen
 Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 
+Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
+
 Route::get('pdf','RelatorioController@pdf');
 
 Route::get('perfil','UserController@perfil');

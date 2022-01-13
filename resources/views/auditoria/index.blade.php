@@ -32,11 +32,13 @@
                             <tr>
                                 <td>{{ date('d/m/Y H:i:s', strtotime($audit->created_at)) }}</td>
                                 <td>
-                                    @forelse($audit->user->roles()->get() as $role)
-                                        <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
-                                    @empty
-                                        Nenhum perfil associado
-                                    @endforelse
+                                    @if($audit->user->roles())
+                                        @forelse($audit->user->roles()->get() as $role)
+                                            <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
+                                        @empty
+                                            Nenhum perfil associado
+                                        @endforelse
+                                    @endif
                                 </td>
                                 <td>{{ $audit->user->name }}</td>
                                 <td>{{ $audit->event }}</td>
