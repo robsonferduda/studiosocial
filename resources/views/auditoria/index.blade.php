@@ -43,7 +43,7 @@
                                 <td>{{ $audit->user->name }}</td>
                                 <td>{{ $audit->event }}</td>
                                 <td>
-
+                                    <a href="{{ url('auditoria/detalhes', $audit->id) }}"><i class="fa fa-eye"></i> Ver</a>
                                 </td>
                             </tr>
                         @endforeach
