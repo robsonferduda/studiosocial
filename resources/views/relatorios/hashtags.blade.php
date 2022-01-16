@@ -20,7 +20,7 @@
                             <div id='cloud' style="height: 450px;"></div>
                         </div>
                         <div class="col-lg-5 col-md-5">
-                            <table class="table table-hover">
+                            <table class="table table-hover table_hashtags">
                                 <thead class="">
                                     <tr>
                                         <th>Hashtag</th>
@@ -28,12 +28,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach(array_slice($lista_hashtags, 0, 10) as $key => $value)
-                                        <tr>
-                                            <td>{{ $key }}</td>
-                                            <td class="center">{{ $value }}</td>
-                                        </tr>
-                                    @endforeach
+                                    
                                 </tbody>
                             </table> 
                         </div>
@@ -44,66 +39,108 @@
     </div>
 @endsection
 @section('script')
+<script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
 
-    $('body').loader('show');
+        var regra = 0;
+        var periodo = {{ $periodo_padrao }};
+        var host =  $('meta[name="base-url"]').attr('content');
+        var token = $('meta[name="csrf-token"]').attr('content');
+        var myChart = null;
+        var dados = null;
 
-    var APP_URL = {!! json_encode(url('/')) !!}
+        $('body').loader('show');
+        loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
-    fetch(APP_URL+'/nuvem-palavras/hashtags', {
-        method: 'GET', 
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-    }).then(function(response) {
-        return response.json();
-        //words = JSON.stringify(words);
-
-    }).then(function(response){
-        
-        let words = [];
-
-        $('body').loader('hide');
-
-        Object.entries(response).forEach(element => {
-            words.push(
-                {
-                    text: element[0], 
-                    weight: element[1],
-                    html: {
-                        class: 'cloud-word'
-                    },
-                    handlers: {
-                        click: function(e) {
-                            for( var i = 0; i < words.length; i++){ 
-                            if (words[i].text === this.textContent) { 
-                                    words.splice(i, 1); 
-                                break; 
-                            }
-                        }
-
-                        $('#cloud').jQCloud('update', words);
-
-                        }
-                    },
-                    
-                }
-            );
+        $("#periodo").change(function(){
+            periodo = $(this).val();
+            loadDados(periodo, regra);          
         });
 
-        let cloud = $('#cloud').jQCloud(words, {
-                autoResize: true,
-                colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
-                fontSize: function (width, height, step) {
-                    if (step == 1)
-                        return width * 0.01 * step + 'px';
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
+            }
+        });
 
-                    return width * 0.009 * step + 'px';
-                }
-            });            
-    });
+        $("#regra").change(function(){
+            loadDados(periodo, regra);
+        });
+
+        function loadDados(periodo, regra){
+
+            var data_inicial = $(".dt_inicial_relatorio").val();
+            var data_final = $(".dt_final_relatorio").val();
+            var ctrl = 0;
+            $(".table_hashtags tbody").empty();
+
+            fetch(host+'/nuvem-palavras/hashtags', {
+                method: 'POST',
+                body: JSON.stringify({ "_token": token,
+                        "periodo": periodo,
+                        "data_inicial": data_inicial,
+                        "data_final": data_final,
+                        "regra": regra }), 
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+            }).then(function(response) {
+                return response.json();
+            }).then(function(response){
+                
+                $('body').loader('hide');
+                let words = [];
+            
+                Object.entries(response).forEach(element => {
+
+                    if(ctrl < 10)
+                        $(".table_hashtags tbody").append('<tr><td>'+element[0]+'</td><td class="center">'+element[1]+'</td></tr>');
+
+                    ctrl++;
+
+                    words.push(
+                        {
+                            text: element[0], 
+                            weight: element[1],
+                            html: {
+                                class: 'cloud-word'
+                            },
+                            handlers: {
+                                click: function(e) {
+                                    for( var i = 0; i < words.length; i++){ 
+                                    if (words[i].text === this.textContent) { 
+                                            words.splice(i, 1); 
+                                        break; 
+                                    }
+                                }
+
+                                $('#cloud').jQCloud('update', words);
+
+                                }
+                            },
+                            
+                        }
+                    );
+                });
+
+                $('#cloud').jQCloud(words, {
+                    autoResize: true,
+                    colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
+                    fontSize: function (width, height, step) {
+                        if (step == 1)
+                            return width * 0.01 * step + 'px';
+
+                        return width * 0.009 * step + 'px';
+                    }
+                });       
+                
+                $('#cloud').jQCloud('update', words);
+            });
+
+        }
 });
 </script>
 @endsection    

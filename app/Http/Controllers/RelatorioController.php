@@ -97,9 +97,7 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Nuvem baseada no volume de hashtags";
 
-      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-
-      return view('relatorios/hashtags', compact('rules','lista_hashtags','mensagem','periodo_relatorio'));
+      return view('relatorios/hashtags', compact('rules', 'mensagem', 'periodo_padrao','periodo_relatorio'));
     }
 
     public function influenciadores()
@@ -110,6 +108,16 @@ class RelatorioController extends Controller
       $mensagem = "Influenciadores positivos e negativos do Twitter";
       
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
+    }
+
+    public function gerenciador()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Geração de relatórios em lote";
+      
+      return view('relatorios/gerenciador', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
     public function retornaDataPeriodo()
@@ -168,11 +176,11 @@ class RelatorioController extends Controller
         $this->data_final = $data_final;
     }
 
-    public function getNuvemHashtags()
+    public function getNuvemHashtags(Request $request)
     {
-      $rules = Rule::all();
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      
       $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-
       echo json_encode($lista_hashtags);
     }    
 
@@ -299,9 +307,12 @@ class RelatorioController extends Controller
       $medias = array();
       $lista_hastags = array();
 
-      $medias_instagram = Media::where('client_id', $this->client_id)->get();
-      $medias_facebook  = FbPost::where('client_id', $this->client_id)->get();
-      $medias_twitter = MediaTwitter::where('client_id', $this->client_id)->get();
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
+      
+      $medias_instagram = Media::where('client_id', $this->client_id)->whereBetween('timestamp',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_facebook  = FbPost::where('client_id', $this->client_id)->whereBetween('tagged_time',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_twitter = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
 
       foreach ($medias_instagram as $media) {
         $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
@@ -320,83 +331,86 @@ class RelatorioController extends Controller
 
     
 
-    public function pdf()
+    public function pdf(Request $request)
     {
         $nome_arquivo = date('YmdHis').".pdf";
-        
-        $chartData = [
-            "type" => 'horizontalBar',
-              "data" => [
-                "labels" => ['Coluna 1', 'Coluna 2', 'Coluna 3'],
-                  "datasets" => [
-                    [
-                      "label" => "Dados", 
-                      "data" => [100, 60, 20],
-                      "backgroundColor" => ['#27ae60', '#f1c40f', '#e74c3c']
-                    ], 
-                  ],
-                ]
-            ];
-        
-        $chartData = json_encode($chartData);
-
-        $chartData = "{
-            type: 'bar',
-            data: {
-            labels: ['Positivo', 'Negativo', 'Neutro'],
-                datasets: [{
-                    label: 'Facebook',
-                    data: [35, 52, 18]
-                }, {
-                    label: 'Instagram',
-                    data: [63, 27, 10]
-                },{
-                    label: 'Twitter',
-                    data: [81, 11, 80]
-                }]
-            },
-            options: {
-                legend: {
-                  position: 'bottom',
-                  labels: {
-                    fontSize: 10,
-                  }
-                },
-                title: {
-                  display: true,
-                  text: 'Redes Sociais x Sentimentos',
-                  fontSize: 12,
-                },
-                scales: {
-                  yAxes: [
-                    {
-                      ticks: {
-                        suggestedMax: 10,
-                        fontSize: 10,
-                        beginAtZero: true,
-                        fontFamily: 'Montserrat',
-                      },
-                    },
-                  ],
-                  xAxes: [
-                    {
-                      ticks: {
-                        fontFamily: 'Montserrat',
-                        fontSize: 10,
-                      },
-                    },
-                  ],
-                },
-              },
-        }";
-
-        $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
-
-        $chartData = file_get_contents($chartURL); 
-        $chart = 'data:image/png;base64, '.base64_encode($chartData);
+        $chart = $this->getGraficoImg();
 
         $pdf = DOMPDF::loadView('relatorios/pdf', compact('chart'));
-
         return $pdf->download($nome_arquivo);
+    }
+
+    public function getGraficoImg()
+    {
+        $chartData = [
+          "type" => 'horizontalBar',
+            "data" => [
+              "labels" => ['Coluna 1', 'Coluna 2', 'Coluna 3'],
+                "datasets" => [
+                  [
+                    "label" => "Dados", 
+                    "data" => [100, 60, 20],
+                    "backgroundColor" => ['#27ae60', '#f1c40f', '#e74c3c']
+                  ], 
+                ],
+              ]
+          ];
+      
+      $chartData = json_encode($chartData);
+
+      $chartData = "{
+          type: 'bar',
+          data: {
+          labels: ['Positivo', 'Negativo', 'Neutro'],
+              datasets: [{
+                  label: 'Facebook',
+                  data: [35, 52, 18]
+              }, {
+                  label: 'Instagram',
+                  data: [63, 27, 10]
+              },{
+                  label: 'Twitter',
+                  data: [81, 11, 80]
+              }]
+          },
+          options: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  fontSize: 10,
+                }
+              },
+              title: {
+                display: true,
+                text: 'Redes Sociais x Sentimentos',
+                fontSize: 12,
+              },
+              scales: {
+                yAxes: [
+                  {
+                    ticks: {
+                      suggestedMax: 10,
+                      fontSize: 10,
+                      beginAtZero: true,
+                      fontFamily: 'Montserrat',
+                    },
+                  },
+                ],
+                xAxes: [
+                  {
+                    ticks: {
+                      fontFamily: 'Montserrat',
+                      fontSize: 10,
+                    },
+                  },
+                ],
+              },
+            },
+      }";
+
+      $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
+
+      $chartData = file_get_contents($chartURL); 
+      return 'data:image/png;base64, '.base64_encode($chartData);
     }
 }

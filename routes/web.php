@@ -10,6 +10,8 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 Auth::routes();
 
 Route::get('auditoria','AuditoriaController@index');
+Route::get('auditoria/detalhes/{id}','AuditoriaController@show');
+
 Route::get('boletins','BoletimController@index');
 Route::get('boletim/{id}','BoletimController@detalhes');
 Route::get('boletim/{id}/enviar','BoletimController@enviar');
@@ -25,6 +27,7 @@ Route::get('permissoes','PermissaoController@index');
 
 Route::get('relatorios','RelatorioController@index');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
+Route::get('relatorios/gerenciador','RelatorioController@gerenciador');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/hashtags','RelatorioController@hashtags');
@@ -37,6 +40,8 @@ Route::post('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimentosRede');
 Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
+
+Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 
 Route::get('pdf','RelatorioController@pdf');
 
@@ -89,7 +94,7 @@ Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/excecoes', 'WordCloudController@excecoes');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
 Route::get('nuvem-palavras/rule/{rule}/words', 'WordCloudController@getWordsByRule');
-Route::get('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
+Route::post('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 Route::post('nuvem-palavras/remove', 'WordCloudController@remove');
 Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecaoRemove')->name('excecao.remove');
 

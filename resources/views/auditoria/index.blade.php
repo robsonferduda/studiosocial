@@ -17,14 +17,14 @@
                 @include('layouts.mensagens')
             </div>
             <div class="col-md-12">
-                <table class="table">
+                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Data</th>
                             <th>Nível</th>
                             <th>Usuário</th>
-                            <th>Operação</th>
-                            <th>Ações</th>
+                            <th class="text-center">Operação</th>
+                            <th class="text-center">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -32,16 +32,18 @@
                             <tr>
                                 <td>{{ date('d/m/Y H:i:s', strtotime($audit->created_at)) }}</td>
                                 <td>
-                                    @forelse($audit->user->roles()->get() as $role)
-                                        <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
-                                    @empty
-                                        Nenhum perfil associado
-                                    @endforelse
+                                    @if($audit->user and $audit->user->roles())
+                                        @forelse($audit->user->roles()->get() as $role)
+                                            <span class="badge badge-{{ $role->display_color }}">{{ $role->display_name }}</span>
+                                        @empty
+                                            Nenhum perfil associado
+                                        @endforelse
+                                    @endif
                                 </td>
-                                <td>{{ $audit->user->name }}</td>
-                                <td>{{ $audit->event }}</td>
-                                <td>
-
+                                <td>{{ ($audit->user) ? $audit->user->name : 'Usuário não identificado' }}</td>
+                                <td class="text-center">{{ ($audit->user) ? $audit->event : 'Evento não identificado' }}</td>
+                                <td class="text-center">
+                                    <a href="{{ url('auditoria/detalhes', $audit->id) }}"><i class="fa fa-eye"></i> Ver</a>
                                 </td>
                             </tr>
                         @endforeach

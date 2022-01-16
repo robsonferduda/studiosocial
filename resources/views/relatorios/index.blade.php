@@ -115,5 +115,21 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-3 col-md-6 col-sm-6">
+            <div class="card card-stats box-relatorio">
+                <div class="card-body text-center">
+                    <div class="row">
+                        <div class="col-12 col-md-12 mb-0">
+                            <a class="link-relatorio" href="{{ url('relatorios/gerenciador') }}">
+                                <div class="icon-big icon-warning">
+                                    <i class="fa fa-cogs text-warning"></i>
+                                </div>
+                                <h4 class="mt-2 text-dark">Gerenciador</h4>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
