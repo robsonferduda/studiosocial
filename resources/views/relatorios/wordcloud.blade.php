@@ -14,7 +14,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @include('layouts/regra-wordcloud')
+                    @include('layouts/regra')
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <div id='cloud' style="height: 400px;"></div>
@@ -29,6 +29,9 @@
 <script src="{{ asset('js/relatorios.js') }}"></script>
 <script>
     $(document).ready(function() {
+
+        var regra = 0;
+        var periodo = {{ $periodo_padrao }};
 
         $("#regra").change(function(){
 
