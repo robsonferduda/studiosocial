@@ -40,6 +40,7 @@ Route::post('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimentosRede');
 Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
+Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPeriodo');
 
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 
@@ -93,7 +94,6 @@ Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterCont
 Route::get('nuvem-palavras', 'WordCloudController@render');
 Route::get('nuvem-palavras/excecoes', 'WordCloudController@excecoes');
 Route::get('nuvem-palavras/words', 'WordCloudController@getWords');
-Route::get('nuvem-palavras/rule/{rule}/words', 'WordCloudController@getWordsByRule');
 Route::post('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 Route::post('nuvem-palavras/remove', 'WordCloudController@remove');
 Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecaoRemove')->name('excecao.remove');
