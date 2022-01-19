@@ -24,11 +24,13 @@ class RelatorioController extends Controller
     private $data_final;
     private $periodo_padrao;
     private $rules;
+    private $rule;
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->mensagem = "";
+        $this->rule = null;
         $this->client_id = session('cliente')['id'];
         $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
         $this->rules = Rule::where('client_id', $this->client_id)->orderBy('name')->get();
@@ -205,29 +207,33 @@ class RelatorioController extends Controller
 
     public function getSentimentosRede(Request $request)
     {
-
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-
-      $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final);
-      $sentimentos_facebook = (new FbPost())->getSentimentos($this->data_inicial, $this->data_final);
-      $sentimentos_instagram = (new Media())->getSentimentos($this->data_inicial, $this->data_final);
-
-      $sentimentos['facebook'] = array('rede_social' => "Facebook",
-                                       'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,
-                                       'total_negativo' => ($sentimentos_facebook) ? $sentimentos_facebook[0]->total : 0,
-                                       'total_neutro' => ($sentimentos_facebook) ? $sentimentos_facebook[1]->total : 0);
-
-      $sentimentos['instagram'] = array('rede_social' => "Instagram",
-                                        'total_positivo' => ($sentimentos_instagram) ? $sentimentos_instagram[2]->total : 0,
-                                        'total_negativo' => ($sentimentos_instagram) ? $sentimentos_instagram[0]->total : 0,
-                                        'total_neutro' => ($sentimentos_instagram) ? $sentimentos_instagram[1]->total : 0,);
-
-      $sentimentos['twitter'] = array('rede_social' => "Twitter",
-                                      'total_positivo' => ($sentimentos_twitter) ? $sentimentos_twitter[2]->total : 0,
-                                      'total_negativo' => ($sentimentos_twitter) ? $sentimentos_twitter[0]->total : 0,
-                                      'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
-      
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $sentimentos = $this->getSentimentos();   
       return response()->json($sentimentos);
+    }
+
+    public function getSentimentos()
+    {
+        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final);
+        $sentimentos_facebook = (new FbPost())->getSentimentos($this->data_inicial, $this->data_final);
+        $sentimentos_instagram = (new Media())->getSentimentos($this->data_inicial, $this->data_final);
+
+        $sentimentos['facebook'] = array('rede_social' => "Facebook",
+                                        'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,
+                                        'total_negativo' => ($sentimentos_facebook) ? $sentimentos_facebook[0]->total : 0,
+                                        'total_neutro' => ($sentimentos_facebook) ? $sentimentos_facebook[1]->total : 0);
+
+        $sentimentos['instagram'] = array('rede_social' => "Instagram",
+                                          'total_positivo' => ($sentimentos_instagram) ? $sentimentos_instagram[2]->total : 0,
+                                          'total_negativo' => ($sentimentos_instagram) ? $sentimentos_instagram[0]->total : 0,
+                                          'total_neutro' => ($sentimentos_instagram) ? $sentimentos_instagram[1]->total : 0,);
+
+        $sentimentos['twitter'] = array('rede_social' => "Twitter",
+                                        'total_positivo' => ($sentimentos_twitter) ? $sentimentos_twitter[2]->total : 0,
+                                        'total_negativo' => ($sentimentos_twitter) ? $sentimentos_twitter[0]->total : 0,
+                                        'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
+
+        return $sentimentos;
     }
 
     public function getSentimentosPeriodo(Request $request)
@@ -333,44 +339,40 @@ class RelatorioController extends Controller
 
     public function pdf(Request $request)
     {
-        $nome_arquivo = date('YmdHis').".pdf";
-        $chart = $this->getGraficoImg();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $sentimentos = $this->getSentimentos();
+        $chart = $this->getGraficoImg($sentimentos);
+        $rule = $this->rule;
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
 
-        $pdf = DOMPDF::loadView('relatorios/pdf', compact('chart'));
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final'));
         return $pdf->download($nome_arquivo);
     }
 
-    public function getGraficoImg()
+    public function getGraficoImg($sentimentos)
     {
-        $chartData = [
-          "type" => 'horizontalBar',
-            "data" => [
-              "labels" => ['Coluna 1', 'Coluna 2', 'Coluna 3'],
-                "datasets" => [
-                  [
-                    "label" => "Dados", 
-                    "data" => [100, 60, 20],
-                    "backgroundColor" => ['#27ae60', '#f1c40f', '#e74c3c']
-                  ], 
-                ],
-              ]
-          ];
-      
-      $chartData = json_encode($chartData);
-
       $chartData = "{
           type: 'bar',
           data: {
           labels: ['Positivo', 'Negativo', 'Neutro'],
               datasets: [{
                   label: 'Facebook',
-                  data: [35, 52, 18]
+                  backgroundColor: '#3f51b5',
+                  hoverBorderColor: '#3f51b5',
+                  data: [{$sentimentos['facebook']['total_positivo']}, {$sentimentos['facebook']['total_negativo']}, {$sentimentos['facebook']['total_neutro']}]
               }, {
                   label: 'Instagram',
-                  data: [63, 27, 10]
+                  backgroundColor: '#e91ea1',
+                  hoverBorderColor: '#fcc468',
+                  data: [{$sentimentos['instagram']['total_positivo']}, {$sentimentos['instagram']['total_negativo']}, {$sentimentos['instagram']['total_neutro']}]
               },{
                   label: 'Twitter',
-                  data: [81, 11, 80]
+                  backgroundColor: '#51bcda',
+                  hoverBorderColor: '#51bcda',
+                  data: [{$sentimentos['twitter']['total_positivo']}, {$sentimentos['twitter']['total_negativo']}, {$sentimentos['twitter']['total_neutro']}]
               }]
           },
           options: {

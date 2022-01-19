@@ -23,13 +23,20 @@
         <div class="col-lg-9 col-md-9 " style="margin-top: -100px;">
             <h5 class="text-center">Sistema de Monitoramento de Redes Sociais</h5>
         </div>
-    </div>   
-    <div class="mt-3 mb-3 py-2 text-center" style="background:#f7f7f7;">
+        <h6 class="text-center">Relatório de Sentimentos de Postagens</h6>
+    </div>  
+    <div class="text-center">
+        <p>Período de {{ $dt_inicial }} à {{ $dt_final }}</p>
+    </div>
+    <div class="mt-0 mb-2 text-center" style="background:#f7f7f7;">
         <strong class="d-block">TERMO DE PESQUISA</strong>
-        "Libertadores da América" e "Flamengo"
+        @if($rule)
+            <p></p>
+        @else
+            <p>Todas as Regras</p>
+        @endif
     </div>
     <div>
-        <h6 class="text-center">Relatório de Sentimentos de Postagens</h6>
         <table class="table">
             <thead>
                 <tr>
@@ -42,27 +49,27 @@
             <tbody>
                 <tr>
                     <td>Facebook</td>
-                    <td class="text-center">63%</td>
-                    <td class="text-center">27%</td>
-                    <td class="text-center">10%</td>
+                    <td class="text-center">{{ $sentimentos['facebook']['total_positivo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['facebook']['total_negativo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['facebook']['total_neutro'] }}</td>
                 </tr>
                 <tr>
                     <td>Instagram</td>
-                    <td class="text-center">63%</td>
-                    <td class="text-center">27%</td>
-                    <td class="text-center">10%</td>
+                    <td class="text-center">{{ $sentimentos['instagram']['total_positivo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['instagram']['total_negativo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['instagram']['total_neutro'] }}</td>
                 </tr>
                 <tr>
                     <td>Twitter</td>
-                    <td class="text-center">63%</td>
-                    <td class="text-center">27%</td>
-                    <td class="text-center">10%</td>
+                    <td class="text-center">{{ $sentimentos['twitter']['total_positivo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['twitter']['total_negativo'] }}</td>
+                    <td class="text-center">{{ $sentimentos['twitter']['total_neutro'] }}</td>
                 </tr>
             </tbody>
         </table>
         <img src="{{ $chart }}">
     </div>
     <footer>
-        Relatório gerado em {{ date("d/m/Y H:i:s") }} 
+        Relatório gerado em {{ date("d/m/Y") }} às {{ date("H:i:s") }} 
     </footer>
 @endsection

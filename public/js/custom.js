@@ -242,5 +242,23 @@ $(document).ready(function() {
         else
             $('.box-password').css("display","none");
 
-    });    
+    });  
+    
+    $("#todos").change(function(){
+
+        if($(this).is(':checked')){
+
+            $(".form-check-input").each(function(){
+                $(this).prop("checked", true);
+            });
+
+        }else{
+
+            $(".form-check-input").each(function(){
+                $(this).prop("checked", false);
+            });
+
+        }
+        
+    });
 });

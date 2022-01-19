@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Classes\IGMention;
+use App\Classes\IGHashTag;
 use App\Rule;
 use App\Twitter\TwitterCollect;
 use App\MediaTwitter;
@@ -41,6 +43,7 @@ class TwitterController extends Controller
     public function index()
     {
        (new TwitterCollect())->pullMedias();
+       (new IGHashTag())->pullMedias();
 
         //$rule = Rule::find(1);
 

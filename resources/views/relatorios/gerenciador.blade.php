@@ -24,6 +24,11 @@
                 <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="form-check">
                         <label class="form-check-label d-block mb-3">
+                            <input class="form-check-input" type="checkbox" name="todos" id="todos" value="true">
+                                TODOS
+                            <span class="form-check-sign"></span>
+                        </label>
+                        <label class="form-check-label d-block mb-3">
                             <input class="form-check-input" type="checkbox" name="is_active" value="true">
                                 Evolução Diária
                             <span class="form-check-sign"></span>
@@ -37,16 +42,16 @@
                             <input class="form-check-input" type="checkbox" name="is_active" value="true">
                                 Sentimentos
                             <span class="form-check-sign"></span>
-                        </label>
+                        </label>                        
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-check">
                         <label class="form-check-label d-block mb-3">
                             <input class="form-check-input" type="checkbox" name="is_active" value="true">
                                 Nuvem de Palavras
                             <span class="form-check-sign"></span>
                         </label>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="form-check">
                         <label class="form-check-label d-block mb-3">
                             <input class="form-check-input" type="checkbox" name="is_active" value="true">
                                 Reactions
