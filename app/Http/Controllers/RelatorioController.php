@@ -11,9 +11,14 @@ use App\Media;
 use App\Utils;
 use App\FbReaction;
 use App\MediaTwitter;
+use App\WordCloudText;
+use App\WordsExecption;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 class RelatorioController extends Controller
 {
@@ -414,5 +419,109 @@ class RelatorioController extends Controller
 
       $chartData = file_get_contents($chartURL); 
       return 'data:image/png;base64, '.base64_encode($chartData);
+    }
+
+    public function getWordCloudPeriodo(Request $request) 
+    {   
+        $rule =   $request->regra;
+
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
+        if(isset($this->client_id)) {
+
+            $rules = Rule::when(!empty($rule), function($query) use ($rule){
+                return $query->where('id', $rule);  
+            })->where('client_id', $this->client_id)->get();
+            
+            $text = '';
+
+            foreach($rules as $rule) {
+
+                $dt_inicial = $this->data_inicial->format('Y-m-d');
+                $dt_final = $this->data_final->format('Y-m-d');
+
+                $igPosts = $rule->igPosts()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('caption')->toArray();
+                $igComments = $rule->igComments()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
+                $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
+                $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
+                $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
+    
+                $textig = $this->concatenateSanitizeText($igPosts);
+                $textigc = $this->concatenateSanitizeText($igComments);
+                $textfb = $this->concatenateSanitizeText($fbPosts);
+                $textfbc = $this->concatenateSanitizeText($fbComments);
+                $texttw = $this->concatenateSanitizeText($twPosts);
+    
+                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw;
+            }
+
+            $wordcloud_text = WordCloudText::create([
+                'text' => $text
+            ]);
+
+            $file_name = 'wordcloud-'.strtotime(now()).'.json';
+
+            if(isset($wordcloud_text->id)) {
+                
+                $word_cloud = [];
+
+                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name]);
+                $process->run(function ($type, $buffer) use ($file_name, &$word_cloud){
+                    if (Process::ERR === $type) {
+                        //echo 'ERR > '.$buffer.'<br />';
+                    } else {
+                        
+                        if(trim($buffer) == 'END') {
+                            //echo 'OUT > '.$buffer.'<br />';
+
+                            $file = Storage::disk('wordcloud')->get($file_name);
+                            //dd($words_execption);
+                
+                            $words = json_decode($file);
+                           
+                            $words = (Array) $words;
+                            arsort($words);
+                
+                            $words = array_slice($words, 0, 200);
+
+                            $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->pluck('word')->toArray();
+                                            
+                            foreach($words as $word => $qtd_times) {
+
+                                if(in_array($word, $words_execption))
+                                    continue;
+
+                                $word_cloud[$word] = $qtd_times;  
+                            }
+
+                            Storage::disk('wordcloud')->delete($file_name);
+                        }
+    
+                    }
+                });
+            
+            }
+
+            
+
+        } else {
+                $word_cloud = ['Cliente' => 3, 'Não' => 2, 'Selecionado' => 2];               
+        }
+
+        echo json_encode($word_cloud);
+        
+    }
+
+    public function concatenateSanitizeText(Array $textArray)
+    {
+        $concatenateText = '';
+
+        foreach($textArray as $text) {
+                        
+            $concatenateText .= ' '.$text;
+        }
+
+        return $concatenateText;
+
     }
 }
