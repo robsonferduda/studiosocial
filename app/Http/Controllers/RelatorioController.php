@@ -212,14 +212,6 @@ class RelatorioController extends Controller
       return response()->json($reactions);
     }
 
-    public function getSentimentosRede(Request $request)
-    {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-      $this->rule_id = $request->regra; 
-      $sentimentos = $this->getSentimentos();   
-      return response()->json($sentimentos);
-    }
-
     public function getSentimentosPeriodo(Request $request)
     {
         $dados = array();
@@ -228,7 +220,25 @@ class RelatorioController extends Controller
         $dados = $this->getEvolucaoDiaria();      
 
         return response()->json($dados);
+    }
 
+    public function getRedesPeriodo(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra; 
+        $dados = $this->getEvolucaoRedeSocial();        
+
+        return response()->json($dados);
+    }
+
+    public function getSentimentosRede(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+      $this->rule_id = $request->regra; 
+      $sentimentos = $this->getSentimentos();   
+
+      return response()->json($sentimentos);
     }
 
     public function getEvolucaoDiaria()
@@ -259,6 +269,42 @@ class RelatorioController extends Controller
         return $dados;
     }
 
+    public function getEvolucaoRedeSocial()
+    {
+        for ($i=0; $i < $this->periodo; $i++) { 
+
+          $data = $this->data_inicial->addDay()->format('Y-m-d');
+          $data_formatada = $this->data_inicial->format('d/m/Y');
+
+          $datas[] = $data;
+          $datas_formatadas[] = $data_formatada;
+
+          $ig_comments_total = DB::table('ig_comments')
+                              ->join('medias','medias.id','=','ig_comments.media_id')
+                              ->where('medias.client_id','=', $this->client_id)
+                              ->whereBetween('ig_comments.timestamp', [$data.' 00:00:00',$data.' 23:23:59'])
+                              ->count();
+
+          $fb_comments_total = DB::table('fb_comments')
+                              ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
+                              ->where('fb_posts.client_id','=',$this->client_id)
+                              ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                              ->count();
+
+          $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+          $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
+          $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
+      }
+
+      $dados = array('data' => $datas,
+                      'data_formatada' => $datas_formatadas,
+                      'dados_twitter' => $dados_twitter,
+                      'dados_instagram' => $dados_instagram,
+                      'dados_facebook' => $dados_facebook);
+
+      return $dados;
+    }
+
     public function getSentimentos()
     {
         $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final, $this->rule_id);
@@ -281,46 +327,6 @@ class RelatorioController extends Controller
                                         'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
 
         return $sentimentos;
-    }
-
-    public function getRedesPeriodo(Request $request)
-    {
-        $dados = array();
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-
-        for ($i=0; $i < $this->periodo; $i++) { 
-
-            $data = $this->data_inicial->addDay()->format('Y-m-d');
-            $data_formatada = $this->data_inicial->format('d/m/Y');
-
-            $datas[] = $data;
-            $datas_formatadas[] = $data_formatada;
-
-            $ig_comments_total = DB::table('ig_comments')
-                                ->join('medias','medias.id','=','ig_comments.media_id')
-                                ->where('medias.client_id','=', $this->client_id)
-                                ->whereBetween('ig_comments.timestamp', [$data.' 00:00:00',$data.' 23:23:59'])
-                                ->count();
-
-            $fb_comments_total = DB::table('fb_comments')
-                                ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
-                                ->where('fb_posts.client_id','=',$this->client_id)
-                                ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
-                                ->count();
-
-            $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
-            $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
-        }
-
-        $dados = array('data' => $datas,
-                        'data_formatada' => $datas_formatadas,
-                        'dados_twitter' => $dados_twitter,
-                        'dados_instagram' => $dados_instagram,
-                        'dados_facebook' => $dados_facebook);
-
-        return response()->json($dados);
-
     }
 
     public function getAllMedias()
@@ -350,6 +356,8 @@ class RelatorioController extends Controller
       return $lista_hastags;
     }
 
+    //Métodos chamados quando o relatório em pdf é requisitado
+
     public function evolucaoDiariaPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
@@ -364,13 +372,27 @@ class RelatorioController extends Controller
         $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
         return $pdf->download($nome_arquivo);
     }
-    
 
+    public function evolucaoRedeSocialPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dados = $this->getEvolucaoRedeSocial();
+        $chart = $this->getGraficoEvolucaoRedeSocial($dados);
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
+        return $pdf->download($nome_arquivo);
+    }
+    
     public function pdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
         $sentimentos = $this->getSentimentos();
-        $chart = $this->getGraficoImg($sentimentos);
+        $chart = $this->getGraficoSentimentos($sentimentos);
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
@@ -380,6 +402,8 @@ class RelatorioController extends Controller
         $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final'));
         return $pdf->download($nome_arquivo);
     }
+
+    //Métodos de geração da imagem do gráfico
 
     public function getGraficoEvolucaoDiaria($dados)
     {
@@ -467,7 +491,93 @@ class RelatorioController extends Controller
       return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
-    public function getGraficoImg($sentimentos)
+    public function getGraficoEvolucaoRedeSocial($dados)
+    {
+      $datas = implode("','", $dados['data_formatada']);
+      $instagram = implode(",", $dados['dados_instagram']);
+      $facebook = implode(",", $dados['dados_facebook']);
+      $twitter = implode(",", $dados['dados_twitter']);
+
+      $chartData = "{
+        type: 'bar',
+        data: {
+            labels: ['{$datas}'],
+            datasets: [
+            {
+                label: ' Instagram',
+                borderColor: '#e91ea1',
+                fill: true,
+                backgroundColor: '#e91ea1',
+                hoverBorderColor: '#fcc468',
+                borderWidth: 8,
+                stack: '1',
+                data: [ $instagram ]
+            },
+            {
+                label: ' Facebook',
+                borderColor: '#3f51b5',
+                fill: true,
+                backgroundColor: '#3f51b5',
+                hoverBorderColor: '#3f51b5',
+                borderWidth: 8,
+                stack: '1',
+                data: [ $facebook ]
+            },
+            {
+                label: ' Twitter',
+                borderColor: '#51bcda',
+                fill: true,
+                backgroundColor: '#51bcda',
+                hoverBorderColor: '#51bcda',
+                borderWidth: 8,
+                stack: '1',
+                data: [ $twitter ]
+            }
+          ]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              fontSize: 8,
+            }
+          },
+          title: {
+            display: true,
+            text: 'Evolução Diária',
+            fontSize: 12,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMax: 10,
+                  fontSize: 8,
+                  beginAtZero: true,
+                  fontFamily: 'Montserrat',
+                },
+              },
+            ],
+            xAxes: [
+              {
+                barPercentage: 0.3,
+                ticks: {
+                  fontFamily: 'Montserrat',
+                  fontSize: 8,
+                },
+              },
+            ],
+          },
+        },
+      }";
+
+      $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
+
+      $chartData = file_get_contents($chartURL); 
+      return 'data:image/png;base64, '.base64_encode($chartData);
+    }
+
+    public function getGraficoSentimentos($sentimentos)
     {
       $chartData = "{
           type: 'bar',
