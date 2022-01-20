@@ -42,6 +42,7 @@ Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPe
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPeriodo');
 
+Route::post('relatorios/pdf/evolucao-diaria','RelatorioController@evolucaoDiariaPdf');
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 
 Route::get('pdf','RelatorioController@pdf');

@@ -220,6 +220,45 @@ class RelatorioController extends Controller
       return response()->json($sentimentos);
     }
 
+    public function getSentimentosPeriodo(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra; 
+        $dados = $this->getEvolucaoDiaria();      
+
+        return response()->json($dados);
+
+    }
+
+    public function getEvolucaoDiaria()
+    {
+        for ($i=0; $i < $this->periodo; $i++) { 
+
+          $data = $this->data_inicial->addDay()->format('Y-m-d');
+          $data_formatada = $this->data_inicial->format('d/m/Y');
+
+          //Total de sentimentos do Twitter
+          $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+          $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+          $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+    
+          $datas[] = $data;
+          $datas_formatadas[] = $data_formatada;
+          $dados_positivos[] = $total_positivos;
+          $dados_negativos[] = $total_negativos;
+          $dados_neutros[] = $total_neutros;
+      }
+
+      $dados = array('data' => $datas,
+                      'data_formatada' => $datas_formatadas,
+                      'dados_positivos' => $dados_positivos,
+                      'dados_negativos' => $dados_negativos,
+                      'dados_neutros' => $dados_neutros);
+
+        return $dados;
+    }
+
     public function getSentimentos()
     {
         $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final, $this->rule_id);
@@ -242,38 +281,6 @@ class RelatorioController extends Controller
                                         'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
 
         return $sentimentos;
-    }
-
-    public function getSentimentosPeriodo(Request $request)
-    {
-        $dados = array();
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-
-        for ($i=0; $i < $this->periodo; $i++) { 
-
-            $data = $this->data_inicial->addDay()->format('Y-m-d');
-            $data_formatada = $this->data_inicial->format('d/m/Y');
-
-            //Total de sentimentos do Twitter
-            $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-      
-            $datas[] = $data;
-            $datas_formatadas[] = $data_formatada;
-            $dados_positivos[] = $total_positivos;
-            $dados_negativos[] = $total_negativos;
-            $dados_neutros[] = $total_neutros;
-        }
-
-        $dados = array('data' => $datas,
-                         'data_formatada' => $datas_formatadas,
-                         'dados_positivos' => $dados_positivos,
-                         'dados_negativos' => $dados_negativos,
-                         'dados_neutros' => $dados_neutros);
-
-        return response()->json($dados);
-
     }
 
     public function getRedesPeriodo(Request $request)
@@ -343,6 +350,20 @@ class RelatorioController extends Controller
       return $lista_hastags;
     }
 
+    public function evolucaoDiariaPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dados = $this->getEvolucaoDiaria();
+        $chart = $this->getGraficoEvolucaoDiaria($dados);
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
+        return $pdf->download($nome_arquivo);
+    }
     
 
     public function pdf(Request $request)
@@ -358,6 +379,92 @@ class RelatorioController extends Controller
 
         $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final'));
         return $pdf->download($nome_arquivo);
+    }
+
+    public function getGraficoEvolucaoDiaria($dados)
+    {
+      $datas = implode("','", $dados['data_formatada']);
+      $positivos = implode(",", $dados['dados_positivos']);
+      $negativos = implode(",", $dados['dados_negativos']);
+      $neutros = implode(",", $dados['dados_neutros']);
+
+      $chartData = "{
+        type: 'bar',
+        data: {
+            labels: ['{$datas}'],
+            datasets: [
+            {
+                label: ' Positivo',
+                    borderColor: '#4caf50',
+                    fill: true,
+                    backgroundColor: '#4caf50',
+                    hoverBorderColor: '#4caf50',
+                    borderWidth: 8,
+                    stack: '1',
+                    data: [{$positivos}]
+                },
+                {
+                    label: ' Negativo',
+                    borderColor: '#f44336',
+                    fill: true,
+                    backgroundColor: '#f44336',
+                    hoverBorderColor: '#f44336',
+                    borderWidth: 8,
+                    stack: '1',
+                    data: [{$negativos}]
+                },
+                {
+                    label: ' Neutro',
+                    borderColor: '#ffcc33',
+                    fill: true,
+                    backgroundColor: '#ffcc33',
+                    hoverBorderColor: '#ffcc33',
+                    borderWidth: 8,
+                    stack: '1',
+                    data: [{$neutros}]
+                }
+            ]
+        },
+        options: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              fontSize: 8,
+            }
+          },
+          title: {
+            display: true,
+            text: 'Evolução Diária',
+            fontSize: 12,
+          },
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  suggestedMax: 10,
+                  fontSize: 8,
+                  beginAtZero: true,
+                  fontFamily: 'Montserrat',
+                },
+              },
+            ],
+            xAxes: [
+              {
+                barPercentage: 0.3,
+                ticks: {
+                  fontFamily: 'Montserrat',
+                  fontSize: 8,
+                },
+              },
+            ],
+          },
+        },
+      }";
+
+      $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
+
+      $chartData = file_get_contents($chartURL); 
+      return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
     public function getGraficoImg($sentimentos)
