@@ -40,17 +40,30 @@ class MediaTwitter extends Model implements Auditable
         return $this->belongsToMany('App\Term','twitter_term','media_id','term_id')->withTimestamps();
     }
 
-    public function getSentimentos($data_inicial, $data_final)
+    public function getSentimentos($data_inicial, $data_final, $rule)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
 
-        return DB::select("SELECT sentiment, count(*) as total 
-                            FROM media_twitter 
-                            WHERE sentiment NOTNULL 
-                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            GROUP BY sentiment 
-                            ORDER BY sentiment");
+        if($rule)
+            $sql = "SELECT sentiment, count(*) as total 
+                    FROM media_twitter t1, rule_message t2
+                    WHERE t1.id = t2.id 
+                    AND created_tweet_at BETWEEN '2021-01-01 00:00:00' AND '2022-01-01 23:59:59'
+                    AND sentiment NOTNULL
+                    AND t2.rule_id = $rule
+                    AND t2.rules_type = 3
+                    GROUP BY sentiment 
+                    ORDER BY sentiment";
+        else
+            $sql = "SELECT sentiment, count(*) as total 
+                    FROM media_twitter 
+                    WHERE sentiment NOTNULL 
+                    AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                    GROUP BY sentiment 
+                    ORDER BY sentiment";
+
+        return DB::select($sql);
     }
 
     public function getInfluenciadoresPositivos($client_id, $data_inicial, $data_final)

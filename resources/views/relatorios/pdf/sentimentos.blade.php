@@ -31,7 +31,7 @@
     <div class="mt-0 mb-2 text-center" style="background:#f7f7f7;">
         <strong class="d-block">TERMO DE PESQUISA</strong>
         @if($rule)
-            <p></p>
+            <p>{{ $rule->getExpression() }}</p>
         @else
             <p>Todas as Regras</p>
         @endif

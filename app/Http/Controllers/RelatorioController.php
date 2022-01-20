@@ -30,12 +30,14 @@ class RelatorioController extends Controller
     private $periodo_padrao;
     private $rules;
     private $rule;
+    private $rule_id;
 
     public function __construct()
     {
         $this->middleware('auth');
         $this->mensagem = "";
         $this->rule = null;
+        $this->rule_id = null;
         $this->client_id = session('cliente')['id'];
         $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
         $this->rules = Rule::where('client_id', $this->client_id)->orderBy('name')->get();
@@ -212,14 +214,15 @@ class RelatorioController extends Controller
 
     public function getSentimentosRede(Request $request)
     {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+      $this->rule_id = $request->regra; 
       $sentimentos = $this->getSentimentos();   
       return response()->json($sentimentos);
     }
 
     public function getSentimentos()
     {
-        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final);
+        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final, $this->rule_id);
         $sentimentos_facebook = (new FbPost())->getSentimentos($this->data_inicial, $this->data_final);
         $sentimentos_instagram = (new Media())->getSentimentos($this->data_inicial, $this->data_final);
 
@@ -347,7 +350,7 @@ class RelatorioController extends Controller
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
         $sentimentos = $this->getSentimentos();
         $chart = $this->getGraficoImg($sentimentos);
-        $rule = $this->rule;
+        $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
 
