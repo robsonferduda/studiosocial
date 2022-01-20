@@ -17,7 +17,7 @@
                     @include('layouts/regra')
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
-                            <div id='cloud' style="height: 400px;"></div>
+                            <div id='cloud' style="height: 500px;"></div>
                         </div>
                     </div>
                 </div>            
@@ -30,19 +30,28 @@
 <script>
     $(document).ready(function() {
 
-        var regra = 0;
+        var regra = '';
         var periodo = {{ $periodo_padrao }};
         var token = $('meta[name="csrf-token"]').attr('content');
 
         loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
         $("#regra").change(function(){
+
+            regra = $(this).val();
             loadDados(periodo, regra);
         });
 
         $("#periodo").change(function(){
             periodo = $(this).val();
             loadDados(periodo, regra);          
+        });
+
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                periodo = 0;
+                loadDados(periodo, regra);
+            }
         });
 
         function loadDados(periodo, regra){

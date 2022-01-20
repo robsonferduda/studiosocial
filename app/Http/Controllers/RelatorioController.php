@@ -704,7 +704,7 @@ class RelatorioController extends Controller
                 
                             $words = array_slice($words, 0, 200);
 
-                            $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->pluck('word')->toArray();
+                            $words_execption = WordsExecption::where('client_id', $this->client_id)->pluck('word')->toArray();
                                             
                             foreach($words as $word => $qtd_times) {
 
