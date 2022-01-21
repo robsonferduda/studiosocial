@@ -679,13 +679,14 @@ class RelatorioController extends Controller
                 'text' => $text
             ]);
 
-            $file_name = 'wordcloud-'.strtotime(now()).'.json';
+            $file_name = 'wordcloud-'.strtotime(now());
 
             if(isset($wordcloud_text->id)) {
                 
                 $word_cloud = [];
 
-                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name]);
+                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name, 'tela', $this->client_id]);
+
                 $process->run(function ($type, $buffer) use ($file_name, &$word_cloud){
                     if (Process::ERR === $type) {
                         //echo 'ERR > '.$buffer.'<br />';
