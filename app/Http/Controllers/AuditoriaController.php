@@ -17,7 +17,7 @@ class AuditoriaController extends Controller
 
     public function index()
     {
-        $audits = Audit::with('user')->orderBy('created_at','ASC')->get();
+        $audits = Audit::with('user')->whereNotNull('user_id')->orderBy('created_at','ASC')->get();
         return view('auditoria/index',compact('audits'));
     }
 

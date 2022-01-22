@@ -195,7 +195,6 @@ class RelatorioController extends Controller
 
     public function getReactions(Request $request)
     {
-
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
       $dt_inicial = $this->data_inicial->format('Y-m-d');
       $dt_final = $this->data_final->format('Y-m-d');
@@ -400,6 +399,32 @@ class RelatorioController extends Controller
         $nome_arquivo = date('YmdHis').".pdf";
 
         $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final'));
+        return $pdf->download($nome_arquivo);
+    }
+
+    public function reactionsPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dt_inicial = $this->data_inicial->format('Y-m-d');
+        $dt_final = $this->data_final->format('Y-m-d');
+
+        $dados = DB::select("SELECT t3.name, t3.color, t3.icon, count(*) 
+                            FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
+                            WHERE t1.id = t2.post_id 
+                            AND t2.reaction_id = t3.id 
+                            AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            AND t1.client_id = $this->client_id
+                            GROUP BY t3.name, t3.color, t3.icon 
+                            ORDER BY t3.name");
+        
+        $chart = $this->getGraficoReactions($dados);
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/reactions', compact('chart','dados','rule','dt_inicial','dt_final'));
         return $pdf->download($nome_arquivo);
     }
 
@@ -634,6 +659,57 @@ class RelatorioController extends Controller
               },
             },
       }";
+
+      $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
+
+      $chartData = file_get_contents($chartURL); 
+      return 'data:image/png;base64, '.base64_encode($chartData);
+    }
+
+    public function getGraficoReactions($dados)
+    {
+      $valores = null;
+      $labels = null;
+      $colors = null;
+
+      foreach ($dados as $key => $dado) {
+        $valores[] = $dado->count;
+        $labels[] = $dado->icon;
+        $colors[] = $dado->color;
+      }
+
+      $valores = implode(",", $valores);
+      $labels = implode("','", $labels);
+      $colors = implode("','", $colors);
+
+      $chartData = "{
+                    type:'pie',
+                    data:{
+                      labels:['$labels'],
+                      datasets:[{
+                        label:'Reactions',
+                        borderWidth: 0,
+                        backgroundColor: ['$colors'],
+                        data:[$valores]
+                      }]
+                    },
+                    options: {
+                      legend: {
+                        position: 'bottom',
+                        labels: {
+                          fontSize: 10,
+                        }
+                      },
+                      pieceLabel: {
+                        render: 'percentage',
+                        fontColor: '#fff',
+                        precision: 2
+                      },
+                      scales: {
+                       
+                      },
+                    }
+                  }";
 
       $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
 

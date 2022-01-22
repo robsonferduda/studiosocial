@@ -45,6 +45,7 @@ Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPerio
 Route::post('relatorios/pdf/evolucao-diaria','RelatorioController@evolucaoDiariaPdf');
 Route::post('relatorios/pdf/evolucao-redes-cociais','RelatorioController@evolucaoRedeSocialPdf');
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
+Route::post('relatorios/pdf/reactions','RelatorioController@reactionsPdf');
 
 Route::get('pdf','RelatorioController@pdf');
 
