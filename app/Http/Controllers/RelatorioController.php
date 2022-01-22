@@ -755,13 +755,14 @@ class RelatorioController extends Controller
                 'text' => $text
             ]);
 
-            $file_name = 'wordcloud-'.strtotime(now()).'.json';
+            $file_name = 'wordcloud-'.strtotime(now());
 
             if(isset($wordcloud_text->id)) {
                 
                 $word_cloud = [];
 
-                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name]);
+                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name, 'tela', $this->client_id]);
+
                 $process->run(function ($type, $buffer) use ($file_name, &$word_cloud){
                     if (Process::ERR === $type) {
                         //echo 'ERR > '.$buffer.'<br />';
@@ -780,7 +781,7 @@ class RelatorioController extends Controller
                 
                             $words = array_slice($words, 0, 200);
 
-                            $words_execption = WordsExecption::where('client_id', $this->cliente['id'])->pluck('word')->toArray();
+                            $words_execption = WordsExecption::where('client_id', $this->client_id)->pluck('word')->toArray();
                                             
                             foreach($words as $word => $qtd_times) {
 
