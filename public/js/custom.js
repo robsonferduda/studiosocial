@@ -257,8 +257,6 @@ $(document).ready(function() {
             $(".form-check-input").each(function(){
                 $(this).prop("checked", false);
             });
-
-        }
-        
+        }        
     });
 });

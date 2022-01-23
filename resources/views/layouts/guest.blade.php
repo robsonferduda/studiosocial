@@ -83,6 +83,24 @@
   <script>
     $(document).ready(function() {
 
+      $('body').on("click", ".fa-eye", function(e) {
+
+        var target = "#"+$(this).data('target');
+
+        $(target).attr('type','text');
+        $(this).removeClass('fa-eye');
+        $(this).addClass('fa-eye-slash');
+      });
+
+      $('body').on("click", ".fa-eye-slash", function(e) {
+
+        var target = "#"+$(this).data('target');
+
+        $(target).attr('type','password');
+        $(this).removeClass('fa-eye-slash');
+        $(this).addClass('fa-eye');
+      });
+
       $sidebar = $('.sidebar');
       $sidebar_img_container = $sidebar.find('.sidebar-background');
 

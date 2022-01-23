@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Permission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -15,6 +16,7 @@ class PermissaoController extends Controller
 
     public function index()
     {
-        return view('permissoes/index');
+        $permissions = Permission::all();
+        return view('permissoes/index', compact('permissions'));
     }
 }

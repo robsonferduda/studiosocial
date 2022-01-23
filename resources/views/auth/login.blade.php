@@ -31,6 +31,9 @@
                       </span>
                     </div>
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                    <div class="view-eye">
+                      <i class="fa fa-eye view-password" data-target="password"></i>  
+                    </div> 
                     @error('password')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -49,13 +52,15 @@
                   </div>
                 </div>
                 <div class="card-footer center">
-                    <button type="submit" class="btn btn-primary btn-round btn-block mb-4">
+                    <button type="submit" class="btn btn-primary btn-round btn-block mb-4 w-50 m-auto">
                         {{ __('Entrar') }}
                     </button>
                     @if (Route::has('password.request'))
-                        <a class="btn-link mb-3" href="{{ route('password.request') }}">
+                      <div class="mt-3">
+                        <a class="btn-link mb-3 mt-3" href="{{ route('password.request') }}">
                             <span class="forget-password">{{ __('esqueceu sua senha?') }}</span>
                         </a>
+                      </div>
                     @endif
                 </div>
               </div>

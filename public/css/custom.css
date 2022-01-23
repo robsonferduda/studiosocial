@@ -64,3 +64,21 @@
 .img-perfil{
     width: 100px;
 }
+.view-eye{
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    z-index: 1000;
+}
+.view-eye:hover{
+    cursor: pointer;
+}
+.view-eye-p{
+    position: absolute;
+    top: 10px;
+    right: 28px;
+    z-index: 1000;
+}
+.view-eye-p:hover{
+    cursor: pointer;
+}
