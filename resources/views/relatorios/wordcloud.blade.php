@@ -173,12 +173,13 @@
 
         $(".btn-relatorio").click(function(){
 
-            var data_inicial = $(".dt_inicial_relatorio").val();
-            var data_final = $(".dt_final_relatorio").val();
-            $('.card-main').loader('show');
+            let APP_URL = {!! json_encode(url('/')) !!}
+            let data_inicial = $(".dt_inicial_relatorio").val();
+            let data_final = $(".dt_final_relatorio").val();
+            $('body').loader('show');
 
             $.ajax({
-                url: host+'/relatorios/pdf/wordcloud',
+                url: APP_URL+'/relatorios/pdf/wordcloud',
                 type: 'POST',
                 data: { "_token": token,
                         "periodo": periodo,
@@ -224,7 +225,7 @@
                         setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
                     }
 
-                    $('.card-main').loader('hide');
+                    $('body').loader('hide');
                 }
             }); 
 

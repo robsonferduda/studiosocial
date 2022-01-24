@@ -357,6 +357,85 @@ class RelatorioController extends Controller
 
     //Métodos chamados quando o relatório em pdf é requisitado
 
+    public function wordcloudPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $rule = $request->regra;
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+
+        if(isset($this->client_id)) {
+
+            $rules = Rule::when(!empty($rule), function($query) use ($rule){
+                return $query->where('id', $rule);  
+            })->where('client_id', $this->client_id)->get();
+            
+            $text = '';
+
+            foreach($rules as $rule) {
+
+                $dt_inicial = $this->data_inicial->format('Y-m-d');
+                $dt_final = $this->data_final->format('Y-m-d');
+
+                $igPosts = $rule->igPosts()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('caption')->toArray();
+                $igComments = $rule->igComments()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
+                $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
+                $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
+                $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
+    
+                $textig = $this->concatenateSanitizeText($igPosts);
+                $textigc = $this->concatenateSanitizeText($igComments);
+                $textfb = $this->concatenateSanitizeText($fbPosts);
+                $textfbc = $this->concatenateSanitizeText($fbComments);
+                $texttw = $this->concatenateSanitizeText($twPosts);
+    
+                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw;
+            }
+
+            $wordcloud_text = WordCloudText::create([
+                'text' => $text
+            ]);
+
+            $file_name = 'wordcloud-'.strtotime(now());
+            $chart = null;
+
+            if(isset($wordcloud_text->id)) {
+                
+                $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name, 'imagem', $this->client_id]);
+
+                $process->run(function ($type, $buffer) use ($file_name, &$chart){
+                    if (Process::ERR === $type) {
+                        //echo 'ERR > '.$buffer.'<br />';
+                    } else {
+                        
+                        if(trim($buffer) == 'END') {
+                            //echo 'OUT > '.$buffer.'<br />';
+                                    
+                            $chartData = file_get_contents(Storage::disk('wordcloud')->getAdapter()->getPathPrefix().$file_name.".png"); 
+                            $chart =  'data:image/png;base64, '.base64_encode($chartData);
+                            
+                            Storage::disk('wordcloud')->delete($file_name.".png");
+                            Storage::disk('wordcloud')->delete($file_name.".json");
+                        }
+    
+                    }
+                });
+            
+            }
+
+            
+
+        }
+        //dd($chart);
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $rule = Rule::find($request->regra);
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dt_inicial','dt_final'));
+        return $pdf->download($nome_arquivo);
+    }
+
+
     public function evolucaoDiariaPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
