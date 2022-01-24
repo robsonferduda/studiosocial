@@ -42,7 +42,7 @@
                                 @if(count($c->fbAccounts))
                                     <a title="Contas do Facebook" href="{{ url('client/accounts/facebook',$c->id) }}" class="btn btn-primary btn-link btn-icon btn-social btn-facebook"><i  class="fa fa-plug font-25"></i></a>
                                 @endif
-                                <a href="https://studiosocial.ga/login/facebook/client/{{ $c->id }}" class="btn btn-social btn-facebook">
+                                <a href="https://studiosocial.app/login/facebook/client/{{ $c->id }}" class="btn btn-social btn-facebook">
                                     <i class="fa fa-facebook fa-fw"></i> CONECTAR Facebook
                                 </a>
                             </td>
