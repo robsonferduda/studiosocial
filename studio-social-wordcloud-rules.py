@@ -9,7 +9,7 @@ import pandas as pd
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 import nltk
 import unicodedata
-#nltk.download('stopwords')
+nltk.download('stopwords')
 
 id_wordcloud_text = sys.argv[1]
 file_name = sys.argv[2]
@@ -38,7 +38,7 @@ extraStopWords = ["m²","pra","a","acerca","adeus","agora","ainda","alem","algma
 stopwords = set(STOPWORDS)
 stopwords.update(extraStopWords)
     
-#stopwords.union(nltk.corpus.stopwords.words('portuguese'))
+stopwords.union(nltk.corpus.stopwords.words('portuguese'))
 
 text = re.sub(r"www\S+", " ", text)
 text = re.sub(r"http\S+", " ", text)
