@@ -24,6 +24,9 @@ Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecion
 
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
+Route::get('permissoes/{id}/users','PermissaoController@users');
+Route::get('permissoes/{id}/perfis','PermissaoController@perfis');
+Route::get('perfis','RoleController@index');
 
 Route::get('relatorios','RelatorioController@index');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
@@ -66,10 +69,13 @@ Route::get('hashtag/situacao/{hashtag}','HashtagController@atualizarSituacao');
 Route::get('hashtag/medias/{hashtag}','HashtagController@medias');
 Route::post('hashtag/create','HashtagController@create');
 
+Route::get('role/permissions/{role}','RoleController@permissions');
+
 Route::resource('client', 'ClientController');
 Route::resource('hashtag', 'HashtagController');
 Route::resource('usuario', 'UserController');
 Route::resource('regras', 'RuleController');
+Route::resource('role', 'RoleController');
 Route::resource('term', 'TermController');
 
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
@@ -80,6 +86,8 @@ Route::get('media/{media_id}/tipo/{tipo}/sentimento/{sentimento}/atualizar','Med
 Route::get('monitoramento','MonitoramentoController@index');
 Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
+
+
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
 

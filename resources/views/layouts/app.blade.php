@@ -91,18 +91,26 @@
                 </li>
                 <hr/>
                 @role('administradores')
-                <li class="{{ (Session::has('url') and Session::get('url') == 'auditoria') ? 'active' : '' }}">
-                    <a href="{{ url('auditoria') }}">
-                      <i class="fa fa-shield"></i>
-                    <p>Autidoria</p>
-                    </a>
-                </li>
-                @endrole
-                @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
                       <a href="{{ url('configuracoes') }}">
                       <i class="nc-icon nc-settings-gear-65"></i>
                       <p>Configurações</p>
+                      </a>
+                  </li>
+                @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'auditoria') ? 'active' : '' }}">
+                      <a href="{{ url('auditoria') }}">
+                        <i class="fa fa-shield"></i>
+                      <p>Autidoria</p>
+                      </a>
+                  </li>
+                @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'perfis') ? 'active' : '' }}">
+                      <a href="{{ url('perfis') }}">
+                      <i class="fa fa-group"></i>
+                      <p>Perfis</p>
                       </a>
                   </li>
                 @endrole

@@ -19,4 +19,17 @@ class PermissaoController extends Controller
         $permissions = Permission::all();
         return view('permissoes/index', compact('permissions'));
     }
+
+    public function users($id)
+    {
+        $permission = Permission::find($id);
+        return view('permissoes/users', compact('permission'));
+    }
+
+    public function perfis($id)
+    {
+        $permission = Permission::find($id);
+        $perfis = $permission->roles;
+        return view('permissoes/perfis', compact('perfis'));
+    }
 }
