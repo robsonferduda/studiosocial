@@ -18,7 +18,7 @@
             <tbody>
                 <tr>
                     <td>
-                        <img src="https://studiosocial.ga/img/logo_zurich.png">
+                        <img src="https://studiosocial.app/img/logo_zurich.png">
                     </td>
                 </tr>
             </tbody>
@@ -89,7 +89,7 @@
                         <div style="text-transform: uppercase; font-weight: 600;">
                           <table>
                             <tr>
-                              <td><img class="icone" src="https://studiosocial.ga/img/icone_{{ $icone }}.png"></td>
+                              <td><img class="icone" src="https://studiosocial.app/img/icone_{{ $icone }}.png"></td>
                               <td><p>{!! $tipo_formatado !!}</p></td>
                             </tr>
                           </table> 

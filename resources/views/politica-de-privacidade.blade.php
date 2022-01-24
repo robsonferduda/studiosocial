@@ -12,7 +12,7 @@
                 </div>
                 <div class="card-body">
                     <div class="px-3">
-                        <p>A sua privacidade é importante para nós. É política do Studio Social respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site <a href=http://studiosocial.ga/>Studio Social</a>, e outros sites que possuímos e operamos.</p>
+                        <p>A sua privacidade é importante para nós. É política do Studio Social respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site <a href=http://studiosocial.app/>Studio Social</a>, e outros sites que possuímos e operamos.</p>
                         <p>Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço. Fazemo-lo por meios justos e legais, com o seu conhecimento e consentimento. Também informamos por que estamos coletando e como será usado.                    </p>
                         <p>Apenas retemos as informações coletadas pelo tempo necessário para fornecer o serviço solicitado. Quando armazenamos dados, protegemos dentro de meios comercialmente aceitáveis ​​para evitar perdas e roubos, bem como acesso, divulgação, cópia, uso ou                        modificação não autorizados.</p>
                             <p>Não compartilhamos informações de identificação pessoal publicamente ou com terceiros, exceto quando exigido por lei.</p>

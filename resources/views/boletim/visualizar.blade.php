@@ -25,7 +25,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-8">
-                            <img src="https://studiosocial.ga/img/logo_zurich.png">
+                            <img src="https://studiosocial.app/img/logo_zurich.png">
                         </div>
                     </div>
                 </div>
