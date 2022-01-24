@@ -22,7 +22,6 @@ Route::get('configuracoes','ConfiguracoesController@index');
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
 Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecionarPeriodo');
 
-Route::get('notificacoes','NotificacaoController@index');
 Route::get('permissoes','PermissaoController@index');
 Route::get('permissoes/{id}/users','PermissaoController@users');
 Route::get('permissoes/{id}/perfis','PermissaoController@perfis');
@@ -73,6 +72,7 @@ Route::get('role/permissions/{role}','RoleController@permissions');
 
 Route::resource('client', 'ClientController');
 Route::resource('hashtag', 'HashtagController');
+Route::resource('notification', 'NotificacaoController');
 Route::resource('usuario', 'UserController');
 Route::resource('regras', 'RuleController');
 Route::resource('role', 'RoleController');
@@ -87,7 +87,8 @@ Route::get('monitoramento','MonitoramentoController@index');
 Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
 Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 
-
+Route::get('notificacoes','NotificacaoController@index');
+Route::get('notificacoes/{id}/descricao','NotificacaoController@getDescricao');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
 

@@ -229,6 +229,7 @@
   <script src="{{ asset('js/custom.js') }}"></script>
   <script src="{{ asset('js/croppie.min.js') }}"></script>
   <script src="{{ asset('js/upload-image.js') }}"></script>
+  <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
   <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
@@ -263,6 +264,12 @@
       let APP_URL = {!! json_encode(url('/')) !!}
 
       $('.select2').select2();
+
+      $('#frm_notification_create').validate();
+
+      jQuery.extend(jQuery.validator.messages, {
+        required: "Campo obrigatório"
+      });
       
       $('#datatable').DataTable({
         "pagingType": "full_numbers",

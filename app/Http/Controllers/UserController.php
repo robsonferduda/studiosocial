@@ -82,8 +82,6 @@ class UserController extends Controller
         $flag_senha = $request->is_password == true ? true : false;
         $request->merge(['is_active' => $flag]);
 
-        dd(Hash::make($request->password));
-
         if($flag_senha)
             $request->merge(['password' => Hash::make($request->password)]);
         else

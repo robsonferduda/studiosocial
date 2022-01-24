@@ -82,3 +82,11 @@
 .view-eye-p:hover{
     cursor: pointer;
 }
+.notification-descricao{ 
+    padding: 5px 8px;
+    border-radius: 5px;
+}
+.error{
+    color: #dd0808;
+    margin-top: 5px;
+}
