@@ -95,7 +95,11 @@ class Utils
             case '23505':
                 return '<i class="fa fa-times"></i> Violação de restrição de valor único';
                 break;
-            
+
+            case '22008':
+                return '<i class="fa fa-times"></i> Formato de data inválido';
+                break;
+                            
             default:
                 return '<i class="fa fa-times"></i> Código de erro desconhecido: '.$errorCode;
                 break;
