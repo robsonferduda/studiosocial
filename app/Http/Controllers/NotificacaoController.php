@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Utils;
 use App\Client;
 use App\Notification;
 use App\NotificationClient;
