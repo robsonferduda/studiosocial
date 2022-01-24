@@ -695,11 +695,11 @@ class RelatorioController extends Controller
                         if(trim($buffer) == 'END') {
                             //echo 'OUT > '.$buffer.'<br />';
 
-                            $file = Storage::disk('wordcloud')->get($file_name);
+                            $file = Storage::disk('wordcloud')->get($file_name.".json");
                             //dd($words_execption);
                 
-                            $words = json_decode($file);
-                           
+                            $words = json_decode($file);                                                 
+
                             $words = (Array) $words;
                             arsort($words);
                 
@@ -715,7 +715,7 @@ class RelatorioController extends Controller
                                 $word_cloud[$word] = $qtd_times;  
                             }
 
-                            Storage::disk('wordcloud')->delete($file_name);
+                            Storage::disk('wordcloud')->delete($file_name.".json");
                         }
     
                     }

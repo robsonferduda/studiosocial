@@ -46,7 +46,7 @@ text = re.sub(r"#([a-zA-Z0-9_]{1,50})", " ", text)
         
 wordcloud_words = WordCloud(stopwords=stopwords, random_state=1).process_text(text)
 
-with open("storage/app/wordcloud/files/"+file_name+".json", "w") as outfile:
+with open("/var/www/html/storage/app/wordcloud/files/"+file_name+".json", "w") as outfile:
     json.dump(wordcloud_words, outfile)
 
     #with open("storage/app/wordcloud/files/cliente-"+str(client['id'])+"-wordclould.text", "w") as outfile:
@@ -66,7 +66,7 @@ with open("storage/app/wordcloud/files/"+file_name+".json", "w") as outfile:
 
         if len(wordcloud_words) > 0:
             wordcloud = WordCloud(width = 3000, height = 2000, random_state=1, background_color='white', colormap='Set2', stopwords = stopwords).generate_from_frequencies(wordcloud_words)
-            wordcloud.to_file("storage/app/wordcloud/files/"+file_name+".png")
+            wordcloud.to_file("/var/www/html/storage/app/wordcloud/files/"+file_name+".png")
     
 
 print('END')
