@@ -37,11 +37,13 @@
                             <td class="center">{{ $notification->valor }}</td>
                             <td class="center">{{ $notification->valor_atual }}</td>
                             <td class="center">
-                                @if($notification->status)
-                                    <span class="badge badge-success">Ativo</span>
-                                @else
-                                    <span class="badge badge-warning">Inativo</span>
-                                @endif
+                                <a href="{{ url('notificacoes/'.$notification->id.'/situacao') }}">
+                                    @if($notification->status)
+                                        <span class="badge badge-success">Ativo</span>
+                                    @else
+                                        <span class="badge badge-warning">Inativo</span>
+                                    @endif
+                                </a>
                             </td>
                             <td>
                                 <a title="Editar" href="{{ route('notification.edit',$notification->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>

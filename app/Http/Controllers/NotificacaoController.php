@@ -26,7 +26,7 @@ class NotificacaoController extends Controller
     {
         $client = Client::find(Session::get('cliente')['id']);
         $notifications = Notification::orderBy('name')->get();
-        $notifications_client = NotificationClient::with('notification')->where('client_id', $this->client_id)->get();
+        $notifications_client = NotificationClient::with('notification')->where('client_id', $this->client_id)->orderBy('created_at')->get();
 
         return view('notificacoes/index', compact('client','notifications','notifications_client'));
     }
@@ -77,7 +77,7 @@ class NotificacaoController extends Controller
     {
         $request->merge(['dt_inicio' => date('Y-m-d', strtotime(str_replace('/', '-', $request->dt_inicio)))]);
         $request->merge(['dt_termino' => date('Y-m-d', strtotime(str_replace('/', '-', $request->dt_termino)))]);
-        
+
         try {
             $notification_client = NotificationClient::find($id);
             $notification_client->update($request->all());
@@ -111,6 +111,15 @@ class NotificacaoController extends Controller
             Flash::error('<i class="fa fa-times"></i> Erro ao excluir registro');
         }
 
+        return redirect('notificacoes');
+    }
+
+    public function atualizarSituacao($notification_id)
+    {
+        $notification = NotificationClient::findOrFail($notification_id);
+        $notification->status = !$notification->status;
+        $notification->save();
+        
         return redirect('notificacoes');
     }
 }
