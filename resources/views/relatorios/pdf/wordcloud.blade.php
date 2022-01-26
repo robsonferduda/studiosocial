@@ -26,7 +26,7 @@
         <h6 class="text-center">Relatório Nuvem de Palavras</h6>
     </div>  
     <div class="text-center">
-        <p>Período de {{ $dt_inicial }} à {{ $dt_final }}</p>
+        <p>Período de {{ $dtInicial }} à {{ $dtFinal }}</p>
     </div>
     <div class="mt-0 mb-2 text-center" style="background:#f7f7f7;">
         <strong class="d-block">TERMO DE PESQUISA</strong>
