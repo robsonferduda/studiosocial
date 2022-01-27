@@ -363,6 +363,7 @@ class RelatorioController extends Controller
         $rule = $request->regra;
         $dtInicial = $request->data_inicial;
         $dtFinal = $request->data_final;
+        $nome = "Nuvem de Palavras";
 
         if(isset($this->client_id)) {
 
@@ -431,7 +432,7 @@ class RelatorioController extends Controller
 
         $rule = Rule::find($request->regra);
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dtInicial','dtFinal'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dtInicial','dtFinal','nome'));
         return $pdf->download($nome_arquivo);
     }
 
@@ -460,10 +461,11 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Evolução por Rede Social";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
     
@@ -502,10 +504,11 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Reactions";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/reactions', compact('chart','dados','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/reactions', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
 
