@@ -16,18 +16,7 @@
             text-align: center;
         }
     </style>
-    @include("cabecalho")
-    <div class="text-center">
-        <p>Período de {{ $dt_inicial }} à {{ $dt_final }}</p>
-    </div>
-    <div class="mt-0 mb-2 text-center" style="background:#f7f7f7;">
-        <strong class="d-block">TERMO DE PESQUISA</strong>
-        @if($rule)
-            <p>{{ $rule->getExpression() }}</p>
-        @else
-            <p>Todas as Regras</p>
-        @endif
-    </div>
+    @include("relatorios/pdf/cabecalho")
     <div>
         <img src="{{ $chart }}">
     </div>
