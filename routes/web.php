@@ -50,6 +50,7 @@ Route::post('relatorios/pdf/wordcloud','RelatorioController@wordcloudPdf');
 Route::post('relatorios/pdf/evolucao-redes-cociais','RelatorioController@evolucaoRedeSocialPdf');
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 Route::post('relatorios/pdf/reactions','RelatorioController@reactionsPdf');
+Route::post('relatorios/pdf/localizacao','RelatorioController@localizacaoPdf');
 
 Route::get('pdf','RelatorioController@pdf');
 

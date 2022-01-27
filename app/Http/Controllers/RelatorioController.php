@@ -543,6 +543,21 @@ class RelatorioController extends Controller
         return $pdf->download($nome_arquivo);
     }
 
+    public function localizacaoPdf(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $dados = $this->getDadosLocalizacao();
+      $rule = Rule::find($request->regra);
+      $dt_inicial = $request->data_inicial;
+      $dt_final = $request->data_final;
+      $nome = "Relatório de Localização";
+
+      $nome_arquivo = date('YmdHis').".pdf";
+
+      $pdf = DOMPDF::loadView('relatorios/pdf/localizacao', compact('dados','rule','dt_inicial','dt_final','nome'));
+      return $pdf->download($nome_arquivo);
+    }
+
     //Métodos de geração da imagem do gráfico
 
     public function getGraficoEvolucaoDiaria($dados)
