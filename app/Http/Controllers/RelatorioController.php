@@ -119,6 +119,16 @@ class RelatorioController extends Controller
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
+    public function localizacao()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Localização das postagens e dos usuários do Twitter";
+      
+      return view('relatorios/localizacao', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
+    }
+
     public function gerenciador()
     {
       $rules = $this->rules;
@@ -240,6 +250,16 @@ class RelatorioController extends Controller
       return response()->json($sentimentos);
     }
 
+    public function getLocalizacao(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra; 
+        $dados = $this->getDadosLocalizacao();      
+
+        return response()->json($dados);
+    }
+
     public function getEvolucaoDiaria()
     {
         for ($i=0; $i < $this->periodo; $i++) { 
@@ -326,6 +346,17 @@ class RelatorioController extends Controller
                                         'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
 
         return $sentimentos;
+    }
+
+    public function getDadosLocalizacao()
+    {
+        $location_tweet = (new MediaTwitter())->getTweetLocation($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+        $location_user = (new MediaTwitter())->getUserLocation($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+
+        $locations['location_tweet'] = $location_tweet;
+        $locations['location_user'] = $location_user;
+
+        return $locations;
     }
 
     public function getAllMedias()

@@ -95,4 +95,35 @@ class MediaTwitter extends Model implements Auditable
                             ORDER BY total DESC
                             LIMIT 10");
     }
+
+    public function getTweetLocation($client_id, $data_inicial, $data_final, $rule)
+    {
+        $dt_inicial = $data_inicial->format('Y-m-d');
+        $dt_final = $data_final->format('Y-m-d');
+
+        return DB::select("SELECT place_name, count(*) as total
+                            FROM media_twitter 
+                            WHERE place_name notnull 
+                            AND place_name != '' 
+                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            GROUP BY place_name
+                            ORDER BY total DESC
+                            LIMIT 20");
+
+    }
+
+    public function getUserLocation($client_id, $data_inicial, $data_final, $rule)
+    {
+        $dt_inicial = $data_inicial->format('Y-m-d');
+        $dt_final = $data_final->format('Y-m-d');
+        
+        return DB::select("SELECT user_location, count(*) as total 
+                            FROM media_twitter 
+                            WHERE user_location notnull 
+                            AND user_location != ''
+                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            GROUP BY user_location
+                            ORDER BY total DESC
+                            LIMIT 20");
+    }
 }

@@ -28,12 +28,12 @@ Route::get('permissoes/{id}/perfis','PermissaoController@perfis');
 Route::get('perfis','RoleController@index');
 
 Route::get('relatorios','RelatorioController@index');
-Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/gerenciador','RelatorioController@gerenciador');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/hashtags','RelatorioController@hashtags');
 Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
+Route::get('relatorios/localizacao','RelatorioController@localizacao');
 Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
 Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 
@@ -43,6 +43,7 @@ Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimen
 Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPeriodo');
+Route::post('relatorios/dados/localizacao', 'RelatorioController@getLocalizacao');
 
 Route::post('relatorios/pdf/evolucao-diaria','RelatorioController@evolucaoDiariaPdf');
 Route::post('relatorios/pdf/wordcloud','RelatorioController@wordcloudPdf');
