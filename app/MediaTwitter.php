@@ -3,6 +3,7 @@
 namespace App;
 
 use DB;
+use App\Rule;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -105,6 +106,7 @@ class MediaTwitter extends Model implements Auditable
                             FROM media_twitter 
                             WHERE place_name notnull 
                             AND place_name != '' 
+                            AND client_id = $client_id
                             AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             GROUP BY place_name
                             ORDER BY total DESC
@@ -112,18 +114,39 @@ class MediaTwitter extends Model implements Auditable
 
     }
 
-    public function getUserLocation($client_id, $data_inicial, $data_final, $rule)
+    public function getUserLocation($client_id, $data_inicial, $data_final, $rule_id)
     {
+        $dados = array();
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
+
+        if($rule_id){
+            
+            $sql = "SELECT user_location, count(*) as total 
+                    FROM media_twitter t1, rule_message t2
+                    WHERE t1.id = t2.id 
+                    AND user_location notnull 
+                    AND user_location != ''
+                    AND client_id = $client_id
+                    AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                    AND t2.rule_id = $rule_id
+                    AND t2.rules_type = 3
+                    GROUP BY user_location
+                    ORDER BY total DESC
+                    LIMIT 20";
+
+        }else{
+            $sql = "SELECT user_location, count(*) as total 
+                                FROM media_twitter 
+                                WHERE user_location notnull 
+                                AND user_location != ''
+                                AND client_id = $client_id
+                                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                                GROUP BY user_location
+                                ORDER BY total DESC
+                                LIMIT 20";
+        }
         
-        return DB::select("SELECT user_location, count(*) as total 
-                            FROM media_twitter 
-                            WHERE user_location notnull 
-                            AND user_location != ''
-                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            GROUP BY user_location
-                            ORDER BY total DESC
-                            LIMIT 20");
+        return DB::select($sql);
     }
 }
