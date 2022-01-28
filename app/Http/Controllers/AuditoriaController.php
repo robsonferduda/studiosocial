@@ -18,12 +18,9 @@ class AuditoriaController extends Controller
 
     public function index(Request $request)
     {
-        $audits = Audit::with('user')->whereNotNull('user_id')->orderBy('created_at','ASC')->get();
-
         if ($request->ajax()) {
-            
-             $auditorias = Audit::with('user')
-                           ->orderBy('created_at','ASC')->get();
+            // dd($operacao);
+            $auditorias = Audit::with('user')->orderBy('created_at','ASC')->get();
  
             return DataTables::of($auditorias)
             ->addColumn('data', function ($auditoria) {
@@ -31,8 +28,10 @@ class AuditoriaController extends Controller
             })
             ->addColumn('nivel', function ($auditoria) {
                 $roles = [];
-                foreach($auditoria->user->roles()->get() as $role){
-                    $roles[] = ['display_name' => $role->display_name, 'display_color' => $role->display_color];
+                if(isset($auditoria->user)) {
+                    foreach($auditoria->user->roles()->get() as $role){
+                        $roles[] = ['display_name' => $role->display_name, 'display_color' => $role->display_color];
+                    }
                 }
                 return $roles;
             })    
@@ -49,7 +48,7 @@ class AuditoriaController extends Controller
             ->make(true);
         }
 
-        return view('auditoria/index',compact('audits'));
+        return view('auditoria/index');
     }
 
     public function show($id)
