@@ -388,9 +388,7 @@ class RelatorioController extends Controller
     public function wordcloudPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
-        $rule = $request->regra;
-        $dtInicial = $request->data_inicial;
-        $dtFinal = $request->data_final;
+        $rule = $request->regra;       
         $nome = "Nuvem de Palavras";
 
         if(isset($this->client_id)) {
@@ -460,7 +458,10 @@ class RelatorioController extends Controller
 
         $rule = Rule::find($request->regra);
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dtInicial','dtFinal','nome'));
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
 

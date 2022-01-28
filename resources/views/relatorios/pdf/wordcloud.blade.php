@@ -18,6 +18,7 @@
     </style>
     @include("relatorios/pdf/cabecalho")
     <div>
+        <br>
         <img src="{{ $chart }}">
     </div>
     <footer>
