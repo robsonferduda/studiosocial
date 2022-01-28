@@ -16,4 +16,6 @@
                 <i class="fa fa-smile-o text-success"></i>
             @break                                            
     @endswitch
+
+    <a title="Excluir Mídia" href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/excluir') }}" class="btn btn-danger btn-link btn-icon pull-right btn-delete-media"><i class="fa fa-trash fa-2x"></i></a>
 </h3>

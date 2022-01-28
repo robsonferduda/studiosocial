@@ -64,6 +64,25 @@ $(document).ready(function() {
         });
     }); 
 
+    $('body').on("click", ".btn-delete-media", function(e) {
+        e.preventDefault();
+        var url = $(this).attr("href");
+        Swal.fire({
+            title: "Tem certeza que deseja excluir?",
+            text: "Você não poderá recuperar o registro excluído",
+            type: "warning",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            confirmButtonText: '<i class="fa fa-check"></i> Confirmar',
+            cancelButtonText: '<i class="fa fa-times"></i> Cancelar'
+        }).then(function(result) {
+            if (result.value) {
+                window.location.href = url;
+            }
+        });
+    }); 
+
     $('body').on("click", ".button-redo", function(e) {
         e.preventDefault();
         var form = $(this).closest("form");

@@ -54,4 +54,38 @@ class MediaController extends Controller
         
         return redirect()->back()->withInput();
     }
+
+    public function excluir($id, $tipo)
+    {
+        $media = null;
+
+        switch ($tipo) {
+            case 'twitter':
+                $media = MediaTwitter::where('id',$id)->first();
+                break;
+            
+            case 'facebook':
+                $media = FbPost::where('id',$id)->first();
+                break;
+
+            case 'instagram':
+                $media = Media::where('id',$id)->first();
+                break;
+        }
+
+        if($media){
+
+            if($media->delete()){
+                Flash::success('<i class="fa fa-check"></i> Mídia excluída com sucesso');
+            }else{
+                Flash::error('<i class="fa fa-check"></i> Erro ao excluir mídia');
+            }
+
+        }else{
+            Flash::warning('<i class="fa fa-exclamation"></i> Mídia não encontrada');
+        }
+        
+        return redirect()->back()->withInput();
+
+    }
 }
