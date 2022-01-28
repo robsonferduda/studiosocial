@@ -54,7 +54,7 @@ class TermController extends Controller
                     
                     $medias[] = array('id' => $media->id,
                                       'media_id' => $media_id,  
-                                      'type_message' => 'tweets',   
+                                      'type_message' => 'twitter',   
                                       'text' => $media->caption,
                                       'username' => '',
                                       'sentiment' => $media->sentiment,
@@ -73,7 +73,7 @@ class TermController extends Controller
                     
                     $medias[] = array('id' => $media->id,
                                       'media_id' => $media->twitter_id,
-                                      'type_message' => 'tweets', 
+                                      'type_message' => 'twitter', 
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),

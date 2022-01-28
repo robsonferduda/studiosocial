@@ -8,7 +8,7 @@
                     <h4 class="card-title ml-2"><i class="fa fa-hashtag"></i> Monitoramento </h4>
                 </div>
                 <div class="col-md-6">
-                    <a href="{{ URL::previous() }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-angle-double-left"></i> Voltar</a>
+                    <a href="{{ url('monitoramento') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="nc-icon nc-sound-wave"></i> Monitoramento</a>
                 </div>
             </div>
         </div>
