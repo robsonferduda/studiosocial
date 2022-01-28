@@ -4,9 +4,14 @@ namespace App;
 
 use DB;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class FbPost extends Model
+class FbPost extends Model implements Auditable
 {
+    use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
+
     protected $table = 'fb_posts';
 
     protected $fillable = [ 'message',
