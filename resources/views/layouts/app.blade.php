@@ -84,12 +84,14 @@
                   <p>Regras</p>
                   </a>
                 </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
-                  <a href="{{ url('boletins') }}">
-                  <i class="fa fa-file-o"></i>
-                  <p>Boletins</p>
-                  </a>
-                </li>
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
+                    <a href="{{ url('boletins') }}">
+                    <i class="fa fa-file-o"></i>
+                    <p>Boletins</p>
+                    </a>
+                  </li>
+                @endrole
                 <hr/>
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">

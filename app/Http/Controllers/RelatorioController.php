@@ -119,6 +119,16 @@ class RelatorioController extends Controller
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
+    public function localizacao()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Localização das postagens e dos usuários do Twitter";
+      
+      return view('relatorios/localizacao', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
+    }
+
     public function gerenciador()
     {
       $rules = $this->rules;
@@ -240,6 +250,16 @@ class RelatorioController extends Controller
       return response()->json($sentimentos);
     }
 
+    public function getLocalizacao(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra; 
+        $dados = $this->getDadosLocalizacao();      
+
+        return response()->json($dados);
+    }
+
     public function getEvolucaoDiaria()
     {
         for ($i=0; $i < $this->periodo; $i++) { 
@@ -328,6 +348,17 @@ class RelatorioController extends Controller
         return $sentimentos;
     }
 
+    public function getDadosLocalizacao()
+    {
+        $location_tweet = (new MediaTwitter())->getTweetLocation($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+        $location_user = (new MediaTwitter())->getUserLocation($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+
+        $locations['location_tweet'] = $location_tweet;
+        $locations['location_user'] = $location_user;
+
+        return $locations;
+    }
+
     public function getAllMedias()
     {
       $medias = array();
@@ -363,6 +394,7 @@ class RelatorioController extends Controller
         $rule = $request->regra;
         $dtInicial = $request->data_inicial;
         $dtFinal = $request->data_final;
+        $nome = "Nuvem de Palavras";
 
         if(isset($this->client_id)) {
 
@@ -431,7 +463,7 @@ class RelatorioController extends Controller
 
         $rule = Rule::find($request->regra);
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dtInicial','dtFinal'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dtInicial','dtFinal','nome'));
         return $pdf->download($nome_arquivo);
     }
 
@@ -444,10 +476,11 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Evolução Diária";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
 
@@ -459,10 +492,11 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Evolução por Rede Social";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
     
@@ -474,10 +508,11 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Sentimentos";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/sentimentos', compact('chart','sentimentos','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
 
@@ -500,11 +535,27 @@ class RelatorioController extends Controller
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+        $nome = "Relatório de Reactions";
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/reactions', compact('chart','dados','rule','dt_inicial','dt_final'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/reactions', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
+    }
+
+    public function localizacaoPdf(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $dados = $this->getDadosLocalizacao();
+      $rule = Rule::find($request->regra);
+      $dt_inicial = $request->data_inicial;
+      $dt_final = $request->data_final;
+      $nome = "Relatório de Localização";
+
+      $nome_arquivo = date('YmdHis').".pdf";
+
+      $pdf = DOMPDF::loadView('relatorios/pdf/localizacao', compact('dados','rule','dt_inicial','dt_final','nome'));
+      return $pdf->download($nome_arquivo);
     }
 
     //Métodos de geração da imagem do gráfico
