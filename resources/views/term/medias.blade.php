@@ -70,25 +70,7 @@
                                     <span class="float-right">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
                                 </div>
                                 <p>{{ $media['text'] }}</p>
-                                <h3>
-                                    @switch($media['sentiment'])
-                                        @case(-1)
-                                                <i class="fa fa-frown-o text-danger"></i>
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>
-                                            @break
-                                        @case(0)
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a> 
-                                                <i class="fa fa-ban text-primary"></i>
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/1/atualizar') }}"><i class="fa fa-smile-o op-2"></i></a>                                                
-                                            @break
-                                        @case(1)
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/-1/atualizar') }}"><i class="fa fa-frown-o op-2"></i></a>
-                                                <a href="{{ url('media/'.$media['id'].'/tipo/'.$media['type_message'].'/sentimento/0/atualizar') }}"><i class="fa fa-ban op-2"></i></a>
-                                                <i class="fa fa-smile-o text-success"></i>
-                                            @break                                            
-                                    @endswitch
-                                </h3>
+                                @include('layouts.sentiment')
                             </div>
                         </div>
                     </div>

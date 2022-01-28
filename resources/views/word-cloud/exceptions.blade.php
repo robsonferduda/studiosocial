@@ -5,9 +5,13 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="card-title ml-2"><i class="nc-icon nc-ruler-pencil"></i> Nuvem de Palavras - Expressões Removidas</h4>
+                    <h4 class="card-title ml-2">
+                        <i class="nc-icon nc-ruler-pencil"></i> Nuvem de Palavras 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Expressões Removidas
+                    </h4>
                 </div>
-                <div class="col-md-6">                    
+                <div class="col-md-6">   
+                    <a href="{{ url('nuvem-palavras') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="fa fa-cloud"></i> Nuvem de Palavras</a>                 
                 </div>
             </div>
         </div>
