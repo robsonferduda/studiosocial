@@ -51,6 +51,7 @@ Route::post('relatorios/pdf/evolucao-redes-cociais','RelatorioController@evoluca
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 Route::post('relatorios/pdf/reactions','RelatorioController@reactionsPdf');
 Route::post('relatorios/pdf/localizacao','RelatorioController@localizacaoPdf');
+Route::post('relatorios/pdf/gerador','RelatorioController@geradorPdf');
 
 Route::get('pdf','RelatorioController@pdf');
 

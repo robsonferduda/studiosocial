@@ -16,10 +16,8 @@
                 </div>
                 <div class="card-body">
                     @include('layouts/regra')
+                    <div class="col-lg-12 col-md-12 msg"></div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12 msg">
-
-                        </div>
                         <div class="col-lg-6 col-md-6">
                             <table class="table table-hover table_reactions d-none">
                                 <thead class="">
@@ -173,7 +171,7 @@
                     }else{
                         if(myChart) myChart.destroy();
                         $(".table_reactions").addClass("d-none");
-                        $(".msg").html('<p class="ml-1 text-primary">Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
+                        $(".msg").html('<p class="ml-1 msg"><i class="fa fa-exclamation-circle mr-1"></i>Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
                     }
                 }
             });             

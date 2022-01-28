@@ -205,20 +205,12 @@ class RelatorioController extends Controller
 
     public function getReactions(Request $request)
     {
+      $dados = array();
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-      $dt_inicial = $this->data_inicial->format('Y-m-d');
-      $dt_final = $this->data_final->format('Y-m-d');
+      $this->rule_id = $request->regra;
+      $dados = $this->getDadosReactions();
 
-      $reactions = DB::select("SELECT t3.name, t3.color, t3.icon, count(*) 
-                              FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
-                              WHERE t1.id = t2.post_id 
-                              AND t2.reaction_id = t3.id 
-                              AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                              AND t1.client_id = $this->client_id
-                              GROUP BY t3.name, t3.color, t3.icon 
-                              ORDER BY t3.name");
-
-      return response()->json($reactions);
+      return response()->json($dados);
     }
 
     public function getSentimentosPeriodo(Request $request)
@@ -258,6 +250,11 @@ class RelatorioController extends Controller
         $dados = $this->getDadosLocalizacao();      
 
         return response()->json($dados);
+    }
+
+    public function getDadosReactions()
+    {
+      return (new FbPost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
     }
 
     public function getEvolucaoDiaria()
@@ -519,18 +516,7 @@ class RelatorioController extends Controller
     public function reactionsPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
-        $dt_inicial = $this->data_inicial->format('Y-m-d');
-        $dt_final = $this->data_final->format('Y-m-d');
-
-        $dados = DB::select("SELECT t3.name, t3.color, t3.icon, count(*) 
-                            FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
-                            WHERE t1.id = t2.post_id 
-                            AND t2.reaction_id = t3.id 
-                            AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            AND t1.client_id = $this->client_id
-                            GROUP BY t3.name, t3.color, t3.icon 
-                            ORDER BY t3.name");
-        
+        $dados = $this->getDadosReactions();
         $chart = $this->getGraficoReactions($dados);
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
@@ -950,5 +936,33 @@ class RelatorioController extends Controller
 
         return $concatenateText;
 
+    }
+
+    public function geradorPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+        $relatorios = $request->relatorios;
+        $nome = "Relatório de Redes Sociais";
+
+        $dados = [];
+        $charts = [];
+
+        if(in_array('sentimentos', $relatorios)){
+          $dados['sentimentos'] = $this->getSentimentos(); 
+          $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
+        }
+
+        if(in_array('reactions', $relatorios)){
+          $dados['reactions'] = $this->getDadosReactions();
+          $charts['reactions'] = $this->getGraficoReactions($dados['reactions']);
+        }
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios'));
+        return $pdf->download($nome_arquivo);
     }
 }
