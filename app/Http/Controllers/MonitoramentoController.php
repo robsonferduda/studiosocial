@@ -113,7 +113,8 @@ class MonitoramentoController extends Controller
                         }
                     }
 
-                    $medias[] = array('id' => $media->media_id,
+                    $medias[] = array('id' => $media->id,
+                                      'media_id' => $media->media_id,
                                       'text' => $media->caption,
                                       'username' => $media->username,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
@@ -176,7 +177,8 @@ class MonitoramentoController extends Controller
                 $medias_temp = MediaTwitter::where('client_id', $client_id)->orderBy('created_tweet_at','DESC')->paginate(20);
                 foreach ($medias_temp as $key => $media) {
                     
-                    $medias[] = array('id' => $media->twitter_id,
+                    $medias[] = array('id' => $media->id,
+                                      'media_id' => $media->twitter_id,
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),

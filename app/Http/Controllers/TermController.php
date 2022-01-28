@@ -54,14 +54,15 @@ class TermController extends Controller
                     
                     $medias[] = array('id' => $media->id,
                                       'media_id' => $media_id,  
-                                      'type_message' => 'tweets',   
+                                      'type_message' => 'instagram',   
                                       'text' => $media->caption,
                                       'username' => '',
                                       'sentiment' => $media->sentiment,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
-                                      'social_media_id' => $media->social_media_id
+                                      'social_media_id' => $media->social_media_id,
+                                      'link' => $media->permalink
                                     );
 
                 }
@@ -73,7 +74,7 @@ class TermController extends Controller
                     
                     $medias[] = array('id' => $media->id,
                                       'media_id' => $media->twitter_id,
-                                      'type_message' => 'tweets', 
+                                      'type_message' => 'twitter', 
                                       'text' => $media->full_text,
                                       'username' => $media->user_name,
                                       'created_at' => dateTimeUtcToLocal($media->created_tweet_at),

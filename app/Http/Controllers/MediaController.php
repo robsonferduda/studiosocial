@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\FbPost;
+use App\Media;
 use App\MediaTwitter;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
@@ -22,14 +24,21 @@ class MediaController extends Controller
     public function atualizaSentimento($id, $tipo, $sentimento)
     {
         switch ($tipo) {
-            case 'tweets':
+            case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
                 $media->sentiment = $sentimento;
                 break;
             
-            case 'value':
-                
+            case 'instagram':
+                $media = Media::where('id',$id)->first();
+                $media->sentiment = $sentimento;
                 break;
+
+            case 'facebook':
+                $media = FbPost::where('id',$id)->first();
+                $media->sentiment = $sentimento;
+                break;
+            
         }
         
         if($media->update())

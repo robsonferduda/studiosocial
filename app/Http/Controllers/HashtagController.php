@@ -45,15 +45,17 @@ class HashtagController extends Controller
                     $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
                     
                     $medias[] = array('id' => $media->id,
-                                      'media_id' => $media_id,  
-                                      'type_message' => 'tweets',   
+                                      'media_id' => $media->media_id,  
+                                      'type_message' => 'instagram',   
                                       'text' => $media->caption,
                                       'username' => '',
                                       'sentiment' => $media->sentiment,
+                                      'user_profile_image_url' => null,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
-                                      'social_media_id' => $media->social_media_id
+                                      'social_media_id' => $media->social_media_id,
+                                      'link' => $media->permalink
                                     );
 
                 }

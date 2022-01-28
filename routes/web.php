@@ -9,6 +9,8 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 
 Auth::routes();
 
+Route::get('account/client/{cliente_id}','AccountController@index');
+
 Route::get('auditoria','AuditoriaController@index');
 Route::get('auditoria/detalhes/{id}','AuditoriaController@show');
 
