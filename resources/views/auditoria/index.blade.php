@@ -17,7 +17,7 @@
                 @include('layouts.mensagens')
             </div>
             <div class="col-md-12">
-                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <table id="kt_server_side_datatable" aria-describedby="kt_datatable_info" class="table table-striped table-bordered dataTable" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Data</th>
@@ -28,7 +28,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($audits as $audit)
+                    {{--    @foreach($audits as $audit)
                             <tr>
                                 <td>{{ date('d/m/Y H:i:s', strtotime($audit->created_at)) }}</td>
                                 <td>
@@ -46,11 +46,55 @@
                                     <a href="{{ url('auditoria/detalhes', $audit->id) }}"><i class="fa fa-eye"></i> Ver</a>
                                 </td>
                             </tr>
-                        @endforeach
+                        @endforeach --}}
                     </tbody>
                 </table>   
             </div>        
         </div>
     </div>
 </div> 
+@endsection
+{{-- Styles Section --}}
+@section('style')
+    <link href="{{ asset('plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css"/>
+@endsection
+
+{{-- Scripts Section --}}
+@section('script')
+    
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#kt_server_side_datatable').DataTable( {
+            "processing": true,
+            "serverSide": true,
+            "order": [[ 0, "desc" ]],
+            "bFilter": false,
+            "ajax":{
+                "url": "{{ url('auditoria') }}",
+                "dataType": "json",
+                "type": "GET"                
+            },
+            "columns": [            
+                { data: "data" },
+                { 
+                    "data": "nivel", 
+                    render: function ( data, type, row ) {
+
+                        let td = '';
+                        $.each(data, function( index, value ) {
+                            td += '<span class="badge badge-'+value.display_color+'">'+value.display_name+'</span>';
+                        });
+
+                        return td;
+                    }
+                },
+                { data: "usuario" },
+                { data: "operacao" },               
+                {data: "acoes", orderable: false, searchable: false},
+            ]    
+        } );
+    } );
+    </script>
+    {{-- vendors --}}
+    <script src="{{ asset('plugins/custom/datatables/datatables.bundle.js') }}" type="text/javascript"></script>
 @endsection
