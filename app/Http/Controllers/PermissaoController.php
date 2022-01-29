@@ -16,14 +16,15 @@ class PermissaoController extends Controller
 
     public function index()
     {
-        $permissions = Permission::all();
+        $permissions = Permission::orderBy('display_name')->get();
         return view('permissoes/index', compact('permissions'));
     }
 
     public function users($id)
     {
         $permission = Permission::find($id);
-        return view('permissoes/users', compact('permission'));
+        $usuarios = array();
+        return view('permissoes/users', compact('permission','usuarios'));
     }
 
     public function perfis($id)

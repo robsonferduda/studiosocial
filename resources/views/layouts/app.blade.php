@@ -59,31 +59,39 @@
                     </a>
                   </li>
                 @endrole
+                @permission('notificacoes')
                 <li class="{{ (Session::has('url') and Session::get('url') == 'notificacoes') ? 'active' : '' }}">
                   <a href="{{ url('notificacoes') }}">
                   <i class="nc-icon nc-send"></i>
                   <p>NOTIFICAÇÕES</p>
                   </a>
                 </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'relatorios') ? 'active' : '' }}">
-                  <a href="{{ url('relatorios') }}">
-                  <i class="nc-icon nc-chart-bar-32"></i>
-                  <p>RELATÓRIOS</p>
-                  </a>
+                @endpermission
+                @permission('relatorios')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'relatorios') ? 'active' : '' }}">
+                    <a href="{{ url('relatorios') }}">
+                    <i class="nc-icon nc-chart-bar-32"></i>
+                    <p>RELATÓRIOS</p>
+                    </a>
+                  </li>
+                @endpermission
+                @permission('nuvem-de-palavras')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'nuvem-palavras') ? 'active' : '' }}">
+                    <a href="{{ url('nuvem-palavras') }}">
+                    <i class="fa fa-cloud"></i>
+                    <p>NUVEM PALAVRAS</p>
+                    </a>
+                  </li>
+                @endpermission
                 </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'nuvem-palavras') ? 'active' : '' }}">
-                  <a href="{{ url('nuvem-palavras') }}">
-                  <i class="fa fa-cloud"></i>
-                  <p>NUVEM PALAVRAS</p>
-                  </a>
-                </li>
-                </li>
-                <li class="{{ (Session::has('url') and Session::get('url') == 'regras') ? 'active' : '' }}">
-                  <a href="{{ url('regras') }}">
-                  <i class="nc-icon fa nc-ruler-pencil"></i>
-                  <p>Regras</p>
-                  </a>
-                </li>
+                @permission('regras')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'regras') ? 'active' : '' }}">
+                    <a href="{{ url('regras') }}">
+                    <i class="nc-icon fa nc-ruler-pencil"></i>
+                    <p>Regras</p>
+                    </a>
+                  </li>
+                @endpermission
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
                     <a href="{{ url('boletins') }}">

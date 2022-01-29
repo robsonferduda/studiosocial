@@ -73,6 +73,7 @@ Route::get('hashtag/medias/{hashtag}','HashtagController@medias');
 Route::post('hashtag/create','HashtagController@create');
 
 Route::get('role/permissions/{role}','RoleController@permissions');
+Route::post('role/permission/{role}','RoleController@addPermission');
 
 Route::resource('client', 'ClientController');
 Route::resource('hashtag', 'HashtagController');

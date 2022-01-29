@@ -27,11 +27,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                        @foreach($perfis as $p)
+                        @forelse($perfis as $p)
                             <tr>
                                 <td>{{ $p->display_name }}</td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td>Nenhum perfil associado</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>  
             </div>         

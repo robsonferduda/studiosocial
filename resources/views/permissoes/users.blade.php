@@ -27,7 +27,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                        
+                        @forelse($usuarios as $user)
+                            <tr>
+                                <td>{{ $u->name }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td>Nenhum usuario associado</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>  
             </div>         

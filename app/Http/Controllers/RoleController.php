@@ -109,7 +109,9 @@ class RoleController extends Controller
     public function permissions($role)
     {
         $role = Role::findOrFail($role);
-        return view('perfis/permissions', compact('role'));
+        $permissions = Permission::orderBy('display_name')->get();
+
+        return view('perfis/permissions', compact('role','permissions'));
     }
 
     public function show($id)

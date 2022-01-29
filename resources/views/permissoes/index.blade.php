@@ -34,7 +34,7 @@
                 <tbody>
                     @foreach($permissions as $p)
                         <tr>
-                            <td>{{ $p->display_name }}</td>
+                            <td>{{ $p->display_name }} ({{ $p->name }})</td>
                             <td>{{ $p->description }}</td>
                             <td class="center">
                                 <a title="Usuários Habilitados" href="{{ url('permissoes/'.$p->id.'/users') }}" class="btn btn-primary btn-icon btn-link"><i class="nc-icon nc-circle-10 font-25"></i></a>
