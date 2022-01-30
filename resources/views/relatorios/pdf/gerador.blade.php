@@ -20,6 +20,12 @@
     </style>
     @include("relatorios/pdf/cabecalho")
     <div>
+
+        @if(in_array('evolucao_diaria', $relatorios))
+            @include("relatorios/pdf/partials/evolucao_diaria")
+            <div class="page_break"></div>
+        @endif
+
         @if(in_array('sentimentos', $relatorios))
             @include("relatorios/pdf/partials/sentimento")
             <div class="page_break"></div>

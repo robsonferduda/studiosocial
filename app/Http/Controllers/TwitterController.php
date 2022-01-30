@@ -44,6 +44,7 @@ class TwitterController extends Controller
     {
        (new TwitterCollect())->pullMedias();
        (new IGHashTag())->pullMedias();
+       (new IGMention())->pullMedias();
 
         //$rule = Rule::find(1);
 

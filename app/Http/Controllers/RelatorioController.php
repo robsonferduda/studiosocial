@@ -951,6 +951,11 @@ class RelatorioController extends Controller
         $dados = [];
         $charts = [];
 
+        if(in_array('evolucao_diaria', $relatorios)){
+          $dados['evolucao_diaria'] = $this->getEvolucaoDiaria(); 
+          $charts['evolucao_diaria'] = $this->getGraficoEvolucaoDiaria($dados['evolucao_diaria']);
+        }
+
         if(in_array('sentimentos', $relatorios)){
           $dados['sentimentos'] = $this->getSentimentos(); 
           $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
