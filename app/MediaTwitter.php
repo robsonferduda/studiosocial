@@ -41,6 +41,14 @@ class MediaTwitter extends Model implements Auditable
         return $this->belongsToMany('App\Term','twitter_term','media_id','term_id')->withTimestamps();
     }
 
+    public function getMedia($client_id)
+    {
+        return DB::select("SELECT count(*)/30 as media 
+                           FROM media_twitter 
+                           WHERE client_id = {$client_id} 
+                           AND created_tweet_at > current_date - interval '30' day")[0]->media;
+    }
+
     public function getSentimentos($data_inicial, $data_final, $rule)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');

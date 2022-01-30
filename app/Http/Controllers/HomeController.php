@@ -35,6 +35,7 @@ class HomeController extends Controller
         $periodo_relatorio = null;
 
         $u = User::find(Auth::user()->id);
+        $media_twitter = (new MediaTwitter)->getMedia($this->client_id);
 
         if($u->hasRole('administradores')){
 
@@ -43,7 +44,7 @@ class HomeController extends Controller
             $hashtags = Hashtag::where('is_active',true)->get();
             $terms = Term::where('is_active',true)->get();
 
-            return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio'));
+            return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter'));
 
         }else{
             
@@ -67,7 +68,7 @@ class HomeController extends Controller
                             'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
                             'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
 
-            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio'));
+            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter'));
                 
         }     
 

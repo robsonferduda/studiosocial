@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
     <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-3 col-md-3 col-sm-6">
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
@@ -26,7 +26,7 @@
                 </div>
             </div>
         </div>  
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-3 col-md-3 col-sm-6">
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>  
-        <div class="col-lg-4 col-md-6 col-sm-6">
+        <div class="col-lg-3 col-md-3 col-sm-6">
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
@@ -71,9 +71,33 @@
                     <span class="text-info"><i class="fa fa-clock-o"></i> Atualizado em {{ date('d/m/Y H:i:s') }}</span>
                 </div>
             </div>
-        </div>      
+        </div>    
+        <div class="col-lg-3 col-md-3 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-5 col-md-4">
+                            <div class="icon-big text-center icon-warning">
+                                <i class="fa fa-twitter text-info"></i>
+                            </div>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <div class="numbers">
+                                <p class="card-category">Média de Tweets</p>
+                                <p class="card-title"><a>{{ $media_twitter }}</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer ">
+                    <hr>
+                    <span class="text-info"><i class="fa fa-clock-o"></i> Atualizado em {{ date('d/m/Y H:i:s') }}</span>
+                </div>
+            </div>
+        </div>   
     </div> 
     <div class="row">
+
         <div class="col-lg-4 col-md-4 col-sm-6">
             <div class="card card-stats">
                 <div class="card-body ">
@@ -113,6 +137,7 @@
                 </div>
             </div>
         </div>  
+
     </div>
 @endsection
 @section('script')
