@@ -129,7 +129,10 @@ class RoleController extends Controller
         $permissions = $request->input('permission') ? $request->input('permission') : [];
 
         $role = Role::findOrFail($id);
-        $role->syncPermissions($permissions);
+        if($role->syncPermissions($permissions))
+            Flash::success('<i class="fa fa-check"></i> Permissões atualizadas com sucesso');
+        else
+            Flash::error('<i class="fa fa-times"></i> Erro ao atribuir permissões');
         
         return redirect('role/permissions/'.$id);
     }
