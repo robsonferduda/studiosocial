@@ -107,6 +107,7 @@
             relatorios = [];
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
+            $('.card').loader('show');
 
             $(".form-check-input:checked").each(function(){
                 relatorios.push($(this).val());               
@@ -160,7 +161,7 @@
                         setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
                     }
 
-                    $('.card-main').loader('hide');
+                    $('.card').loader('hide');
                 }
             });  
         });
