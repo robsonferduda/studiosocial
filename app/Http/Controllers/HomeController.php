@@ -23,7 +23,15 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->client_id = (session('cliente')) ? session('cliente')['id'] : null;
+
+        $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
+
+        $clienteSession = ['id' => $cliente->id, 'nome' => $cliente->name];
+
+        Session::put('cliente', session('cliente') ? session('cliente') : $clienteSession);
+
+        $this->client_id = session('cliente')['id'];
+        
         Session::put('url','home');
     }
 
