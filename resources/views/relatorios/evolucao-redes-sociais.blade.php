@@ -126,7 +126,7 @@
             var data_final = $(".dt_final_relatorio").val();
 
             $.ajax({
-                url: host+'/relatorios/dados/redes',
+                url: host+'/relatorios/dados/medias/evolucao-redes',
                 type: 'POST',
                 data: { "_token": token,
                         "periodo": periodo,

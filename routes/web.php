@@ -38,10 +38,10 @@ Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
 Route::get('relatorios/localizacao','RelatorioController@localizacao');
 
 Route::post('relatorios/dados/medias/evolucao-diaria','RelatorioController@getEvolucaoDiaria');
+Route::post('relatorios/dados/medias/evolucao-redes','RelatorioController@getEvolucaoRedeSocial');
 Route::post('relatorios/dados/influenciadores','RelatorioController@getInfluenciadores');
 Route::post('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimentosRede');
-Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPeriodo');
 Route::post('relatorios/dados/localizacao', 'RelatorioController@getLocalizacao');
 

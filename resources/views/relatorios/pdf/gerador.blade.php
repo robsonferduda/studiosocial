@@ -26,6 +26,11 @@
             <div class="page_break"></div>
         @endif
 
+        @if(in_array('evolucao_rede', $relatorios))
+            @include("relatorios/pdf/partials/evolucao_rede")
+            <div class="page_break"></div>
+        @endif
+
         @if(in_array('sentimentos', $relatorios))
             @include("relatorios/pdf/partials/sentimento")
             <div class="page_break"></div>

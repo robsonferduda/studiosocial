@@ -165,6 +165,8 @@ class RelatorioController extends Controller
 
     //FIM Métodos do Relatório de Evolução Diária
 
+    //INÍCIO Métodos do Relatório de Redes Sociais
+
     public function evolucaoRedesSociais()
     {
       $rules = $this->rules;
@@ -174,6 +176,70 @@ class RelatorioController extends Controller
 
       return view('relatorios/evolucao-redes-sociais', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
     }
+
+    public function getEvolucaoRedeSocial(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra; 
+        $dados = $this->getDadosEvolucaoRedeSocial();        
+
+        return response()->json($dados);
+    }
+
+    public function getDadosEvolucaoRedeSocial()
+    {
+        for ($i=0; $i < $this->periodo; $i++) { 
+
+          $data = $this->data_inicial->addDay()->format('Y-m-d');
+          $data_formatada = $this->data_inicial->format('d/m/Y');
+
+          $datas[] = $data;
+          $datas_formatadas[] = $data_formatada;
+
+          $ig_comments_total = DB::table('ig_comments')
+                              ->join('medias','medias.id','=','ig_comments.media_id')
+                              ->where('medias.client_id','=', $this->client_id)
+                              ->whereBetween('ig_comments.timestamp', [$data.' 00:00:00',$data.' 23:23:59'])
+                              ->count();
+
+          $fb_comments_total = DB::table('fb_comments')
+                              ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
+                              ->where('fb_posts.client_id','=',$this->client_id)
+                              ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                              ->count();
+
+          $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
+          $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
+          $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
+      }
+
+      $dados = array('data' => $datas,
+                      'data_formatada' => $datas_formatadas,
+                      'dados_twitter' => $dados_twitter,
+                      'dados_instagram' => $dados_instagram,
+                      'dados_facebook' => $dados_facebook);
+
+      return $dados;
+    }
+
+    public function evolucaoRedeSocialPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dados = $this->getDadosEvolucaoRedeSocial();
+        $chart = $this->getGraficoEvolucaoRedeSocial($dados);
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+        $nome = "Relatório de Evolução por Rede Social";
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
+        return $pdf->download($nome_arquivo);
+    }
+
+    //FIM Métodos do Relatório de Redes Sociais
 
     public function sentimentos()
     {
@@ -319,16 +385,6 @@ class RelatorioController extends Controller
       return response()->json($dados);
     }
 
-    public function getRedesPeriodo(Request $request)
-    {
-        $dados = array();
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-        $this->rule_id = $request->regra; 
-        $dados = $this->getEvolucaoRedeSocial();        
-
-        return response()->json($dados);
-    }
-
     public function getSentimentosRede(Request $request)
     {
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
@@ -351,42 +407,6 @@ class RelatorioController extends Controller
     public function getDadosReactions()
     {
       return (new FbPost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
-    }
-
-    public function getEvolucaoRedeSocial()
-    {
-        for ($i=0; $i < $this->periodo; $i++) { 
-
-          $data = $this->data_inicial->addDay()->format('Y-m-d');
-          $data_formatada = $this->data_inicial->format('d/m/Y');
-
-          $datas[] = $data;
-          $datas_formatadas[] = $data_formatada;
-
-          $ig_comments_total = DB::table('ig_comments')
-                              ->join('medias','medias.id','=','ig_comments.media_id')
-                              ->where('medias.client_id','=', $this->client_id)
-                              ->whereBetween('ig_comments.timestamp', [$data.' 00:00:00',$data.' 23:23:59'])
-                              ->count();
-
-          $fb_comments_total = DB::table('fb_comments')
-                              ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
-                              ->where('fb_posts.client_id','=',$this->client_id)
-                              ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
-                              ->count();
-
-          $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-          $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
-          $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
-      }
-
-      $dados = array('data' => $datas,
-                      'data_formatada' => $datas_formatadas,
-                      'dados_twitter' => $dados_twitter,
-                      'dados_instagram' => $dados_instagram,
-                      'dados_facebook' => $dados_facebook);
-
-      return $dados;
     }
 
     public function getSentimentos()
@@ -530,25 +550,6 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
 
         $pdf = DOMPDF::loadView('relatorios/pdf/wordcloud', compact('chart','rule','dt_inicial','dt_final','nome'));
-        return $pdf->download($nome_arquivo);
-    }
-
-
-    
-
-    public function evolucaoRedeSocialPdf(Request $request)
-    {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
-        $dados = $this->getEvolucaoRedeSocial();
-        $chart = $this->getGraficoEvolucaoRedeSocial($dados);
-        $rule = Rule::find($request->regra);
-        $dt_inicial = $request->data_inicial;
-        $dt_final = $request->data_final;
-        $nome = "Relatório de Evolução por Rede Social";
-
-        $nome_arquivo = date('YmdHis').".pdf";
-
-        $pdf = DOMPDF::loadView('relatorios/pdf/evolucao-diaria', compact('chart','dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
     
@@ -1008,6 +1009,11 @@ class RelatorioController extends Controller
         if(in_array('evolucao_diaria', $relatorios)){
           $dados['evolucao_diaria'] = $this->getDadosEvolucaoDiaria(); 
           $charts['evolucao_diaria'] = $this->getGraficoEvolucaoDiaria($dados['evolucao_diaria']);
+        }
+
+        if(in_array('evolucao_rede', $relatorios)){
+          $dados['evolucao_rede'] = $this->getDadosEvolucaoRedeSocial(); 
+          $charts['evolucao_rede'] = $this->getGraficoEvolucaoRedeSocial($dados['evolucao_rede']);
         }
 
         if(in_array('sentimentos', $relatorios)){
