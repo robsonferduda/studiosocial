@@ -127,7 +127,7 @@
             var data_final = $(".dt_final_relatorio").val();
             
             $.ajax({
-                url: host+'/relatorios/dados/sentimentos',
+                url: host+'/relatorios/dados/medias/evolucao-diaria',
                 type: 'POST',
                 data: { "_token": token,
                         "periodo": periodo,

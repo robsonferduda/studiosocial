@@ -28,19 +28,19 @@ Route::get('permissoes/{id}/perfis','PermissaoController@perfis');
 Route::get('perfis','RoleController@index');
 
 Route::get('relatorios','RelatorioController@index');
+Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
+Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 Route::get('relatorios/gerenciador','RelatorioController@gerenciador');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/hashtags','RelatorioController@hashtags');
 Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
 Route::get('relatorios/localizacao','RelatorioController@localizacao');
-Route::get('relatorios/midias/evolucao-diaria','RelatorioController@evolucaoDiaria');
-Route::get('relatorios/midias/evolucao-redes-sociais','RelatorioController@evolucaoRedesSociais');
 
+Route::post('relatorios/dados/medias/evolucao-diaria','RelatorioController@getEvolucaoDiaria');
 Route::post('relatorios/dados/influenciadores','RelatorioController@getInfluenciadores');
 Route::post('relatorios/dados/reactions','RelatorioController@getReactions');
 Route::post('relatorios/dados/sentimentos/rede','RelatorioController@getSentimentosRede');
-Route::post('relatorios/dados/sentimentos','RelatorioController@getSentimentosPeriodo');
 Route::post('relatorios/dados/redes','RelatorioController@getRedesPeriodo');
 Route::post('relatorios/dados/wordcloud', 'RelatorioController@getWordCloudPeriodo');
 Route::post('relatorios/dados/localizacao', 'RelatorioController@getLocalizacao');
