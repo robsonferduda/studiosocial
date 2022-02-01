@@ -50,6 +50,7 @@ class HashtagController extends Controller
                                       'text' => $media->caption,
                                       'username' => '',
                                       'sentiment' => $media->sentiment,
+                                      'user_profile_image_url' => null,
                                       'created_at' => dateTimeUtcToLocal($media->timestamp),
                                       'like_count' => $media->like_count,
                                       'comments_count' => $media->like_count,
