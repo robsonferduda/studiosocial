@@ -291,6 +291,55 @@ class RelatorioController extends Controller
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
+    public function getInfluenciadores(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      $dados = $this->getDadosInfluenciadores();
+      return response()->json($dados);
+    }
+
+    public function getDadosInfluenciadores()
+    {
+      
+      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
+      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
+
+      foreach($dados['negativos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['negativos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['negativos'][$key]->url_image = 'img/user.png';
+        }
+        $dados['negativos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      foreach($dados['positivos'] as $key => $user){
+        if($user->user_profile_image_url){
+          $dados['positivos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
+        }else{
+          $dados['positivos'][$key]->url_image = '../img/user.png';
+        }
+        $dados['positivos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
+      }
+
+      return $dados;
+    }
+
+    public function influenciadoresPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dados = $this->getDadosInfluenciadores();
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+        $nome = "Relatório de Principais Influenciadores";
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/influenciadores', compact('dados','rule','dt_inicial','dt_final','nome'));
+        return $pdf->download($nome_arquivo);
+    }
+
     public function localizacao()
     {
       $rules = $this->rules;
@@ -315,34 +364,6 @@ class RelatorioController extends Controller
     {
         return array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                      'data_final'   => Carbon::now()->format('d/m/Y'));
-    }
-
-    public function getInfluenciadores(Request $request)
-    {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-
-      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
-      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
-
-      foreach($dados['negativos'] as $key => $user){
-        if($user->user_profile_image_url){
-          $dados['negativos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
-        }else{
-          $dados['negativos'][$key]->url_image = 'img/user.png';
-        }
-        $dados['negativos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
-      }
-
-      foreach($dados['positivos'] as $key => $user){
-        if($user->user_profile_image_url){
-          $dados['positivos'][$key]->url_image = str_replace('normal','400x400', $user->user_profile_image_url);
-        }else{
-          $dados['positivos'][$key]->url_image = '../img/user.png';
-        }
-        $dados['positivos'][$key]->url_perfil = 'https://twitter.com/'.$user->user_name;
-      }
-
-      return response()->json($dados);
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)

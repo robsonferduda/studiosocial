@@ -34,6 +34,7 @@ Route::get('relatorios/gerenciador','RelatorioController@gerenciador');
 Route::get('relatorios/reactions','RelatorioController@reactions');
 Route::get('relatorios/sentimentos','RelatorioController@sentimentos');
 Route::get('relatorios/hashtags','RelatorioController@hashtags');
+Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
 Route::get('relatorios/localizacao','RelatorioController@localizacao');
 
@@ -50,6 +51,7 @@ Route::post('relatorios/pdf/wordcloud','RelatorioController@wordcloudPdf');
 Route::post('relatorios/pdf/evolucao-redes-cociais','RelatorioController@evolucaoRedeSocialPdf');
 Route::post('relatorios/pdf/sentimentos/rede','RelatorioController@pdf');
 Route::post('relatorios/pdf/reactions','RelatorioController@reactionsPdf');
+Route::post('relatorios/pdf/influenciadores','RelatorioController@influenciadoresPdf');
 Route::post('relatorios/pdf/localizacao','RelatorioController@localizacaoPdf');
 Route::post('relatorios/pdf/gerador','RelatorioController@geradorPdf');
 
