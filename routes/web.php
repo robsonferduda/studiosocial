@@ -85,6 +85,7 @@ Route::resource('regras', 'RuleController');
 Route::resource('role', 'RoleController');
 Route::resource('term', 'TermController');
 
+
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
@@ -122,3 +123,7 @@ Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecao
 
 
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');
+
+Route::get('cliente/{client}/facebook/paginas','FbPageController@index');
+
+Route::resource('facebook/pagina', 'FbPageControllerController');

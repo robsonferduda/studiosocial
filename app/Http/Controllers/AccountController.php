@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Client;
 use App\FbAccount;
 use Illuminate\Http\Request;
 

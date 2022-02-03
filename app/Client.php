@@ -37,6 +37,11 @@ class Client extends Model
         return $this->hasMany('App\FbAccount', 'client_id', 'id');
     } 
 
+    public function fbPages()
+    {
+        return $this->hasMany('App\ClientFbPage', 'client_id', 'id');
+    } 
+
     public static function boot() {
         
         parent::boot();
