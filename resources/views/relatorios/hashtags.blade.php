@@ -50,7 +50,7 @@
         var myChart = null;
         var dados = null;
 
-        $('body').loader('show');
+        $('.card').loader('show');
         loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
         $("#periodo").change(function(){
@@ -66,6 +66,7 @@
         });
 
         $("#regra").change(function(){
+            regra = $(this).val();
             loadDados(periodo, regra);
         });
 
@@ -91,7 +92,7 @@
                 return response.json();
             }).then(function(response){
                 
-                $('body').loader('hide');
+                $('.card').loader('hide');
                 let words = [];
             
                 Object.entries(response).forEach(element => {

@@ -38,7 +38,6 @@
         loadDados(periodo, regra); //Toda vez que carrega os dados, o gráfico é atualizado
 
         $("#regra").change(function(){
-
             regra = $(this).val();
             loadDados(periodo, regra);
         });
@@ -57,7 +56,7 @@
 
         function loadDados(periodo, regra){
 
-            $('body').loader('show');
+            $('.card').loader('show');
 
             let APP_URL = {!! json_encode(url('/')) !!}
             let data_inicial = $(".dt_inicial_relatorio").val();
@@ -82,7 +81,7 @@
         
                 let words = [];
 
-                $('body').loader('hide');
+                $('.card').loader('hide');
                 const _token = $('meta[name="csrf-token"]').attr('content');
 
                 Object.entries(response).forEach(element => {
@@ -142,13 +141,9 @@
 
                                             $('#cloud').jQCloud('update', words);
                                         }
-                                    });
-                            
-                                
-
+                                    });                    
                                 }
                             },
-                            
                         }
                     );
                 });
@@ -176,7 +171,7 @@
             let APP_URL = {!! json_encode(url('/')) !!}
             let data_inicial = $(".dt_inicial_relatorio").val();
             let data_final = $(".dt_final_relatorio").val();
-            $('body').loader('show');
+            $('.card').loader('show');
 
             $.ajax({
                 url: APP_URL+'/relatorios/pdf/wordcloud',
@@ -225,7 +220,19 @@
                         setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
                     }
 
-                    $('body').loader('hide');
+                    $('.card').loader('hide');
+                },
+                error: function(response){
+                    $('.card').loader('hide');
+                    if(response.status){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao gerar relatório',
+                            confirmButtonColor: "#28a745",
+                            confirmButtonText: '<i class="fa fa-check"></i> Enviar',
+                            html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
+                        })
+                    }
                 }
             }); 
 
