@@ -1047,6 +1047,10 @@ class RelatorioController extends Controller
           $charts['reactions'] = $this->getGraficoReactions($dados['reactions']);
         }
 
+        if(in_array('influenciadores', $relatorios)){
+          $dados['influenciadores'] = $this->getDadosInfluenciadores();
+        }
+
         $nome_arquivo = date('YmdHis').".pdf";
 
         $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios'));

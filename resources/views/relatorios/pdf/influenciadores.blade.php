@@ -32,9 +32,9 @@
     <div style="margin-top: 20px;">
         <div style="width: 48%; float: left;">
             <h6 class="center">POSITIVOS</h6>
-            @foreach($dados['positivos'] as $u)
-                <div style="margin-bottom: 10px; border-bottom: 1px solid #d7d7d7; font-size: 11px;">
-                    <img style="width: 40px; height: 40px;" src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+            @foreach($dados['positivos'] as $key => $u)
+                <div style="margin-bottom: 10px; font-size: 11px; {{ ($key < count($dados['positivos']) -1 ) ? 'border-bottom: 1px solid #d7d7d7;' : '' }}">
+                    <img style="width: 40px; height: 40px;" src="{{ $u->url_image }}" alt="Imagem de Perfil" class="rounded-pill">
                     <strong style="margin-bottom: 20px;">{{ $u->user_name }}</strong>
                     <span>{{ $u->total }} postagens</span>
                 </div>
@@ -42,9 +42,9 @@
         </div>
         <div style="width: 48%; float: right;">
             <h6 class="center">NEGATIVOS</h6>
-            @foreach($dados['negativos'] as $u)
-                <div style="margin-bottom: 10px; border-bottom: 1px solid #d7d7d7; font-size: 11px;">
-                    <img style="width: 40px; height: 40px;" src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+            @foreach($dados['negativos'] as $key => $u)
+                <div style="margin-bottom: 10px; font-size: 11px; {{ ($key < count($dados['positivos']) -1 ) ? 'border-bottom: 1px solid #d7d7d7;' : '' }}">
+                    <img style="width: 40px; height: 40px;" src="{{ $u->url_image }}" alt="Imagem de Perfil" class="rounded-pill">
                     <strong style="margin-bottom: 20px;">{{ $u->user_name }}</strong>
                     <span>{{ $u->total }} postagens</span>
                 </div>

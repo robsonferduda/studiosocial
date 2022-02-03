@@ -40,6 +40,11 @@
             @include("relatorios/pdf/partials/reactions")
             <div class="page_break"></div>
         @endif
+
+        @if(in_array('influenciadores', $relatorios))
+            @include("relatorios/pdf/partials/influenciadores")
+            <div class="page_break"></div>
+        @endif
         
     </div>
     <footer>
