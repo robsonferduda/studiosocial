@@ -162,6 +162,18 @@
                     }
 
                     $('.card').loader('hide');
+                },
+                error: function(response){
+                    $('.card').loader('hide');
+                    if(response.status){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erro ao gerar relatório',
+                            confirmButtonColor: "#28a745",
+                            confirmButtonText: '<i class="fa fa-check"></i> Enviar',
+                            html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
+                        })
+                    }
                 }
             });  
         });

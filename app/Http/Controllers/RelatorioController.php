@@ -871,9 +871,12 @@ class RelatorioController extends Controller
         $colors[] = $dado->color;
       }
 
-      $valores = implode(",", $valores);
-      $labels = implode("','", $labels);
-      $colors = implode("','", $colors);
+      if($valores){
+
+          $valores = implode(",", $valores);
+          $labels = implode("','", $labels);
+          $colors = implode("','", $colors);
+      }
 
       $chartData = "{
                     type:'pie',
