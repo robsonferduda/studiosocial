@@ -281,6 +281,21 @@ class RelatorioController extends Controller
       return view('relatorios/hashtags', compact('rules', 'mensagem', 'periodo_padrao','periodo_relatorio'));
     }
 
+    public function hashtagsPdf(Request $request)
+    {
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $dados = array();
+        $rule = Rule::find($request->regra);
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+        $nome = "Relatório de Hashtags";
+
+        $nome_arquivo = date('YmdHis').".pdf";
+
+        $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('dados','rule','dt_inicial','dt_final','nome'));
+        return $pdf->download($nome_arquivo);
+    }
+
     public function influenciadores()
     {
       $rules = $this->rules;
