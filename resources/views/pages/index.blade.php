@@ -5,7 +5,7 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="card-title ml-2"><i class="fa fa-at"></i> Contas Monitoradas</h4>
+                    <h4 class="card-title ml-2"><i class="fa fa-at"></i> Páginas do Facebook Monitoradas</h4>
                 </div>
                 <div class="col-md-6">
                     <a href="{{ url('clientes') }}" class="btn btn-info pull-right" style="margin-right: 12px;"><i class="fa fa-table"></i> Clientes</a>
@@ -21,10 +21,9 @@
                 <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Conta</th>
+                            <th>Página</th>
                             <th class="center">Coletar Postagens</th>
-                            <th class="center">Coletar Menções</th>
-                            <th class="center">Situação</th>
+                            <th class="center">Coletar Menções</th>                          
                             <th class="center">Ações</th>
                         </tr>
                     </thead>
@@ -84,9 +83,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h5 class="modal-title" id="myModalLabel"><i class="fa fa-at"></i> <strong> Cadastrar Contas</strong></h5>
+                <h5 class="modal-title" id="myModalLabel"><i class="fa fa-at"></i> <strong> Cadastrar Páginas do Facebook</strong></h5>
             </div>
-            {!! Form::open(['id' => 'frm_term_create', 'url' => ['term']]) !!}
+            {!! Form::open(['id' => 'frm_page_create', 'url' => ['page']]) !!}
                 <input type="hidden" name="client_id" value="{{ $client->id }}">
                 <div class="modal-body">
                     <div class="card-body">            
@@ -94,7 +93,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>URL da Conta <span class="text-danger">Obrigatório</span></label>
-                                    <input type="text" class="form-control" name="term" id="term" value="">
+                                    <input type="text" class="form-control" name="url" id="url" value="">
                                 </div>
                             </div>
                         </div>  
@@ -103,7 +102,7 @@
                                 <div class="form-check mt-3">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="" value="">
+                                            <input class="form-check-input" type="checkbox" name="mention" value="">
                                             Menções
                                             <span class="form-check-sign"></span>
                                         </label>
@@ -112,7 +111,7 @@
                                 <div class="form-check mt-3">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                            <input class="form-check-input" type="checkbox" name="" value="">
+                                            <input class="form-check-input" type="checkbox" name="post" value="">
                                             Postagens
                                             <span class="form-check-sign"></span>
                                         </label>

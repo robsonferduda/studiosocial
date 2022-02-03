@@ -13,12 +13,6 @@ class AccountController extends Controller
         $this->middleware('auth');
     }
 
-    public function index($client_id)
-    {
-        $client = Client::with('user')->find($client_id);
-        return view('account/index', compact('client'));
-    }
-
     public function isToCollectMention(Request $request)
     {
         

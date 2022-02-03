@@ -9,8 +9,6 @@ Route::get('/termos-de-servico', function () { return view('termos-de-servico');
 
 Auth::routes();
 
-Route::get('account/client/{cliente_id}','AccountController@index');
-
 Route::get('auditoria','AuditoriaController@index');
 Route::get('auditoria/detalhes/{id}','AuditoriaController@show');
 
@@ -85,6 +83,7 @@ Route::resource('regras', 'RuleController');
 Route::resource('role', 'RoleController');
 Route::resource('term', 'TermController');
 
+
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');
 
@@ -122,3 +121,7 @@ Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecao
 
 
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');
+
+Route::get('cliente/{client}/facebook/paginas','FbPageController@index');
+
+Route::resource('facebook/pagina', 'FbPageControllerController');
