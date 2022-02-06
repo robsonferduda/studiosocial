@@ -299,16 +299,7 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
-        $file_name = 'cliente-4-wordcloud';
-
-        $process = new Process(['python3', 'pip3 install wordcloud']);
-
-        $process->run(function ($type, $buffer) use ($file_name, &$chart){
-          if (Process::ERR === $type) {
-              echo 'ERR > '.$buffer.'<br />';
-          }
-        });
-  
+        $file_name = 'cliente-4-wordcloud'; 
 
         $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordcloud', 'imagem', $this->client_id]);
 
