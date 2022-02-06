@@ -271,6 +271,7 @@ class RelatorioController extends Controller
       return view('relatorios/reactions', compact('rules','periodo_relatorio','periodo_padrao' ,'mensagem'));
     }
 
+    //INÍCIO Métodos do Relatório de Hashtags
     public function hashtags()
     {
       $rules = $this->rules;
@@ -281,6 +282,14 @@ class RelatorioController extends Controller
       return view('relatorios/hashtags', compact('rules', 'mensagem', 'periodo_padrao','periodo_relatorio'));
     }
 
+    public function getNuvemHashtags(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      
+      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
+      echo json_encode($lista_hashtags);
+    } 
+
     public function hashtagsPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
@@ -290,11 +299,71 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
+        $file_name = 'cliente-4-wordcloud';
+
+        $process = new Process(['python3', 'pip3 install wordcloud']);
+
+        $process->run(function ($type, $buffer) use ($file_name, &$chart){
+          if (Process::ERR === $type) {
+              echo 'ERR > '.$buffer.'<br />';
+          }
+        });
+  
+
+        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordcloud', 'imagem', $this->client_id]);
+
+        $process->run(function ($type, $buffer) use ($file_name, &$chart){
+            if (Process::ERR === $type) {
+                echo 'ERR > '.$buffer.'<br />';
+            } else {
+                
+                if(trim($buffer) == 'END') {
+                    //echo 'OUT > '.$buffer.'<br />';
+                            
+                    $chartData = file_get_contents(Storage::disk('wordcloud-images')->getAdapter()->getPathPrefix().$file_name.".png"); 
+                    $chart =  'data:image/png;base64, '.base64_encode($chartData);
+                    
+                    //Storage::disk('wordcloud')->delete($file_name.".png");
+                    //Storage::disk('wordcloud')->delete($file_name.".json");
+                }
+
+            }
+        });
+    
         $nome_arquivo = date('YmdHis').".pdf";
 
         $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
+
+    public function getAllMedias()
+    {
+      $medias = array();
+      $lista_hastags = array();
+
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
+      
+      $medias_instagram = Media::where('client_id', $this->client_id)->whereBetween('timestamp',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_facebook  = FbPost::where('client_id', $this->client_id)->whereBetween('tagged_time',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+      $medias_twitter = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
+
+      foreach ($medias_instagram as $media) {
+        $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
+      }
+
+      foreach ($medias_facebook as $media) {
+        $lista_hastags = Utils::getHashtags($media->message, $lista_hastags);
+      }
+
+      foreach ($medias_twitter as $media) {
+        $lista_hastags = Utils::getHashtags($media->full_text, $lista_hastags);
+      }
+
+      return $lista_hastags;
+    }
+
+    //FIM Métodos do Relatório de Hashtags
 
     public function influenciadores()
     {
@@ -401,15 +470,7 @@ class RelatorioController extends Controller
         $this->periodo = $periodo;
         $this->data_inicial = $data_inicial;
         $this->data_final = $data_final;
-    }
-
-    public function getNuvemHashtags(Request $request)
-    {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-      
-      $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-      echo json_encode($lista_hashtags);
-    }    
+    } 
 
     public function getReactions(Request $request)
     {
@@ -478,33 +539,6 @@ class RelatorioController extends Controller
         $locations['location_user'] = $location_user;
 
         return $locations;
-    }
-
-    public function getAllMedias()
-    {
-      $medias = array();
-      $lista_hastags = array();
-
-      $dt_inicial = $this->data_inicial->format('Y-m-d');
-      $dt_final = $this->data_final->format('Y-m-d');
-      
-      $medias_instagram = Media::where('client_id', $this->client_id)->whereBetween('timestamp',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
-      $medias_facebook  = FbPost::where('client_id', $this->client_id)->whereBetween('tagged_time',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
-      $medias_twitter = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
-
-      foreach ($medias_instagram as $media) {
-        $lista_hastags = Utils::getHashtags($media->caption, $lista_hastags);
-      }
-
-      foreach ($medias_facebook as $media) {
-        $lista_hastags = Utils::getHashtags($media->message, $lista_hastags);
-      }
-
-      foreach ($medias_twitter as $media) {
-        $lista_hastags = Utils::getHashtags($media->full_text, $lista_hastags);
-      }
-
-      return $lista_hastags;
     }
 
     //Métodos chamados quando o relatório em pdf é requisitado
@@ -577,7 +611,7 @@ class RelatorioController extends Controller
             
 
         }
-        //dd($chart);
+      
         $nome_arquivo = date('YmdHis').".pdf";
 
         $rule = Rule::find($request->regra);
@@ -976,11 +1010,11 @@ class RelatorioController extends Controller
 
                 $process->run(function ($type, $buffer) use ($file_name, &$word_cloud){
                     if (Process::ERR === $type) {
-                        //echo 'ERR > '.$buffer.'<br />';
+                        echo 'ERR > '.$buffer.'<br />';
                     } else {
                         
                         if(trim($buffer) == 'END') {
-                            //echo 'OUT > '.$buffer.'<br />';
+                            echo 'OUT > '.$buffer.'<br />';
 
                             $file = Storage::disk('wordcloud')->get($file_name.".json");
                             //dd($words_execption);
@@ -1008,29 +1042,23 @@ class RelatorioController extends Controller
                     }
                 });
             
-            }
-
-            
+            }            
 
         } else {
                 $word_cloud = ['Cliente' => 3, 'Não' => 2, 'Selecionado' => 2];               
         }
-
-        echo json_encode($word_cloud);
-        
+      echo json_encode($word_cloud);
     }
 
     public function concatenateSanitizeText(Array $textArray)
     {
         $concatenateText = '';
 
-        foreach($textArray as $text) {
-                        
-            $concatenateText .= ' '.$text;
+        foreach($textArray as $text) {          
+          $concatenateText .= ' '.$text;
         }
 
         return $concatenateText;
-
     }
 
     public function geradorPdf(Request $request)
@@ -1058,6 +1086,10 @@ class RelatorioController extends Controller
         if(in_array('sentimentos', $relatorios)){
           $dados['sentimentos'] = $this->getSentimentos(); 
           $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
+        }
+
+        if(in_array('nuvem', $relatorios)){
+          $charts['nuvem'] = null;
         }
 
         if(in_array('reactions', $relatorios)){

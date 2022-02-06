@@ -36,6 +36,11 @@
             <div class="page_break"></div>
         @endif
 
+        @if(in_array('nuvem', $relatorios))
+            @include("relatorios/pdf/partials/wordcloud")
+            <div class="page_break"></div>
+        @endif
+
         @if(in_array('reactions', $relatorios))
             @include("relatorios/pdf/partials/reactions")
             <div class="page_break"></div>

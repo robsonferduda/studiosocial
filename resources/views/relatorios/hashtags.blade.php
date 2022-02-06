@@ -17,9 +17,6 @@
                 <div class="card-body">
                     @include('layouts/regra')
                     <div class="row">
-                        <div class="col-lg-7 col-md-7">
-                            <div id='cloud' style="height: 450px;"></div>
-                        </div>
                         <div class="col-lg-5 col-md-5">
                             <table class="table table-hover table_hashtags">
                                 <thead class="">
@@ -32,6 +29,9 @@
                                     
                                 </tbody>
                             </table> 
+                        </div>
+                        <div class="col-lg-7 col-md-7">
+                            <div id='cloud' style="height: 450px;"></div>
                         </div>
                     </div>
                 </div>            
