@@ -1004,11 +1004,11 @@ class RelatorioController extends Controller
 
                 $process->run(function ($type, $buffer) use ($file_name, &$word_cloud){
                     if (Process::ERR === $type) {
-                        echo 'ERR > '.$buffer.'<br />';
+                       // echo 'ERR > '.$buffer.'<br />';
                     } else {
                         
                         if(trim($buffer) == 'END') {
-                            echo 'OUT > '.$buffer.'<br />';
+                            //echo 'OUT > '.$buffer.'<br />';
 
                             $file = Storage::disk('wordcloud')->get($file_name.".json");
                             //dd($words_execption);
