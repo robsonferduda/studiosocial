@@ -301,7 +301,7 @@ class RelatorioController extends Controller
 
         $file_name = 'cliente-4-wordclould'; 
 
-        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordcloud', 'imagem', $this->client_id]);
+        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordclould', 'imagem', $this->client_id]);
 
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
