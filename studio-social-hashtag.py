@@ -16,7 +16,7 @@ cliente = sys.argv[4]
         
 stopwords = ''
 
-f = open ("/home/socialstudio/public_html/storage/app/wordcloud/files/"+file_name+".json", "r")
+f = open ("/home/socialstudio/public_html/storage/app/hashtag/files/"+file_name+".json", "r")
 wordcloud_words = json.loads(f.read())
 
 if tipo == 'imagem' :
