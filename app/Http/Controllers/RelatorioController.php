@@ -584,7 +584,7 @@ class RelatorioController extends Controller
 
                 $process->run(function ($type, $buffer) use ($file_name, &$chart){
                     if (Process::ERR === $type) {
-                        echo 'ERR > '.$buffer.'<br />';
+                        //echo 'ERR > '.$buffer.'<br />';
                     } else {
                         
                         if(trim($buffer) == 'END') {
