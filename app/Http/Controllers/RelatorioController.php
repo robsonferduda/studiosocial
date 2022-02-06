@@ -299,7 +299,10 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
-        $file_name = 'cliente-4-wordclould'; 
+        $file_name = 'cliente-4-wordclould';
+        
+        $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
+        Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
 
         $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordclould', 'imagem', $this->client_id]);
 
