@@ -300,7 +300,7 @@ class RelatorioController extends Controller
         $nome = "Relatório de Hashtags";
 
         $file_name = 'cliente-4-wordclould';
-        
+
         $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
         Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
 
@@ -584,7 +584,7 @@ class RelatorioController extends Controller
 
                 $process->run(function ($type, $buffer) use ($file_name, &$chart){
                     if (Process::ERR === $type) {
-                        //echo 'ERR > '.$buffer.'<br />';
+                        echo 'ERR > '.$buffer.'<br />';
                     } else {
                         
                         if(trim($buffer) == 'END') {
