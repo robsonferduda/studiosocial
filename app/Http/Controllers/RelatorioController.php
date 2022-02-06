@@ -305,13 +305,13 @@ class RelatorioController extends Controller
 
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
-                echo 'ERR > '.$buffer.'<br />';
+                //echo 'ERR > '.$buffer.'<br />';
             } else {
                 
                 if(trim($buffer) == 'END') {
                     //echo 'OUT > '.$buffer.'<br />';
                             
-                    $chartData = file_get_contents(Storage::disk('wordcloud-images')->getAdapter()->getPathPrefix().$file_name.".png"); 
+                    $chartData = file_get_contents(Storage::disk('hashtag')->getAdapter()->getPathPrefix().$file_name.".png"); 
                     $chart =  'data:image/png;base64, '.base64_encode($chartData);
                     
                     //Storage::disk('wordcloud')->delete($file_name.".png");
