@@ -18,7 +18,8 @@
     </style>
     @include("relatorios/pdf/cabecalho")
     <div>
-        
+        <br>
+        <img src="{{ $chart }}">
     </div>
     <footer>
         Relatório gerado em {{ date("d/m/Y") }} às {{ date("H:i:s") }} 

@@ -323,7 +323,7 @@ class RelatorioController extends Controller
     
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('dados','rule','dt_inicial','dt_final','nome'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('chart', 'dados','rule','dt_inicial','dt_final','nome'));
         return $pdf->download($nome_arquivo);
     }
 
