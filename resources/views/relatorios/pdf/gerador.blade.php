@@ -18,37 +18,67 @@
             text-align: center;
         }
     </style>
-    @include("relatorios/pdf/cabecalho")
+    
     <div>
 
         @if(in_array('evolucao_diaria', $relatorios))
+            @php $nome = "Relatório de Evolução Diária" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/evolucao_diaria")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
 
         @if(in_array('evolucao_rede', $relatorios))
+            @php $nome = "Relatório de Evolução Por Rede Social" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/evolucao_rede")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
 
         @if(in_array('sentimentos', $relatorios))
+            @php $nome = "Relatório de Sentimentos" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/sentimento")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
 
         @if(in_array('nuvem', $relatorios))
+            @php $nome = "Nuvem de Palavras" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/wordcloud")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
 
         @if(in_array('reactions', $relatorios))
+            @php $nome = "Relatório de Reactions" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/reactions")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
 
         @if(in_array('influenciadores', $relatorios))
+            @php $nome = "Relatório de Principais Influenciadores" @endphp
+            @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/influenciadores")
-            <div class="page_break"></div>
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
         @endif
         
     </div>

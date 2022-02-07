@@ -1063,6 +1063,7 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $relatorios = $request->relatorios;
         $nome = "Relatório de Redes Sociais";
+        $page_break = 0;
 
         $dados = [];
         $charts = [];
@@ -1070,34 +1071,40 @@ class RelatorioController extends Controller
         if(in_array('evolucao_diaria', $relatorios)){
           $dados['evolucao_diaria'] = $this->getDadosEvolucaoDiaria(); 
           $charts['evolucao_diaria'] = $this->getGraficoEvolucaoDiaria($dados['evolucao_diaria']);
+          $page_break++;
         }
 
         if(in_array('evolucao_rede', $relatorios)){
           $dados['evolucao_rede'] = $this->getDadosEvolucaoRedeSocial(); 
           $charts['evolucao_rede'] = $this->getGraficoEvolucaoRedeSocial($dados['evolucao_rede']);
+          $page_break++;
         }
 
         if(in_array('sentimentos', $relatorios)){
           $dados['sentimentos'] = $this->getSentimentos(); 
           $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
+          $page_break++;
         }
 
         if(in_array('nuvem', $relatorios)){
           $charts['nuvem'] = null;
+          $page_break++;
         }
 
         if(in_array('reactions', $relatorios)){
           $dados['reactions'] = $this->getDadosReactions();
           $charts['reactions'] = $this->getGraficoReactions($dados['reactions']);
+          $page_break++;
         }
 
         if(in_array('influenciadores', $relatorios)){
           $dados['influenciadores'] = $this->getDadosInfluenciadores();
+          $page_break++;
         }
 
         $nome_arquivo = date('YmdHis').".pdf";
 
-        $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios'));
+        $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios','page_break'));
         return $pdf->download($nome_arquivo);
     }
 }
