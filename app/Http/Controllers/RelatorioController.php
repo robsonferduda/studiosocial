@@ -1069,46 +1069,54 @@ class RelatorioController extends Controller
         $charts = [];
 
         if(in_array('evolucao_diaria', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['evolucao_diaria'] = $this->getDadosEvolucaoDiaria(); 
           $charts['evolucao_diaria'] = $this->getGraficoEvolucaoDiaria($dados['evolucao_diaria']);
           $page_break++;
         }
 
         if(in_array('evolucao_rede', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['evolucao_rede'] = $this->getDadosEvolucaoRedeSocial(); 
           $charts['evolucao_rede'] = $this->getGraficoEvolucaoRedeSocial($dados['evolucao_rede']);
           $page_break++;
         }
 
         if(in_array('sentimentos', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['sentimentos'] = $this->getSentimentos(); 
           $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
           $page_break++;
         }
 
         if(in_array('nuvem', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $charts['nuvem'] = null;
           $page_break++;
         }
 
         if(in_array('reactions', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['reactions'] = $this->getDadosReactions();
           $charts['reactions'] = $this->getGraficoReactions($dados['reactions']);
           $page_break++;
         }
 
         if(in_array('hashtags', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['hashtags'] = null;
           $charts['hashtags'] = null;
           $page_break++;
         }
 
         if(in_array('influenciadores', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['influenciadores'] = $this->getDadosInfluenciadores();
           $page_break++;
         }
 
         if(in_array('localizacao', $relatorios)){
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
           $dados['localizacao'] = null;
           $page_break++;
         }
