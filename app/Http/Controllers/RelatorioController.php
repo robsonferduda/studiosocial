@@ -1097,8 +1097,19 @@ class RelatorioController extends Controller
           $page_break++;
         }
 
+        if(in_array('hashtags', $relatorios)){
+          $dados['hashtags'] = null;
+          $charts['hashtags'] = null;
+          $page_break++;
+        }
+
         if(in_array('influenciadores', $relatorios)){
           $dados['influenciadores'] = $this->getDadosInfluenciadores();
+          $page_break++;
+        }
+
+        if(in_array('localizacao', $relatorios)){
+          $dados['localizacao'] = null;
           $page_break++;
         }
 

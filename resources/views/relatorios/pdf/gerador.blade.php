@@ -71,10 +71,30 @@
             @php $page_break--; @endphp
         @endif
 
+        @if(in_array('hashtags', $relatorios))
+            @php $nome = "Relatório de Hashtags" @endphp
+            @include("relatorios/pdf/cabecalho")
+            @include("relatorios/pdf/partials/hashtags")
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
+        @endif
+
         @if(in_array('influenciadores', $relatorios))
             @php $nome = "Relatório de Principais Influenciadores" @endphp
             @include("relatorios/pdf/cabecalho")
             @include("relatorios/pdf/partials/influenciadores")
+            @if($page_break > 1)
+                <div class="page_break"></div>
+            @endif
+            @php $page_break--; @endphp
+        @endif
+
+        @if(in_array('localizacao', $relatorios))
+            @php $nome = "Relatório de Localização" @endphp
+            @include("relatorios/pdf/cabecalho")
+            @include("relatorios/pdf/partials/localizacao")
             @if($page_break > 1)
                 <div class="page_break"></div>
             @endif
