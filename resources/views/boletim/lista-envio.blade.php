@@ -25,6 +25,11 @@
                 <div class="row px-3">
                     <div class="col-md-6">
                         <div class="form-check">
+                            <label class="form-check-label d-block mb-3">
+                                <input class="form-check-input" type="checkbox" name="todos" id="todos" value="todos" checked="checked">
+                                    TODOS
+                                <span class="form-check-sign"></span>
+                            </label>
                             @foreach($lista_email as $key => $email)
                                 <label class="form-check-label d-block mb-3 txt-black">
                                     <input class="form-check-input" type="checkbox" name="emails[]" value="{{ $email['email'] }}" checked="checked">
