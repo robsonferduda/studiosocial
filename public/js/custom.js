@@ -25,6 +25,19 @@ $(document).ready(function() {
             }
         });
     }); 
+
+    $('body').on("click", ".btn-send-mail", function(e) {
+        
+        Swal.fire({
+            title: "Envio de Boletim",            
+            text: "Aguarde, o sistema está enviado as mensagens",
+            html: '<i style="font-size: 65px;" class="fa fa-spinner fa-spin"></i><br/><br/>Aguarde, o sistema está enviado as mensagens',
+            showConfirmButton: false,
+            allowEscapeKey: true,
+            allowOutsideClick: false
+        });
+    }); 
+
    
     $('body').on("click", ".button-remove-hashtag", function(e) {
         e.preventDefault();
