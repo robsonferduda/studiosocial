@@ -19,7 +19,7 @@ class BoletimController extends Controller
 
     public function index()
     {
-        $boletins = Boletim::where('id_cliente',443)->orderBy('data','DESC')->get();
+        $boletins = Boletim::whereIn('id_cliente',[443,452])->orderBy('data','DESC')->get();
         return view('boletim/index',compact('boletins'));
     }
 

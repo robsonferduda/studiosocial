@@ -25,7 +25,11 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-8">
-                            <img src="https://studiosocial.app/img/logo_zurich.png">
+                            @if($boletim->id_cliente == 452)
+                                <img src="https://studiosocial.app/img/logo_offshore.png">
+                            @else
+                                <img src="https://studiosocial.app/img/logo_zurich.png">
+                            @endif
                         </div>
                     </div>
                 </div>

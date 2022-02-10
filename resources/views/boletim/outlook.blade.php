@@ -18,7 +18,11 @@
             <tbody>
                 <tr>
                     <td>
-                        <img src="https://studiosocial.app/img/logo_zurich.png">
+                        @if($boletim->id_cliente == 452)
+                            <img src="https://studiosocial.app/img/logo_offshore.png">
+                        @else
+                            <img src="https://studiosocial.app/img/logo_zurich.png">
+                        @endif
                     </td>
                 </tr>
             </tbody>

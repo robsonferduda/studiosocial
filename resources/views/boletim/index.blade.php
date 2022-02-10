@@ -21,6 +21,7 @@
                     <thead class="">
                         <tr>
                             <th>Data da Criação</th>
+                            <th>Cliente</th>
                             <th>Boletim</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Ações</th>
@@ -30,6 +31,13 @@
                         @foreach($boletins as $boletim)
                             <tr>
                                 <td>{{ Carbon\Carbon::parse($boletim->data)->format('d/m/Y H:i') }}</td>
+                                <td>
+                                    @if($boletim->id_cliente == 452)
+                                        Offshore
+                                    @else
+                                        Zurich Airport
+                                    @endif
+                                </td>
                                 <td>{{ $boletim->titulo }}</td>
                                 <td class="text-center">
                                     @if($boletim->status_envio == 'enviado')
