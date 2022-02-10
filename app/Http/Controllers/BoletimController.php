@@ -133,10 +133,6 @@ class BoletimController extends Controller
         
         $emails = $request->emails;
 
-        Mail::raw('Hello World!', function($msg) {$msg->to('robsonferduda@gmail.com')->subject('Test Email'); });
-
-        /*
-
         $data = array("dados"=> $dados, "boletim" => $boletim);
          
         Mail::send('boletim.outlook', $data, function($message) use ($emails) {
@@ -144,7 +140,6 @@ class BoletimController extends Controller
         ->subject('Boletim de Clipagens');
             $message->from('boletins@clipagens.com.br','Studio Clipagem');
         });
-        */
 
         return redirect('boletim/'.$request->id);
     }
