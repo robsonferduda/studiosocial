@@ -19,9 +19,19 @@ Route::get('boletim/{id}/outlook','BoletimController@outlook');
 Route::get('boletim/{id}/visualizar','BoletimController@visualizar');
 Route::post('boletim/enviar/lista','BoletimController@enviarLista');
 
+Route::get('clientes','ClientController@index');
+Route::get('cliente/get/json','ClientController@json');
+Route::get('clientes','ClientController@index')->name('clientes.index');
+Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');
+Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
+Route::get('client/emails/{cliente}','ClientController@emails');
+Route::post('cliente/selecionar','ClientController@selecionar');
+
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
 Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecionarPeriodo');
+
+Route::get('email/situacao/{id}','EmailController@atualizarSituacao');
 
 Route::get('permissoes','PermissaoController@index');
 Route::get('permissoes/{id}/users','PermissaoController@users');
@@ -61,12 +71,6 @@ Route::get('pdf','RelatorioController@pdf');
 
 Route::get('perfil','UserController@perfil');
 Route::get('usuarios','UserController@index');
-Route::get('clientes','ClientController@index');
-Route::get('cliente/get/json','ClientController@json');
-Route::get('clientes','ClientController@index')->name('clientes.index');
-Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');
-Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
-Route::post('cliente/selecionar','ClientController@selecionar');
 
 Route::get('terms/client/{cliente}','TermController@getTerms');
 Route::get('term/situacao/{term}','TermController@atualizarSituacao');
@@ -86,7 +90,7 @@ Route::resource('usuario', 'UserController');
 Route::resource('regras', 'RuleController');
 Route::resource('role', 'RoleController');
 Route::resource('term', 'TermController');
-
+Route::resource('email', 'EmailController');
 
 Route::get('login/facebook/client/{client}', 'FacebookController@redirectToProvider');
 Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback');

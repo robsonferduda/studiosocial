@@ -32,6 +32,12 @@ class ClientController extends Controller
         return view('clientes/detalhes', compact('client'));
     }
 
+    public function emails($id)
+    {
+        $client = Client::with('user')->find($id);
+        return view('clientes/emails', compact('client'));
+    }
+
     public function create(Request $request)
     {
         return view('clientes/novo');

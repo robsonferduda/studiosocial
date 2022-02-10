@@ -22,6 +22,11 @@ class Client extends Model
         return $this->hasMany(Hashtag::class, 'client_id', 'id');
     }
 
+    public function emails()
+    {
+        return $this->hasMany(Email::class, 'client_id', 'id');
+    }
+
     public function terms()
     {
         return $this->hasMany(Term::class, 'client_id', 'id');

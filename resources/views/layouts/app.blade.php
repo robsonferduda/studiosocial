@@ -277,6 +277,7 @@
       $('.select2').select2();
 
       $('#frm_notification_create').validate();
+      $('#frm_add_email').validate();
 
       jQuery.extend(jQuery.validator.messages, {
         required: "Campo obrigatório"

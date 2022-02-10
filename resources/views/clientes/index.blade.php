@@ -51,6 +51,7 @@
                                 <a title="Páginas do Facebook Monitoradas" href="{{ url('cliente/'.$c->id.'/facebook/paginas') }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-at font-25"></i></a>
                                 <a title="Termos do Cliente" href="{{ url('terms/client',$c->id) }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-font font-25"></i></a>
                                 <a title="Hashtags do Cliente" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>
+                                <a title="Emails de Comunicação" href="{{ url('client/emails',$c->id) }}" class="btn btn-danger btn-link btn-icon"><i class="fa fa-envelope font-25"></i></a>
                                 <a title="Dados do Usuário" href="{{ url('client',$c->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
                                 <a title="Editar" href="{{ route('client.edit',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>
                                 <form class="form-delete" style="display: inline;" action="{{ route('client.destroy',$c->id) }}" method="POST">
