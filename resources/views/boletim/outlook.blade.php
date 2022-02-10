@@ -42,7 +42,7 @@
                         <table style="border-bottom: 1px solid #2196f3; width: 100%; margin-bottom: 8px;">
                             <tr>
                                 <td style="width: 30px;">
-                                    <img src="https://studiosocial.ga/img/icone.jpg">
+                                    <img src="https://studiosocial.app/img/icone.jpg">
                                 </td>
                                 <td style="color: #2196f3; font-size: 20px !important; text-transform: uppercase;">
                                     {{ $noticia->area }}
