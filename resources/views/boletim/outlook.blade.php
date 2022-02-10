@@ -19,7 +19,7 @@
                 <tr>
                     <td>
                         @if($boletim->id_cliente == 452)
-                            <img src="https://studiosocial.app/img/logo_offshore.png">
+                            <img src="https://studiosocial.app/img/logo_offshore.jpg">
                         @else
                             <img src="https://studiosocial.app/img/logo_zurich.png">
                         @endif
