@@ -54,6 +54,13 @@ class BoletimController extends Controller
         if($boletim->id_cliente == 452){
 
             $lista_email = array(
+                array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
+                array('nome' => 'Teste', 'email' => 'andre.couto@teste.novo.com')
+            );
+
+            /*
+
+            $lista_email = array(
                 array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
                 array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
                 array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
@@ -61,11 +68,14 @@ class BoletimController extends Controller
                 array('nome' => 'Armstron', 'email' => 'armstron.carvalho@zurichairportbrasil.com'),
                 array('nome' => 'Cris Vieira', 'email' => 'cris.vieira@zurichairportbrasil.com'),
                 array('nome' => 'Fabio Marques', 'email' => 'fabio.marques@zurichairportbrasil.com'),
+                array('nome' => 'Fernando Castro', 'email' => 'fernando.castro@zurichairportbrasil.com'),
                 array('nome' => 'Kleyton Mendes', 'email' => 'kleyton.mendes@zurichairportbrasil.com'),
                 array('nome' => 'Natalia Santos Pereira', 'email' => 'natalia.pereira@zurichairportbrasil.com'),
                 array('nome' => 'Ricardo Gesse', 'email' => 'ricardo.gesse@zurichairportbrasil.com '),
                 array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com')
             );
+
+            */
 
         }else{
 
@@ -130,19 +140,32 @@ class BoletimController extends Controller
     {
         $boletim = Boletim::where('id', $request->id)->first();
         $dados = $this->getDadosBoletim($request->id);   
+        $logs = array();
         
         $data = array("dados"=> $dados, "boletim" => $boletim);
         $emails = $request->emails;
 
         for ($i=0; $i < count($emails); $i++) { 
-            Mail::send('boletim.outlook', $data, function($message) use ($emails, $i) {
-            $message->to($emails[$i])
-            ->subject('Boletim de Clipagens');
-                $message->from('boletins@clipagens.com.br','Studio Clipagem');
-            });
+
+            try{
+                $nail_status = Mail::send('boletim.outlook', $data, function($message) use ($emails, $i) {
+                $message->to($emails[$i])
+                ->subject('Boletim de Clipagens');
+                    $message->from('boletins@clipagens.com.br','Studio Clipagem');
+                });
+                $msg = "Email enviado com sucesso";
+                $tipo = "success";
+            }
+            catch (\Swift_TransportException $e) {
+                $msg = "Erro ao enviar para o endereço especificado";
+                $tipo = "error";
+            }
+
+            $logs[] = array('email' => $emails[$i],'tipo' => $tipo, 'msg' => $msg);
         }
 
-        return redirect('boletim/'.$request->id);
+        return view('boletim/resumo', compact('boletim', 'logs'));
+        //return redirect('boletim/'.$request->id)->with(['log' => $log]);
     }
  
     public function getDadosBoletim($id)
