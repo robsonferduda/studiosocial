@@ -131,15 +131,16 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $request->id)->first();
         $dados = $this->getDadosBoletim($request->id);   
         
+        $data = array("dados"=> $dados, "boletim" => $boletim);
         $emails = $request->emails;
 
-        $data = array("dados"=> $dados, "boletim" => $boletim);
-         
-        Mail::send('boletim.outlook', $data, function($message) use ($emails) {
-        $message->to($emails)
-        ->subject('Boletim de Clipagens');
-            $message->from('boletins@clipagens.com.br','Studio Clipagem');
-        });
+        for ($i=0; $i < count($emails); $i++) { 
+            Mail::send('boletim.outlook', $data, function($message) use ($emails, $i) {
+            $message->to($emails[$i])
+            ->subject('Boletim de Clipagens');
+                $message->from('boletins@clipagens.com.br','Studio Clipagem');
+            });
+        }
 
         return redirect('boletim/'.$request->id);
     }
