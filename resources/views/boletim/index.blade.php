@@ -20,7 +20,8 @@
                 <table class="table table-hover">
                     <thead class="">
                         <tr>
-                            <th>Data da Criação</th>
+                            <th class="center">Código</th>
+                            <th class="center">Data da Criação</th>
                             <th>Cliente</th>
                             <th>Boletim</th>
                             <th class="text-center">Status</th>
@@ -30,7 +31,8 @@
                     <tbody>
                         @foreach($boletins as $boletim)
                             <tr>
-                                <td>{{ Carbon\Carbon::parse($boletim->data)->format('d/m/Y H:i') }}</td>
+                                <td class="center">{{ $boletim->id }}</td>
+                                <td class="center">{{ Carbon\Carbon::parse($boletim->data)->format('d/m/Y H:i') }}</td>
                                 <td>
                                     @if($boletim->id_cliente == 452)
                                         Offshore
