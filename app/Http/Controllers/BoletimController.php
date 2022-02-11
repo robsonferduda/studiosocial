@@ -54,6 +54,7 @@ class BoletimController extends Controller
         if($boletim->id_cliente == 452){
 
             $lista_email = array(
+                array('nome' => 'Teste Email Inesistente', 'email' => 'email@inexistente.ga'),
                 array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
                 array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
                 array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
@@ -67,7 +68,7 @@ class BoletimController extends Controller
                 array('nome' => 'Ricardo Gesse', 'email' => 'ricardo.gesse@zurichairportbrasil.com '),
                 array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com')
             );
-            
+
         }else{
 
             $lista_email = array(
