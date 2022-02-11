@@ -54,13 +54,6 @@ class BoletimController extends Controller
         if($boletim->id_cliente == 452){
 
             $lista_email = array(
-                array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
-                array('nome' => 'Teste', 'email' => 'andre.couto@teste.novo.com')
-            );
-
-            /*
-
-            $lista_email = array(
                 array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
                 array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
                 array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
@@ -74,9 +67,7 @@ class BoletimController extends Controller
                 array('nome' => 'Ricardo Gesse', 'email' => 'ricardo.gesse@zurichairportbrasil.com '),
                 array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com')
             );
-
-            */
-
+            
         }else{
 
             $lista_email = array(
@@ -116,24 +107,6 @@ class BoletimController extends Controller
         }
 
         return view('boletim/lista-envio', compact('boletim', 'lista_email'));
-        /*
-        $boletim = Boletim::where('id', $id)->first();
-        $dados = $this->getDadosBoletim($id);   
-        
-        //$emails = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
-        $emails = ['robsonferduda@gmail.com','alvaro@studioclipagem.com.br'];
-        //$emails = ['robsonferduda@gmail.com'];
-
-        $data = array("dados"=> $dados, "boletim" => $boletim);
-         
-        Mail::send('boletim.outlook', $data, function($message) use ($emails) {
-        $message->to($emails)
-        ->subject('Boletim de Clipagens');
-            $message->from('boletins@clipagens.com.br','Studio Clipagem');
-        });
-
-        return redirect('boletim/'.$id);
-        */
     }
 
     public function enviarLista(Request $request)
@@ -165,7 +138,6 @@ class BoletimController extends Controller
         }
 
         return view('boletim/resumo', compact('boletim', 'logs'));
-        //return redirect('boletim/'.$request->id)->with(['log' => $log]);
     }
  
     public function getDadosBoletim($id)
