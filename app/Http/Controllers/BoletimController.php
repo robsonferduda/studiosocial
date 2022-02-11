@@ -51,7 +51,7 @@ class BoletimController extends Controller
     {
         $boletim = Boletim::where('id', $id)->first();
 
-        if($boletim->id_cliente = 452){
+        if($boletim->id_cliente == 452){
 
             $lista_email = array(
                 array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
