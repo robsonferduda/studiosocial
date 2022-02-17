@@ -55,7 +55,7 @@ class BoletimController extends Controller
 
             $lista_email = array(
                 array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
-                array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
+                //array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
                 array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
                 array('nome' => 'Andre Couto', 'email' => 'andre.couto@zurichairportbrasil.com'),
                 array('nome' => 'Armstron', 'email' => 'armstron.carvalho@zurichairportbrasil.com'),
@@ -72,7 +72,7 @@ class BoletimController extends Controller
 
             $lista_email = array(
                             array('nome' => 'Álvaro Lista', 'email' => 'alvaro@studioclipagem.com.br'),
-                            array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
+                            //array('nome' => 'Rafael de Moraes Costa', 'email' => 'rafael01costa@gmail.com'),
                             array('nome' => 'Robson Fernando Duda', 'email' => 'robsonferduda@gmail.com'),
                             array('nome' => 'Adrian Elkuch', 'email' => 'adrian.elkuch@zurich-airport.lat'),
                             array('nome' => 'Anderson Pinheiro', 'email' => 'anderson.pinheiro@zurichairportbrasil.com'),
@@ -136,6 +136,9 @@ class BoletimController extends Controller
 
             $logs[] = array('email' => $emails[$i],'tipo' => $tipo, 'msg' => $msg);
         }
+
+        $boletim->status_envio = 'enviado';
+        $boletim->save();
 
         return view('boletim/resumo', compact('boletim', 'logs'));
     }
