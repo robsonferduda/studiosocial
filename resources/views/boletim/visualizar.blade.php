@@ -96,7 +96,13 @@
                                         <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                                         <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                                         <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                        <p style="margin-bottom: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Assista</a></p>
+
+                                        @php 
+                                            $file_headers = @get_headers(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4');
+                                        @endphp
+                                        @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Assista</a></p>
+                                        @endif
                                     </div>
 
                                 @elseif($noticia->clipagem == 'radio')
@@ -107,7 +113,13 @@
                                         <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                                         <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                                         <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                        <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Ouça</a></p>                                    </div>
+                                        @php 
+                                            $file_headers = @get_headers(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3');
+                                        @endphp
+                                        @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Ouça</a></p>
+                                        @endif                                    
+                                    </div>
                                 
                                 @elseif($noticia->clipagem == 'web')
 
@@ -118,7 +130,13 @@
                                         <p style="margin-bottom: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                                         <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
                                         <p style="margin-bottom: 0px;"><strong>Link:</strong><a href="{{ $noticia->link }}" target="_BLANK"> Acesse</a></p>
-                                        <p style="margin-bottom: 10px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
+
+                                        @php 
+                                            $file_headers = @get_headers($noticia->url);
+                                        @endphp
+                                        @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                            <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" target="BLANK" download>Veja</a></p>
+                                        @endif
                                     </div>                            
 
                                 @else

@@ -85,7 +85,13 @@
                                 @endif
                                 <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                <p style="margin-bottom: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
+
+                                @php 
+                                    $file_headers = @get_headers(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4');
+                                @endphp
+                                @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                    <p style="margin-bottom: 0px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" download>Download</a></p>
+                                @endif
 
                                 <video width="320" height="240" controls>
                                     <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp4' }}" type="video/mp4">
@@ -103,7 +109,13 @@
                                 @endif
                                 <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ gmdate("H:i:s", $noticia->segundos)}}</p>
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Download</a></p>
+
+                                @php 
+                                    $file_headers = @get_headers(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3');
+                                @endphp
+                                @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                    <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" download>Download</a></p>
+                                @endif
 
                                 <audio width="320" height="240" controls>
                                     <source src="{{ env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.mp3' }}" type="audio/mpeg">
@@ -121,8 +133,15 @@
                                     <p style="margin-bottom: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                                 @endif
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Acesse</a></p>
-                                <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" download>Veja</a></p>
+                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->link }}" target="BLANK" download>Acesse</a></p>
+
+                                @php 
+                                    $file_headers = @get_headers($noticia->url);
+                                @endphp
+                                @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                    <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Print:</strong> <a href="{{ $noticia->url }}" target="BLANK" download>Veja</a></p>
+                                @endif
+
                             </div>                            
 
                         @else
@@ -135,7 +154,13 @@
                                     <p style="margin-bottom: 0px;"><strong>Seção:</strong> {{ $noticia->INFO2 }}</p>
                                 @endif
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
-                                <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+
+                                @php 
+                                    $file_headers = @get_headers($noticia->url);
+                                @endphp
+                                @if(!(!$file_headers || $file_headers[0] == 'HTTP/1.1 404 Not Found'))
+                                    <p style="margin-bottom: 10px;"><strong>Link:</strong> <a href="{{ $noticia->url }}" download>Download</a></p>
+                                @endif
                             </div>
 
                         @endif
