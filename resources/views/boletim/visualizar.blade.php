@@ -57,7 +57,7 @@
                                     @endphp
                                 @endif
 
-                                @if($noticia->clipagem != $tipo)
+                                @if($noticia->clipagem != $tipo or($noticia->clipagem == $tipo and $noticia->area != $area))
                                     @switch($noticia->clipagem)
                                         @case('web')
                                             @php
