@@ -21,23 +21,23 @@ clients = cur.fetchall()
 
 for client in clients:
 
-    sql = 'select 	caption from medias t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 4) where t0.deleted_at is null and t0.client_id ='+str(client['id'])
+    sql = 'select 	caption from medias t0  where t0.deleted_at is null and t0.client_id ='+str(client['id'])
     cur.execute(sql)
     medias = cur.fetchall()
 
-    sql = 'select full_text from media_twitter t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 3) where t0.deleted_at is null and t0.client_id = '+str(client['id'])
+    sql = 'select full_text from media_twitter t0  where t0.deleted_at is null and t0.client_id = '+str(client['id'])
     cur.execute(sql)
     medias_t = cur.fetchall()
 
-    sql = 'select message from fb_posts t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 1) where t0.deleted_at is null and t0.client_id = '+str(client['id'])
+    sql = 'select message from fb_posts t0 where t0.deleted_at is null and t0.client_id = '+str(client['id'])
     cur.execute(sql)
     medias_f = cur.fetchall()
 
-    sql = 'select t0.text from  ig_comments t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 5) inner join medias t2 on (t0.media_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
+    sql = 'select t0.text from  ig_comments t0 inner join medias t2 on (t0.media_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
     cur.execute(sql)
     comments_i = cur.fetchall()
 
-    sql = 'select * from fb_comments t0 inner join rule_message t1 on ( t0.id = t1.message_id and t1.rules_type = 2) inner join fb_posts t2 on (t0.post_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
+    sql = 'select * from fb_comments t0 inner join fb_posts t2 on (t0.post_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
     cur.execute(sql)
     comments_f = cur.fetchall()
 
