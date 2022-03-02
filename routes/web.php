@@ -133,3 +133,5 @@ Route::post('account/collect/mention', 'AccountController@isToCollectMention');
 Route::get('cliente/{client}/facebook/paginas','FbPageController@index');
 
 Route::resource('facebook/pagina', 'FbPageControllerController');
+
+Route::get('processamento','ProcessamentoController@index');
