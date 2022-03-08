@@ -126,11 +126,9 @@ Route::post('nuvem-palavras/hashtags', 'RelatorioController@getNuvemHashtags');
 Route::post('nuvem-palavras/remove', 'WordCloudController@remove');
 Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecaoRemove')->name('excecao.remove');
 
-
-
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');
 
-Route::get('cliente/{client}/facebook/paginas','FbPageController@index');
+Route::get('facebook/paginas','FbPageController@index');
 
 Route::resource('facebook/pagina', 'FbPageControllerController');
 

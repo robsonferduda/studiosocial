@@ -13,10 +13,8 @@ class FbPageController extends Controller
         $this->middleware('auth');
     }
 
-    public function index($client)
+    public function index()
     {
-        $client = Client::with('user')->find($client);
-
-        return view('pages/index', compact('client'));
+        return view('pages/index');
     }
 }

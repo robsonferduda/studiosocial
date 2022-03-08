@@ -85,8 +85,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h5 class="modal-title" id="myModalLabel"><i class="fa fa-at"></i> <strong> Cadastrar Páginas do Facebook</strong></h5>
             </div>
-            {!! Form::open(['id' => 'frm_page_create', 'url' => ['page']]) !!}
-                <input type="hidden" name="client_id" value="{{ $client->id }}">
+            {!! Form::open(['id' => 'frm_page_create', 'url' => ['page']]) !!}                
                 <div class="modal-body">
                     <div class="card-body">            
                         <div class="row">
