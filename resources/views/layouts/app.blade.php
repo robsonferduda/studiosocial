@@ -100,6 +100,14 @@
                     </a>
                   </li>
                 @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'transcricao') ? 'active' : '' }}">
+                    <a href="{{ url('transcricao') }}">
+                    <i class="fa fa-commenting-o" aria-hidden="true"></i>
+                    <p>Transcrição</p>
+                    </a>
+                  </li>
+                @endrole
                 <hr/>
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
@@ -284,7 +292,7 @@
       
       $('#datatable').DataTable({
         "pagingType": "full_numbers",
-        "order": false,
+        
         "lengthMenu": [
           [10, 25, 50, -1],
           [10, 25, 50, "All"]

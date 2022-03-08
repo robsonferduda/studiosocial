@@ -55,6 +55,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'audios' => [
+            'driver' => 'local',
+            'root' => storage_path('app/audios'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
+
         'wordcloud' => [
             'driver' => 'local',
             'root' => storage_path('app/wordcloud/files'),

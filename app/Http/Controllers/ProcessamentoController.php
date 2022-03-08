@@ -6,7 +6,7 @@ use DB;
 use Auth;
 use App\User;
 use App\Term;
-use App\Client;
+use App\Radios;
 use App\Configs;
 use App\Hashtag;
 use App\Media;
@@ -63,4 +63,42 @@ class ProcessamentoController extends Controller
             echo "No instante ".$ocorrencias[$i]['tempo']." houve ".count($ocorrencias[$i]['ocorrencias'])." ocorrências de valores das chaves \"".implode('","',$ocorrencias[$i]['ocorrencias']).'"'."<br/>";
         }
     }
+
+    public function radios()
+    {
+        $emissoras = Radios::all();
+        return view('transcricao/emissoras', compact('emissoras'));
+    }
+
+    public function audios($emissora)
+    {
+        $radio = Radios::where('pasta',$emissora)->first();
+        $files = \File::allFiles(storage_path('app/audios/'.$emissora));
+
+        $lista = collect($files)->sortBy(function($file){
+            return $file->getBaseName();
+        });
+
+        foreach($lista as $key => $file){
+
+            $linha = '';
+            $arq = fopen(storage_path("app/audios/".$emissora."/".$file->getFilename()), "r");
+            while(!feof($arq)) {
+                $linha = fgets($arq);
+                if(trim($linha) != '') $tempo = substr(trim($linha),11,8);
+            }
+            fclose($arq);
+            $lista[$key]->tempo = $tempo;
+        }
+
+        return view('transcricao/arquivos', compact('lista','radio'));
+    }
+
+    public function processar($pasta)
+    {
+        $radio = Radios::where('pasta',$pasta)->first();
+        $resultado = array();
+        return view('transcricao/resultado', compact('resultado','radio'));
+    }
+    
 }
