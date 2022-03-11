@@ -135,6 +135,7 @@ Route::get('cliente/{client}/facebook/paginas','FbPageController@index');
 Route::resource('facebook/pagina', 'FbPageControllerController');
 
 Route::get('transcricao','ProcessamentoController@radios');
+Route::get('transcricao/baixar/{pasta}','ProcessamentoController@baixar');
 Route::get('transcricao/processar/{pasta}','ProcessamentoController@processar');
 ROute::get('transcricao/audios/{emissora}','ProcessamentoController@audios');
 Route::get('processamento','ProcessamentoController@index');
