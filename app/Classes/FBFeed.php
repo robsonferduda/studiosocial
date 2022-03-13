@@ -22,7 +22,7 @@ class FBFeed{
 
         foreach ($pages as $page) {
             
-            $access_token = 'EAAICnmS4fO0BAMfnRZBWoq4A7Cxvjln1wphBBjPDdZBdJlzc0ybOus9feXKqPnhFGq3q1ZBlTWGZBVGeokbnrNzXCd02zNnZCKsZBFaFqz0kdxxze5ZBZCID1EfYvJpSTJIST0HGijHrzBGtPhx5Py9wngPmu1KkdFrdgfnzaZB3wEsUelbKu1ED4';
+            $access_token = FbPage::where('id', 10)->first()->token;
             $id_page_id = 'trilhasemsc';
 
             $fb_feed = new FBFeedApi($id_page_id);
