@@ -47,8 +47,7 @@
                                 </a>
                             </td>
                             <td class="text-center">
-                                <a title="Facebook" href="{{ url('monitoramento/media/facebook') }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>
-                                <a title="Páginas do Facebook Monitoradas" href="{{ url('cliente/'.$c->id.'/facebook/paginas') }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-at font-25"></i></a>
+                                <a title="Facebook" href="{{ url('monitoramento/media/facebook') }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>                                
                                 <a title="Termos do Cliente" href="{{ url('terms/client',$c->id) }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-font font-25"></i></a>
                                 <a title="Hashtags do Cliente" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>
                                 <a title="Emails de Comunicação" href="{{ url('client/emails',$c->id) }}" class="btn btn-danger btn-link btn-icon"><i class="fa fa-envelope font-25"></i></a>
