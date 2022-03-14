@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\FBFeed;
 use App\FbPageMonitor;
 use App\FbPagePost;
+use App\Client;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 
@@ -101,5 +102,10 @@ class FbPageController extends Controller
 
         return view('pages/medias', compact('medias', 'medias_temp'));
 
+    }
+
+    public function clientes()
+    {
+        return Client::select(['id', 'name'])->get();
     }
 }

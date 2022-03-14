@@ -43,6 +43,7 @@
                                     <span class="badge badge-pill badge-success">ATIVO</span>
                                 </td>--}}
                                 <td class="center">
+                                    <button title="Associar Clientes" id="btn-connect-client" class="btn btn-primary btn-link btn-icon"><i class="fa fa-list fa-2x"></i></button>
                                     <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
                                     <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
                                         @csrf
@@ -158,11 +159,68 @@
     </div>
 </div>
 
+<div class="modal fade modal-primary" id="modalConnectClient" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title" id="myModalLabel"><i class="fa fa-list"></i> <strong> Associar Clientes</strong></h5>
+            </div>
+            {!! Form::open(['id' => 'frm_connect_client', 'url' => ['facebook-pagina/associar-cliente']]) !!}       
+                <input type="hidden" class="form-control" name="id" id="id" value="">       
+                <div class="modal-body">
+                    <div class="card-body">   
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Clientes <span class="text-danger">Obrigatório</span></label>
+                                    <select class="select2" name="client[]" multiple="multiple">
+                                        <option value="AL">Alabama</option>                                    
+                                        <option value="WY">Wyoming</option>
+                                        <option value="WY">Teste Teste Teste Teste Teste Teste</option>
+                                        <option value="WY">Wyoming</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>                                            
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar</button>
+                    <button data-dismiss="modal" class="btn btn-danger"><i class="fa fa-times"></i> Cancelar</button>
+                </div>
+            {!! Form::close() !!} 
+        </div>
+    </div>
+</div>
+
 
 @endsection
 @section('script')
 <script>
-    $(document).ready(function() {        
+    $(document).ready(function() {     
+
+        $('.select2').select2({
+            minimumInputLength: 3,
+            placeholder: 'Selecione um Cliente',
+            ajax: {
+                url: 'facebook-pagina/clientes',
+                processResults: function (data) {
+                    console.log(data);
+                    return {
+                        results:  $.map(data, function(obj, index) {
+
+                            return { id: obj.id, text: obj.name };    
+                        })
+                    };                    
+                }
+            } 
+        });
+
+        $('#btn-connect-client').click(function(){
+            $('#modalConnectClient').modal('show');
+        });
+
         $('.btn-edit-page').click(function(){
             var url = "facebook-pagina";
             var tour_id= $(this).data('id');
