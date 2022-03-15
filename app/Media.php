@@ -41,7 +41,7 @@ class Media extends Model implements Auditable
         return $this->hasMany('App\IgComment','media_id','id');
     }
 
-    public function getSentimentos($data_inicial, $data_final)
+    public function getSentimentos($client_id, $data_inicial, $data_final)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
@@ -50,6 +50,7 @@ class Media extends Model implements Auditable
                             FROM medias 
                             WHERE sentiment NOTNULL 
                             AND timestamp BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            AND client_id = $client_id
                             GROUP BY sentiment 
                             ORDER BY sentiment");
     }
