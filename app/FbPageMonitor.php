@@ -19,4 +19,8 @@ class FbPageMonitor extends Model
                             'post'
                         ];
 
+    public function clients () {
+        return $this->belongsToMany(Client::class, 'client_page_monitor', 'fb_page_monitor_id', 'client_id')->withTimestamps();
+    }
+
 }

@@ -44,7 +44,7 @@ class FBFeed{
                     $date_updated = new \DateTime($post['updated_time']);
                     $strtotime_date_updated =  strtotime($date_updated->format('Y-m-d'));
                     $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
-                   // $reactions = $this->getReactions($post['id'], $fb_feed, $access_token);
+                    $reactions = $this->getReactions($post['id'], $fb_feed, $access_token);
                                                               
                     $post = FbPagePost::updateOrCreate(
                             [
@@ -55,31 +55,28 @@ class FBFeed{
                                 'message' => isset($post['message']) ? $post['message']: null,
                                 'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
                                 'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                                                                                                            
-                                //'comment_count' => $reactions['qtd_comments'],
-                                //'share_count' => $reactions['qtd_shares'],
+                                'comment_count' => $reactions['qtd_comments'],
+                                'share_count' => $reactions['qtd_shares'],
                             ]);    
 
-                    // $reaction_buffer = [];
-                    // foreach ($reactions['types'] as $type => $qtd) {
-                    //     if($qtd > 0) {
+                    $reaction_buffer = [];
+                    foreach ($reactions['types'] as $type => $qtd) {
+                        if($qtd > 0) {
 
-                    //         $reaction = constant('App\Enums\FbReaction::'. $type);
-                    //         $reaction_buffer[$reaction] = ['count' => $qtd];
+                            $reaction = constant('App\Enums\FbReaction::'. $type);
+                            $reaction_buffer[$reaction] = ['count' => $qtd];
                                        
-                    //     }                                    
-                    // }
+                        }                                    
+                    }
 
-                    // if (!empty($reaction_buffer)) {
-                    //     $post->reactions()->sync($reaction_buffer);
-                    // }
+                    if (!empty($reaction_buffer)) {
+                        $post->reactions()->sync($reaction_buffer);
+                    }
                 }            
                               
                 $after = $fb_feed->getAfter($posts);
         
             } while($fb_feed->hasAfter($posts) && ($strtotime_date_updated >= $strtotime_date_yesterday));
-                       
-                
-            
         }
     }
 

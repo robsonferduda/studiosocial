@@ -8,6 +8,7 @@ use App\FbPagePost;
 use App\Client;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
+use LDAP\Result;
 
 class FbPageController extends Controller
 {
@@ -20,7 +21,9 @@ class FbPageController extends Controller
     {
         $pages = FbPageMonitor::all();
 
-        return view('pages/index', compact('pages'));
+        $clients = Client::select(['id', 'name'])->get();
+
+        return view('pages/index', compact('pages', 'clients'));
     }
 
     public function show($id) {
@@ -31,29 +34,74 @@ class FbPageController extends Controller
 
     public function store(Request $request)
     {
-        FbPageMonitor::create([
-            'name' => $request->name, 
-            'url' => $request->url
-        ]);
+        try {
+            $page = FbPageMonitor::create([
+                'name' => $request->name, 
+                'url' => $request->url
+            ]);
+
+            if($page) {
+                $retorno = array('flag' => true,
+                'msg' => "Dados inseridos com sucesso");
+            }
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+
+        } catch (Exception $e) {
+            
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao inserir o registro");
+        }
 
         (new FBFeed())->pullMedias();
 
-        return redirect('facebook-paginas');
+        if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('facebook-paginas');
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect('facebook-paginas');
+        }
     }
 
     public function update(Request $request)
     {   
-        $page = FbPageMonitor::where('id', $request->id)->first();
+        try {
+            $page = FbPageMonitor::where('id', $request->id)->first();
 
-        $page->update([
-            'name' => $request->name,
-            'url'  => $request->url
-        ]);
+            $page->update([
+                'name' => $request->name,
+                'url'  => $request->url
+            ]);
 
+            if($page) {
+                $retorno = array('flag' => true,
+                'msg' => "Dados atualizados com sucesso");
+            }
+
+        } catch (\Illuminate\Database\QueryException $e) {
+
+            $retorno = array('flag' => false,
+                             'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
+
+        } catch (Exception $e) {
+            
+            $retorno = array('flag' => true,
+                             'msg' => "Ocorreu um erro ao atualizar o registro");
+        }
 
        (new FBFeed())->pullMedias();
 
-        return redirect('facebook-paginas');
+       if ($retorno['flag']) {
+            Flash::success($retorno['msg']);
+            return redirect('facebook-paginas');
+        } else {
+            Flash::error($retorno['msg']);
+            return redirect('facebook-paginas');
+        }
     }
 
     public function destroy($id)
@@ -104,8 +152,17 @@ class FbPageController extends Controller
 
     }
 
-    public function clientes()
+    public function associarCliente(Request $request)
     {
-        return Client::select(['id', 'name'])->get();
+        $clients = $request->client;
+
+        $page = FbPageMonitor::where('id', $request->id)->first();
+
+        $result = $page->clients()->sync($clients);
+
+        Flash::success('<i class="fa fa-check"></i> Clientes da página <strong>'.$page->name.'</strong> atualizados com sucesso');
+
+        return redirect('facebook-paginas');
+
     }
 }
