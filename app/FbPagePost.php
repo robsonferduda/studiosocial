@@ -23,4 +23,9 @@ class FbPagePost extends Model implements Auditable
                             'share_count',
                             'comment_count'
                         ];
+
+    public function reactions()
+    {
+        return $this->belongsToMany('App\FbReaction','fb_page_post_reaction','page_post_id','reaction_id')->withTimestamps()->withPivot('count');
+    }
 }
