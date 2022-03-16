@@ -7,7 +7,7 @@
                 <div class="col-md-6">
                     <h4 class="card-title">
                         <i class="nc-icon nc-sound-wave"></i> Relatórios 
-                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Evolução Diária 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Gerenciador 
                     </h4>
                 </div>
                 <div class="col-md-6">
