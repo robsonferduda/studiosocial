@@ -646,7 +646,8 @@ class RelatorioController extends Controller
 
     public function localizacaoPdf(Request $request)
     {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
+      $this->rule_id = $request->regra;  
       $dados = $this->getDadosLocalizacao();
       $rule = Rule::find($request->regra);
       $dt_inicial = $request->data_inicial;
