@@ -32,13 +32,13 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="fa fa-hashtag text-warning"></i>
+                                <i class="fa fa-facebook text-facebook"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
                             <div class="numbers">
-                                <p class="card-category">Hashtags Ativas</p>
-                                <p class="card-title"><a href="#">{{ count($hashtags) }}</a></p>
+                                <p class="card-category">Média Facebook</p>
+                                <p class="card-title">{{ $media_facebook }}</p>
                             </div>
                         </div>
                     </div>
@@ -55,13 +55,13 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="fa fa-font"></i>
+                                <i class="fa fa-instagram text-pink""></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
                             <div class="numbers">
-                                <p class="card-category">Termos Ativos</p>
-                                <p class="card-title"><a href="#">{{ count($terms) }}</a></p>
+                                <p class="card-category">Média Instagram</p>
+                                <p class="card-title">{{ $media_instagram }}</p>
                             </div>
                         </div>
                     </div>
@@ -114,7 +114,10 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-12 col-md-12">
-                            <h6 class="mt-2 mb-3">Termos Ativos</h6>
+                            <h6 class="mt-2 mb-3">
+                                Termos Ativos
+                                <a class="pull-right" href="{{ url('terms/client', session('cliente')['id']) }}"><i class="fa fa-plus"></i> Adicionar</a>
+                            </h6>
                             @foreach($terms as $term)
                                 <p>{{ $term->term }}</p>
                             @endforeach
@@ -129,7 +132,10 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-12 col-md-12">
-                            <h6 class="mt-2 mb-3">Hashtags Ativas</h6>
+                            <h6 class="mt-2 mb-3">
+                                Hashtags Ativas
+                                <a class="pull-right" href="{{ url('client/hashtags', session('cliente')['id']) }}"><i class="fa fa-plus"></i> Adicionar</a>
+                            </h6>
                             @foreach($hashtags as $hashtag)
                                 <p>#{{ $hashtag->hashtag }}</p>
                             @endforeach
