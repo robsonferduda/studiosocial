@@ -1053,6 +1053,7 @@ class RelatorioController extends Controller
 
     public function geradorPdf(Request $request)
     {
+        $this->rule_id = $request->regra;  
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
@@ -1113,7 +1114,8 @@ class RelatorioController extends Controller
 
         if(in_array('localizacao', $relatorios)){
           $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['localizacao'] = null;
+          $dados['localizacao'] = $this->getDadosLocalizacao(); 
+          
           $page_break++;
         }
 
