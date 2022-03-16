@@ -132,7 +132,9 @@
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
-                        <div id='cloud' style="height: 300px;"></div>
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="custom-cloud" id='cloud'></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -146,7 +148,8 @@
 
         $('body').loader('show');
 
-        var APP_URL = {!! json_encode(url('/')) !!}
+        var APP_URL = {!! json_encode(url('/')) !!};
+        var tamanho = 0.02;
 
         fetch(APP_URL+'/nuvem-palavras/words', {
             method: 'GET', 
@@ -156,13 +159,12 @@
             },
         }).then(function(response) {
             return response.json();
-            //words = JSON.stringify(words);
-
         }).then(function(response){
             
             let words = [];
 
             $('body').loader('hide');
+            const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {
                 words.push(
@@ -171,31 +173,19 @@
                         weight: element[1],
                         html: {
                             class: 'cloud-word'
-                        },
-                        handlers: {
-                            click: function(e) {
-                                for( var i = 0; i < words.length; i++){ 
-                                   if (words[i].text === this.textContent) { 
-                                        words.splice(i, 1); 
-                                       break; 
-                                   }
-                               }
-
-                               $('#cloud').jQCloud('update', words);
-
-                            }
-                        },
-                        
+                        },                        
                     }
                 );
             });
 
             let cloud = $('#cloud').jQCloud(words, {
+                autoResize: true,
+                classPattern: null,
+                colors: ["#66C2A5", "#FC8D62", "#800026", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
                 fontSize: function (width, height, step) {
-                    if (step == 1)
-                    return width * 0.01 * step + 'px';
-
-                    return width * 0.009 * step + 'px';
+                    if (step < 5)
+                        tamanho = tamanho - 0.001;
+                    return width * tamanho * step + 'px';
                 }
             });            
         });
