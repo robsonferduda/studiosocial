@@ -299,28 +299,23 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
-        $file_name = 'cliente-4-wordclould';
+        $file_name = 'cliente-'.$this->client_id.'-hashtag';
 
         $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
         Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
 
-        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordclould', 'imagem', $this->client_id]);
+        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', $this->client_id]);
 
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
-                //echo 'ERR > '.$buffer.'<br />';
-            } else {
-                
-                if(trim($buffer) == 'END') {
-                    //echo 'OUT > '.$buffer.'<br />';
-                            
-                    $chartData = file_get_contents(Storage::disk('hashtag')->getAdapter()->getPathPrefix().$file_name.".png"); 
+              //echo 'ERR > '.$buffer.'<br />';
+              $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
+              $chart =  'data:image/png;base64, '.base64_encode($chartData);
+            } else {                
+                if(trim($buffer) == 'END') {                            
+                    $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
                     $chart =  'data:image/png;base64, '.base64_encode($chartData);
-                    
-                    //Storage::disk('wordcloud')->delete($file_name.".png");
-                    //Storage::disk('wordcloud')->delete($file_name.".json");
                 }
-
             }
         });
     
