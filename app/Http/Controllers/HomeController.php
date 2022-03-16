@@ -49,8 +49,9 @@ class HomeController extends Controller
 
             $users = User::whereNull('client_id')->count();
             $clientes = Client::count();
-            $hashtags = Hashtag::where('is_active',true)->get();
-            $terms = Term::where('is_active',true)->get();
+           
+            $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
+            $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
             return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter'));
 
