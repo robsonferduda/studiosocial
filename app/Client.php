@@ -47,6 +47,10 @@ class Client extends Model
         return $this->hasMany('App\ClientFbPage', 'client_id', 'id');
     } 
 
+    public function pagesMonitor () {
+        return $this->belongsToMany(FbPageMonitor::class, 'client_page_monitor', 'client_id', 'fb_page_monitor_id')->withTimestamps();
+    }
+
     public static function boot() {
         
         parent::boot();
@@ -60,4 +64,5 @@ class Client extends Model
         });
 
     }
+    
 }

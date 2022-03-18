@@ -26,6 +26,7 @@ Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAcc
 Route::get('client/hashtags/{cliente}','ClientController@getHashtags');
 Route::get('client/emails/{cliente}','ClientController@emails');
 Route::post('cliente/selecionar','ClientController@selecionar');
+Route::get('cliente/paginas-associadas/{client}','ClientController@connectedtPages');
 
 Route::get('configuracoes','ConfiguracoesController@index');
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');

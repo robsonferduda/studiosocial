@@ -49,9 +49,9 @@ class FBFeed{
                     $post = FbPagePost::updateOrCreate(
                             [
                                 'post_id' => $post['id'],                                
+                                'fb_page_monitor_id' => $page->id,
                             ],    
                             [
-                                'fb_page_monitor_id' => 3,
                                 'message' => isset($post['message']) ? $post['message']: null,
                                 'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
                                 'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                                                                                                            
