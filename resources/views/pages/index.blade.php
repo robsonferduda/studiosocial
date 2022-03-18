@@ -43,7 +43,7 @@
                                     <span class="badge badge-pill badge-success">ATIVO</span>
                                 </td>--}}
                                 <td class="center">
-                                    <button title="Associar Clientes" id="btn-connect-client" class="btn btn-primary btn-link btn-icon"><i class="fa fa-list fa-2x"></i></button>
+                                    <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  id="btn-connect-client" class="btn btn-primary btn-link btn-icon"><i class="fa fa-list fa-2x"></i></button>
                                     <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
                                     <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
                                         @csrf
@@ -173,12 +173,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label>Clientes <span class="text-danger">Obrigatório</span></label>
-                                    <select class="select2" name="client[]" multiple="multiple">
-                                        <option value="AL">Alabama</option>                                    
-                                        <option value="WY">Wyoming</option>
-                                        <option value="WY">Teste Teste Teste Teste Teste Teste</option>
-                                        <option value="WY">Wyoming</option>
+                                    <label>Clientes </label>
+                                    <select class="select2" name="client[]" multiple="multiple" id="select_client">
+                                        @foreach($clients as $client)
+                                            <option value="{{ $client->id }}">{{ $client->name }}</option>         
+                                        @endforeach                                                                                                          
                                     </select>
                                 </div>
                             </div>
@@ -200,33 +199,34 @@
 <script>
     $(document).ready(function() {     
 
-        $('.select2').select2({
-            minimumInputLength: 3,
-            placeholder: 'Selecione um Cliente',
-            ajax: {
-                url: 'facebook-pagina/clientes',
-                processResults: function (data) {
-                    console.log(data);
-                    return {
-                        results:  $.map(data, function(obj, index) {
-
-                            return { id: obj.id, text: obj.name };    
-                        })
-                    };                    
-                }
-            } 
+        var select = $('.select2').select2({
+            tags: true,
+            placeholder: 'Selecione um Cliente',           
         });
 
         $('#btn-connect-client').click(function(){
-            $('#modalConnectClient').modal('show');
+
+            $id_clients = $(this).data('clients').split(",");
+
+            $("#select_client option").each(function()
+            {
+                if($id_clients.includes($(this).val())) {
+                   // select.select2
+                    $(this).attr('selected','selected');
+                    select.trigger('change');
+                }                
+            });
+
+            $('#modalConnectClient #id').val($(this).data("id"));                        
+            $('#modalConnectClient').modal('show');  
+        
         });
 
         $('.btn-edit-page').click(function(){
             var url = "facebook-pagina";
-            var tour_id= $(this).data('id');
-            $.get(url + '/' + tour_id, function (data) {
+            var page_id= $(this).data('id');
+            $.get(url + '/' + page_id, function (data) {
                 //success data
-                console.log(data);
                 $('#modalPaginaEdit #id').val(data.id);
                 $('#modalPaginaEdit #name').val(data.name);
                 $('#modalPaginaEdit #url').val(data.url);

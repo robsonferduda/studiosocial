@@ -128,11 +128,11 @@ Route::delete('nuvem-palavras/excecao/remove/{id}', 'WordCloudController@excecao
 
 Route::post('account/collect/mention', 'AccountController@isToCollectMention');
 
-Route::get('facebook-pagina/clientes','FbPageController@clientes');
 Route::resource('facebook-pagina', 'FbPageController');
 Route::get('facebook-paginas','FbPageController@index');
 Route::post('facebook-pagina/atualizar','FbPageController@update');
 Route::get('facebook-paginas/monitoramento','FbPageController@medias');
+Route::post('facebook-pagina/associar-cliente','FbPageController@associarCliente');
 
 
 Route::get('transcricao','ProcessamentoController@radios');
