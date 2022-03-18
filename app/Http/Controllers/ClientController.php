@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Hash;
 use App\User;
 use App\Client;
+use App\ClientPageMonitor;
+use App\FbReaction;
 use App\Role;
 use App\Utils;
 use App\SocialMedia;
@@ -171,6 +173,19 @@ class ClientController extends Controller
 
         $social_medias = SocialMedia::where('fl_hashtag',true)->orderBy('name')->get();
         return view('clientes/hashtags', compact('client','social_medias'));
+    }
+
+    public function connectedtPages($client) 
+    {
+        $client = Client::with(['pagesMonitor' => function($query){
+            $query->with(['fbPagesPost' => function($query){
+                $query->with('reactions');
+            }]);
+        }])->where('id', $client)->first();
+
+        $reactions = FbReaction::all();
+
+        return view('clientes/connected-pages', compact('client', 'reactions'));
     }
 
 }

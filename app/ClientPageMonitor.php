@@ -10,6 +10,7 @@ class ClientPageMonitor extends Model implements Auditable
 {
 
     use SoftDeletes;
+    use \OwenIt\Auditing\Auditable;
 
     protected $table = 'client_page_monitor';
 
