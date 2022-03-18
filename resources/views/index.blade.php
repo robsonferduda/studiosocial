@@ -32,13 +32,13 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="fa fa-hashtag text-warning"></i>
+                                <i class="fa fa-facebook text-facebook"></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
                             <div class="numbers">
-                                <p class="card-category">Hashtags Ativas</p>
-                                <p class="card-title"><a href="#">{{ count($hashtags) }}</a></p>
+                                <p class="card-category">Média Facebook</p>
+                                <p class="card-title">{{ $media_facebook }}</p>
                             </div>
                         </div>
                     </div>
@@ -55,13 +55,13 @@
                     <div class="row">
                         <div class="col-5 col-md-4">
                             <div class="icon-big text-center icon-warning">
-                                <i class="fa fa-font"></i>
+                                <i class="fa fa-instagram text-pink""></i>
                             </div>
                         </div>
                         <div class="col-7 col-md-8">
                             <div class="numbers">
-                                <p class="card-category">Termos Ativos</p>
-                                <p class="card-title"><a href="#">{{ count($terms) }}</a></p>
+                                <p class="card-category">Média Instagram</p>
+                                <p class="card-title">{{ $media_instagram }}</p>
                             </div>
                         </div>
                     </div>
@@ -97,13 +97,27 @@
         </div>   
     </div> 
     <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-6">
+            <div class="card card-stats">
+                <div class="card-body ">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="custom-cloud" id='cloud'></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
 
         <div class="col-lg-4 col-md-4 col-sm-6">
             <div class="card card-stats">
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-12 col-md-12">
-                            <h6 class="mt-2 mb-3">Termos Ativos</h6>
+                            <h6 class="mt-2 mb-3">
+                                Termos Ativos
+                                <a class="pull-right" href="{{ url('terms/client', session('cliente')['id']) }}"><i class="fa fa-plus"></i> Adicionar</a>
+                            </h6>
                             @foreach($terms as $term)
                                 <p>{{ $term->term }}</p>
                             @endforeach
@@ -118,7 +132,10 @@
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-12 col-md-12">
-                            <h6 class="mt-2 mb-3">Hashtags Ativas</h6>
+                            <h6 class="mt-2 mb-3">
+                                Hashtags Ativas
+                                <a class="pull-right" href="{{ url('client/hashtags', session('cliente')['id']) }}"><i class="fa fa-plus"></i> Adicionar</a>
+                            </h6>
                             @foreach($hashtags as $hashtag)
                                 <p>#{{ $hashtag->hashtag }}</p>
                             @endforeach
@@ -127,17 +144,6 @@
                 </div>
             </div>
         </div>   
-
-        <div class="col-lg-4 col-md-4 col-sm-6">
-            <div class="card card-stats">
-                <div class="card-body ">
-                    <div class="row">
-                        <div id='cloud' style="height: 300px;"></div>
-                    </div>
-                </div>
-            </div>
-        </div>  
-
     </div>
 @endsection
 @section('script')
@@ -146,7 +152,8 @@
 
         $('body').loader('show');
 
-        var APP_URL = {!! json_encode(url('/')) !!}
+        var APP_URL = {!! json_encode(url('/')) !!};
+        var tamanho = 0.02;
 
         fetch(APP_URL+'/nuvem-palavras/words', {
             method: 'GET', 
@@ -156,13 +163,12 @@
             },
         }).then(function(response) {
             return response.json();
-            //words = JSON.stringify(words);
-
         }).then(function(response){
             
             let words = [];
 
             $('body').loader('hide');
+            const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {
                 words.push(
@@ -171,31 +177,19 @@
                         weight: element[1],
                         html: {
                             class: 'cloud-word'
-                        },
-                        handlers: {
-                            click: function(e) {
-                                for( var i = 0; i < words.length; i++){ 
-                                   if (words[i].text === this.textContent) { 
-                                        words.splice(i, 1); 
-                                       break; 
-                                   }
-                               }
-
-                               $('#cloud').jQCloud('update', words);
-
-                            }
-                        },
-                        
+                        },                        
                     }
                 );
             });
 
             let cloud = $('#cloud').jQCloud(words, {
+                autoResize: true,
+                classPattern: null,
+                colors: ["#66C2A5", "#FC8D62", "#800026", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
                 fontSize: function (width, height, step) {
-                    if (step == 1)
-                    return width * 0.01 * step + 'px';
-
-                    return width * 0.009 * step + 'px';
+                    if (step < 5)
+                        tamanho = tamanho - 0.001;
+                    return width * tamanho * step + 'px';
                 }
             });            
         });

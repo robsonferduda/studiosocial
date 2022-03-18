@@ -299,28 +299,23 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
-        $file_name = 'cliente-4-wordclould';
+        $file_name = 'cliente-'.$this->client_id.'-hashtag';
 
         $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
         Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
 
-        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', 10, 'cliente-4-wordclould', 'imagem', $this->client_id]);
+        $process = new Process(['python3', base_path().'/studio-social-hashtag.py', $this->client_id]);
 
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
-                //echo 'ERR > '.$buffer.'<br />';
-            } else {
-                
-                if(trim($buffer) == 'END') {
-                    //echo 'OUT > '.$buffer.'<br />';
-                            
-                    $chartData = file_get_contents(Storage::disk('hashtag')->getAdapter()->getPathPrefix().$file_name.".png"); 
+              //echo 'ERR > '.$buffer.'<br />';
+              $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
+              $chart =  'data:image/png;base64, '.base64_encode($chartData);
+            } else {                
+                if(trim($buffer) == 'END') {                            
+                    $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
                     $chart =  'data:image/png;base64, '.base64_encode($chartData);
-                    
-                    //Storage::disk('wordcloud')->delete($file_name.".png");
-                    //Storage::disk('wordcloud')->delete($file_name.".json");
                 }
-
             }
         });
     
@@ -502,9 +497,9 @@ class RelatorioController extends Controller
 
     public function getSentimentos()
     {
-        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->data_inicial, $this->data_final, $this->rule_id);
-        $sentimentos_facebook = (new FbPost())->getSentimentos($this->data_inicial, $this->data_final);
-        $sentimentos_instagram = (new Media())->getSentimentos($this->data_inicial, $this->data_final);
+        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+        $sentimentos_facebook = (new FbPost())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
+        $sentimentos_instagram = (new Media())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
 
         $sentimentos['facebook'] = array('rede_social' => "Facebook",
                                         'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,
@@ -512,14 +507,14 @@ class RelatorioController extends Controller
                                         'total_neutro' => ($sentimentos_facebook) ? $sentimentos_facebook[1]->total : 0);
 
         $sentimentos['instagram'] = array('rede_social' => "Instagram",
-                                          'total_positivo' => ($sentimentos_instagram) ? $sentimentos_instagram[2]->total : 0,
-                                          'total_negativo' => ($sentimentos_instagram) ? $sentimentos_instagram[0]->total : 0,
-                                          'total_neutro' => ($sentimentos_instagram) ? $sentimentos_instagram[1]->total : 0,);
+                                          'total_positivo' => ($sentimentos_instagram and isset($sentimentos_instagram[2])) ? $sentimentos_instagram[2]->total : 0,
+                                          'total_negativo' => ($sentimentos_instagram and isset($sentimentos_instagram[0])) ? $sentimentos_instagram[0]->total : 0,
+                                          'total_neutro' => ($sentimentos_instagram and isset($sentimentos_instagram[1])) ? $sentimentos_instagram[1]->total : 0,);
 
         $sentimentos['twitter'] = array('rede_social' => "Twitter",
-                                        'total_positivo' => ($sentimentos_twitter) ? $sentimentos_twitter[2]->total : 0,
-                                        'total_negativo' => ($sentimentos_twitter) ? $sentimentos_twitter[0]->total : 0,
-                                        'total_neutro' => ($sentimentos_twitter) ? $sentimentos_twitter[1]->total : 0);
+                                        'total_positivo' => ($sentimentos_twitter and isset($sentimentos_twitter[2])) ? $sentimentos_twitter[2]->total : 0,
+                                        'total_negativo' => ($sentimentos_twitter and isset($sentimentos_twitter[0])) ? $sentimentos_twitter[0]->total : 0,
+                                        'total_neutro' => ($sentimentos_twitter and isset($sentimentos_twitter[1])) ? $sentimentos_twitter[1]->total : 0);
 
         return $sentimentos;
     }
@@ -651,7 +646,8 @@ class RelatorioController extends Controller
 
     public function localizacaoPdf(Request $request)
     {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
+      $this->rule_id = $request->regra;  
       $dados = $this->getDadosLocalizacao();
       $rule = Rule::find($request->regra);
       $dt_inicial = $request->data_inicial;
@@ -1057,6 +1053,7 @@ class RelatorioController extends Controller
 
     public function geradorPdf(Request $request)
     {
+        $this->rule_id = $request->regra;  
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
@@ -1117,7 +1114,8 @@ class RelatorioController extends Controller
 
         if(in_array('localizacao', $relatorios)){
           $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['localizacao'] = null;
+          $dados['localizacao'] = $this->getDadosLocalizacao(); 
+          
           $page_break++;
         }
 

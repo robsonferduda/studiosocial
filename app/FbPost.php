@@ -36,7 +36,7 @@ class FbPost extends Model implements Auditable
         return $this->hasMany('App\FbComment','post_id','id');
     }
 
-    public function getSentimentos($data_inicial, $data_final)
+    public function getSentimentos($client_id, $data_inicial, $data_final)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');

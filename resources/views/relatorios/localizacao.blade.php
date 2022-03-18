@@ -18,9 +18,9 @@
                     @include('layouts/regra')
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
-                            <h6 class="center">Localização dos Tweets</h6>
-                            <div class="col-lg-12 col-md-12 msg_tweets"></div>
-                            <table class="table table-hover table_places d-none">
+                            <h6 class="center">Localização dos Usuários</h6>
+                            <div class="col-lg-12 col-md-12 msg_users"></div>
+                            <table class="table table-hover table_location d-none">
                                 <thead class="">
                                     <tr>
                                         <th>Localização</th>
@@ -33,9 +33,9 @@
                             </table> 
                         </div>
                         <div class="col-lg-6 col-md-6">
-                            <h6 class="center">Localização dos Usuários</h6>
-                            <div class="col-lg-12 col-md-12 msg_users"></div>
-                            <table class="table table-hover table_location d-none">
+                            <h6 class="center">Localização dos Tweets</h6>
+                            <div class="col-lg-12 col-md-12 msg_tweets"></div>
+                            <table class="table table-hover table_places d-none">
                                 <thead class="">
                                     <tr>
                                         <th>Localização</th>
@@ -90,6 +90,7 @@
 
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
+            var regra = $("#regra").val();
             $('.card').loader('show');
 
             $.ajax({

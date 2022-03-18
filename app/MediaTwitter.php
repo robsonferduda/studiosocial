@@ -49,7 +49,7 @@ class MediaTwitter extends Model implements Auditable
                            AND created_tweet_at > current_date - interval '30' day")[0]->media;
     }
 
-    public function getSentimentos($data_inicial, $data_final, $rule)
+    public function getSentimentos($client_id, $data_inicial, $data_final, $rule)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
@@ -62,6 +62,7 @@ class MediaTwitter extends Model implements Auditable
                     AND sentiment NOTNULL
                     AND t2.rule_id = $rule
                     AND t2.rules_type = 3
+                    AND client_id = $client_id
                     GROUP BY sentiment 
                     ORDER BY sentiment";
         else
@@ -69,6 +70,7 @@ class MediaTwitter extends Model implements Auditable
                     FROM media_twitter 
                     WHERE sentiment NOTNULL 
                     AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                    AND client_id = $client_id
                     GROUP BY sentiment 
                     ORDER BY sentiment";
 

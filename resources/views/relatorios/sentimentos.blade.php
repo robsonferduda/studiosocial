@@ -232,8 +232,7 @@
                 tooltipCornerRadius: 6,
                 tooltipXOffset: 10,
                 },
-
-
+                
                 legend: {
                     display: true,
                     position: 'top',

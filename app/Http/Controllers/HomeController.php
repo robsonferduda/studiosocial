@@ -42,17 +42,30 @@ class HomeController extends Controller
         $clientes = null;
         $periodo_relatorio = null;
 
+        $ig_comments_total = DB::table('ig_comments')
+                                ->join('medias','medias.id','=','ig_comments.media_id')
+                                ->where('medias.client_id','=',$this->client_id)
+                                ->count();
+
+        $fb_comments_total = DB::table('fb_comments')
+                                ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
+                                ->where('fb_posts.client_id','=',$this->client_id)
+                                ->count();
+
         $u = User::find(Auth::user()->id);
-        $media_twitter = (new MediaTwitter)->getMedia($this->client_id);
+        $media_twitter = round((MediaTwitter::where('client_id',$this->client_id)->count())/30, 1);
+        $media_instagram = round((Media::where('client_id',$this->client_id)->count() + $ig_comments_total)/30, 1);
+        $media_facebook = round((FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total)/30, 1);
 
         if($u->hasRole('administradores')){
 
             $users = User::whereNull('client_id')->count();
             $clientes = Client::count();
-            $hashtags = Hashtag::where('is_active',true)->get();
-            $terms = Term::where('is_active',true)->get();
+           
+            $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
+            $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
-            return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter'));
+            return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','media_instagram','media_facebook'));
 
         }else{
             
@@ -61,16 +74,6 @@ class HomeController extends Controller
 
             $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
             $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
-
-            $ig_comments_total = DB::table('ig_comments')
-                                ->join('medias','medias.id','=','ig_comments.media_id')
-                                ->where('medias.client_id','=',$this->client_id)
-                                ->count();
-
-            $fb_comments_total = DB::table('fb_comments')
-                                ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
-                                ->where('fb_posts.client_id','=',$this->client_id)
-                                ->count();
 
             $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
                             'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
