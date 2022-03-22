@@ -37,7 +37,7 @@ class FbPageController extends Controller
         try {
             $page = FbPageMonitor::create([
                 'name' => $request->name, 
-                'url' => $request->url
+                'url' => 'https://paginaexemplo1.com.br' //$request->url
             ]);
 
             if($page) {
@@ -56,7 +56,7 @@ class FbPageController extends Controller
                              'msg' => "Ocorreu um erro ao inserir o registro");
         }
 
-        (new FBFeed())->pullMedias();
+        //(new FBFeed())->pullMedias();
 
         if ($retorno['flag']) {
             Flash::success($retorno['msg']);
@@ -74,7 +74,7 @@ class FbPageController extends Controller
 
             $page->update([
                 'name' => $request->name,
-                'url'  => $request->url
+                'url' => 'https://paginaexemplo1.com.br' //$request->url
             ]);
 
             if($page) {
@@ -93,7 +93,7 @@ class FbPageController extends Controller
                              'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-       (new FBFeed())->pullMedias();
+       //(new FBFeed())->pullMedias();
 
        if ($retorno['flag']) {
             Flash::success($retorno['msg']);
@@ -129,8 +129,24 @@ class FbPageController extends Controller
             //     }
             // }
 
+            // $medias[] = array('id' => $media->id,
+            //     'text' => $media->message,
+            //     'username' => '',
+            //     'created_at' => dateTimeUtcToLocal($media->updated_time),
+            //     'sentiment' => '',
+            //     'type_message' => 'facebook',
+            //     'like_count' => '',
+            //     'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
+            //     'social_media_id' => $media->social_media_id,
+            //     'tipo' => 'facebook',
+            //     'comments' => [],
+            //     'link' => $media->permalink_url,
+            //     'share_count' => '',
+            //     'user_profile_image_url' => ''
+            //  );
+
             $medias[] = array('id' => $media->id,
-                'text' => $media->message,
+                'text' => "No entanto, não podemos esquecer que a hegemonia do ambiente político exige a precisão e a definição das formas de ação.",
                 'username' => '',
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
@@ -140,7 +156,7 @@ class FbPageController extends Controller
                 'social_media_id' => $media->social_media_id,
                 'tipo' => 'facebook',
                 'comments' => [],
-                'link' => $media->permalink_url,
+                'link' => 'https://www.facebook.com/paginaexemplo',
                 'share_count' => '',
                 'user_profile_image_url' => ''
              );
