@@ -26,6 +26,28 @@ class FbPageController extends Controller
         return view('pages/index', compact('pages', 'clients'));
     }
 
+    public function cadastrar()
+    {
+        return view('pages/cadastrar');
+    }
+
+    public function buscarPagina(Request $request)
+    {
+        $dados[] = array('name' => 'Trilhas em SC',
+                        'link' => 'https://www.facebook.com/trilhasemsc',
+                        'description' => 'Página de trilhas para caminhada',
+                        'category' => 'Trilhas para caminhada',
+                        'picture' => 'https://scontent.ffln1-1.fna.fbcdn.net/v/t39.30808-1/242821839_343810697533765_4176783763062421895_n.jpg?stp=cp0_dst-jpg_p50x50&_nc_cat=109&ccb=1-5&_nc_sid=1eb0c7&_nc_eui2=AeEYsD--UXfFJTJOsPH3aSyXPZphKJ-dCWg9mmEon50JaDxDT-WyMcjPP6ezMeRJ2FtS-_2Xs46eX8CazTQABF6H&_nc_ohc=wfYwnNzWiwwAX_8XIHi&_nc_ht=scontent.ffln1-1.fna&oh=00_AT-tpOe3r-qpSraBiPqFTwSVbgBu7qV9-hC_x4iX8qWP6A&oe=623FA5A9');
+       
+        $dados[] = array('name' => 'Seagro',
+                        'link' => 'https://www.facebook.com/seagrosc',
+                        'description' => 'Página de trilhas para caminhada',
+                        'category' => 'Organização sem fins lucrativos',
+                        'picture' => 'https://scontent.ffln1-1.fna.fbcdn.net/v/t1.6435-1/60320715_2556315881255255_5507433561478660096_n.png?stp=cp0_dst-png_p50x50&_nc_cat=108&ccb=1-5&_nc_sid=1eb0c7&_nc_eui2=AeFH8xNBdgC-o4a_iORpjQVWZlU6DFeED7xmVToMV4QPvNEuD-V0uA8DEEmqFOn6lmzx-nk4-AuVuGWF0MDvAT-R&_nc_ohc=mmYXi5YmAhEAX95vOPt&_nc_ht=scontent.ffln1-1.fna&oh=00_AT848MOFfeSbCuilEUcotCmpPpR6Q2rAkrjBOid4szQ4cQ&oe=625F25F8');
+        
+        echo json_encode($dados);        
+    }
+
     public function show($id) {
         $page = FbPageMonitor::where('id', $id)->first();
 

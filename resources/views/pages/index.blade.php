@@ -9,7 +9,7 @@
                 </div>
                 <div class="col-md-6">
                     <a href="{{ url('facebook-paginas/monitoramento') }}" class="btn btn-info pull-right" style="margin-right: 12px;"><i class="nc-icon nc-sound-wave"></i> Monitoramento</a>
-                    <button class="btn btn-primary pull-right mr-2" data-toggle="modal" data-target="#modalPaginaCreate"><i class="fa fa-at"></i> Cadastrar</button>
+                    <a href="{{ url('facebook-paginas/cadastrar') }}" class="btn btn-primary pull-right mr-2"><i class="fa fa-at"></i> Cadastrar</a>
                 </div>
             </div>
         </div>
