@@ -7,6 +7,8 @@ use App\Classes\FBSearchPageApi;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Client;
+use App\Utils;
+use Exception;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 use LDAP\Result;
@@ -34,7 +36,9 @@ class FbPageController extends Controller
 
     public function buscarPagina(Request $request)
     {
-        
+
+        $pages_monitor = FbPageMonitor::pluck('page_id')->toArray();
+
         $token_app = getTokenApp();
 
         $fb_api = new FBSearchPageApi();
@@ -70,11 +74,12 @@ class FbPageController extends Controller
                             'link' => $infos['link'],
                             'description' => isset($infos['description']) ? $infos['description'] : '',
                             'category' => $infos['category'],
-                            'picture' => $infos['picture']['data']['url']
+                            'picture' => $infos['picture']['data']['url'],
+                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false )
                         );
         }
 
-        if($fb_api->hasAfter($pages)) {
+        if($fb_api->hasAfter($pages) || $fb_api->hasBefore($pages) ) {
             $dados['info']['after'] = $fb_api->getAfter($pages);
             $dados['info']['before'] = $fb_api->getBefore($pages);
             $dados['info']['query'] = $request->termo;
@@ -95,7 +100,8 @@ class FbPageController extends Controller
         try {
             $page = FbPageMonitor::create([
                 'name' => $request->name, 
-                'url' => 'https://paginaexemplo1.com.br' //$request->url
+                'url' => $request->link,
+                'page_id' => $request->id
             ]);
 
             if($page) {
@@ -110,18 +116,16 @@ class FbPageController extends Controller
 
         } catch (Exception $e) {
             
-            $retorno = array('flag' => true,
+            $retorno = array('flag' => false,
                              'msg' => "Ocorreu um erro ao inserir o registro");
         }
 
         //(new FBFeed())->pullMedias();
 
         if ($retorno['flag']) {
-            Flash::success($retorno['msg']);
-            return redirect('facebook-paginas');
+            echo json_encode($retorno);
         } else {
-            Flash::error($retorno['msg']);
-            return redirect('facebook-paginas');
+            echo json_encode($retorno);
         }
     }
 

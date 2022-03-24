@@ -31,14 +31,14 @@
             <div class="col-md-12">
                 <div class="row mb-5">
                     <div class="col-md-12">
-                        <ul class="pagination justify-content-between">
+                        {{-- <ul class="pagination justify-content-between" style="display: none">
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='previou' data-previou="" rel="prev" aria-label="@lang('pagination.previous')"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>                                
                             </li>
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='next' data-next="" rel="next" aria-label="@lang('pagination.next')"><i class="fa fa-arrow-right" aria-hidden="true"></i></a>
                             </li>
-                        </ul>
+                        </ul> --}}
                         <div class="user-dashboard-info-box mb-0 bg-white p-4 shadow-sm">
                             <table class="table table-paginas manage-candidates-top mb-0">
                                 <thead>
@@ -52,7 +52,7 @@
                                 </tbody>
                             </table>
                         </div>
-                        <ul class="pagination justify-content-between">
+                        <ul class="pagination justify-content-between" style="display: none">
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='previou' data-previou="" rel="prev" aria-label="@lang('pagination.previous')"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>                                
                             </li>
@@ -70,6 +70,52 @@
 @section('script')
 <script>
     $(document).ready(function() {  
+
+
+        let success = function(response) {
+            $(".table-paginas tbody tr").empty();
+
+            response = JSON.parse(response)
+
+            $(".previou").data('previou',response.info.before);
+            $(".next").data('next',response.info.after);
+            $("#pagination-termo").val(response.info.query);
+
+            if (response.info.after || response.info.before ) {
+                $('.pagination').css('display', 'flex');
+            } else {
+                $('.pagination').css('display', 'none');
+            }
+
+            $.each(response.data, function(index, value) {                          
+                table(value);                    
+            }); 
+        }
+
+        let table = function(value) {
+
+            let button = (value.registered == false) ? '<button type="button" data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '' ;                        
+
+            $(".table-paginas tbody").append(
+                '<tr class="candidates-list">' +
+                    '<td class="title">' +
+                        '<div class="thumb">' +
+                            '<img class="img-fluid" src="'+value.picture+'" alt="">' +
+                        '</div>' +
+                        '<div class="candidate-list-details">' +
+                              '<div class="candidate-list-info">' +
+                                    '<div class="candidate-list-title">' +
+                                        '<h5 class="mb-0">' +
+                                            '<a class="action" href="'+value.link+'" target="BLANK">'+value.name+'</a>' +
+                                        '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>'+                                               
+                                         '</div>' +
+                                        '</div>' +
+                                    '</div>' +
+                                '</td>' +                                        
+                    '<td class="text-center">'+button+'</td>' +
+                '</tr>');  
+        }
+
         
         var host =  $('meta[name="base-url"]').attr('content');
         var token = $('meta[name="csrf-token"]').attr('content');
@@ -86,37 +132,7 @@
                         "after": ''                        
                     },
                 success: function(response) {
-
-                    $(".table-paginas tbody tr").empty();
-
-                    response = JSON.parse(response)
-
-                    $(".previou").data('previou',response.info.before);
-                    $(".next").data('next',response.info.after);
-                    $("#pagination-termo").val(response.info.query);
-
-                    $.each(response.data, function(index, value) {                          
-                    
-                        $(".table-paginas tbody").append('<tr class="candidates-list">' +
-                            '<td class="title">' +
-                               '<div class="thumb">' +
-                                    '<img class="img-fluid" src="'+value.picture+'" alt="">' +
-                                '</div>' +
-                                '<div class="candidate-list-details">' +
-                                    '<div class="candidate-list-info">' +
-                                        '<div class="candidate-list-title">' +
-                                            '<h5 class="mb-0">' +
-                                                '<a class="action" href="'+value.link+'" target="BLANK">'+value.name+'</a>' +
-                                            '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>'+                                               
-                                                '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +                                        
-                                '<td class="text-center">' +
-                                        '<button type="button" class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' +
-                                '</td>' +
-                            '</tr>');  
-                    }); 
+                    success(response);                   
                 },
                 error: function(response){
                     $('.card').loader('hide');
@@ -137,15 +153,22 @@
 
             var name = $(this).closest("tr").find(".action").text();
             var link = $(this).closest("tr").find(".action").attr('href');
+            let id = $(this).data('id');
+            let button = $(this);
 
             $.ajax({
                 url: host+'/facebook-pagina',
                 type: 'POST',
                 data: { "_token": token,
                         "name": name,
-                        "link": link},
+                        "link": link,
+                        "id": id
+                        },
                 success: function(response) {
-
+                    response = JSON.parse(response)
+                    if(response.flag) {
+                        button.remove();
+                    }
                 }
             });
         });
@@ -167,37 +190,7 @@
                         "after": ''                         
                     },
                 success: function(response) {
-
-                    $(".table-paginas tbody tr").empty();
-
-                    response = JSON.parse(response)
-
-                    $(".previou").data('previou',response.info.before);
-                    $(".next").data('next',response.info.after);
-                    $("#pagination-termo").val(response.info.query);
-
-                    $.each(response.data, function(index, value) {                          
-                    
-                        $(".table-paginas tbody").append('<tr class="candidates-list">' +
-                            '<td class="title">' +
-                            '<div class="thumb">' +
-                                    '<img class="img-fluid" src="'+value.picture+'" alt="">' +
-                                '</div>' +
-                                '<div class="candidate-list-details">' +
-                                    '<div class="candidate-list-info">' +
-                                        '<div class="candidate-list-title">' +
-                                            '<h5 class="mb-0">' +
-                                                '<a class="action" href="'+value.link+'" target="BLANK">'+value.name+'</a>' +
-                                            '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>'+                                               
-                                                '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +                                        
-                                '<td class="text-center">' +
-                                        '<button type="button" class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' +
-                                '</td>' +
-                            '</tr>');  
-                    }); 
+                    success(response);  
                 },
                 error: function(response){
                     $('.card').loader('hide');
@@ -221,8 +214,6 @@
             var termo = $("#pagination-termo").val();
             var next = $(this).data('next');
 
-            console.log(next);
-
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
                 type: 'POST',
@@ -232,37 +223,7 @@
                         "after": next                         
                     },
                 success: function(response) {
-
-                    $(".table-paginas tbody tr").empty();
-
-                    response = JSON.parse(response)
-
-                    $(".previou").data('previou',response.info.before);
-                    $(".next").data('next',response.info.after);
-                    $("#pagination-termo").val(response.info.query);
-
-                    $.each(response.data, function(index, value) {                          
-                    
-                        $(".table-paginas tbody").append('<tr class="candidates-list">' +
-                            '<td class="title">' +
-                            '<div class="thumb">' +
-                                    '<img class="img-fluid" src="'+value.picture+'" alt="">' +
-                                '</div>' +
-                                '<div class="candidate-list-details">' +
-                                    '<div class="candidate-list-info">' +
-                                        '<div class="candidate-list-title">' +
-                                            '<h5 class="mb-0">' +
-                                                '<a class="action" href="'+value.link+'" target="BLANK">'+value.name+'</a>' +
-                                            '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>'+                                               
-                                                '</div>' +
-                                        '</div>' +
-                                    '</div>' +
-                                '</td>' +                                        
-                                '<td class="text-center">' +
-                                        '<button type="button" class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' +
-                                '</td>' +
-                            '</tr>');  
-                    }); 
+                    success(response);  
                 },
                 error: function(response){
                     $('.card').loader('hide');
