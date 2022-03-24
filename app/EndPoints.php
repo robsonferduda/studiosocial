@@ -16,7 +16,7 @@ class EndPoints
     const FB_PAGE_FEED = '{fb_page_id}/feed';
     const FB_POST_REACTIONS = '{fb_post_id}';
     const FB_POST_METION_HOOKED = '{fb_post_id}';
-    const FB_SEARCH_PAGES = 'pages/search?q={query}';
+    const FB_SEARCH_PAGES = 'pages/search';
     const FB_SEARCH_PAGE_INFO = '{fb_page_id}';
 
     
@@ -75,14 +75,14 @@ class EndPoints
         return str_replace('{fb_post_id}', urlencode($post_id), static::BASE_URL.static::FB_POST_METION_HOOKED);
     }
 
-    public static function getFBSearchPagesLink($query)
+    public static function getFBSearchPagesLink()
     {   
-        return str_replace('{query}', urlencode($query), static::BASE_URL.static::FB_SEARCH_PAGES);
+        return static::BASE_URL.static::FB_SEARCH_PAGES;
     }
 
-    public static function getFBSearchPageInfoLink($id)
+    public static function getFBSearchPageInfoLink($fb_page_id)
     {   
-        return str_replace('{id}', urlencode($id), static::BASE_URL.static::FB_SEARCH_PAGE_INFO);
+        return str_replace('{fb_page_id}', urlencode($fb_page_id), static::BASE_URL.static::FB_SEARCH_PAGE_INFO);
     }
 
     

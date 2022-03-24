@@ -10,9 +10,9 @@ class FBSearchPageApi extends IGApi{
         
     }
 
-    public function getPages(String $query,Array $params = []): Array
+    public function getPages(Array $params = []): Array
     {
-        $url = EndPoints::getFBSearchPagesLink($query);
+        $url = EndPoints::getFBSearchPagesLink();
     
         $response = $this->makeApiCall($url,$params);
         
@@ -28,7 +28,7 @@ class FBSearchPageApi extends IGApi{
         $url = EndPoints::getFBSearchPageInfoLink($id);
     
         $response = $this->makeApiCall($url,$params);
-        
+
         if($response->successful()) {
             return $response->json();
         }
@@ -37,13 +37,14 @@ class FBSearchPageApi extends IGApi{
     }
 
 
-    public function getFbPostFields()
+    public function getPageInfoFields()
     {
         $fields = [
-            'id',
-            'message',
-            'permalink_url',
-            'updated_time'
+            'picture',
+            'name',
+            'link',
+            'description',
+            'category'
         ];
 
         return implode(',',$fields);

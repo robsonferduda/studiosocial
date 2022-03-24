@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Classes\FBFeed;
+use App\Classes\FBSearchPageApi;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Client;
@@ -33,19 +34,54 @@ class FbPageController extends Controller
 
     public function buscarPagina(Request $request)
     {
-        $dados[] = array('name' => 'Trilhas em SC',
-                        'link' => 'https://www.facebook.com/trilhasemsc',
-                        'description' => 'Página de trilhas para caminhada',
-                        'category' => 'Trilhas para caminhada',
-                        'picture' => 'https://scontent.ffln1-1.fna.fbcdn.net/v/t39.30808-1/242821839_343810697533765_4176783763062421895_n.jpg?stp=cp0_dst-jpg_p50x50&_nc_cat=109&ccb=1-5&_nc_sid=1eb0c7&_nc_eui2=AeEYsD--UXfFJTJOsPH3aSyXPZphKJ-dCWg9mmEon50JaDxDT-WyMcjPP6ezMeRJ2FtS-_2Xs46eX8CazTQABF6H&_nc_ohc=wfYwnNzWiwwAX_8XIHi&_nc_ht=scontent.ffln1-1.fna&oh=00_AT-tpOe3r-qpSraBiPqFTwSVbgBu7qV9-hC_x4iX8qWP6A&oe=623FA5A9');
-       
-        $dados[] = array('name' => 'Seagro',
-                        'link' => 'https://www.facebook.com/seagrosc',
-                        'description' => 'Página de trilhas para caminhada',
-                        'category' => 'Organização sem fins lucrativos',
-                        'picture' => 'https://scontent.ffln1-1.fna.fbcdn.net/v/t1.6435-1/60320715_2556315881255255_5507433561478660096_n.png?stp=cp0_dst-png_p50x50&_nc_cat=108&ccb=1-5&_nc_sid=1eb0c7&_nc_eui2=AeFH8xNBdgC-o4a_iORpjQVWZlU6DFeED7xmVToMV4QPvNEuD-V0uA8DEEmqFOn6lmzx-nk4-AuVuGWF0MDvAT-R&_nc_ohc=mmYXi5YmAhEAX95vOPt&_nc_ht=scontent.ffln1-1.fna&oh=00_AT848MOFfeSbCuilEUcotCmpPpR6Q2rAkrjBOid4szQ4cQ&oe=625F25F8');
         
-        echo json_encode($dados);        
+        $token_app = getTokenApp();
+
+        $fb_api = new FBSearchPageApi();
+
+        $fields = $fb_api->getPageInfoFields();
+                            
+        $params = [      
+            'q' => strtolower($request->termo),   
+            'access_token' => $token_app,
+            'after' => $request->after,
+            'before' => $request->before,
+            'limit' => 10
+        ];
+
+        $pages = $fb_api->getPages($params);
+
+        $dados = [];
+
+        foreach ($pages['data'] as $page) {
+
+            $page_id = $page['id'];
+                                
+            $params = [      
+                'fields' => $fields,   
+                'access_token' => $token_app                
+            ];
+
+            $infos = $fb_api->getPageInfo($page_id, $params);
+
+            $dados['data'][] =  array(
+                            'id' => $infos['id'],
+                            'name' => $infos['name'],
+                            'link' => $infos['link'],
+                            'description' => isset($infos['description']) ? $infos['description'] : '',
+                            'category' => $infos['category'],
+                            'picture' => $infos['picture']['data']['url']
+                        );
+        }
+
+        if($fb_api->hasAfter($pages)) {
+            $dados['info']['after'] = $fb_api->getAfter($pages);
+            $dados['info']['before'] = $fb_api->getBefore($pages);
+            $dados['info']['query'] = $request->termo;
+        }
+            
+        echo json_encode($dados);   
+    
     }
 
     public function show($id) {
