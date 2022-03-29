@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Classes\FBFeed;
+use App\Classes\FBSearchPageApi;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Client;
+use App\Utils;
+use Exception;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
 use LDAP\Result;
@@ -26,6 +29,66 @@ class FbPageController extends Controller
         return view('pages/index', compact('pages', 'clients'));
     }
 
+    public function cadastrar()
+    {
+        return view('pages/cadastrar');
+    }
+
+    public function buscarPagina(Request $request)
+    {
+
+        $pages_monitor = FbPageMonitor::pluck('page_id')->toArray();
+
+        $token_app = getTokenApp();
+
+        $fb_api = new FBSearchPageApi();
+
+        $fields = $fb_api->getPageInfoFields();
+                            
+        $params = [      
+            'q' => strtolower($request->termo),   
+            'access_token' => $token_app,
+            'after' => $request->after,
+            'before' => $request->before,
+            'limit' => 10
+        ];
+
+        $pages = $fb_api->getPages($params);
+
+        $dados = [];
+
+        foreach ($pages['data'] as $page) {
+
+            $page_id = $page['id'];
+                                
+            $params = [      
+                'fields' => $fields,   
+                'access_token' => $token_app                
+            ];
+
+            $infos = $fb_api->getPageInfo($page_id, $params);
+
+            $dados['data'][] =  array(
+                            'id' => $infos['id'],
+                            'name' => $infos['name'],
+                            'link' => $infos['link'],
+                            'description' => isset($infos['description']) ? $infos['description'] : '',
+                            'category' => $infos['category'],
+                            'picture' => $infos['picture']['data']['url'],
+                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false )
+                        );
+        }
+
+        if($fb_api->hasAfter($pages) || $fb_api->hasBefore($pages) ) {
+            $dados['info']['after'] = $fb_api->getAfter($pages);
+            $dados['info']['before'] = $fb_api->getBefore($pages);
+            $dados['info']['query'] = $request->termo;
+        }
+            
+        echo json_encode($dados);   
+    
+    }
+
     public function show($id) {
         $page = FbPageMonitor::where('id', $id)->first();
 
@@ -37,7 +100,8 @@ class FbPageController extends Controller
         try {
             $page = FbPageMonitor::create([
                 'name' => $request->name, 
-                'url' => $request->url
+                'url' => $request->link,
+                'page_id' => $request->id
             ]);
 
             if($page) {
@@ -52,18 +116,16 @@ class FbPageController extends Controller
 
         } catch (Exception $e) {
             
-            $retorno = array('flag' => true,
+            $retorno = array('flag' => false,
                              'msg' => "Ocorreu um erro ao inserir o registro");
         }
 
-        (new FBFeed())->pullMedias();
+        //(new FBFeed())->pullMedias();
 
         if ($retorno['flag']) {
-            Flash::success($retorno['msg']);
-            return redirect('facebook-paginas');
+            echo json_encode($retorno);
         } else {
-            Flash::error($retorno['msg']);
-            return redirect('facebook-paginas');
+            echo json_encode($retorno);
         }
     }
 
@@ -74,7 +136,7 @@ class FbPageController extends Controller
 
             $page->update([
                 'name' => $request->name,
-                'url'  => $request->url
+                'url' => 'https://paginaexemplo1.com.br' //$request->url
             ]);
 
             if($page) {
@@ -93,7 +155,7 @@ class FbPageController extends Controller
                              'msg' => "Ocorreu um erro ao atualizar o registro");
         }
 
-       (new FBFeed())->pullMedias();
+       //(new FBFeed())->pullMedias();
 
        if ($retorno['flag']) {
             Flash::success($retorno['msg']);
@@ -129,8 +191,24 @@ class FbPageController extends Controller
             //     }
             // }
 
+            // $medias[] = array('id' => $media->id,
+            //     'text' => $media->message,
+            //     'username' => '',
+            //     'created_at' => dateTimeUtcToLocal($media->updated_time),
+            //     'sentiment' => '',
+            //     'type_message' => 'facebook',
+            //     'like_count' => '',
+            //     'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
+            //     'social_media_id' => $media->social_media_id,
+            //     'tipo' => 'facebook',
+            //     'comments' => [],
+            //     'link' => $media->permalink_url,
+            //     'share_count' => '',
+            //     'user_profile_image_url' => ''
+            //  );
+
             $medias[] = array('id' => $media->id,
-                'text' => $media->message,
+                'text' => "No entanto, não podemos esquecer que a hegemonia do ambiente político exige a precisão e a definição das formas de ação.",
                 'username' => '',
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
@@ -140,7 +218,7 @@ class FbPageController extends Controller
                 'social_media_id' => $media->social_media_id,
                 'tipo' => 'facebook',
                 'comments' => [],
-                'link' => $media->permalink_url,
+                'link' => 'https://www.facebook.com/paginaexemplo',
                 'share_count' => '',
                 'user_profile_image_url' => ''
              );

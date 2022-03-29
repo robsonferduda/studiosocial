@@ -99,3 +99,7 @@
 }
 .icone-disabled{ color: gray; opacity: 0.6;}
 .custom-cloud{ height: 400px; margin-bottom: 15px; }
+
+.ui-autocomplete{
+    z-index: 1050 !important;
+ }

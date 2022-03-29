@@ -50,7 +50,7 @@
                                 <a title="Facebook" href="{{ url('monitoramento/media/facebook') }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-facebook font-25"></i></a>                                
                                 <a title="Termos do Cliente" href="{{ url('terms/client',$c->id) }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-font font-25"></i></a>
                                 <a title="Hashtags do Cliente" href="{{ url('client/hashtags',$c->id) }}" class="btn btn-success btn-link btn-icon"><i class="fa fa-hashtag font-25"></i></a>
-                                <a title="Páginas Associadas" href="{{ url('cliente/paginas-associadas',$c->id) }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-at font-25"></i></a>
+                                <a title="Páginas dos Concorrentes" href="{{ url('cliente/paginas-associadas',$c->id) }}" class="btn btn-info btn-link btn-icon"><i class="fa fa-at font-25"></i></a>
                                 <a title="Emails de Comunicação" href="{{ url('client/emails',$c->id) }}" class="btn btn-danger btn-link btn-icon"><i class="fa fa-envelope font-25"></i></a>
                                 <a title="Dados do Usuário" href="{{ url('client',$c->id) }}" class="btn btn-warning btn-link btn-icon"><i class="nc-icon nc-circle-10 font-25"></i></a>
                                 <a title="Editar" href="{{ route('client.edit',$c->id) }}" class="btn btn-primary btn-link btn-icon"><i class="fa fa-edit fa-2x"></i></a>

@@ -10,7 +10,7 @@ class TokenController extends Controller
 
     public function checkFacebookToken(Request $request)
     {
-        $token_app = $this->getTokenApp();
+        $token_app = getTokenApp();
 
         $url = "https://graph.facebook.com/debug_token";
         $params = [
@@ -35,18 +35,4 @@ class TokenController extends Controller
             'expires_at' => $date
         ]);
     } 
-
-    private function getTokenApp(): String
-    {
-        $url = "https://graph.facebook.com/oauth/access_token";
-        $params = [
-            'client_id' => env('FACEBOOK_CLIENT_ID'),
-            'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-            'grant_type' => 'client_credentials'
-
-        ];
-
-        $response = Http::get($url,$params);
-        return $response->json()['access_token'];
-    }
 }

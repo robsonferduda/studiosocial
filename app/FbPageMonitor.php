@@ -16,7 +16,8 @@ class FbPageMonitor extends Model
     protected $fillable = [ 'name',
                             'url',
                             'mention',
-                            'post'
+                            'post',
+                            'page_id'
                         ];
 
     public function clients () 

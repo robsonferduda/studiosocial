@@ -35,6 +35,20 @@ class IGApi{
           : false;
     }
 
+    public function getBefore($response): String
+    {
+        return isset($response['paging']['cursors']['before'])
+          ? $response['paging']['cursors']['before']
+          : '';
+    }
+
+    public function hasBefore($response): Bool
+    {
+        return isset($response['paging']['cursors']['before'])
+          ? true
+          : false;
+    }
+
     protected function getId(): String
     {
         return $this->id;
