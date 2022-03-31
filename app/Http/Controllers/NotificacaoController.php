@@ -169,14 +169,16 @@ class NotificacaoController extends Controller
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
                                                      ->get();
 
+                    $valor_atual = count($postagens_twitter);
+
                     $titulo = "Alerta de Hashtag";
                     $msg = "Foram resgistradas novas postagens em relação ao monitoramento do termo '{$notification->valor}'. <br/> Total de mensagens descobertas: {$valor_atual}";
-                    $valor_atual = count($postagens_twitter);
                     break;
             }
 
             $email = null;
             $data['msg'] = $msg;
+            $data['postagens'] = $postagens_twitter;
 
             //Enviar email
             Mail::send('notificacoes.email', $data, function($message) use ($email, $msg, $titulo) {
