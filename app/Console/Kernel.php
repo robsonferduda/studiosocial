@@ -35,12 +35,13 @@ class Kernel extends ConsoleKernel
             (new IGMention())->pullMedias();
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
+            (new FBFeed())->pullMedias();   
             (new Rule())->runJob();            
-        })->everySixHours();
-
-        $schedule->call(function () {
-            (new FBFeed())->pullMedias();       
         })->hourly();
+
+        // $schedule->call(function () {
+               
+        // })->hourly();
     }
 
     /**
