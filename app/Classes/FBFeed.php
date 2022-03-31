@@ -24,18 +24,19 @@ class FBFeed{
 
             $fb_feed = new FBFeedApi($id_page_id);
             $after = '';
-                        
+                      
             do {
                             
                 $params = [
                     'fields' => $fb_feed->getFbPostFields(),
                     'access_token' => $token_app,
                     'after' => $after,
+                    'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
                     'limit' => 20
                 ];
         
                 $posts = $fb_feed->getFeed($params);
-        
+
                 foreach ($posts['data'] as $post) {
 
                     $date_updated = new \DateTime($post['updated_time']);
