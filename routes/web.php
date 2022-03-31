@@ -106,6 +106,7 @@ Route::get('monitoramento/media/{rede}','MonitoramentoController@seleciona');
 Route::get('notificacoes','NotificacaoController@index');
 Route::get('notificacoes/{id}/situacao','NotificacaoController@atualizarSituacao');
 Route::get('notificacoes/{id}/descricao','NotificacaoController@getDescricao');
+Route::get('notificacoes/verificar','NotificacaoController@verificar');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
 
