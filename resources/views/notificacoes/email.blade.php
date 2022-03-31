@@ -36,8 +36,7 @@
                 @foreach ($postagens as $item)
                     <tr>
                         <td>
-                            <img style="width: 80%;" src="https://studiosocial.app/img/twitter-icon.png">
-                            <p>{{ $item->full_text }}</p>
+                            <p><img style="vertical-align: middle;" src="https://studiosocial.app/img/icon/twitter.png"> {{ $item->full_text }}</p>
                         </td>
                     </tr>
                 @endforeach

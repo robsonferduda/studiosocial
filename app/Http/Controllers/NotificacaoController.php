@@ -133,6 +133,7 @@ class NotificacaoController extends Controller
         //Buscar notificações ativas, independente do cliente
 
         $valor_atual = 0;
+        $postagens_twitter = array();
         $notificacoes_ativas = NotificationClient::where('status', true)->get();
 
         foreach ($notificacoes_ativas as $notification) {
