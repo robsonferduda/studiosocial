@@ -136,6 +136,7 @@ Route::post('facebook-pagina/atualizar','FbPageController@update');
 Route::post('facebook-pagina/buscar','FbPageController@buscarPagina');
 Route::post('facebook-pagina/associar-cliente','FbPageController@associarCliente');
 Route::resource('facebook-pagina', 'FbPageController');
+Route::get('pull-medias','FbPageController@pullMedias');
 
 Route::get('transcricao','ProcessamentoController@radios');
 Route::get('transcricao/baixar/{pasta}','ProcessamentoController@baixar');

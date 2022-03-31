@@ -120,8 +120,6 @@ class FbPageController extends Controller
                              'msg' => "Ocorreu um erro ao inserir o registro");
         }
 
-        //(new FBFeed())->pullMedias();
-
         if ($retorno['flag']) {
             echo json_encode($retorno);
         } else {
@@ -228,6 +226,11 @@ class FbPageController extends Controller
 
         return view('pages/medias', compact('medias', 'medias_temp'));
 
+    }
+
+    public function pullMedias()
+    {
+        (new FBFeed())->pullMedias();
     }
 
     public function associarCliente(Request $request)

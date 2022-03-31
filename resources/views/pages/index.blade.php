@@ -22,9 +22,7 @@
                     <thead>
                         <tr>
                             <th>Página</th>
-                            {{--<th>URL</th>
-                            <th class="center">Coletar Postagens</th>
-                            <th class="center">Coletar Menções</th>        --}}                  
+                            <th>URL</th>
                             <th class="center">Ações</th>
                         </tr>
                     </thead>
@@ -32,18 +30,9 @@
                         @foreach ($pages as $page)
                             <tr>
                                 <td>{{$page->name}}</td>
-                                {{--<td>{{$page->url}}</td>
+                                <td><a href="{{ $page->url }}">{{ $page->url }}</a></td>                                
                                 <td class="center">
-                                    <span class="badge badge-pill badge-success">SIM</span>
-                                </td>
-                                <td class="center">
-                                    <span class="badge badge-pill badge-success">SIM</span>
-                                </td>
-                                <td class="center">
-                                    <span class="badge badge-pill badge-success">ATIVO</span>
-                                </td>--}}
-                                <td class="center">
-                                    <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  id="btn-connect-client" class="btn btn-primary btn-link btn-icon"><i class="fa fa-list fa-2x"></i></button>
+                                    <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
                                     <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
                                     <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
                                         @csrf
@@ -160,7 +149,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Clientes </label>
-                                    <select class="select2" name="client[]" multiple="multiple" id="select_client">
+                                    <select class="select2 select_client" name="client[]" multiple="multiple" >
                                         @foreach($clients as $client)
                                             <option value="{{ $client->id }}">{{ $client->name }}</option>         
                                         @endforeach                                                                                                          
@@ -215,18 +204,11 @@
             placeholder: 'Selecione um Cliente',           
         });
 
-        $('#btn-connect-client').click(function(){
+        $('.btn-connect-client').click(function(){
+            
+            id_clients = $(this).data('clients').toString().split(",");
 
-            $id_clients = $(this).data('clients').split(",");
-
-            $("#select_client option").each(function()
-            {
-                if($id_clients.includes($(this).val())) {
-                   // select.select2
-                    $(this).attr('selected','selected');
-                    select.trigger('change');
-                }                
-            });
+            select.val(id_clients).trigger('change');   
 
             $('#modalConnectClient #id').val($(this).data("id"));                        
             $('#modalConnectClient').modal('show');  

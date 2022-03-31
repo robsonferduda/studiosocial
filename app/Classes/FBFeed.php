@@ -12,18 +12,15 @@ use Illuminate\Support\Facades\Log;
 
 class FBFeed{
 
-    function __construct() {
-        
-    }
-
     public function pullMedias()
     {
         $pages = FbPageMonitor::all();
 
         foreach ($pages as $page) {
             
-            $access_token = FbPage::where('id', 10)->first()->token;
-            $id_page_id = 'trilhasemsc';
+            $token_app = getTokenApp();
+
+            $id_page_id = $page->page_id;
 
             $fb_feed = new FBFeedApi($id_page_id);
             $after = '';
@@ -32,9 +29,9 @@ class FBFeed{
                             
                 $params = [
                     'fields' => $fb_feed->getFbPostFields(),
-                    'access_token' => $access_token,
+                    'access_token' => $token_app,
                     'after' => $after,
-                    'limit' => 50
+                    'limit' => 20
                 ];
         
                 $posts = $fb_feed->getFeed($params);
@@ -44,7 +41,7 @@ class FBFeed{
                     $date_updated = new \DateTime($post['updated_time']);
                     $strtotime_date_updated =  strtotime($date_updated->format('Y-m-d'));
                     $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
-                    $reactions = $this->getReactions($post['id'], $fb_feed, $access_token);
+                    $reactions = $this->getReactions($post['id'], $fb_feed, $token_app);
                                                               
                     $post = FbPagePost::updateOrCreate(
                             [

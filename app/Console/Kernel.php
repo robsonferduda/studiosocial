@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Classes\FBFeed;
 use App\Classes\FBMention;
 use App\Classes\IGHashTag;
 use App\Classes\IGMention;
@@ -35,6 +36,10 @@ class Kernel extends ConsoleKernel
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
             (new Rule())->runJob();            
+        })->everySixHours();
+
+        $schedule->call(function () {
+            (new FBFeed())->pullMedias();       
         })->hourly();
     }
 
