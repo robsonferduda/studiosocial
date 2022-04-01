@@ -179,35 +179,19 @@ class FbPageController extends Controller
     public function medias()
     {
 
-        $medias_temp = FbPagePost::orderBy('updated_time','DESC')->paginate(20);
+        $medias_temp = FbPagePost::with('page')->whereHas('page')->orderBy('updated_time','DESC')->paginate(20);
         foreach ($medias_temp as $key => $media) {
             
             // $bag_comments = [];
             // if ($media->comments) {
             //     foreach($media->comments as $comment) {
             //         $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
-            //     }
+            //     }p
             // }
 
-            // $medias[] = array('id' => $media->id,
-            //     'text' => $media->message,
-            //     'username' => '',
-            //     'created_at' => dateTimeUtcToLocal($media->updated_time),
-            //     'sentiment' => '',
-            //     'type_message' => 'facebook',
-            //     'like_count' => '',
-            //     'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
-            //     'social_media_id' => $media->social_media_id,
-            //     'tipo' => 'facebook',
-            //     'comments' => [],
-            //     'link' => $media->permalink_url,
-            //     'share_count' => '',
-            //     'user_profile_image_url' => ''
-            //  );
-
             $medias[] = array('id' => $media->id,
-                'text' => "No entanto, não podemos esquecer que a hegemonia do ambiente político exige a precisão e a definição das formas de ação.",
-                'username' => '',
+                'text' => $media->message,
+                'username' => $media->page->name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
                 'type_message' => 'facebook',
@@ -216,11 +200,10 @@ class FbPageController extends Controller
                 'social_media_id' => $media->social_media_id,
                 'tipo' => 'facebook',
                 'comments' => [],
-                'link' => 'https://www.facebook.com/paginaexemplo',
+                'link' => $media->permalink_url,
                 'share_count' => '',
-                'user_profile_image_url' => ''
+                'user_profile_image_url' => $media->page->picture_url
              );
-
 
         }
 
