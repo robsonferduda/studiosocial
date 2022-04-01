@@ -43,8 +43,8 @@ class TwitterController extends Controller
     public function index()
     {
        (new TwitterCollect())->pullMedias();
-       (new IGHashTag())->pullMedias();
-       (new IGMention())->pullMedias();
+       //(new IGHashTag())->pullMedias();
+       //(new IGMention())->pullMedias();
 
         //$rule = Rule::find(1);
 

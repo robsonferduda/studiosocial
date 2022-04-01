@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use App\Utils;
 use App\Client;
+use App\MediaTwitter;
 use App\Notification;
 use App\NotificationClient;
+use Carbon\Carbon;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
+use App\Enums\NotificationType;
+use App\Notifications\NotificacaoProcessNotification;
 use App\Http\Requests\NotificationRequest;
 use Illuminate\Support\Facades\Session;
 
@@ -121,5 +126,74 @@ class NotificacaoController extends Controller
         $notification->save();
         
         return redirect('notificacoes');
+    }
+
+    public function verificar()
+    {
+        //Buscar notificações ativas, independente do cliente
+
+        $valor_atual = 0;
+        $postagens_twitter = array();
+        $notificacoes_ativas = NotificationClient::where('status', true)->get();
+
+        foreach ($notificacoes_ativas as $notification) {
+
+            //Trata cada notificação de acordo com o tipo
+            switch ($notification->notification_id) {
+
+                //Para cada notificação, verificar a ocorrência, carregar os dados da ocorrência e encaminhar por email
+                case NotificationType::MENTION:
+                    
+                    $titulo = "Alerta de Menções";
+                    $msg = "";
+                    $valor_atual = rand(1,10);
+                    break;
+                
+                case NotificationType::ENGAJAMENTO:
+                        
+                    $titulo = "Alerta de Engajamento";
+                    $msg = "";
+                    $valor_atual = rand(1,10);
+                    break;
+
+                case NotificationType::KEYWORDS:
+                           
+                    $titulo = "Alerta de Palavra-Chave";
+                    $msg = "";
+                    $valor_atual = rand(1,10);
+                    break;
+
+                case NotificationType::HASHTAG:
+
+                    $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
+                                                     ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                     ->where('full_text', "ilike", "%{$notification->valor}%")
+                                                     ->get();
+
+                    $valor_atual = count($postagens_twitter);
+
+                    $titulo = "Alerta de Hashtag";
+                    $msg = "Foram resgistradas novas postagens em relação ao monitoramento do termo '{$notification->valor}'. <br/> Total de mensagens descobertas: {$valor_atual}";
+                    break;
+            }
+
+            $email = null;
+            $data['msg'] = $msg;
+            $data['postagens'] = $postagens_twitter;
+
+            //Enviar email
+            Mail::send('notificacoes.email', $data, function($message) use ($email, $msg, $titulo) {
+                $message->to("robsonferduda@gmail.com")
+                ->subject('Notificação de Monitoramento - '.$titulo);
+                    $message->from('boletins@clipagens.com.br','Studio Social');
+                });          
+
+            $notification->valor_atual = $valor_atual;
+            $notification->save();
+
+        }
+
+        dd($msg);
+
     }
 }
