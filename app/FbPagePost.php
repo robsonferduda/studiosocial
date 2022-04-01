@@ -28,4 +28,9 @@ class FbPagePost extends Model implements Auditable
     {
         return $this->belongsToMany('App\FbReaction','fb_page_post_reaction','page_post_id','reaction_id')->withTimestamps()->withPivot('count');
     }
+
+    public function page()
+    { 
+        return $this->hasOne('App\FbPageMonitor', 'id', 'fb_page_monitor_id'); 
+    }
 }
