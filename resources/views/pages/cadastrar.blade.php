@@ -94,7 +94,7 @@
 
         let table = function(value) {
 
-            let button = (value.registered == false) ? '<button type="button" data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '' ;                        
+            let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '' ;                        
 
             $(".table-paginas tbody").append(
                 '<tr class="candidates-list">' +
@@ -154,6 +154,7 @@
             var name = $(this).closest("tr").find(".action").text();
             var link = $(this).closest("tr").find(".action").attr('href');
             let id = $(this).data('id');
+            let picture = $(this).data('picture');
             let button = $(this);
 
             $.ajax({
@@ -162,7 +163,8 @@
                 data: { "_token": token,
                         "name": name,
                         "link": link,
-                        "id": id
+                        "id": id,
+                        "picture": picture
                         },
                 success: function(response) {
                     response = JSON.parse(response)

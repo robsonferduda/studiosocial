@@ -40,6 +40,7 @@ class FBMention{
                             'fields' => $fb_mention->getFBMentionFields(),
                             'access_token' => $access_token,
                             'after' => $after,
+                            'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
                             'limit' => 50
                         ];
         

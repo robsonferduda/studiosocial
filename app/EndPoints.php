@@ -18,6 +18,7 @@ class EndPoints
     const FB_POST_METION_HOOKED = '{fb_post_id}';
     const FB_SEARCH_PAGES = 'pages/search';
     const FB_SEARCH_PAGE_INFO = '{fb_page_id}';
+    const FB_PAGE_PICTURE ='{fb_page_id}/picture';
 
     
     public static function getMetionsLink($ig_user_id)
@@ -83,6 +84,11 @@ class EndPoints
     public static function getFBSearchPageInfoLink($fb_page_id)
     {   
         return str_replace('{fb_page_id}', urlencode($fb_page_id), static::BASE_URL.static::FB_SEARCH_PAGE_INFO);
+    }
+
+    public static function getPagePicture($fb_page_id)
+    {   
+        return str_replace('{fb_page_id}', urlencode($fb_page_id), static::BASE_URL.static::FB_PAGE_PICTURE);
     }
 
     

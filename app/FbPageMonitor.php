@@ -17,7 +17,8 @@ class FbPageMonitor extends Model
                             'url',
                             'mention',
                             'post',
-                            'page_id'
+                            'page_id',
+                            'picture_url'
                         ];
 
     public function clients () 

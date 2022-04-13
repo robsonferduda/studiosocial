@@ -45,6 +45,7 @@ class IGMention{
                                 'fields' => $ig_mention->getIGMentionFields(),
                                 'access_token' => $access_token,
                                 'after' => $after,
+                                'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
                                 'limit' => 50
                             ];
         

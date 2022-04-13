@@ -49,4 +49,17 @@ class FBSearchPageApi extends IGApi{
 
         return implode(',',$fields);
     } 
+
+    public function getPagePicture(String $id, $params) {
+        
+        $url = EndPoints::getPagePicture($id);
+    
+        $response = $this->makeApiCall($url,$params);
+
+        if($response->successful()) {
+            return $response->json();
+        }
+        
+        return [];
+    }
 }
