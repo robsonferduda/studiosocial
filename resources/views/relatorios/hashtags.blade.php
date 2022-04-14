@@ -160,16 +160,13 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
-            }).then(function(response) {
-                return response.json();
+
             }).then(function(response){
                 
                 $('.card').loader('hide');
                 let words = [];
 
                 $(".msg").html("");
-
-                console.log(response.length);
 
                 if(response.length){
 
