@@ -16,6 +16,7 @@
                 </div>
                 <div class="card-body">
                     @include('layouts/regra')
+                    <div class="col-lg-12 col-md-12 msg"></div>
                     <div class="row">
                         <div class="col-lg-5 col-md-5">
                             <table class="table table-hover table_hashtags">
@@ -165,8 +166,12 @@
                 
                 $('.card').loader('hide');
                 let words = [];
-            
-                Object.entries(response).forEach(element => {
+
+                $(".msg").html("");
+
+                if(response.length){
+
+                    Object.entries(response).forEach(element => {
 
                     if(ctrl < 10)
                         $(".table_hashtags tbody").append('<tr><td>'+element[0]+'</td><td class="center">'+element[1]+'</td></tr>');
@@ -196,9 +201,9 @@
                             
                         }
                     );
-                });
+                    });
 
-                $('#cloud').jQCloud(words, {
+                    $('#cloud').jQCloud(words, {
                     autoResize: true,
                     colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
                     fontSize: function (width, height, step) {
@@ -207,9 +212,15 @@
 
                         return width * 0.009 * step + 'px';
                     }
-                });       
+                    });       
+
+                    $('#cloud').jQCloud('update', words);
+
+                }else{
+                    $(".msg").html('<p class="ml-1 msg"><i class="fa fa-exclamation-circle mr-1"></i>Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
+                }
+            
                 
-                $('#cloud').jQCloud('update', words);
             });
 
         }
