@@ -169,6 +169,8 @@
 
                 $(".msg").html("");
 
+                alert(response.length);
+
                 if(response.length){
 
                     Object.entries(response).forEach(element => {
