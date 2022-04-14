@@ -169,7 +169,7 @@
 
                 $(".msg").html("");
 
-                alert(response.length);
+                console.log(response);
 
                 if(response.length){
 
