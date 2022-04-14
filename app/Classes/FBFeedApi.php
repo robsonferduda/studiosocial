@@ -50,8 +50,7 @@ class FBFeedApi extends IGApi{
 
     public function getFBReactionsFields()
     {
-        $fields = [
-            'id',
+        $fields = [           
             'shares',
             'comments.summary(true)',
             'reactions.type(LIKE).limit(0).summary(true).as(LIKE)',

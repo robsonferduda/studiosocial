@@ -13,11 +13,11 @@ class FBFeed{
     {
         $pages = FbPageMonitor::all();
 
+        $token_app = getTokenApp();
+
+        $token = $this->getTokenValid($token_app);
+
         foreach ($pages as $page) {
-
-            $token_app = getTokenApp();
-
-            $token = $this->getTokenValid($token_app);
 
             $id_page_id = $page->page_id;
 
@@ -27,7 +27,7 @@ class FBFeed{
             do {
                             
                 $params = [
-                    'fields' => $fb_feed->getFbPostFields(),
+                    'fields' => $fb_feed->getFbPostFields().','.$fb_feed->getFBReactionsFields(),
                     'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
@@ -45,7 +45,7 @@ class FBFeed{
                     $date_updated = new \DateTime($post['updated_time']);
                     $strtotime_date_updated =  strtotime($date_updated->format('Y-m-d'));
                     $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
-                    $reactions = $this->getReactions($post['id'], $fb_feed, $token);
+                    $reactions = $this->getReactions($post);
                                                               
                     $post = FbPagePost::updateOrCreate(
                             [
@@ -81,14 +81,7 @@ class FBFeed{
         }
     }
 
-    public function getReactions($post_id, $fb_feed, $access_token) {
-
-        $params = [
-            'fields' => $fb_feed->getFBReactionsFields($post_id),
-            'access_token' => $access_token
-        ];
-
-        $post_reactions = $fb_feed->getFBPostReactions($post_id,$params);
+    public function getReactions($post_reactions) {
 
         $reactions = [
             'id' => isset($post_reactions['id']) ? isset($post_reactions['id']) : null,
