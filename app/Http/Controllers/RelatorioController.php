@@ -554,7 +554,7 @@ class RelatorioController extends Controller
     public function getGraficoWordCloud()
     {
       $rule = $this->rule_id; 
-      
+
       $rules = Rule::when(!empty($rule), function($query) use ($rule){
           return $query->where('id', $rule);  
       })->where('client_id', $this->client_id)->get();
@@ -1090,7 +1090,7 @@ class RelatorioController extends Controller
 
         if(in_array('nuvem', $relatorios)){
           $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $charts['nuvem'] = null;
+          $charts['nuvem'] = $this->getGraficoWordCloud();
           $page_break++;
         }
 
