@@ -229,7 +229,7 @@
                             icon: 'error',
                             title: 'Erro ao gerar relatório',
                             confirmButtonColor: "#28a745",
-                            confirmButtonText: '<i class="fa fa-check"></i> Enviar',
+                            confirmButtonText: '<i class="fa fa-check"></i> Fechar',
                             html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
                         })
                     }
