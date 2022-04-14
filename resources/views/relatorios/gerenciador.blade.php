@@ -107,75 +107,89 @@
             relatorios = [];
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
-            $('.card').loader('show');
-
+            
             $(".form-check-input:checked").each(function(){
                 relatorios.push($(this).val());               
             });
+
+            if(!relatorios.length){
+                
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Opção Inválida',
+                    confirmButtonColor: "#28a745",
+                    confirmButtonText: '<i class="fa fa-check"></i> Fechar',
+                    html: 'Selecione pelo menos uma opção para gerar o relatório'
+                })
+
+            }else{
+
+                $('.card').loader('show');
                
-            $.ajax({
-                url: host+'/relatorios/pdf/gerador',
-                type: 'POST',
-                data: { "_token": token,
-                        "periodo": periodo,
-                         "data_inicial": data_inicial,
-                        "data_final": data_final,
-                        "relatorios": relatorios,
-                        "regra": regra },
-                 xhrFields: {
-                    responseType: 'blob' // to avoid binary data being mangled on charset conversion
-                },
-                success: function(blob, status, xhr) {
-                                            
-                    var filename = "";
-                    var disposition = xhr.getResponseHeader('Content-Disposition');
-                    if (disposition && disposition.indexOf('attachment') !== -1) {
-                        var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                        var matches = filenameRegex.exec(disposition);
-                        if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
-                    }
-
-                    if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                        // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                        window.navigator.msSaveBlob(blob, filename);
-                    } else {
-                        var URL = window.URL || window.webkitURL;
-                        var downloadUrl = URL.createObjectURL(blob);
-
-                        if (filename) {
-                            // use HTML5 a[download] attribute to specify filename
-                            var a = document.createElement("a");
-                            // safari doesn't support this yet
-                            if (typeof a.download === 'undefined') {
-                                window.location.href = downloadUrl;
-                            } else {
-                                a.href = downloadUrl;
-                                a.download = filename;
-                                document.body.appendChild(a);
-                                a.click();
-                            }
-                        } else {
-                            window.location.href = downloadUrl;
+                $.ajax({
+                    url: host+'/relatorios/pdf/gerador',
+                    type: 'POST',
+                    data: { "_token": token,
+                            "periodo": periodo,
+                            "data_inicial": data_inicial,
+                            "data_final": data_final,
+                            "relatorios": relatorios,
+                            "regra": regra },
+                    xhrFields: {
+                        responseType: 'blob' // to avoid binary data being mangled on charset conversion
+                    },
+                    success: function(blob, status, xhr) {
+                                                
+                        var filename = "";
+                        var disposition = xhr.getResponseHeader('Content-Disposition');
+                        if (disposition && disposition.indexOf('attachment') !== -1) {
+                            var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                            var matches = filenameRegex.exec(disposition);
+                            if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
                         }
 
-                        setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
-                    }
+                        if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                            // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                            window.navigator.msSaveBlob(blob, filename);
+                        } else {
+                            var URL = window.URL || window.webkitURL;
+                            var downloadUrl = URL.createObjectURL(blob);
 
-                    $('.card').loader('hide');
-                },
-                error: function(response){
-                    $('.card').loader('hide');
-                    if(response.status){
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Erro ao gerar relatório',
-                            confirmButtonColor: "#28a745",
-                            confirmButtonText: '<i class="fa fa-check"></i> Enviar',
-                            html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
-                        })
+                            if (filename) {
+                                // use HTML5 a[download] attribute to specify filename
+                                var a = document.createElement("a");
+                                // safari doesn't support this yet
+                                if (typeof a.download === 'undefined') {
+                                    window.location.href = downloadUrl;
+                                } else {
+                                    a.href = downloadUrl;
+                                    a.download = filename;
+                                    document.body.appendChild(a);
+                                    a.click();
+                                }
+                            } else {
+                                window.location.href = downloadUrl;
+                            }
+
+                            setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 10); // cleanup
+                        }
+
+                        $('.card').loader('hide');
+                    },
+                    error: function(response){
+                        $('.card').loader('hide');
+                        if(response.status){
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro ao gerar relatório',
+                                confirmButtonColor: "#28a745",
+                                confirmButtonText: '<i class="fa fa-check"></i> Fechar',
+                                html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
+                            })
+                        }
                     }
-                }
-            });  
+                });  
+            }
         });
     });
 </script>
