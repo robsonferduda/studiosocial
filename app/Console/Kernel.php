@@ -37,11 +37,8 @@ class Kernel extends ConsoleKernel
             (new FBMention())->pullMedias();
             (new FBFeed())->pullMedias();   
             (new Rule())->runJob();            
-        })->hourly();
+        })->hourly()->between('2:00', '23:00');
 
-        // $schedule->call(function () {
-               
-        // })->hourly();
     }
 
     /**

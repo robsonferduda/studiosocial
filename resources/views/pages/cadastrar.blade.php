@@ -77,6 +77,20 @@
 
             response = JSON.parse(response)
 
+            console.log(response);
+
+            if(response.limit_exceeded == true) {                                    
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Limite da API Excedido',
+                    confirmButtonColor: "#28a745",
+                    confirmButtonText: '<i class="fa fa-close"></i> Fechar',
+                    html: 'Limite de uso da API atingido. Tente novamente mais tarde.'
+                });
+
+                return;
+            }
+
             $(".previou").data('previou',response.info.before);
             $(".next").data('next',response.info.after);
             $("#pagination-termo").val(response.info.query);
@@ -132,7 +146,7 @@
                         "after": ''                        
                     },
                 success: function(response) {
-                    success(response);                   
+                    success(response);    
                 },
                 error: function(response){
                     $('.card').loader('hide');
@@ -141,7 +155,7 @@
                             icon: 'error',
                             title: 'Erro ao buscar dados',
                             confirmButtonColor: "#28a745",
-                            confirmButtonText: '<i class="fa fa-check"></i> Enviar',
+                            confirmButtonText: '<i class="fa fa-close"></i> Fechar',
                             html: 'Entre em contato com o suporte e informe o seguinte código de erro: <strong>500</strong>'
                         })
                     }

@@ -2,13 +2,10 @@
 
 namespace App\Classes;
 
-use App\Client;
-use App\FbComment;
-use App\FbPost;
-use App\FbPage;
+use App\FbAccount;
 use App\FbPageMonitor;
 use App\FbPagePost;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class FBFeed{
 
@@ -17,8 +14,10 @@ class FBFeed{
         $pages = FbPageMonitor::all();
 
         foreach ($pages as $page) {
-            
+
             $token_app = getTokenApp();
+
+            $token = $this->getTokenValid($token_app);
 
             $id_page_id = $page->page_id;
 
@@ -29,7 +28,7 @@ class FBFeed{
                             
                 $params = [
                     'fields' => $fb_feed->getFbPostFields(),
-                    'access_token' => $token_app,
+                    'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
                     'limit' => 20
@@ -37,12 +36,16 @@ class FBFeed{
         
                 $posts = $fb_feed->getFeed($params);
 
+                if(empty($posts['data'])) {
+                    continue;
+                }
+
                 foreach ($posts['data'] as $post) {
 
                     $date_updated = new \DateTime($post['updated_time']);
                     $strtotime_date_updated =  strtotime($date_updated->format('Y-m-d'));
                     $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
-                    $reactions = $this->getReactions($post['id'], $fb_feed, $token_app);
+                    $reactions = $this->getReactions($post['id'], $fb_feed, $token);
                                                               
                     $post = FbPagePost::updateOrCreate(
                             [
@@ -88,7 +91,7 @@ class FBFeed{
         $post_reactions = $fb_feed->getFBPostReactions($post_id,$params);
 
         $reactions = [
-            'id' => $post_reactions['id'],
+            'id' => isset($post_reactions['id']) ? isset($post_reactions['id']) : null,
             'qtd_shares' => isset($post_reactions['shares']['count']) ? $post_reactions['shares']['count'] : null,
             'qtd_comments' => isset($post_reactions['comments']['summary']['total_count']) ? $post_reactions['comments']['summary']['total_count'] : null,
             'types' => [
@@ -104,5 +107,39 @@ class FBFeed{
 
         return $reactions;
         
+    }
+
+    private function getTokenValid($token_app, $stepOne = true, Array $idsAccount = []) {
+
+        if($stepOne) {
+            $idsAccount = FbAccount::pluck('id')->toArray();
+        }
+
+        $key = array_rand($idsAccount);
+
+        $account = FbAccount::where('id', $idsAccount[$key])->first();
+       
+        $url = "https://graph.facebook.com/debug_token";
+        $params = [
+            'input_token' => $account->token,
+            'access_token' => $token_app
+        ];
+
+        $response = Http::get($url,$params);
+
+        $response = $response->json();
+
+        if($response['data']['is_valid'] == true) {
+            return $account->token;
+        } else  {
+            unset($idsAccount[$key]);
+
+            if(empty($idsAccount)) {
+                return $token_app;
+            }
+
+            $this->getTokenValid($token_app, $stepOne = false, $idsAccount);
+        }
+
     }
 }

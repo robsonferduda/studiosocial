@@ -17,7 +17,7 @@ class FBSearchPageApi extends IGApi{
         $response = $this->makeApiCall($url,$params);
         
         if($response->successful()) {
-            return $response->json();
+            return ['body' => $response->json(), 'headers' => $response->headers()];
         }
         
         return [];

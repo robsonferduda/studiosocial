@@ -58,6 +58,19 @@ class FbPageController extends Controller
         $pages = $fb_api->getPages($params);
 
         $dados = [];
+        $dados['limit_exceeded'] =  false;
+
+        if(isset($pages['headers']['x-app-usage'][0])) {
+            $x_app_usage = json_decode($pages['headers']['x-app-usage'][0]);
+
+            if((int) $x_app_usage->call_count > 50) {
+                $dados['limit_exceeded'] = true;
+                echo json_encode($dados);  
+                exit;
+            }
+        }
+
+        $pages = $pages['body'];
 
         foreach ($pages['data'] as $page) {
 
@@ -86,7 +99,7 @@ class FbPageController extends Controller
             $dados['info']['before'] = $fb_api->getBefore($pages);
             $dados['info']['query'] = $request->termo;
         }
-            
+        
         echo json_encode($dados);   
     
     }
