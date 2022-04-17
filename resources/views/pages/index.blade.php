@@ -173,19 +173,7 @@
 @section('script')
 <script>
     $(document).ready(function() {     
-
-        var availableTags = [
-            {
-                "nome":"Página Exemplo 1"
-            },
-            {
-                "nome":"Página Exemplo 2"        
-            },
-            {
-                "nome":"Página Exemplo 3"    
-            }
-        ];
-        
+ 
         $(".name-autocomplete").autocomplete({
             source: function (request, response) {
             //data :: JSON list defined
@@ -204,7 +192,7 @@
             placeholder: 'Selecione um Cliente',           
         });
 
-        $('.btn-connect-client').click(function(){
+        $('#datatable').on('click','.btn-connect-client', function() {
             
             id_clients = $(this).data('clients').toString().split(",");
 
@@ -215,7 +203,7 @@
         
         });
 
-        $('.btn-edit-page').click(function(){
+        $('#datatable').on('click', '.btn-edit-page' ,function(){
             var url = "facebook-pagina";
             var page_id= $(this).data('id');
             $.get(url + '/' + page_id, function (data) {

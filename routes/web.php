@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\FbTerm;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
@@ -140,6 +141,9 @@ Route::resource('facebook-pagina', 'FbPageController');
 Route::get('pull-medias','FbPageController@pullMedias');
 Route::get('verificar-imagem-profile','FbPageController@verifyPicture');
 Route::get('atualiza-reacoes','FbPageController@updateReactions');
+Route::get('fb-terms', function(){
+    (new FbTerm)->runJob();
+});
 
 Route::get('transcricao','ProcessamentoController@radios');
 Route::get('transcricao/baixar/{pasta}','ProcessamentoController@baixar');
