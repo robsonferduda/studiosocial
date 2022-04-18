@@ -286,7 +286,7 @@ class FbPageController extends Controller
 
         $posts = FbPagePost::get();
         $fb_feed = new FBFeedApi(999);
-        $token_app = getTokenApp();
+        $token_app = env('COLETA1');//getTokenApp();
 
         foreach ($posts as $post) {
             $reactions = $this->getReactions($post['post_id'], $fb_feed, $token_app);
