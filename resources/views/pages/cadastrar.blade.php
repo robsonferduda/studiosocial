@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-12">
                 <div class="row mb-5">
-                    <div class="col-md-12">
+                    <div class="col-md-12 box-paginas">
                         {{-- <ul class="pagination justify-content-between" style="display: none">
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='previou' data-previou="" rel="prev" aria-label="@lang('pagination.previous')"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>                                
@@ -138,6 +138,8 @@
 
             var termo = $("#termo").val();
 
+            $('.box-paginas').loader('show');
+        
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
                 type: 'POST',
@@ -146,10 +148,11 @@
                         "after": ''                        
                     },
                 success: function(response) {
+                    $('.box-paginas').loader('hide');
                     success(response);    
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
@@ -196,6 +199,7 @@
 
             var termo = $("#pagination-termo").val();
             var previou = $(this).data('previou');
+            $('.box-paginas').loader('show');
 
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
@@ -207,9 +211,10 @@
                     },
                 success: function(response) {
                     success(response);  
+                    $('.box-paginas').loader('hide');
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    $('.box-paginas').loader('hide');
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
@@ -229,6 +234,7 @@
 
             var termo = $("#pagination-termo").val();
             var next = $(this).data('next');
+            $('.box-paginas').loader('show');
 
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
@@ -240,9 +246,10 @@
                     },
                 success: function(response) {
                     success(response);  
+                    $('.box-paginas').loader('hide');
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    $('.box-paginas').loader('hide');
                     if(response.status){
                         Swal.fire({
                             icon: 'error',

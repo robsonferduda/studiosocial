@@ -105,3 +105,6 @@
 .ui-autocomplete{
     z-index: 1050 !important;
  }
+ .box-paginas{
+     min-height: 600px;
+ }
