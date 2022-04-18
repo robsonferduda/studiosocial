@@ -41,7 +41,7 @@ class FbPageController extends Controller
 
         $pages_monitor = FbPageMonitor::pluck('page_id')->toArray();
 
-        $token_app = getTokenApp();
+        $token_app = env('COLETA1');//getTokenApp();
 
         $fb_api = new FBSearchPageApi();
 
