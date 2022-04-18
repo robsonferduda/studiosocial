@@ -31,7 +31,7 @@ class FbTerm{
                                     ->where('fb_page_monitor_id', $client->fb_page_monitor_id)
                                     ->get();
 
-                dd($posts);
+                $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
 
             }
 

@@ -15,7 +15,7 @@ class FBFeed{
 
         $token_app = getTokenApp();
 
-        $token = $this->getTokenValid($token_app);
+        $token = env('COLETA1');//$this->getTokenValid($token_app);
 
         foreach ($pages as $page) {
 
