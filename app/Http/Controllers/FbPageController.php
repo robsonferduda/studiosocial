@@ -41,7 +41,7 @@ class FbPageController extends Controller
 
         $pages_monitor = FbPageMonitor::pluck('page_id')->toArray();
 
-        $token_app = getTokenApp();
+        $token_app = env('COLETA1');//getTokenApp();
 
         $fb_api = new FBSearchPageApi();
 
@@ -286,7 +286,7 @@ class FbPageController extends Controller
 
         $posts = FbPagePost::get();
         $fb_feed = new FBFeedApi(999);
-        $token_app = getTokenApp();
+        $token_app = env('COLETA1');//getTokenApp();
 
         foreach ($posts as $post) {
             $reactions = $this->getReactions($post['post_id'], $fb_feed, $token_app);
