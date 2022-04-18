@@ -71,6 +71,11 @@
 <script>
     $(document).ready(function() {  
 
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                $("#btn-find").trigger('click');
+            }
+        });
 
         let success = function(response) {
             $(".table-paginas tbody tr").empty();
@@ -108,7 +113,7 @@
 
         let table = function(value) {
 
-            let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '' ;                        
+            let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '<span class="badge badge-success"><i class="fa fa-check"></i> Página Cadastrada</span>' ;                        
 
             $(".table-paginas tbody").append(
                 '<tr class="candidates-list">' +
@@ -126,7 +131,7 @@
                                         '</div>' +
                                     '</div>' +
                                 '</td>' +                                        
-                    '<td class="text-center">'+button+'</td>' +
+                    '<td class="text-center box-btn">'+button+'</td>' +
                 '</tr>');  
         }
 
@@ -173,6 +178,7 @@
             let id = $(this).data('id');
             let picture = $(this).data('picture');
             let button = $(this);
+            let row = $(this).closest("tr").find(".box-btn");
 
             $.ajax({
                 url: host+'/facebook-pagina',
@@ -187,6 +193,7 @@
                     response = JSON.parse(response)
                     if(response.flag) {
                         button.remove();
+                        row.html('<span class="badge badge-success"><i class="fa fa-check"></i> Página Cadastrada</span>');
                     }
                 }
             });
