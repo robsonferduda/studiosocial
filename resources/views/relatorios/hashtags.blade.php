@@ -148,6 +148,8 @@
             var data_final = $(".dt_final_relatorio").val();
             var ctrl = 0;
             $(".table_hashtags tbody").empty();
+            $(".table_hashtags").css('display','none');
+            $('.card').loader('show');
 
             fetch(host+'/nuvem-palavras/hashtags', {
                 method: 'POST',
@@ -160,69 +162,74 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
                 },
-
+            }).then(function(response) {
+                return response.json();
             }).then(function(response){
-                
-                $('.card').loader('hide');
-                let words = [];
 
+                let size = Object.keys(response).length;
+                let words = [];
                 $(".msg").html("");
 
-                if(response.length){
+                if(size){
+
+                    $(".table_hashtags").css('display','block');
 
                     Object.entries(response).forEach(element => {
 
-                    if(ctrl < 10)
-                        $(".table_hashtags tbody").append('<tr><td>'+element[0]+'</td><td class="center">'+element[1]+'</td></tr>');
+                        if(ctrl < 10)
+                            $(".table_hashtags tbody").append('<tr><td>'+element[0]+'</td><td class="center">'+element[1]+'</td></tr>');
 
-                    ctrl++;
+                        ctrl++;
 
-                    words.push(
-                        {
-                            text: element[0], 
-                            weight: element[1],
-                            html: {
-                                class: 'cloud-word'
-                            },
-                            handlers: {
-                                click: function(e) {
-                                    for( var i = 0; i < words.length; i++){ 
-                                    if (words[i].text === this.textContent) { 
-                                            words.splice(i, 1); 
-                                        break; 
+                        words.push(
+                            {
+                                text: element[0], 
+                                weight: element[1],
+                                html: {
+                                    class: 'cloud-word'
+                                },
+                                handlers: {
+                                    click: function(e) {
+                                        for( var i = 0; i < words.length; i++){ 
+                                        if (words[i].text === this.textContent) { 
+                                                words.splice(i, 1); 
+                                            break; 
+                                        }
                                     }
-                                }
 
-                                $('#cloud').jQCloud('update', words);
+                                    $('#cloud').jQCloud('update', words);
 
-                                }
-                            },
-                            
-                        }
-                    );
+                                    }
+                                },
+                                
+                            }
+                        );
                     });
 
                     $('#cloud').jQCloud(words, {
-                    autoResize: true,
-                    colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
-                    fontSize: function (width, height, step) {
-                        if (step == 1)
-                            return width * 0.01 * step + 'px';
+                        autoResize: true,
+                        colors: ["#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
+                        fontSize: function (width, height, step) {
+                            if (step == 1)
+                                return width * 0.01 * step + 'px';
 
-                        return width * 0.009 * step + 'px';
-                    }
+                            return width * 0.009 * step + 'px';
+                        }
                     });       
 
-                    $('#cloud').jQCloud('update', words);
+                    $('#cloud').jQCloud('update', words);              
 
                 }else{
-                    $(".msg").html('<p class="ml-1 msg"><i class="fa fa-exclamation-circle mr-1"></i>Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
-                }
-            
+                    $(".msg").html('<p class="ml-1"><i class="fa fa-exclamation-circle mr-1"></i>Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
+                } 
                 
+                $('#cloud').jQCloud('update', words);
+                        
+            }).catch(function(error){
+                alert("Houve um erro na requisição da API");
             });
-
+            $('.card').loader('hide');
         }
-});
+    });
 </script>
 @endsection    
