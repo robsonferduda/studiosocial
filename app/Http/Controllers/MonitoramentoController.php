@@ -86,9 +86,17 @@ class MonitoramentoController extends Controller
                                 ->where('fb_posts.client_id','=',$this->client_id)
                                 ->whereBetween('fb_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
                                 ->count();
+           
+            $fb_post_pages_total = DB::table('page_post_term')
+                                ->join('terms', 'page_post_term.term_id','=','terms.id')
+                                ->join('fb_page_posts', 'page_post_term.page_post_id','=','fb_page_posts.id')
+                                ->whereBetween('fb_page_posts.updated_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->where('terms.client_id','=',$this->client_id)
+                                ->count();
+                                            
 
             $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
+            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total + $fb_post_pages_total;
             $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
         }
 
