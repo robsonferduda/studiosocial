@@ -90,7 +90,8 @@ class FbPageController extends Controller
                             'description' => isset($infos['description']) ? $infos['description'] : '',
                             'category' => $infos['category'],
                             'picture' => $infos['picture']['data']['url'],
-                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false )
+                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false ),
+                            'location' => isset($infos['location']) ? $infos['location'] : ''
                         );
         }
 

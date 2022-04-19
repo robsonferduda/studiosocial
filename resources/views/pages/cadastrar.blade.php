@@ -116,8 +116,7 @@
 
             let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '<span class="badge badge-success"><i class="fa fa-check"></i> Página Cadastrada</span>' ;                        
 
-            $(".table-paginas tbody").append(
-                '<tr class="candidates-list">' +
+            let text =  '<tr class="candidates-list">' +
                     '<td class="title">' +
                         '<div class="thumb">' +
                             '<img class="img-fluid" src="'+value.picture+'" alt="">' +
@@ -127,13 +126,26 @@
                                     '<div class="candidate-list-title">' +
                                         '<h5 class="mb-0">' +
                                             '<a class="action" href="'+value.link+'" target="BLANK">'+value.name+'</a>' +
-                                        '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>'+                                               
-                                         '</div>' +
+                                        '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.category+'</li></ul>';  
+                                        if(value.location != '') {   
+                                            if(value.location.country != undefined) {                                        
+                                                text += '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.location.country+'</li></ul>';
+                                            }
+                                            if(value.location.state != undefined) {      
+                                                text += '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.location.state+'</li></ul>';
+                                            }
+                                            if(value.location.city != undefined) {      
+                                                text += '</h5></div><div class="candidate-list-option"><ul class="list-unstyled"><li>'+value.location.city+'</li></ul>';
+                                            }
+                                        }                                                                              
+                                        text += '</div>' +
                                         '</div>' +
                                     '</div>' +
                                 '</td>' +                                        
                     '<td class="text-center box-btn">'+button+'</td>' +
-                '</tr>');  
+                '</tr>';
+
+            $(".table-paginas tbody").append(text);  
         }
 
         
@@ -158,7 +170,7 @@
                     success(response);    
                 },
                 error: function(response){
-                    
+                    $('.box-paginas').loader('hide');
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
