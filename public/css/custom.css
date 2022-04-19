@@ -90,7 +90,9 @@
     color: #dd0808;
     margin-top: 5px;
 }
-.msg{    
+.table_hashtags{ display: none;}
+.msg { padding: 0 !important;}
+.msg > p{    
     background: #f9f9f9;
     padding: 5px 10px;
 }
@@ -102,4 +104,7 @@
 
 .ui-autocomplete{
     z-index: 1050 !important;
+ }
+ .box-paginas{
+     min-height: 600px;
  }

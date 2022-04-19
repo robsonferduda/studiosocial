@@ -30,7 +30,7 @@
             </div>
             <div class="col-md-12">
                 <div class="row mb-5">
-                    <div class="col-md-12">
+                    <div class="col-md-12 box-paginas">
                         {{-- <ul class="pagination justify-content-between" style="display: none">
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='previou' data-previou="" rel="prev" aria-label="@lang('pagination.previous')"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>                                
@@ -71,6 +71,12 @@
 <script>
     $(document).ready(function() {  
 
+        $(document).on('keypress',function(e) {
+            if(e.which == 13) {
+                $("#btn-find").trigger('click');
+                return false;
+            }
+        });
 
         let success = function(response) {
             $(".table-paginas tbody tr").empty();
@@ -108,7 +114,7 @@
 
         let table = function(value) {
 
-            let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '' ;                        
+            let button = (value.registered == false) ? '<button type="button" data-picture='+value.picture+' data-id='+value.id+' class="btn btn-sm btn-primary btn-cadastrar"><span class="btn-label"><i class="fa fa-plus"></i></span> Adicionar </button>' : '<span class="badge badge-success"><i class="fa fa-check"></i> Página Cadastrada</span>' ;                        
 
             $(".table-paginas tbody").append(
                 '<tr class="candidates-list">' +
@@ -126,7 +132,7 @@
                                         '</div>' +
                                     '</div>' +
                                 '</td>' +                                        
-                    '<td class="text-center">'+button+'</td>' +
+                    '<td class="text-center box-btn">'+button+'</td>' +
                 '</tr>');  
         }
 
@@ -138,6 +144,8 @@
 
             var termo = $("#termo").val();
 
+            $('.box-paginas').loader('show');
+        
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
                 type: 'POST',
@@ -146,10 +154,11 @@
                         "after": ''                        
                     },
                 success: function(response) {
+                    $('.box-paginas').loader('hide');
                     success(response);    
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
@@ -170,6 +179,7 @@
             let id = $(this).data('id');
             let picture = $(this).data('picture');
             let button = $(this);
+            let row = $(this).closest("tr").find(".box-btn");
 
             $.ajax({
                 url: host+'/facebook-pagina',
@@ -184,6 +194,7 @@
                     response = JSON.parse(response)
                     if(response.flag) {
                         button.remove();
+                        row.html('<span class="badge badge-success"><i class="fa fa-check"></i> Página Cadastrada</span>');
                     }
                 }
             });
@@ -196,6 +207,7 @@
 
             var termo = $("#pagination-termo").val();
             var previou = $(this).data('previou');
+            $('.box-paginas').loader('show');
 
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
@@ -207,9 +219,10 @@
                     },
                 success: function(response) {
                     success(response);  
+                    $('.box-paginas').loader('hide');
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    $('.box-paginas').loader('hide');
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
@@ -229,6 +242,7 @@
 
             var termo = $("#pagination-termo").val();
             var next = $(this).data('next');
+            $('.box-paginas').loader('show');
 
             $.ajax({
                 url: host+'/facebook-pagina/buscar',
@@ -240,9 +254,10 @@
                     },
                 success: function(response) {
                     success(response);  
+                    $('.box-paginas').loader('hide');
                 },
                 error: function(response){
-                    $('.card').loader('hide');
+                    $('.box-paginas').loader('hide');
                     if(response.status){
                         Swal.fire({
                             icon: 'error',
