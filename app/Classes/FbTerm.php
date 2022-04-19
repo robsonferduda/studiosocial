@@ -34,9 +34,7 @@ class FbTerm{
                                     ->get();
 
                 $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
-
             }
-
         }
     }
 

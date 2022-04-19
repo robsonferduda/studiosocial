@@ -134,8 +134,8 @@ class MonitoramentoController extends Controller
                 break;
 
             case 'facebook':
-                $medias_temp_a = FbPost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("'post' as tipo"))->with('comments')->with('reactions')->where('client_id', $client_id);
-                $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("'post_page' as tipo"))->with('reactions')->whereHas('terms', function ($query) use ($client_id){
+                $medias_temp_a = FbPost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("0 as tipo"))->addSelect(DB::raw("'post' as tipo"))->with('comments')->with('reactions')->where('client_id', $client_id);
+                $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])->addSelect(DB::raw("'post_page' as tipo"))->with('page')->with('reactions')->whereHas('terms', function ($query) use ($client_id){
                     $query->where('client_id', $client_id);
                 });
                 $medias_temp = $medias_temp_b->union($medias_temp_a)->orderBy('updated_time','DESC')->paginate(20);
@@ -144,6 +144,11 @@ class MonitoramentoController extends Controller
 
                     if($media->tipo == 'post') {
                         $media = FbPost::find($media->id);
+                        $img = '';
+                        $name = '';
+                    } else {                     
+                        $img = $media->page->picture_url;
+                        $name = $media->page->name;
                     }
 
                     $bag_comments = [];
@@ -166,7 +171,7 @@ class MonitoramentoController extends Controller
 
                     $medias[] = array('id' => $media->id,
                                       'text' => $media->message,
-                                      'username' => '',
+                                      'username' => $name,
                                       'created_at' => dateTimeUtcToLocal($media->updated_time),
                                       'sentiment' => $media->sentiment,
                                       'type_message' => 'facebook',
@@ -177,7 +182,7 @@ class MonitoramentoController extends Controller
                                       'comments' => $bag_comments,
                                       'link' => $media->permalink_url,
                                       'share_count' => !empty($media->share_count) ? $media->share_count : 0,
-                                      'user_profile_image_url' => ''
+                                      'user_profile_image_url' => $img
                                     );
 
                 } 
