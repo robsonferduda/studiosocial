@@ -28,9 +28,14 @@ class FbTerm{
                             ->where('client_id', $client->client_id)->get();
             
             foreach ($termos_ativos as $termo) {
-                print_r($termo->term);
+                
+                $last = $termo->pagePosts()->latest('created_at')->first();
+
                 $posts = FbPagePost::where('message', 'ilike', '%'.strtolower($termo->term).'%')
                                     ->where('fb_page_monitor_id', $client->fb_page_monitor_id)
+                                    ->when($last, function ($q) use ($last){
+                                        return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
+                                    })                                    
                                     ->get();
 
                 $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
