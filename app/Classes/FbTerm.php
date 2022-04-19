@@ -31,7 +31,11 @@ class FbTerm{
                 
                 $last = $termo->pagePosts()->latest('created_at')->first();
 
-                $posts = FbPagePost::where('message', 'ilike', '%'.strtolower($termo->term).'%')
+                $posts = FbPagePost::where(function ($query) use ($termo) {
+                                        $query->where('message', 'ilike', '% '.strtolower($termo->term).' %')
+                                        ->orWhere('message', 'ilike', '%'.strtolower($termo->term).' %')
+                                        ->orWhere('message', 'ilike', '% '.strtolower($termo->term).'%');
+                                    })
                                     ->where('fb_page_monitor_id', $client->fb_page_monitor_id)
                                     ->when($last, function ($q) use ($last){
                                         return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
