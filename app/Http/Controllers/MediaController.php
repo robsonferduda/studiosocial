@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\FbPagePost;
 use App\FbPost;
 use App\Media;
 use App\MediaTwitter;
@@ -67,7 +68,9 @@ class MediaController extends Controller
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
                 break;
-
+            case 'facebook-page':
+                $media = FbPagePost::where('id',$id)->first();
+                break;
             case 'instagram':
                 $media = Media::where('id',$id)->first();
                 break;

@@ -24,7 +24,7 @@ class FbPageController extends Controller
 
     public function index()
     {
-        $pages = FbPageMonitor::all();
+        $pages = FbPageMonitor::select(['name','id', 'url'])->get();
 
         $clients = Client::select(['id', 'name'])->get();
 
@@ -221,7 +221,7 @@ class FbPageController extends Controller
                 'username' => $media->page->name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
-                'type_message' => 'facebook',
+                'type_message' => 'facebook-page',
                 'like_count' => $likes_count,
                 'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                 'social_media_id' => $media->social_media_id,
