@@ -13,6 +13,7 @@ use App\MediaTwitter;
 use App\Term;
 use Carbon\Carbon;
 use App\Enums\FbReaction;
+use App\FbPagePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -133,8 +134,17 @@ class MonitoramentoController extends Controller
                 break;
 
             case 'facebook':
-                $medias_temp = FbPost::with('comments')->with('reactions')->where('client_id', $client_id)->orderBy('updated_time','DESC')->paginate(20);
+                $medias_temp_a = FbPost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("'post' as tipo"))->with('comments')->with('reactions')->where('client_id', $client_id);
+                $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("'post_page' as tipo"))->with('reactions')->whereHas('terms', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                });
+                $medias_temp = $medias_temp_b->union($medias_temp_a)->orderBy('updated_time','DESC')->paginate(20);
+                
                 foreach ($medias_temp as $key => $media) {
+
+                    if($media->tipo == 'post') {
+                        $media = FbPost::find($media->id);
+                    }
 
                     $bag_comments = [];
                     if ($media->comments) {
@@ -142,7 +152,7 @@ class MonitoramentoController extends Controller
                             $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
                         }
                     }
-                    
+  
                     $likes_count = 0;
                     $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
                     $likes = $media->reactions()->wherePivot('reaction_id',FbReaction::LIKE)->first();
@@ -170,7 +180,7 @@ class MonitoramentoController extends Controller
                                       'user_profile_image_url' => ''
                                     );
 
-                }
+                } 
                 break;
             
             case 'twitter':
@@ -197,7 +207,7 @@ class MonitoramentoController extends Controller
                 }
             break;
         }
-
+    
         return view('monitoramento/medias', compact('medias', 'medias_temp'));
     }
 }
