@@ -4,6 +4,7 @@ namespace App\Classes;
 
 use App\ClientPageMonitor;
 use App\Enums\SocialMedia;
+use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Jobs\FbTerm as JobsFbTerm;
 use App\Term;
@@ -17,6 +18,12 @@ class FbTerm{
     public function runJob()
     {
         //JobsFbTerm::dispatch();   
+
+        $posts = FbPagePost::whereHas('terms', function ($query) {
+            $query->where('client_id', 1);
+        })->get();
+
+        dd($posts);
 
         $clients = ClientPageMonitor::get();
         foreach ($clients as $client) {
@@ -36,7 +43,6 @@ class FbTerm{
             }
 
         }
-
     }
 
 }

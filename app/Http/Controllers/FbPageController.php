@@ -263,7 +263,7 @@ class FbPageController extends Controller
 
         foreach ($pages_monitor as $page) {
            
-            $token_app = getTokenApp();
+            $token_app = env('COLETA1');//getTokenApp();
 
             $fb_api = new FBSearchPageApi();
                                 
