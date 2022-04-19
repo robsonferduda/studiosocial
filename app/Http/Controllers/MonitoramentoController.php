@@ -38,7 +38,7 @@ class MonitoramentoController extends Controller
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
         $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-        $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
+        $terms = Term::with('mediasTwitter')->with('medias')->with('pagePosts')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
         $ig_comments_total = DB::table('ig_comments')
                             ->join('medias','medias.id','=','ig_comments.media_id')
@@ -49,9 +49,14 @@ class MonitoramentoController extends Controller
                             ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
                             ->where('fb_posts.client_id','=',$this->client_id)
                             ->count();
-
+                        
+        $fb_post_pages_total = DB::table('page_post_term')
+                            ->join('terms', 'page_post_term.term_id','=','terms.id')
+                            ->where('terms.client_id','=',$this->client_id)
+                            ->count();
+           
         $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
-                        'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
+                        'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_post_pages_total + $fb_comments_total,
                         'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
 
         return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
