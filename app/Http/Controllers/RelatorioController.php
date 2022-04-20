@@ -308,9 +308,9 @@ class RelatorioController extends Controller
 
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
-              //echo 'ERR > '.$buffer.'<br />';
-              $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
-              $chart =  'data:image/png;base64, '.base64_encode($chartData);
+              echo 'ERR > '.$buffer.'<br />';
+              //$chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
+              //$chart =  'data:image/png;base64, '.base64_encode($chartData);
             } else {                
                 if(trim($buffer) == 'END') {                            
                     $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
