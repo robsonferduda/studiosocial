@@ -302,7 +302,7 @@ class RelatorioController extends Controller
         $file_name = 'cliente-'.$this->client_id.'-hashtag';
 
         $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
-        Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
+        //Storage::disk('hashtag')->put($file_name.'.json', json_encode($lista_hashtags));
 
         $process = new Process(['python3', base_path().'/studio-social-hashtag.py', $this->client_id]);
 
