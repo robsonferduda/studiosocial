@@ -13,7 +13,7 @@ class FbTerm{
     public function runJob()
     {
     
-        JobsFbTerm::dispatch($client->id);                
+        JobsFbTerm::dispatch();                
     }
 
 }
