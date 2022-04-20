@@ -313,7 +313,7 @@ class RelatorioController extends Controller
               //$chart =  'data:image/png;base64, '.base64_encode($chartData);
             } else {   
 
-              dd("Teste");
+              dd($buffer);
               
                 if(trim($buffer) == 'END') {                            
                     $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
