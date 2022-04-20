@@ -33,4 +33,10 @@ class FbPagePost extends Model implements Auditable
     { 
         return $this->hasOne('App\FbPageMonitor', 'id', 'fb_page_monitor_id'); 
     }
+
+    public function terms()
+    {
+        return $this->belongsToMany('App\Term','page_post_term','page_post_id','term_id')->withTimestamps();
+    }
+
 }

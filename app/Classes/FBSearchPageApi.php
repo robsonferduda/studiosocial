@@ -44,7 +44,8 @@ class FBSearchPageApi extends IGApi{
             'name',
             'link',
             'description',
-            'category'
+            'category',
+            'location'
         ];
 
         return implode(',',$fields);

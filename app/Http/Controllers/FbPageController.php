@@ -24,7 +24,7 @@ class FbPageController extends Controller
 
     public function index()
     {
-        $pages = FbPageMonitor::all();
+        $pages = FbPageMonitor::select(['name','id', 'url'])->get();
 
         $clients = Client::select(['id', 'name'])->get();
 
@@ -90,7 +90,8 @@ class FbPageController extends Controller
                             'description' => isset($infos['description']) ? $infos['description'] : '',
                             'category' => $infos['category'],
                             'picture' => $infos['picture']['data']['url'],
-                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false )
+                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false ),
+                            'location' => isset($infos['location']) ? $infos['location'] : ''
                         );
         }
 
@@ -221,7 +222,7 @@ class FbPageController extends Controller
                 'username' => $media->page->name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
-                'type_message' => 'facebook',
+                'type_message' => 'facebook-page',
                 'like_count' => $likes_count,
                 'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                 'social_media_id' => $media->social_media_id,
@@ -263,7 +264,7 @@ class FbPageController extends Controller
 
         foreach ($pages_monitor as $page) {
            
-            $token_app = getTokenApp();
+            $token_app = env('COLETA1');//getTokenApp();
 
             $fb_api = new FBSearchPageApi();
                                 

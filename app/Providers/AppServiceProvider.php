@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
             TypeMessage::TWEETS => 'App\MediaTwitter',
             TypeMessage::IG_POSTS => 'App\Media',
             TypeMessage::IG_COMMENT => 'App\IgComment',
+            TypeMessage::FB_PAGE_POST => 'App\FbPagePost',
         ]);
 
     }
