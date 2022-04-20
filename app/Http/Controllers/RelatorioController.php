@@ -311,7 +311,10 @@ class RelatorioController extends Controller
               echo 'ERR > '.$buffer.'<br />';
               //$chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
               //$chart =  'data:image/png;base64, '.base64_encode($chartData);
-            } else {                
+            } else {   
+
+              dd("Teste");
+              
                 if(trim($buffer) == 'END') {                            
                     $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
                     $chart =  'data:image/png;base64, '.base64_encode($chartData);
