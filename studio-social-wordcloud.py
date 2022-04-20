@@ -80,7 +80,7 @@ for client in clients:
     text_f = " ".join(c.lstrip("#").lower() for c in text_f)
     text_ci = " ".join(c.lstrip("#").lower() for c in text_ci)
     text_cf = " ".join(c.lstrip("#").lower() for c in text_cf)
-    text_fpp = " ".join(c.lstrip("#").lower() for c in medias_fpp)
+    text_fpp = " ".join(c.lstrip("#").lower() for c in text_fpp)
 
     text = text_i+' '+text_t+' '+text_f+' '+text_ci+' '+text_cf+' '+text_fpp
 
