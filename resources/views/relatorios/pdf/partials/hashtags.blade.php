@@ -1,3 +1,3 @@
 <div>
-    <img src="{{ $charts['nuvem'] }}">
+    <img src="{{ $charts['hashtags'] }}">
 </div>

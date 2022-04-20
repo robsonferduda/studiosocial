@@ -1115,8 +1115,7 @@ class RelatorioController extends Controller
 
         if(in_array('hashtags', $relatorios)){
           $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['hashtags'] = null;
-          $charts['hashtags'] = null;
+          $charts['hashtags'] = $this->getDadosHashtag();
           $page_break++;
         }
 
