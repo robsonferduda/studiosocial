@@ -571,14 +571,16 @@ class RelatorioController extends Controller
           $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
           $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
           $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
+          $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
 
           $textig = $this->concatenateSanitizeText($igPosts);
           $textigc = $this->concatenateSanitizeText($igComments);
           $textfb = $this->concatenateSanitizeText($fbPosts);
           $textfbc = $this->concatenateSanitizeText($fbComments);
           $texttw = $this->concatenateSanitizeText($twPosts);
+          $textfpp = $this->concatenateSanitizeText($fbPagePost);
 
-          $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw;
+          $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp;
       }
 
       $wordcloud_text = WordCloudText::create([
@@ -978,14 +980,16 @@ class RelatorioController extends Controller
                 $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
                 $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
                 $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
+                $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
     
                 $textig = $this->concatenateSanitizeText($igPosts);
                 $textigc = $this->concatenateSanitizeText($igComments);
                 $textfb = $this->concatenateSanitizeText($fbPosts);
                 $textfbc = $this->concatenateSanitizeText($fbComments);
                 $texttw = $this->concatenateSanitizeText($twPosts);
+                $textfpp = $this->concatenateSanitizeText($fbPagePost);
     
-                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw;
+                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp;
             }
 
             $wordcloud_text = WordCloudText::create([
