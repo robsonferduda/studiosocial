@@ -33,6 +33,10 @@ for client in clients:
     cur.execute(sql)
     medias_f = cur.fetchall()
 
+    sql = 'select message from fb_page_posts t0 inner join page_post_term t1 on (t0.id = t1.page_post_id) inner join terms t2 on (t1.term_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
+    cur.execute(sql)
+    medias_fpp = cur.fetchall()
+
     sql = 'select t0.text from  ig_comments t0 inner join medias t2 on (t0.media_id = t2.id) where t0.deleted_at is null and t2.client_id = '+str(client['id'])
     cur.execute(sql)
     comments_i = cur.fetchall()
@@ -66,13 +70,19 @@ for client in clients:
         df = pd.DataFrame (comments_f)
         text_cf = df.dropna(subset=['text'], axis=0)['text']
 
+    text_fpp = ''
+    if len(medias_fpp) > 0:
+        df = pd.DataFrame (medias_fpp)
+        text_fpp = df.dropna(subset=['text'], axis=0)['text']
+
     text_i = " ".join(c.lstrip("#").lower() for c in text_i)
     text_t = " ".join(c.lstrip("#").lower() for c in text_t)
     text_f = " ".join(c.lstrip("#").lower() for c in text_f)
     text_ci = " ".join(c.lstrip("#").lower() for c in text_ci)
     text_cf = " ".join(c.lstrip("#").lower() for c in text_cf)
+    text_fpp = " ".join(c.lstrip("#").lower() for c in medias_fpp)
 
-    text = text_i+' '+text_t+' '+text_f+' '+text_ci+' '+text_cf
+    text = text_i+' '+text_t+' '+text_f+' '+text_ci+' '+text_cf+' '+text_fpp
 
     text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode()
 
