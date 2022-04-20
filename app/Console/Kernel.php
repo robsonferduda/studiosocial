@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Classes\FBFeed;
 use App\Classes\FBMention;
+use App\Classes\FbTerm;
 use App\Classes\IGHashTag;
 use App\Classes\IGMention;
 use App\Classes\Rule;
@@ -36,7 +37,8 @@ class Kernel extends ConsoleKernel
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
             (new FBFeed())->pullMedias();   
-            (new Rule())->runJob();            
+            (new Rule())->runJob();         
+            (new FbTerm())->runJob();    
         })->hourly()->between('2:00', '23:00');
 
     }
