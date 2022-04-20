@@ -52,6 +52,11 @@ class Rule extends Model
         return $this->morphedByMany('App\MediaTwitter','rules' ,'rule_message', 'rule_id','message_id', 'id', 'id')->withTimestamps();
     }
 
+    public function fbPagePosts()
+    {
+        return $this->morphedByMany('App\FbPagePost','rules' ,'rule_message', 'rule_id','message_id', 'id', 'id')->withTimestamps();
+    }
+
     public function getExpression()
     {
         $todas   = implode(' E ', $this->expressionsType(TypeRule::TODAS)->pluck('expression')->toArray());

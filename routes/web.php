@@ -1,6 +1,7 @@
 <?php
 
 use App\Classes\FbTerm;
+use App\Classes\Rule as ClassesRule;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
@@ -143,6 +144,10 @@ Route::get('verificar-imagem-profile','FbPageController@verifyPicture');
 Route::get('atualiza-reacoes','FbPageController@updateReactions');
 Route::get('fb-terms', function(){
     (new FbTerm)->runJob();
+});
+
+Route::get('run-rules', function(){
+    (new ClassesRule())->runJob();
 });
 
 Route::get('transcricao','ProcessamentoController@radios');

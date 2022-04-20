@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Enums\TypeRule;
 use App\FbComment;
+use App\FbPagePost;
 use App\FbPost;
 use App\IgComment;
 use App\Media;
@@ -207,6 +208,48 @@ class Rule implements ShouldQueue
             $ids = $medias->pluck('id')->toArray();
 
             $rule->fbComments()->sync($ids);
+
+            //FACEBOOK PAGE POSTS
+            $medias = FbPagePost::whereHas('terms', function($query){
+                $query->where('client_id', $this->client_id);
+            });
+            
+            if(count($todas) > 0) {
+                $medias = $medias->where(function ($query) use ($todas, $algumas) {
+                    $query->where(function ($query) use ($todas) {
+                        foreach($todas as $expression) {
+                            $query->whereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                        }        
+                    });      
+                    if(count($algumas) > 0) {
+                        $query->orWhere(function ($query) use ($algumas) {
+                            foreach($algumas as $expression) {
+                                $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                            }               
+                         });
+                     }
+                });    
+            }
+
+            if(count($algumas) > 0 AND  count($todas) <= 0){
+                $medias = $medias->where(function ($query) use ($algumas) {
+                    foreach($algumas as $expression) {
+                        $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }               
+                });
+            }
+
+            if(count($nenhuma) > 0) {
+                $medias =  $medias->where(function ($query) use ($nenhuma) {
+                    foreach($nenhuma as $expression) {
+                        $query->whereRaw(" lower(message) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
+                    }                             
+                });
+            }
+
+            $ids = $medias->pluck('id')->toArray();
+    
+            $rule->fbPagePosts()->sync($ids);
 
              //TWITTER POSTS
             $medias = MediaTwitter::where('client_id', $this->client_id);
