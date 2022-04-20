@@ -55,7 +55,13 @@ class HomeController extends Controller
         $u = User::find(Auth::user()->id);
         $media_twitter = round((MediaTwitter::where('client_id',$this->client_id)->count())/30, 1);
         $media_instagram = round((Media::where('client_id',$this->client_id)->count() + $ig_comments_total)/30, 1);
-        $media_facebook = round((FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total)/30, 1);
+
+        $fb_post_pages_total = DB::table('page_post_term')
+        ->join('terms', 'page_post_term.term_id','=','terms.id')
+        ->where('terms.client_id','=',$this->client_id)
+        ->count();
+
+        $media_facebook = round((FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total + $fb_post_pages_total)/30, 1);
 
         if($u->hasRole('administradores')){
 
