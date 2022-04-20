@@ -73,7 +73,7 @@ for client in clients:
     text_fpp = ''
     if len(medias_fpp) > 0:
         df = pd.DataFrame (medias_fpp)
-        text_fpp = df.dropna(subset=['text'], axis=0)['text']
+        text_fpp = df.dropna(subset=['message'], axis=0)['message']
 
     text_i = " ".join(c.lstrip("#").lower() for c in text_i)
     text_t = " ".join(c.lstrip("#").lower() for c in text_t)
