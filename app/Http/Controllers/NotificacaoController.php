@@ -54,7 +54,7 @@ class NotificacaoController extends Controller
     public function store(NotificationRequest $request)
     {
         $request->merge(['dt_inicio' => date('Y-m-d', strtotime(str_replace('/', '-', $request->dt_inicio)))]);
-        $request->merge(['dt_termino' => date('Y-m-d', strtotime(str_replace('/', '-', $request->dt_termino)))]);
+        $request->merge(['dt_termino' => ($request->dt_termino) ? date('Y-m-d', strtotime(str_replace('/', '-', $request->dt_termino))) : null] );
 
         try {
             NotificationClient::create($request->all());

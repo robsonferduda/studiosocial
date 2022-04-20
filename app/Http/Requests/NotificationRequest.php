@@ -26,7 +26,6 @@ class NotificationRequest extends FormRequest
         return [
             'notification_id' => 'required',
             'dt_inicio' => 'required',
-            'dt_termino' => 'required',
             'valor' => 'required'
         ];
     }
@@ -36,7 +35,6 @@ class NotificationRequest extends FormRequest
         return [
             'notification_id.required' => 'Campo <strong>Tipo de Notificação</strong> é obrigatório',
             'dt_inicio.required' => 'Campo <strong>Data Inicial</strong> é obrigatório',
-            'dt_termino.required' => 'Campo <strong>Data Final</strong> é obrigatório',
             'valor.required' => 'Campo <strong>Termo/Valor</strong> é obrigatório'
         ];
     }

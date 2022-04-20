@@ -19,8 +19,8 @@
             <table id="datatable" class="table">
                 <thead class="">
                     <tr>
-                        <th>Início</th>
-                        <th>Término</th>
+                        <th class="center">Início</th>
+                        <th class="center">Término</th>
                         <th>Tipo de Notificação</th>
                         <th class="center">Termo/Valor</th>
                         <th class="center">Contagem Atual</th>
@@ -31,8 +31,8 @@
                 <tbody>
                     @foreach($notifications_client as $notification)
                         <tr>
-                            <td>{{ date('d/m/Y', strtotime($notification->dt_inicio)) }}</td>
-                            <td>{{ date('d/m/Y', strtotime($notification->dt_termino)) }}</td>
+                            <td class="center">{{ date('d/m/Y', strtotime($notification->dt_inicio)) }}</td>
+                            <td class="center">{{ ($notification->dt_termino) ? date('d/m/Y', strtotime($notification->dt_termino)) : '--' }}</td>
                             <td>{{ $notification->notification->name }}</td>
                             <td class="center">{{ $notification->valor }}</td>
                             <td class="center">{{ $notification->valor_atual }}</td>
@@ -105,8 +105,8 @@
                        
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>Data Final</label>
-                                    <input type="text" class="form-control dt_termino" name="dt_termino" id="dt_termino" required="true">
+                                    <label>Data Final <span class="text-primary">Opcional</span></label>
+                                    <input type="text" class="form-control dt_termino" name="dt_termino" id="dt_termino">
                                 </div>
                             </div>
                         </div>     
