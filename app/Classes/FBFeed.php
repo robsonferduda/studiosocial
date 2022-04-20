@@ -11,9 +11,15 @@ class FBFeed{
 
     public function pullMedias()
     {
-        $pages = FbPageMonitor::all();
+        set_time_limit(0);
 
-        $token_app = getTokenApp();
+        $hour = \Carbon\Carbon::now()->format('H');
+
+        $order = (int) $hour%2 == 0 ? 'ASC' : 'DESC';
+
+        $pages = FbPageMonitor::orderBy('id', $order)->get();
+
+        //$token_app = getTokenApp();
 
         $token = env('COLETA1');//$this->getTokenValid($token_app);
 
