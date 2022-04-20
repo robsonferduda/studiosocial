@@ -299,6 +299,16 @@ class RelatorioController extends Controller
         $dt_final = $request->data_final;
         $nome = "Relatório de Hashtags";
 
+        $chart = $this->getDadosHashtag();
+    
+        $nome_arquivo = date('YmdHis').".pdf";
+        $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('chart', 'dados','rule','dt_inicial','dt_final','nome'));
+        
+        return $pdf->download($nome_arquivo);
+    }
+
+    function getDadosHashtag()
+    {
         $file_name = 'cliente-'.$this->client_id.'-hashtag';
 
         $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
@@ -319,11 +329,8 @@ class RelatorioController extends Controller
                 }
             }
         });
-    
-        $nome_arquivo = date('YmdHis').".pdf";
-        $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('chart', 'dados','rule','dt_inicial','dt_final','nome'));
-        
-        return $pdf->download($nome_arquivo);
+
+        return $chart;
     }
 
     public function getAllMedias()
