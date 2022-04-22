@@ -17,36 +17,31 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
-            <div class="col-md-12">
-                <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>Página</th>
-                            <th>URL</th>
-                            <th class="center">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($pages as $page)
-                            <tr>
-                                <td>{{$page->name}}</td>
-                                <td><a href="{{ $page->url }}">{{ $page->url }}</a></td>                                
-                                <td class="center">
-                                    <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
-                                    <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
-                                    <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove" title="Delete">
-                                            <i class="fa fa-times fa-2x"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>  
-                        @endforeach                                            
-                    </tbody>
-                </table>   
-            </div>        
+            <h6 class="ml-3">Mostrando {{ $pages->count() }} de {{ $pages->total() }} Páginas</h6>
+            {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @foreach($pages as $key => $page)
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12 text-center">                              
+                                <img src="{{ str_replace('normal','400x400', $page->picture_url) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">                                                            
+                                <strong><p><a href="{{ $page->url }}" target="_blank" rel="noopener noreferrer">{{ $page->name }}</a></p></strong>
+                                <strong><p><a href="{{ url('facebook-paginas/monitoramento/'.$page->id) }}">{{ $page->fb_pages_post_count }} Postagens</a></p></strong>
+                                <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
+                                <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
+                                <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove" title="Delete">
+                                        <i class="fa fa-times fa-2x"></i>
+                                    </button>
+                                </form>                                                    
+                            </div>                                
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+            {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
         </div>
     </div>
 </div> 
@@ -192,7 +187,7 @@
             placeholder: 'Selecione um Cliente',           
         });
 
-        $('#datatable').on('click','.btn-connect-client', function() {
+       $('.btn-connect-client').click(function() {
             
             id_clients = $(this).data('clients').toString().split(",");
 
@@ -203,7 +198,7 @@
         
         });
 
-        $('#datatable').on('click', '.btn-edit-page' ,function(){
+        $('.btn-edit-page').click(function(){
             var url = "facebook-pagina";
             var page_id= $(this).data('id');
             $.get(url + '/' + page_id, function (data) {

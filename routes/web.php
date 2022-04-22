@@ -134,7 +134,7 @@ Route::post('account/collect/mention', 'AccountController@isToCollectMention');
 
 Route::get('facebook-paginas','FbPageController@index');
 Route::get('facebook-paginas/cadastrar','FbPageController@cadastrar');
-Route::get('facebook-paginas/monitoramento','FbPageController@medias');
+Route::get('facebook-paginas/monitoramento/{page?}','FbPageController@medias');
 Route::post('facebook-pagina/atualizar','FbPageController@update');
 Route::post('facebook-pagina/buscar','FbPageController@buscarPagina');
 Route::post('facebook-pagina/associar-cliente','FbPageController@associarCliente');

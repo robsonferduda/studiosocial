@@ -24,7 +24,17 @@ class FbPageController extends Controller
 
     public function index()
     {
-        $pages = FbPageMonitor::select(['name','id', 'url'])->get();
+
+        $quantidade = null;
+
+        $pages = FbPageMonitor::withCount('fbPagesPost')->when($quantidade > 0, function($query) use ($quantidade) {
+            $query->has('fbPagesPost', '>=', $quantidade);
+        })
+        ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
+            $query->doesntHave('fbPagesPost');
+        })
+        ->orderby('fb_pages_post_count', 'desc')
+        ->paginate(20);
 
         $clients = Client::select(['id', 'name'])->get();
 
@@ -193,10 +203,17 @@ class FbPageController extends Controller
         return redirect('facebook-paginas');
     }
 
-    public function medias()
+    public function medias($page = NULL)
     {
 
-        $medias_temp = FbPagePost::with('page')->whereHas('page')->orderBy('updated_time','DESC')->paginate(20);
+        $medias_temp = FbPagePost::with('page')->whereHas('page')->orderBy('updated_time','DESC')
+        ->when($page, function($query) use ($page){
+            $query->where('fb_page_monitor_id', $page);
+        })
+        ->paginate(20);
+
+        $medias = [];
+
         foreach ($medias_temp as $key => $media) {
             
             // $bag_comments = [];
