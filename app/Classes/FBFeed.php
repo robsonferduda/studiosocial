@@ -83,7 +83,7 @@ class FBFeed{
                               
                 $after = $fb_feed->getAfter($posts);
         
-            } while($fb_feed->hasAfter($posts) && ($strtotime_date_updated >= $strtotime_date_yesterday));
+            } while($fb_feed->hasAfter($posts) && count($posts['data']) >= 50);
         }
     }
 
