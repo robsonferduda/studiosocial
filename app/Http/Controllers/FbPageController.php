@@ -13,13 +13,14 @@ use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
-use LDAP\Result;
+use Illuminate\Support\Facades\Session;
 
 class FbPageController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth');
+        Session::put('url','facebook-paginas');
     }
 
     public function index(Request $request)
