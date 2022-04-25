@@ -24,6 +24,8 @@
   <link href="{{ asset('css/jqcloud.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/jquery.loader.min.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/inputTags.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/bootstrap-multiselect.css') }}" rel="stylesheet" />
+  <link href="{{ asset('css/bootstrap-duallistbox.css') }}" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   @yield('style')
@@ -259,6 +261,8 @@
   <script src="{{ asset('js/croppie.min.js') }}"></script>
   <script src="{{ asset('js/upload-image.js') }}"></script>
   <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+  <script src="{{ asset('js/bootstrap-multiselect.js') }}"></script>
+  <script src="{{ asset('js/jquery.bootstrap-duallistbox.min.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
   <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
@@ -308,6 +312,22 @@
           [10, 25, 50, "All"]
         ],
         responsive: true,
+        language: {
+          search: "_INPUT_",
+          searchPlaceholder: "Filtrar",
+        }
+
+      });
+
+      $('.datatable_pages').DataTable({
+        "pagingType": "full_numbers",
+        
+        "lengthMenu": [
+          [10, 25, 50, -1],
+          [10, 25, 50, "All"]
+        ],
+        responsive: false,
+        ordering: false,
         language: {
           search: "_INPUT_",
           searchPlaceholder: "Filtrar",

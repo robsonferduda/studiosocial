@@ -10,6 +10,7 @@
                 <div class="col-md-6">
                     <a href="{{ url('facebook-paginas/monitoramento') }}" class="btn btn-info pull-right" style="margin-right: 12px;"><i class="nc-icon nc-sound-wave"></i> Monitoramento</a>
                     <a href="{{ url('facebook-paginas/cadastrar') }}" class="btn btn-primary pull-right mr-2"><i class="fa fa-at"></i> Cadastrar</a>
+                    <a href="{{ url('facebook-paginas/associar') }}" class="btn btn-warning pull-right mr-2"><i class="fa fa-at"></i> Associar Clientes</a>
                 </div>
             </div>
         </div>
