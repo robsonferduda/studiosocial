@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Term;
 use App\Client;
+use App\Enums\FbReaction;
 use App\SocialMedia;
 use App\Enums\SocialMedia as SM;
+use App\FbPagePost;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -25,7 +27,7 @@ class TermController extends Controller
     public function getTerms($client_id)
     {
         $client = Client::with(['terms' => function($query){
-            $query->withCount('mediasTwitter')->withCount('medias');
+            $query->withCount('mediasTwitter')->withCount('medias')->withCount('pagePosts');
         }])->find($client_id);
 
         $social_medias = SocialMedia::where('fl_term',true)->orderBy('name')->get();
@@ -90,6 +92,49 @@ class TermController extends Controller
 
                 }
                 break;
+            case SM::FACEBOOK:
+               
+                $medias_temp = $term->pagePosts()->orderBy('updated_time', 'DESC')->paginate(20);
+        
+                $medias = [];
+        
+                foreach ($medias_temp as $key => $media) {
+                    
+                    // $bag_comments = [];
+                    // if ($media->comments) {
+                    //     foreach($media->comments as $comment) {
+                    //         $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
+                    //     }p
+                    // }
+        
+                    $likes_count = 0;
+                    $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
+                    $likes = $media->reactions()->wherePivot('reaction_id',FbReaction::LIKE)->first();
+                    if(!empty($loves)) {
+                        $likes_count += $loves->pivot->count;
+                    }
+        
+                    if(!empty($likes)) {
+                        $likes_count += $likes->pivot->count;
+                    }
+        
+                    $medias[] = array('id' => $media->id,
+                        'text' => $media->message,
+                        'username' => $media->page->name,
+                        'created_at' => dateTimeUtcToLocal($media->updated_time),
+                        'sentiment' => '',
+                        'type_message' => 'facebook-page',
+                        'like_count' => $likes_count,
+                        'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
+                        'social_media_id' => $media->social_media_id,
+                        'tipo' => 'facebook',
+                        'comments' => [],
+                        'link' => $media->permalink_url,
+                        'share_count' => !empty($media->share_count) ? $media->share_count : 0,
+                        'user_profile_image_url' => $media->page->picture_url
+                     );
+        
+                }
             
             default:
                 //

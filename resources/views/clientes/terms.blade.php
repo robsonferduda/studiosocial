@@ -45,6 +45,9 @@
                                         @case(App\Enums\SocialMedia::TWITTER)
                                             {{ $term->medias_twitter_count }}
                                             @break
+                                        @case(App\Enums\SocialMedia::FACEBOOK)
+                                            {{ $term->page_posts_count }}
+                                            @break
                                         @default                        
                                     @endswitch
                                 </td>
