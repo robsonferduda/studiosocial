@@ -22,10 +22,11 @@ class FbPageController extends Controller
         $this->middleware('auth');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-
         $quantidade = null;
+
+        $page_term =  strtolower($request->page_term);
 
         $pages = FbPageMonitor::withCount('fbPagesPost')->when($quantidade > 0, function($query) use ($quantidade) {
             $query->has('fbPagesPost', '>=', $quantidade);
@@ -33,12 +34,15 @@ class FbPageController extends Controller
         ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
             $query->doesntHave('fbPagesPost');
         })
+        ->when($page_term, function($query) use ($page_term){
+            $query->whereRaw(" lower(name) SIMILAR TO '%({$page_term} | {$page_term}| {$page_term} )%' ");
+        })
         ->orderby('fb_pages_post_count', 'desc')
         ->paginate(20);
 
         $clients = Client::select(['id', 'name'])->get();
 
-        return view('pages/index', compact('pages', 'clients'));
+        return view('pages/index', compact('pages', 'clients', 'page_term'));
     }
 
     public function cadastrar()
@@ -203,12 +207,17 @@ class FbPageController extends Controller
         return redirect('facebook-paginas');
     }
 
-    public function medias($page = NULL)
+    public function medias(Request $request, $page = NULL)
     {
+
+        $term =  strtolower($request->term);
 
         $medias_temp = FbPagePost::with('page')->whereHas('page')->orderBy('updated_time','DESC')
         ->when($page, function($query) use ($page){
             $query->where('fb_page_monitor_id', $page);
+        })
+        ->when($term, function($query) use ($term){
+            $query->whereRaw(" lower(message) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         })
         ->paginate(20);
 
@@ -252,7 +261,7 @@ class FbPageController extends Controller
 
         }
 
-        return view('pages/medias', compact('medias', 'medias_temp'));
+        return view('pages/medias', compact('medias', 'medias_temp', 'term'));
 
     }
 

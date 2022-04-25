@@ -17,8 +17,24 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
+            {!! Form::open(['id' => 'frm_search_page', 'url' => ['facebook-paginas']]) !!}     
+                <div class="row">  
+                    <div class="col-md-12">                 
+                        <div class="form-group">                            
+                            <input type="text" class="form-control" name="page_term" placeholder="Buscar Página" value="{{ old('page_term') ? old('page_term') : $page_term }}">                                                                                                                                                           
+                        </div>            
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>        
+                    </div>   
+                </div>                                
+            {!! Form::close() !!}     
+                
+            
             <h6 class="ml-3">Mostrando {{ $pages->count() }} de {{ $pages->total() }} Páginas</h6>
-            {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @if($page_term)
+                {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
+            @else
+                {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @endif
             @foreach($pages as $key => $page)
                 <div class="card">
                     <div class="card-body">
@@ -41,7 +57,11 @@
                     </div>
                 </div>
             @endforeach
-            {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @if($page_term)
+                {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
+            @else
+                {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @endif
         </div>
     </div>
 </div> 

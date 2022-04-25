@@ -14,10 +14,24 @@
         </div>
         <div class="card-body">
             <div class="col-md-12">
-                @include('layouts.mensagens')
+                @include('layouts.mensagens')            
             </div>
+            {!! Form::open(['id' => 'frm_search_page', 'url' => ['facebook-paginas/monitoramento']]) !!}     
+            <div class="row">  
+                <div class="col-md-12">                 
+                    <div class="form-group">                            
+                        <input type="text" class="form-control" name="term" placeholder="Buscar por Termo" value="{{ old('term') ? old('term') : $term }}">                                                                                                                                                           
+                    </div>            
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>        
+                </div>   
+            </div>                                
+            {!! Form::close() !!} 
             <h6 class="ml-3">Mostrando {{ $medias_temp->count() }} de {{ $medias_temp->total() }} mídias coletadas</h6>
-            {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @if($term)
+                {{ $medias_temp->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
+            @else
+                {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @endif
             @foreach($medias as $key => $media)
                 <div class="card">
                     <div class="card-body">
@@ -88,7 +102,11 @@
                     </div>
                 </div>
             @endforeach
-            {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @if($term)
+                {{ $medias_temp->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
+            @else
+                {{ $medias_temp->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+            @endif
         </div>
     </div>
 </div> 
