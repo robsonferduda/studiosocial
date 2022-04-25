@@ -113,7 +113,7 @@
                   </li>
                 @endrole
                 @role('administradores')
-                  <li class="{{ (Session::has('url') and Session::get('url') == 'facebook/paginas') ? 'active' : '' }}">
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'facebook-paginas') ? 'active' : '' }}">
                     <a href="{{ url('facebook-paginas') }}">
                     <i class="fa fa-at" aria-hidden="true"></i>
                     <p>Facebook Páginas</p>
