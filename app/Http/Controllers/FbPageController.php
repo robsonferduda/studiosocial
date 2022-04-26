@@ -12,6 +12,7 @@ use App\Enums\FbReaction;
 use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
+use App\Http\Requests\PageRequest;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Session;
 
@@ -278,18 +279,18 @@ class FbPageController extends Controller
         (new FBFeed())->pullMedias();
     }
 
-    public function associarCliente(Request $request)
+    public function associarCliente(PageRequest $request)
     {
-        $clients = $request->client;
+        $clients = $request->clientes;
+        $pages = $request->paginas;
 
-        $page = FbPageMonitor::where('id', $request->id)->first();
+        for ($i=0; $i < count($pages); $i++) {    
+            $page = FbPageMonitor::where('id', $pages[$i])->first();
+            $result = $page->clients()->sync($clients);           
+        }
 
-        $result = $page->clients()->sync($clients);
-
-        Flash::success('<i class="fa fa-check"></i> Clientes da página <strong>'.$page->name.'</strong> atualizados com sucesso');
-
+        Flash::success('<i class="fa fa-check"></i> Associações de clientes e páginas atualizadas com sucesso');
         return redirect('facebook-paginas');
-
     }
 
     public function verifyPicture(){

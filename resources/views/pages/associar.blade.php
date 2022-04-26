@@ -16,29 +16,31 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
-            <form id="demoform" action="#" method="post">
-                <div class="row">
-                    <div class="col-md-6"> 
-                        <h6 class="mb-3">SELECIONE OS CLIENTES</h6>     
-                        <select multiple id="bootstrap-duallistbox-nonselected-list_duallistbox_demo1[]" class="form-control listagem_clientes" name="duallistbox_demo1" style="height: 194px;">
-                            @foreach($clientes as $client)
-                                <option value="{{ $client->id }}">{{ $client->name }}</option>
-                            @endforeach
-                        </select>      
+            <div class="col-md-12">
+                {!! Form::open(['id' => 'frm_connect_client', 'url' => ['facebook-pagina/associar-cliente']]) !!}
+                    <div class="row">
+                        <div class="col-md-6"> 
+                            <h6 class="mb-3"><i class="nc-icon nc-briefcase-24"></i> SELECIONE OS CLIENTES</h6>     
+                            <select multiple id="clientes" class="form-control listagem_clientes" name="clientes[]" style="height: 250px;">
+                                @foreach($clientes as $client)
+                                    <option value="{{ $client->id }}">{{ $client->name }}</option>
+                                @endforeach
+                            </select>      
+                        </div>
+                        <div class="col-md-6">    
+                            <h6 class="mb-3"><i class="fa fa-at"></i> SELECIONE AS PÁGINAS</h6> 
+                            <select multiple id="paginas" class="form-control listagem_paginas" name="paginas[]" style="height: 250px;">
+                                @foreach($paginas as $page)
+                                    <option value="{{ $page->id }}">{{ $page->name }}</option>
+                                @endforeach
+                            </select>           
+                        </div>
+                        <div class="col-md-12 mt-3 center"> 
+                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar Dados</button>
+                        </div>
                     </div>
-                    <div class="col-md-6">    
-                        <h6 class="mb-3">SELECIONE AS PÁGINAS</h6> 
-                        <select multiple id="bootstrap-duallistbox-nonselected-list_duallistbox_demo1[]" class="form-control listagem_paginas" name="duallistbox_demo1" style="height: 194px;">
-                            @foreach($paginas as $page)
-                                <option value="{{ $page->id }}">{{ $page->name }}</option>
-                            @endforeach
-                        </select>           
-                    </div>
-                    <div class="col-md-12 center"> 
-                        <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Salvar Dados</button>
-                    </div>
-                </div>
-            </form>
+                {!! Form::close() !!} 
+            </div>
         </div>
     </div>
 </div> 
