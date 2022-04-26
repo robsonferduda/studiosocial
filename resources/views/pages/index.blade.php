@@ -18,51 +18,58 @@
             <div class="col-md-12">
                 @include('layouts.mensagens')
             </div>
-            {!! Form::open(['id' => 'frm_search_page', 'url' => ['facebook-paginas']]) !!}     
-                <div class="row">  
-                    <div class="col-md-12">                 
-                        <div class="form-group">                            
-                            <input type="text" class="form-control" name="page_term" placeholder="Buscar Página" value="{{ old('page_term') ? old('page_term') : $page_term }}">                                                                                                                                                           
-                        </div>            
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>        
-                    </div>   
-                </div>                                
-            {!! Form::close() !!}     
-                
-            
-            <h6 class="ml-3">Mostrando {{ $pages->count() }} de {{ $pages->total() }} Páginas</h6>
-            @if($page_term)
-                {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
-            @else
-                {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
-            @endif
-            @foreach($pages as $key => $page)
+            <div class="col-md-12">
                 <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12 text-center">                              
-                                <img src="{{ str_replace('normal','400x400', $page->picture_url) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">                                                            
-                                <strong><p><a href="{{ $page->url }}" target="_blank" rel="noopener noreferrer">{{ $page->name }}</a></p></strong>
-                                <strong><p><a href="{{ url('facebook-paginas/monitoramento/'.$page->id) }}">{{ $page->fb_pages_post_count }} Postagens</a></p></strong>
-                                <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
-                                <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
-                                <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove" title="Delete">
-                                        <i class="fa fa-times fa-2x"></i>
-                                    </button>
-                                </form>                                                    
-                            </div>                                
+                    {!! Form::open(['id' => 'frm_search_page', 'class' => 'form-inline', 'url' => ['facebook-paginas']]) !!}
+                        <div class="form-group mx-sm-3 mb-2 w-50">
+                          <label for="page_term" class="sr-only">Termo</label>
+                          <input type="text" class="form-control w-100" name="page_term" id="page_term" placeholder="Buscar Página" value="{{ old('page_term') ? old('page_term') : $page_term }}">
+                          <input type="hidden" class="form-control w-100" name="pagination-termo" id="pagination-termo" >
+                        </div>
+                        <button type="submit" id="btn-find" class="btn btn-primary mb-3"><i class="fa fa-search"></i> Buscar</button>
+                    {!! Form::close() !!} 
+                </div>
+            </div>   
+            <div class="col-md-12">
+                <h6 class="ml-4 mt-5 mb-0">Mostrando {{ $pages->count() }} de {{ $pages->total() }} Páginas</h6>
+                @if($page_term)
+                    {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
+                @else
+                    {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+                @endif
+                
+                @foreach($pages as $key => $page)
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3 text-center">
+                                    <img src="{{ str_replace('normal','400x400', $page->picture_url) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">
+                                    <h6 class="m-2"><a href="{{ $page->url }}" target="_blank" rel="noopener noreferrer">{{ $page->name }}</a></h6>
+                                    <p><a href="{{ url('facebook-paginas/monitoramento/'.$page->id) }}">{{ $page->fb_pages_post_count }} Postagens</a></p>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="pull-right">
+                                        <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
+                                        <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
+                                        <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button title="Excluir" type="submit" class="btn btn-danger btn-link btn-icon button-remove" title="Delete">
+                                                <i class="fa fa-times fa-2x"></i>
+                                            </button>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-            @if($page_term)
-                {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
-            @else
-                {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
-            @endif
+                @endforeach
+                @if($page_term)
+                    {{ $pages->onEachSide(1)->appends(['page_term' => $page_term])->links('vendor.pagination.bootstrap-4') }} 
+                @else
+                    {{ $pages->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+                @endif
+            </div>
         </div>
     </div>
 </div> 
