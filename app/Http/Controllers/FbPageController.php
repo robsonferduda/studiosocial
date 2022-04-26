@@ -37,7 +37,7 @@ class FbPageController extends Controller
             $query->doesntHave('fbPagesPost');
         })
         ->when($page_term, function($query) use ($page_term){
-            $query->whereRaw(" lower(name) SIMILAR TO '%({$page_term} | {$page_term}| {$page_term} )%' ");
+            $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
         })
         ->orderby('fb_pages_post_count', 'desc')
         ->paginate(20);
