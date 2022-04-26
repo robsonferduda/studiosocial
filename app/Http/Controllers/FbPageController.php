@@ -51,6 +51,13 @@ class FbPageController extends Controller
         return view('pages/cadastrar');
     }
 
+    public function associar()
+    {
+        $clientes = Client::orderBy('name')->get();
+        $paginas = FbPageMonitor::orderBy('name')->get();
+        return view('pages/associar', compact('clientes','paginas'));
+    }
+
     public function buscarPagina(Request $request)
     {
 
