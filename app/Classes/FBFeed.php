@@ -80,8 +80,7 @@ class FBFeed{
                            
                         ]); 
 
-                        if(isset($comment['comments'])) {
-                            dd($comments);    
+                        if(isset($comment['comments'])) {                            
                             foreach($comment['comments'] as $relatedComments) {
                                 $comment = FbPagePostComment::updateOrCreate(
                                     [
