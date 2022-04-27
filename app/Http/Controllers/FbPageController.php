@@ -13,6 +13,7 @@ use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\PageRequest;
+use Illuminate\Support\Facades\Http;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Session;
 
@@ -298,7 +299,13 @@ class FbPageController extends Controller
         $pages_monitor = FbPageMonitor::get();
 
         foreach ($pages_monitor as $page) {
-           
+
+            $response = Http::get($page->picture_url);
+
+            if($response->status() == 200){
+                continue;
+            } 
+
             $token_app = env('COLETA1');//getTokenApp();
 
             $fb_api = new FBSearchPageApi();

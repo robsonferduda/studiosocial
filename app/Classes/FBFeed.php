@@ -5,6 +5,7 @@ namespace App\Classes;
 use App\FbAccount;
 use App\FbPageMonitor;
 use App\FbPagePost;
+use App\FbPagePostComment;
 use Illuminate\Support\Facades\Http;
 
 class FBFeed{
@@ -29,7 +30,7 @@ class FBFeed{
 
             $fb_feed = new FBFeedApi($id_page_id);
             $after = '';
-                      
+             
             do {
                             
                 $params = [
@@ -41,18 +42,19 @@ class FBFeed{
                 ];
         
                 $posts = $fb_feed->getFeed($params);
-
+                
                 if(empty($posts['data'])) {
                     continue;
                 }
 
-                foreach ($posts['data'] as $post) {
-
-                    $date_updated = new \DateTime($post['updated_time']);
-                    $strtotime_date_updated =  strtotime($date_updated->format('Y-m-d'));
-                    $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
+                foreach ($posts['data'] as $post) {                    
                     $reactions = $this->getReactions($post);
-                                                              
+                    $comments = [];
+
+                    if(isset($post['comments']['data'])) {
+                        $comments = $post['comments'];
+                    }
+                                
                     $post = FbPagePost::updateOrCreate(
                             [
                                 'post_id' => $post['id'],                                
@@ -65,6 +67,35 @@ class FBFeed{
                                 'comment_count' => $reactions['qtd_comments'],
                                 'share_count' => $reactions['qtd_shares'],
                             ]);    
+
+                    foreach($comments['data'] as $comment) {
+                                   
+                        $comment = FbPagePostComment::updateOrCreate(
+                        [
+                            'page_post_id' => $post['id'],
+                            'created_time' => $comment['created_time']
+                        ],    
+                        [
+                            'text' => $comment['message'],
+                           
+                        ]); 
+
+                        if(isset($comment['comments'])) {
+                            dd($comments);    
+                            foreach($comment['comments'] as $relatedComments) {
+                                $comment = FbPagePostComment::updateOrCreate(
+                                    [
+                                        'page_post_id' => $post['id'],
+                                        'related_to' => $comment['id'],
+                                        'created_time' => $comment['created_time']
+                                    ],    
+                                    [
+                                        'text' => $comment['message'],                                       
+                                    ]); 
+                            }
+                        }
+
+                    }
 
                     $reaction_buffer = [];
                     foreach ($reactions['types'] as $type => $qtd) {

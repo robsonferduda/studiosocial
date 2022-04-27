@@ -52,7 +52,7 @@ class FBFeedApi extends IGApi{
     {
         $fields = [           
             'shares',
-            'comments.summary(true)',
+            'comments.summary(true){created_time,message,comments{message,created_time,reactions.type(LIKE).limit(0).summary(true).as(LIKE),reactions.type(LOVE).limit(0).summary(true).as(LOVE),reactions.type(WOW).limit(0).summary(true).as(WOW),reactions.type(HAHA).limit(0).summary(true).as(HAHA),reactions.type(SAD).limit(0).summary(true).as(SAD),reactions.type(ANGRY).limit(0).summary(true).as(ANGRY),reactions.type(THANKFUL).limit(0).summary(true).as(THANKFUL)},reactions.type(LIKE).limit(0).summary(true).as(LIKE),reactions.type(LOVE).limit(0).summary(true).as(LOVE),reactions.type(WOW).limit(0).summary(true).as(WOW),reactions.type(HAHA).limit(0).summary(true).as(HAHA),reactions.type(SAD).limit(0).summary(true).as(SAD),reactions.type(ANGRY).limit(0).summary(true).as(ANGRY),reactions.type(THANKFUL).limit(0).summary(true).as(THANKFUL)}',
             'reactions.type(LIKE).limit(0).summary(true).as(LIKE)',
             'reactions.type(LOVE).limit(0).summary(true).as(LOVE)',
             'reactions.type(WOW).limit(0).summary(true).as(WOW)',
