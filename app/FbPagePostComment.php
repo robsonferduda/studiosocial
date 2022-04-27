@@ -18,5 +18,10 @@ class FbPagePostComment extends Model
     {
         return $this->hasMany('App\FbPagePost','id','_page_post_id');
     }
+
+    public function reactions()
+    {
+        return $this->belongsToMany('App\FbReaction','fb_page_post_comment_reaction','page_post_comment_id','reaction_id')->withTimestamps()->withPivot('count');
+    }
 }
     
