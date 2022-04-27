@@ -86,10 +86,10 @@ class FBFeed{
                                     [
                                         'page_post_id' => $post['id'],
                                         'related_to' => $comment_bd['id'],
-                                        'created_time' => $comment['created_time']
+                                        'created_time' => $relatedComments['created_time']
                                     ],    
                                     [
-                                        'text' => $comment['message'],                                       
+                                        'text' => $relatedComments['message'],                                       
                                     ]); 
                             }
                         }
