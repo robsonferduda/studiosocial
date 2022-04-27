@@ -49,7 +49,7 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="pull-right">
-                                        <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button>
+                                        {{-- <button title="Associar Clientes" data-id="{{$page->id}}" data-clients="{{ implode(',',$page->clients()->pluck('clients.id')->toArray()) }}"  class="btn btn-primary btn-link btn-icon btn-connect-client"><i class="fa fa-list fa-2x"></i></button> --}}
                                         <button title="Editar" data-id="{{$page->id}}"  class="btn btn-primary btn-link btn-icon btn-edit-page"><i class="fa fa-edit fa-2x"></i></button>
                                         <form class="form-delete" style="display: inline;" action="{{  route('facebook-pagina.destroy',$page->id) }}" method="POST">
                                             @csrf
