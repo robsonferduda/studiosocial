@@ -284,9 +284,9 @@ class FbPageController extends Controller
         $clients = $request->clientes;
         $pages = $request->paginas;
 
-        for ($i=0; $i < count($pages); $i++) {    
-            $page = FbPageMonitor::where('id', $pages[$i])->first();
-            $result = $page->clients()->sync($clients);           
+        for ($i=0; $i < count($clients); $i++) {    
+            $client = Client::where('id', $clients[$i])->first();
+            $result = $client->pagesMonitor()->sync($pages);           
         }
 
         Flash::success('<i class="fa fa-check"></i> Associações de clientes e páginas atualizadas com sucesso');
