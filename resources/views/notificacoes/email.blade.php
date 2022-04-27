@@ -33,13 +33,16 @@
                        <p style="font-size: 15px;">{!! $msg !!}</p>
                     </td>
                 </tr>
-                @foreach ($postagens as $item)
+                @for ($i = 0; $i < count($postagens); $i++)
                     <tr>
                         <td>
-                            <p><img style="vertical-align: middle; width: 4%;" src="https://studiosocial.app/img/icon/twitter.png"> {{ $item->full_text }}</p>
+                            <p>
+                                <img style="vertical-align: middle; width: 4%;" src="https://studiosocial.app/img/icon/{{ $postagens[$i]['img'] }}.png"> 
+                                <a href="{{ $postagens[$i]['link'] }}">{{ $postagens[$i]['msg'] }}</a>
+                            </p>
                         </td>
-                    </tr>
-                @endforeach
+                    </tr>   
+                @endfor
             </tbody>
         </table>          
     </div> 
