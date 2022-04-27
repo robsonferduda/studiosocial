@@ -69,7 +69,9 @@ class FBFeed{
                             ]);    
 
                     foreach($comments['data'] as $comment) {
-                                   
+
+                        $reactions_comment = $this->getReactions($comment);
+            
                         $comment_bd = FbPagePostComment::updateOrCreate(
                         [
                             'page_post_id' => $post['id'],
@@ -80,18 +82,50 @@ class FBFeed{
                            
                         ]); 
 
-                        if(isset($comment['comments'])) {                            
-                            foreach($comment['comments'] as $relatedComments) {
-                                $comment = FbPagePostComment::updateOrCreate(
+                        $reaction_comment_buffer = [];
+                        foreach ($reactions_comment['types'] as $type => $qtd) {
+                            if($qtd > 0) {
+    
+                                $reaction = constant('App\Enums\FbReaction::'. $type);
+                                $reaction_comment_buffer[$reaction] = ['count' => $qtd];
+                                           
+                            }                                    
+                        }
+    
+                        if (!empty($reaction_comment_buffer)) {
+                            $comment_bd->reactions()->sync($reaction_comment_buffer);
+                        }
+
+                        if(isset($comment['comments']['data'])) {                            
+                            foreach($comment['comments']['data'] as $relatedComment) {
+                                
+                                $reactions_comment_related = $this->getReactions($relatedComment);
+
+                                $comment_bd = FbPagePostComment::updateOrCreate(
                                     [
                                         'page_post_id' => $post['id'],
                                         'related_to' => $comment_bd['id'],
-                                        'created_time' => $relatedComments['created_time']
+                                        'created_time' => $relatedComment['created_time']
                                     ],    
                                     [
-                                        'text' => $relatedComments['message'],                                       
+                                        'text' => $relatedComment['message'],                                       
                                     ]); 
-                            }
+
+
+                                $reaction_comment_related_buffer = [];
+                                foreach ($reactions_comment_related['types'] as $type => $qtd) {
+                                    if($qtd > 0) {
+                
+                                        $reaction = constant('App\Enums\FbReaction::'. $type);
+                                        $reaction_comment_related_buffer[$reaction] = ['count' => $qtd];
+                                                       
+                                    }                                    
+                                }
+                
+                                if (!empty($reaction_comment_related_buffer)) {
+                                    $comment_bd->reactions()->sync($reaction_comment_related_buffer);
+                                }
+                            }                            
                         }
 
                     }
