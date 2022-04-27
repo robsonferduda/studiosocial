@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Mail;
 use App\Utils;
 use App\Client;
+use App\Media;
 use App\MediaTwitter;
 use App\Notification;
 use App\NotificationClient;
@@ -132,11 +133,17 @@ class NotificacaoController extends Controller
     {
         //Buscar notificações ativas, independente do cliente
 
+        $msg = "";
         $valor_atual = 0;
+        $total_post = 0;
+        $flag_enviar = false;
+        $postagens = array();
         $postagens_twitter = array();
         $notificacoes_ativas = NotificationClient::where('status', true)->get();
 
         foreach ($notificacoes_ativas as $notification) {
+
+            $flag_enviar = false; //Sempre inicializa o envio da mensagem como falso
 
             //Trata cada notificação de acordo com o tipo
             switch ($notification->notification_id) {
@@ -168,32 +175,78 @@ class NotificacaoController extends Controller
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                      ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
+                                                     //->where('fl_notification',false)
                                                      ->get();
 
-                    $valor_atual = count($postagens_twitter);
+                    $total_post_twitter = count($postagens_twitter);
 
-                    $titulo = "Alerta de Hashtag";
-                    $msg = "Foram resgistradas novas postagens em relação ao monitoramento do termo '{$notification->valor}'. <br/> Total de mensagens descobertas: {$valor_atual}";
+                    if($total_post_twitter){
+
+                        foreach ($postagens_twitter as $key => $post) {
+
+                            $postagens[] = array('img' => 'twitter',
+                                                 'msg'  => $post->full_text,
+                                                 'link' => 'https://twitter.com/'.$post->user_screen_name.'/status/'.$post->twitter_id);
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+
+                    }
+
+                    $postagens_instagram = Media::where('client_id', $notification->client_id)
+                                                ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                ->where('caption', "ilike", "%{$notification->valor}%")
+                                                //->where('fl_notification',false)
+                                                ->get();
+
+                    $total_post_instagram = count($postagens_instagram);
+
+                    if($total_post_instagram){
+
+                        foreach ($postagens_instagram as $key => $post) {
+
+                            $postagens[] = array('img' => 'instagram',
+                                                 'msg'  => $post->caption,
+                                                 'link' => $post->permalink );
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+
+                    }
+
+                    $total_post = $total_post_twitter + $total_post_instagram;
+                    
+                    if($total_post){
+
+                        $flag_enviar = true;
+
+                        $titulo = "Alerta de Hashtag";
+                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da hashtag '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
+
+                    }
                     break;
             }
 
             $email = null;
             $data['msg'] = $msg;
-            $data['postagens'] = $postagens_twitter;
+            $data['postagens'] = $postagens;
 
-            //Enviar email
-            Mail::send('notificacoes.email', $data, function($message) use ($email, $msg, $titulo) {
-                $message->to("robsonferduda@gmail.com")
-                ->subject('Notificação de Monitoramento - '.$titulo);
+            if($flag_enviar){
+
+                //Enviar email
+                Mail::send('notificacoes.email', $data, function($message) use ($email, $msg, $titulo) {
+                    $message->to("robsonferduda@gmail.com")
+                            ->subject('Notificação de Monitoramento - '.$titulo);
                     $message->from('boletins@clipagens.com.br','Studio Social');
-                });          
+                }); 
 
-            $notification->valor_atual = $valor_atual;
+            }
+       
+            $notification->valor_atual = $total_post;
             $notification->save();
-
         }
-
-        dd($msg);
 
     }
 }
