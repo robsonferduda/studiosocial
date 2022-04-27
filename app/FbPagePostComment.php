@@ -16,7 +16,7 @@ class FbPagePostComment extends Model
 
     public function fbPagePost()
     {
-        return $this->hasMany('App\FbPagePost','id','_page_post_id');
+        return $this->hasOne('App\FbPagePost','id','page_post_id');
     }
 
     public function reactions()
