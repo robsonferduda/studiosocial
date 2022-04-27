@@ -9,6 +9,7 @@ use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Client;
 use App\Enums\FbReaction;
+use App\FbPagePostComment;
 use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,6 +17,7 @@ use App\Http\Requests\PageRequest;
 use Illuminate\Support\Facades\Http;
 use Laracasts\Flash\Flash;
 use Illuminate\Support\Facades\Session;
+use DB;
 
 class FbPageController extends Controller
 {
@@ -222,25 +224,41 @@ class FbPageController extends Controller
 
         $term =  strtolower($request->term);
 
-        $medias_temp = FbPagePost::with('page')->whereHas('page')->orderBy('updated_time','DESC')
+        $medias_temp_a = FbPagePost::select('id','message', 'fb_page_monitor_id', 'updated_time')->addSelect(DB::raw("'0'as page_post_id"))->addSelect(DB::raw("'post' as tipo"))->whereHas('page')
         ->when($page, function($query) use ($page){
             $query->where('fb_page_monitor_id', $page);
         })
         ->when($term, function($query) use ($term){
             $query->whereRaw(" lower(message) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
+        });
+
+        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
+        ->when($term, function($query) use ($term){
+            $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         })
-        ->paginate(20);
+        ->when($page, function($query) use ($page){
+            $query->whereHas('FbPagePost', function($query) use ($page){
+                $query->where('fb_page_monitor_id', $page);
+            });
+        });
+
+        $medias_temp = $medias_temp_b->union($medias_temp_a)->orderBy('updated_time','DESC')->paginate(20);
 
         $medias = [];
 
         foreach ($medias_temp as $key => $media) {
             
-            // $bag_comments = [];
-            // if ($media->comments) {
-            //     foreach($media->comments as $comment) {
-            //         $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
-            //     }p
-            // }
+            if($media->tipo == 'post') {
+                $media = FbPagePost::find($media->id);
+                $img = $media->page->picture_url;
+                $name = $media->page->name;
+                $link = $media->permalink_url;
+            } else {             
+    
+                $img = '';
+                $name = '';
+                $link = $media->fbPagePost->permalink_url;
+            }
 
             $likes_count = 0;
             $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
@@ -255,7 +273,7 @@ class FbPageController extends Controller
 
             $medias[] = array('id' => $media->id,
                 'text' => $media->message,
-                'username' => $media->page->name,
+                'username' => $name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
                 'type_message' => 'facebook-page',
@@ -264,9 +282,9 @@ class FbPageController extends Controller
                 'social_media_id' => $media->social_media_id,
                 'tipo' => 'facebook',
                 'comments' => [],
-                'link' => $media->permalink_url,
+                'link' => $link,
                 'share_count' => !empty($media->share_count) ? $media->share_count : 0,
-                'user_profile_image_url' => $media->page->picture_url
+                'user_profile_image_url' => $img
              );
 
         }

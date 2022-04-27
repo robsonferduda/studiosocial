@@ -38,7 +38,7 @@ class FBFeed{
                     'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
-                    'limit' => 30
+                    'limit' => 20
                 ];
         
                 $posts = $fb_feed->getFeed($params);
