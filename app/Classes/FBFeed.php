@@ -38,7 +38,7 @@ class FBFeed{
                     'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
-                    'limit' => 50
+                    'limit' => 30
                 ];
         
                 $posts = $fb_feed->getFeed($params);
@@ -101,7 +101,7 @@ class FBFeed{
                                 
                                 $reactions_comment_related = $this->getReactions($relatedComment);
 
-                                $comment_bd = FbPagePostComment::updateOrCreate(
+                                $comment_bd_related = FbPagePostComment::updateOrCreate(
                                     [
                                         'page_post_id' => $post['id'],
                                         'related_to' => $comment_bd['id'],
@@ -123,7 +123,7 @@ class FBFeed{
                                 }
                 
                                 if (!empty($reaction_comment_related_buffer)) {
-                                    $comment_bd->reactions()->sync($reaction_comment_related_buffer);
+                                    $comment_bd_related->reactions()->sync($reaction_comment_related_buffer);
                                 }
                             }                            
                         }
