@@ -55,7 +55,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Data Final</label>
-                            <input type="text" class="form-control dt_termino" name="dt_termino" id="dt_termino" value="{{ date('d/m/Y', strtotime($notification_client->dt_termino)) }}" required="true">
+                            <input type="text" class="form-control dt_termino" name="dt_termino" id="dt_termino" value="{{ date('d/m/Y', strtotime($notification_client->dt_termino)) }}">
                         </div>
                     </div>
                 </div>     
