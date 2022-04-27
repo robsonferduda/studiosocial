@@ -70,7 +70,7 @@ class FBFeed{
 
                     foreach($comments['data'] as $comment) {
                                    
-                        $comment = FbPagePostComment::updateOrCreate(
+                        $comment_bd = FbPagePostComment::updateOrCreate(
                         [
                             'page_post_id' => $post['id'],
                             'created_time' => $comment['created_time']
@@ -86,7 +86,7 @@ class FBFeed{
                                 $comment = FbPagePostComment::updateOrCreate(
                                     [
                                         'page_post_id' => $post['id'],
-                                        'related_to' => $comment['id'],
+                                        'related_to' => $comment_bd['id'],
                                         'created_time' => $comment['created_time']
                                     ],    
                                     [
