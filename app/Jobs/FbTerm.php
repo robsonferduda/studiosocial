@@ -17,7 +17,7 @@ class FbTerm implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 500;
+    public $timeout = 1000;
 
     /**
      * Create a new job instance.
