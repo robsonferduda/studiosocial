@@ -38,8 +38,8 @@ class EmailCron extends Command
      */
     public function handle()
     {
-        $data = null;
-
+        $data['dados'] = null;
+        
         Mail::send('notificacoes.teste', $data, function($message){
             $message->to("robsonferduda@gmail.com")
                     ->subject('Notificação de Monitoramento - Teste de Envio');
