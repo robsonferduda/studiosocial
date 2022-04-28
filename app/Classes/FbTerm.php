@@ -2,6 +2,11 @@
 
 namespace App\Classes;
 
+use App\Term;
+use App\FbPagePost;
+use App\ClientPageMonitor;
+use App\Enums\SocialMedia;
+use App\FbPagePostComment;
 use App\Jobs\FbTerm as JobsFbTerm;
 
 class FbTerm{
@@ -12,7 +17,6 @@ class FbTerm{
 
     public function runJob()
     {
-    
         JobsFbTerm::dispatch();                
     }
 
