@@ -49,7 +49,7 @@ class FbTerm implements ShouldQueue
                 $last = $termo->pagePosts()->latest('created_at')->first();
                 $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
 
-                $posts = FbPagePost::where(function ($query) use ($termo) {
+                $posts = FbPagePost::select('id')->where(function ($query) use ($termo) {
                                     $query->where('message', 'ilike', '% '.strtolower($termo->term).' %')
                                         ->orWhere('message', 'ilike', '%'.strtolower($termo->term).' %')
                                         ->orWhere('message', 'ilike', '% '.strtolower($termo->term).'%');
@@ -62,7 +62,7 @@ class FbTerm implements ShouldQueue
                 $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
 
                 $page_id = $client->fb_page_monitor_id;                                    
-                $comments = FbPagePostComment::where(function ($query) use ($termo) {
+                $comments = FbPagePostComment::select('id')->where(function ($query) use ($termo) {
                     $query->where('text', 'ilike', '% '.strtolower($termo->term).' %')
                         ->orWhere('text', 'ilike', '%'.strtolower($termo->term).' %')
                         ->orWhere('text', 'ilike', '% '.strtolower($termo->term).'%');
