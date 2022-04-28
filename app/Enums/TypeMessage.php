@@ -12,4 +12,5 @@ final class TypeMessage extends Enum
     const IG_POSTS = 4;
     const IG_COMMENT = 5;
     const FB_PAGE_POST = 7;
+    const FB_PAGE_POST_COMMENT = 8;
 }
