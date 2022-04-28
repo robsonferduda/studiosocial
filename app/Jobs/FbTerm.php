@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use App\ClientPageMonitor;
 use App\Enums\SocialMedia;
 use App\FbPagePost;
+use App\FbPagePostComment;
 use App\Term;
 
 class FbTerm implements ShouldQueue
@@ -35,7 +36,7 @@ class FbTerm implements ShouldQueue
     public function handle()
     {
         set_time_limit(0);
-        
+
         $clients = ClientPageMonitor::get();
         
         foreach ($clients as $client) {
