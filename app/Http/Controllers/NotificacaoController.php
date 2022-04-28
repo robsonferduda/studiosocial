@@ -169,7 +169,7 @@ class NotificacaoController extends Controller
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                     ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                     ->where('full_text', "ilike", "%{$notification->valor}%")
-                                                    //->where('fl_notification',false)
+                                                    ->where('fl_notification',false)
                                                     ->get();
 
                     $total_post_twitter = count($postagens_twitter);
@@ -191,7 +191,7 @@ class NotificacaoController extends Controller
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
-                                                //->where('fl_notification',false)
+                                                ->where('fl_notification',false)
                                                 ->get();
 
                     $total_post_instagram = count($postagens_instagram);
@@ -224,7 +224,7 @@ class NotificacaoController extends Controller
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                      ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
-                                                     //->where('fl_notification',false)
+                                                     ->where('fl_notification',false)
                                                      ->get();
 
                     $total_post_twitter = count($postagens_twitter);
@@ -246,7 +246,7 @@ class NotificacaoController extends Controller
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
-                                                //->where('fl_notification',false)
+                                                ->where('fl_notification',false)
                                                 ->get();
 
                     $total_post_instagram = count($postagens_instagram);
