@@ -70,7 +70,7 @@ class FbTerm implements ShouldQueue
                     ->whereHas('fbPagePost', function($query) use ($page_id){
                         $query->where('fb_page_monitor_id', $page_id);
                     })                  
-                    ->when($last, function ($q) use ($last_comment){
+                    ->when($last_comment, function ($q) use ($last_comment){
                         return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
                     })                                    
                     ->get();
