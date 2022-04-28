@@ -8,9 +8,11 @@ use App\Enums\FbReaction;
 use App\SocialMedia;
 use App\Enums\SocialMedia as SM;
 use App\FbPagePost;
+use App\FbPagePostComment;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use DB;
 
 class TermController extends Controller
 {
@@ -93,19 +95,52 @@ class TermController extends Controller
                 }
                 break;
             case SM::FACEBOOK:
-               
-                $medias_temp = $term->pagePosts()->orderBy('updated_time', 'DESC')->paginate(20);
-        
+
+
+                $medias_temp_a = DB::table('page_post_comment_term')
+                ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
+                ->join('fb_page_posts_comments', 'page_post_comment_term.page_post_comment_id','=','fb_page_posts_comments.id')
+                ->join('fb_page_posts', 'fb_page_posts_comments.page_post_id','=','fb_page_posts.id')
+                ->select('fb_page_posts_comments.id')
+                ->addSelect(DB::raw("text as message"))
+                ->addSelect(DB::raw("0 as share_count"))
+                ->addSelect(DB::raw("0 as comment_count"))
+                ->addSelect(DB::raw("fb_page_posts.permalink_url"))
+                ->addSelect(DB::raw("created_time as updated_time"))
+                ->addSelect(DB::raw("0 as fb_page_monitor_id"))
+                ->addSelect(DB::raw("'comment' as tipo"))
+                ->addSelect(DB::raw("page_post_id"))
+                ->where('terms.id','=',$term_id);
+
+                $medias_temp_b = DB::table('page_post_term')
+                ->join('terms', 'page_post_term.term_id','=','terms.id')
+                ->join('fb_page_posts', 'page_post_term.page_post_id','=','fb_page_posts.id')
+                ->select(['fb_page_posts.id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])
+                ->addSelect(DB::raw("'post_page' as tipo"))
+                ->addSelect(DB::raw("0 as page_post_id"))
+                ->where('terms.id','=',$term_id);
+            
+                $medias_temp = $medias_temp_a->union($medias_temp_b)->orderBy('updated_time', 'DESC')->paginate(20);
+
                 $medias = [];
         
                 foreach ($medias_temp as $key => $media) {
-                    
-                    // $bag_comments = [];
-                    // if ($media->comments) {
-                    //     foreach($media->comments as $comment) {
-                    //         $bag_comments[] = ['text' => $comment->text, 'created_at' => $comment->timestamp];
-                    //     }p
-                    // }
+
+                    $data = $media->updated_time;
+                    $link = $media->permalink_url;
+                    $message = $media->message;
+                   
+                    if($media->tipo == 'post_page') {     
+                        $media = FbPagePost::with('page')->find($media->id);                                        
+                        $img = $media->page->picture_url;
+                        $name = $media->page->name;
+                       
+                      
+                    } else {
+                        $media = FbPagePostComment::find($media->id);        
+                        $img = '';
+                        $name = '';                                               
+                    }
         
                     $likes_count = 0;
                     $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
@@ -119,9 +154,9 @@ class TermController extends Controller
                     }
         
                     $medias[] = array('id' => $media->id,
-                        'text' => $media->message,
-                        'username' => $media->page->name,
-                        'created_at' => dateTimeUtcToLocal($media->updated_time),
+                        'text' => $message,
+                        'username' => $name,
+                        'created_at' => dateTimeUtcToLocal($data),
                         'sentiment' => '',
                         'type_message' => 'facebook-page',
                         'like_count' => $likes_count,
@@ -129,9 +164,9 @@ class TermController extends Controller
                         'social_media_id' => $media->social_media_id,
                         'tipo' => 'facebook',
                         'comments' => [],
-                        'link' => $media->permalink_url,
+                        'link' => $link,
                         'share_count' => !empty($media->share_count) ? $media->share_count : 0,
-                        'user_profile_image_url' => $media->page->picture_url
+                        'user_profile_image_url' => $img
                      );
         
                 }
