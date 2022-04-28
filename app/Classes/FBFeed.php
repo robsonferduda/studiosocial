@@ -17,6 +17,7 @@ class FBFeed{
         $hour = \Carbon\Carbon::now()->format('H');
 
         $order = (int) $hour%2 == 0 ? 'ASC' : 'DESC';
+        $limit = (int) $hour%2 == 0 ? 5 : 20;
 
         $pages = FbPageMonitor::orderBy('id', $order)->get();
 
@@ -38,7 +39,7 @@ class FBFeed{
                     'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
-                    'limit' => 20
+                    'limit' => $limit
                 ];
         
                 $posts = $fb_feed->getFeed($params);
@@ -71,11 +72,11 @@ class FBFeed{
                     foreach($comments['data'] as $comment) {
 
                         $reactions_comment = $this->getReactions($comment);
-            
+
                         $comment_bd = FbPagePostComment::updateOrCreate(
                         [
                             'page_post_id' => $post['id'],
-                            'created_time' => $comment['created_time']
+                            'created_time' => \Carbon\Carbon::parse($comment['created_time'])->toDateTimeString()
                         ],    
                         [
                             'text' => $comment['message'],
@@ -105,7 +106,7 @@ class FBFeed{
                                     [
                                         'page_post_id' => $post['id'],
                                         'related_to' => $comment_bd['id'],
-                                        'created_time' => $relatedComment['created_time']
+                                        'created_time' => \Carbon\Carbon::parse($relatedComment['created_time'])->toDateTimeString()
                                     ],    
                                     [
                                         'text' => $relatedComment['message'],                                       

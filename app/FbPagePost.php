@@ -39,4 +39,9 @@ class FbPagePost extends Model implements Auditable
         return $this->belongsToMany('App\Term','page_post_term','page_post_id','term_id')->withTimestamps();
     }
 
+    public function fbPagePostComment()
+    {
+        return $this->hasMany('App\FbPagePostComment','page_post_id','id');
+    }
+
 }
