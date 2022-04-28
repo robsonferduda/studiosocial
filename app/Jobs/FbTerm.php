@@ -10,6 +10,7 @@ use Illuminate\Queue\SerializesModels;
 use App\ClientPageMonitor;
 use App\Enums\SocialMedia;
 use App\FbPagePost;
+use App\FbPagePostComment;
 use App\Term;
 
 class FbTerm implements ShouldQueue
@@ -34,6 +35,8 @@ class FbTerm implements ShouldQueue
      */
     public function handle()
     {
+        set_time_limit(0);
+
         $clients = ClientPageMonitor::get();
         
         foreach ($clients as $client) {
@@ -44,6 +47,7 @@ class FbTerm implements ShouldQueue
             foreach ($termos_ativos as $termo) {
                     
                 $last = $termo->pagePosts()->latest('created_at')->first();
+                $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
 
                 $posts = FbPagePost::where(function ($query) use ($termo) {
                                     $query->where('message', 'ilike', '% '.strtolower($termo->term).' %')
@@ -56,6 +60,22 @@ class FbTerm implements ShouldQueue
                                     })                                    
                                     ->get();
                 $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
+
+                $page_id = $client->fb_page_monitor_id;                                    
+                $comments = FbPagePostComment::where(function ($query) use ($termo) {
+                    $query->where('text', 'ilike', '% '.strtolower($termo->term).' %')
+                        ->orWhere('text', 'ilike', '%'.strtolower($termo->term).' %')
+                        ->orWhere('text', 'ilike', '% '.strtolower($termo->term).'%');
+                    })
+                    ->whereHas('fbPagePost', function($query) use ($page_id){
+                        $query->where('fb_page_monitor_id', $page_id);
+                    })                  
+                    ->when($last_comment, function ($q) use ($last_comment){
+                        return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
+                    })                                    
+                    ->get();
+                $termo->pagePostsComments()->syncWithoutDetaching($comments->pluck('id')->toArray());
+
             }
         }
     }

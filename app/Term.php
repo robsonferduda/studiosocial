@@ -32,6 +32,11 @@ class Term extends Model
         return $this->belongsToMany('App\FbPagePost','page_post_term','term_id','page_post_id')->withTimestamps();
     }
 
+    public function pagePostsComments()
+    {
+        return $this->belongsToMany('App\FbPagePostComment','page_post_comment_term','term_id','page_post_comment_id')->withTimestamps();
+    }
+
     public function socialMedia()
     {
         return $this->belongsTo('App\SocialMedia', 'social_media_id', 'id');
