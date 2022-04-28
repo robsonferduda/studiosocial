@@ -168,7 +168,7 @@ class NotificacaoController extends Controller
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                     ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                     ->where('full_text', "ilike", "%{$notification->valor}%")
-                                                    //->where('fl_notification',false)
+                                                    ->where('fl_notification',false)
                                                     ->get();
 
                     $total_post_twitter = count($postagens_twitter);
@@ -190,7 +190,7 @@ class NotificacaoController extends Controller
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
-                                                //->where('fl_notification',false)
+                                                ->where('fl_notification',false)
                                                 ->get();
 
                     $total_post_instagram = count($postagens_instagram);
@@ -212,7 +212,7 @@ class NotificacaoController extends Controller
 
                     if($total_post){
                         $flag_enviar = true;
-                        $titulo = "Alerta de Palavras-Chave";
+                        $titulo = "Alerta para a palavra-chave ".$notification->valor;
                         $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
                     }
 
@@ -223,7 +223,7 @@ class NotificacaoController extends Controller
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                      ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
-                                                     //->where('fl_notification',false)
+                                                     ->where('fl_notification',false)
                                                      ->get();
 
                     $total_post_twitter = count($postagens_twitter);
@@ -245,7 +245,7 @@ class NotificacaoController extends Controller
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
-                                                //->where('fl_notification',false)
+                                                ->where('fl_notification',false)
                                                 ->get();
 
                     $total_post_instagram = count($postagens_instagram);
@@ -270,7 +270,7 @@ class NotificacaoController extends Controller
 
                         $flag_enviar = true;
 
-                        $titulo = "Alerta de Hashtag";
+                        $titulo = "Alerta para a hashtag ".$notification->valor;
                         $msg = "Foram resgistradas novas postagens em relação ao monitoramento da hashtag '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
 
                     }
