@@ -32,7 +32,9 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('email:cron')->everyMinute();
+        $schedule->command('notificacao:cron')->hourly();
+
+        $schedule->command('email:cron')->hourly();
 
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();

@@ -2,24 +2,23 @@
 
 namespace App\Console\Commands;
 
-use Mail;
 use Illuminate\Console\Command;
 
-class EmailCron extends Command
+class NotificacaoCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'email:cron';
+    protected $signature = 'notificacao:cron';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Envia um email as cada 5 minutos';
+    protected $description = 'Command description';
 
     /**
      * Create a new command instance.
@@ -38,12 +37,6 @@ class EmailCron extends Command
      */
     public function handle()
     {
-        $data['dados'] = null;
-        
-        Mail::send('notificacoes.teste', $data, function($message){
-            $message->to("robsonferduda@gmail.com")
-                    ->subject('Notificação de Monitoramento - Teste de Envio');
-            $message->from('boletins@clipagens.com.br','Studio Social');
-        }); 
+        app('App\Http\Controllers\NotificacaoController')->verificar();
     }
 }
