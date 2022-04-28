@@ -283,12 +283,22 @@ class NotificacaoController extends Controller
 
             if($flag_enviar){
 
-                //Enviar email
-                Mail::send('notificacoes.email', $data, function($message) use ($email, $msg, $titulo) {
-                    $message->to("robsonferduda@gmail.com")
-                            ->subject('Notificação de Monitoramento - '.$titulo);
-                    $message->from('boletins@clipagens.com.br','Studio Social');
-                }); 
+                $emails = Client::where('id', $notification->client_id)->first()->emails;
+
+                if(count($emails)){
+
+                    foreach ($emails as $key => $email) {
+
+                        $mail_to = $email->ds_email;
+
+                        //Enviar email
+                        Mail::send('notificacoes.email', $data, function($message) use ($mail_to, $msg, $titulo) {
+                            $message->to($mail_to)
+                                    ->subject('Notificação de Monitoramento - '.$titulo);
+                            $message->from('boletins@clipagens.com.br','Studio Social');
+                        });
+                    }
+                }
 
             }
        
