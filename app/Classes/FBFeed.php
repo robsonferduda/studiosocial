@@ -17,6 +17,7 @@ class FBFeed{
         $hour = \Carbon\Carbon::now()->format('H');
 
         $order = (int) $hour%2 == 0 ? 'ASC' : 'DESC';
+        $limit = (int) $hour%2 == 0 ? 5 : 20;
 
         $pages = FbPageMonitor::orderBy('id', $order)->get();
 
@@ -38,7 +39,7 @@ class FBFeed{
                     'access_token' => $token,
                     'after' => $after,
                     'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
-                    'limit' => 20
+                    'limit' => $limit
                 ];
         
                 $posts = $fb_feed->getFeed($params);
