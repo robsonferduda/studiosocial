@@ -46,7 +46,7 @@
                                             {{ $term->medias_twitter_count }}
                                             @break
                                         @case(App\Enums\SocialMedia::FACEBOOK)
-                                            {{ $term->page_posts_count }}
+                                            {{ $term->page_posts_count + $term->page_posts_comments_count }}
                                             @break
                                         @default                        
                                     @endswitch

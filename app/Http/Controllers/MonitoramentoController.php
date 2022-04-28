@@ -14,6 +14,7 @@ use App\Term;
 use Carbon\Carbon;
 use App\Enums\FbReaction;
 use App\FbPagePost;
+use App\FbPagePostComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
@@ -54,9 +55,14 @@ class MonitoramentoController extends Controller
                             ->join('terms', 'page_post_term.term_id','=','terms.id')
                             ->where('terms.client_id','=',$this->client_id)
                             ->count();
+        $fb_post_pages_comments_total = DB::table('page_post_comment_term')
+                            ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
+                            ->where('terms.client_id','=',$this->client_id)
+                            ->count();
+
            
         $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
-                        'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_post_pages_total + $fb_comments_total,
+                        'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_post_pages_total + $fb_comments_total + $fb_post_pages_comments_total,
                         'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
 
         return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
@@ -93,10 +99,15 @@ class MonitoramentoController extends Controller
                                 ->whereBetween('fb_page_posts.updated_time', [$data.' 00:00:00',$data.' 23:23:59'])
                                 ->where('terms.client_id','=',$this->client_id)
                                 ->count();
-                                            
-
+            $fb_post_pages_comments_total = DB::table('page_post_comment_term')
+                                ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
+                                ->join('fb_page_posts_comments', 'page_post_comment_term.page_post_comment_id','=','fb_page_posts_comments.id')
+                                ->whereBetween('fb_page_posts_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->where('terms.client_id','=',$this->client_id)
+                                ->count();
+                                                
             $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total + $fb_post_pages_total;
+            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total + $fb_post_pages_total + $fb_post_pages_comments_total;
             $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
         }
 
@@ -147,21 +158,51 @@ class MonitoramentoController extends Controller
                 break;
 
             case 'facebook':
-                $medias_temp_a = FbPost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])->addSelect(DB::raw("0 as tipo"))->addSelect(DB::raw("'post' as tipo"))->with('comments')->with('reactions')->where('client_id', $client_id);
-                $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])->addSelect(DB::raw("'post_page' as tipo"))->with('page')->with('reactions')->whereHas('terms', function ($query) use ($client_id){
+                $medias_temp_a = FbPost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time'])
+                ->addSelect(DB::raw("0 as fb_page_monitor_id"))
+                ->addSelect(DB::raw("'post' as tipo"))
+                ->addSelect(DB::raw("0 as page_post_id"))
+                ->with('comments')->with('reactions')->where('client_id', $client_id);
+                $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])
+                ->addSelect(DB::raw("'post_page' as tipo"))
+                ->addSelect(DB::raw("0 as page_post_id"))
+                ->with('page')
+                ->with('reactions')
+                ->whereHas('terms', function ($query) use ($client_id){
                     $query->where('client_id', $client_id);
                 });
-                $medias_temp = $medias_temp_b->union($medias_temp_a)->orderBy('updated_time','DESC')->paginate(20);
-                
+
+                $medias_temp_c = FbPagePostComment::with('fbPagePost')->select('id')
+                ->addSelect(DB::raw("text as message"))
+                ->addSelect(DB::raw("0 as share_count"))
+                ->addSelect(DB::raw("0 as comment_count"))
+                ->addSelect(DB::raw("'' as permalink_url"))
+                ->addSelect(DB::raw("created_time as updated_time"))
+                ->addSelect(DB::raw("0 as fb_page_monitor_id"))
+                ->addSelect(DB::raw("'comment' as tipo"))
+                ->addSelect(DB::raw("page_post_id"))
+                ->whereHas('terms', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                });
+
+                $medias_temp = $medias_temp_c->union($medias_temp_a)->union($medias_temp_b)->orderBy('updated_time','DESC')->paginate(20);
+                                
                 foreach ($medias_temp as $key => $media) {
 
                     if($media->tipo == 'post') {
                         $media = FbPost::find($media->id);
                         $img = '';
                         $name = '';
-                    } else {                     
+                        $link = $media->permalink_url;
+                    } elseif($media->tipo == 'post_page') {     
+                        $media = FbPagePost::with('page')->find($media->id);                                        
                         $img = $media->page->picture_url;
                         $name = $media->page->name;
+                        $link = $media->permalink_url;
+                    } else {
+                        $img = '';
+                        $name = '';                        
+                        $link = $media->fbPagePost->permalink_url;
                     }
 
                     $bag_comments = [];
@@ -193,7 +234,7 @@ class MonitoramentoController extends Controller
                                       'social_media_id' => $media->social_media_id,
                                       'tipo' => 'facebook',
                                       'comments' => $bag_comments,
-                                      'link' => $media->permalink_url,
+                                      'link' => $link,
                                       'share_count' => !empty($media->share_count) ? $media->share_count : 0,
                                       'user_profile_image_url' => $img
                                     );
