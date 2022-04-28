@@ -338,7 +338,7 @@ class Rule implements ShouldQueue
             if(!$rule->fl_process){
                 $rule->fl_process = true;
                 $rule->save();
-               // $rule->notify(new RuleProcessNotification());   
+                $rule->notify(new RuleProcessNotification());   
             } 
         }
     }
