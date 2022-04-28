@@ -32,6 +32,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
+        $schedule->command('notificacao:cron')->everyMinute();
+
         $schedule->command('email:cron')->hourly();
 
         $schedule->call(function () {
