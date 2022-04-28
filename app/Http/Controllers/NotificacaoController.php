@@ -165,9 +165,57 @@ class NotificacaoController extends Controller
 
                 case NotificationType::KEYWORDS:
                            
-                    $titulo = "Alerta de Palavra-Chave";
-                    $msg = "";
-                    $valor_atual = rand(1,10);
+                    $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
+                                                    ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                    ->where('full_text', "ilike", "%{$notification->valor}%")
+                                                    //->where('fl_notification',false)
+                                                    ->get();
+
+                    $total_post_twitter = count($postagens_twitter);
+
+                    if($total_post_twitter){
+
+                        foreach ($postagens_twitter as $key => $post) {
+
+                            $postagens[] = array('img' => 'twitter',
+                                            'msg'  => $post->full_text,
+                                            'link' => 'https://twitter.com/'.$post->user_screen_name.'/status/'.$post->twitter_id);
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+
+                    }
+
+                    $postagens_instagram = Media::where('client_id', $notification->client_id)
+                                                ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                ->where('caption', "ilike", "%{$notification->valor}%")
+                                                //->where('fl_notification',false)
+                                                ->get();
+
+                    $total_post_instagram = count($postagens_instagram);
+
+                    if($total_post_instagram){
+
+                        foreach ($postagens_instagram as $key => $post) {
+
+                            $postagens[] = array('img' => 'instagram',
+                                            'msg'  => $post->caption,
+                                            'link' => $post->permalink );
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+                    }
+
+                    $total_post = $total_post_twitter + $total_post_instagram;
+
+                    if($total_post){
+                        $flag_enviar = true;
+                        $titulo = "Alerta de Palavras-Chave";
+                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
+                    }
+
                     break;
 
                 case NotificationType::HASHTAG:
