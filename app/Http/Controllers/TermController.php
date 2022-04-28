@@ -27,7 +27,7 @@ class TermController extends Controller
     public function getTerms($client_id)
     {
         $client = Client::with(['terms' => function($query){
-            $query->withCount('mediasTwitter')->withCount('medias')->withCount('pagePosts');
+            $query->withCount('mediasTwitter')->withCount('medias')->withCount('pagePosts')->withCount('pagePostsComments');
         }])->find($client_id);
 
         $social_medias = SocialMedia::where('fl_term',true)->orderBy('name')->get();
