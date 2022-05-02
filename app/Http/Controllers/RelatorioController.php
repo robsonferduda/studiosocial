@@ -580,6 +580,7 @@ class RelatorioController extends Controller
           $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
           $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
           $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
+          $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
 
           $textig = $this->concatenateSanitizeText($igPosts);
           $textigc = $this->concatenateSanitizeText($igComments);
@@ -587,8 +588,9 @@ class RelatorioController extends Controller
           $textfbc = $this->concatenateSanitizeText($fbComments);
           $texttw = $this->concatenateSanitizeText($twPosts);
           $textfpp = $this->concatenateSanitizeText($fbPagePost);
+          $textfppc = $this->concatenateSanitizeText($fbPagePostComments);
 
-          $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp;
+          $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp.' '.$textfppc;
       }
 
       $wordcloud_text = WordCloudText::create([
@@ -989,6 +991,7 @@ class RelatorioController extends Controller
                 $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
                 $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
                 $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
+                $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
     
                 $textig = $this->concatenateSanitizeText($igPosts);
                 $textigc = $this->concatenateSanitizeText($igComments);
@@ -996,8 +999,9 @@ class RelatorioController extends Controller
                 $textfbc = $this->concatenateSanitizeText($fbComments);
                 $texttw = $this->concatenateSanitizeText($twPosts);
                 $textfpp = $this->concatenateSanitizeText($fbPagePost);
+                $textfppc = $this->concatenateSanitizeText($fbPagePostComments);
     
-                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp;
+                $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp.' '.$textfppc;
             }
 
             $wordcloud_text = WordCloudText::create([
