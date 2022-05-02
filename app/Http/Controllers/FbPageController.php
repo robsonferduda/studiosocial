@@ -278,7 +278,7 @@ class FbPageController extends Controller
                 'username' => $name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
                 'sentiment' => '',
-                'type_message' => 'facebook-page',
+                'type_message' => $type_message,
                 'like_count' => $likes_count,
                 'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                 'social_media_id' => $media->social_media_id,
