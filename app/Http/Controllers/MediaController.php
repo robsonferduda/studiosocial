@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\FbPagePost;
+use App\FbPagePostComment;
 use App\FbPost;
 use App\Media;
 use App\MediaTwitter;
@@ -70,6 +71,9 @@ class MediaController extends Controller
                 break;
             case 'facebook-page':
                 $media = FbPagePost::where('id',$id)->first();
+                break;
+            case 'facebook-page-comment':
+                $media = FbPagePostComment::where('id',$id)->first();
                 break;
             case 'instagram':
                 $media = Media::where('id',$id)->first();

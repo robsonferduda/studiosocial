@@ -253,11 +253,13 @@ class FbPageController extends Controller
                 $img = $media->page->picture_url;
                 $name = $media->page->name;
                 $link = $media->permalink_url;
+                $type_message = 'facebook-page';
             } else {             
     
                 $img = '';
-                $name = '';
-                $link = $media->fbPagePost->permalink_url;
+                $name = '';               
+                $link = ($media->fbPagePost) ? $media->fbPagePost->permalink_url : '';
+                $type_message = 'facebook-page-comment';
             }
 
             $likes_count = 0;
