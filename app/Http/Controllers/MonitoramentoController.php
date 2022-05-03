@@ -179,6 +179,7 @@ class MonitoramentoController extends Controller
 
                 $medias_temp_c = FbPagePostComment::with('fbPagePost')->select('id')
                 ->addSelect(DB::raw("text as message"))
+                ->addSelect(DB::raw("sentiment as sentiment"))
                 ->addSelect(DB::raw("0 as share_count"))
                 ->addSelect(DB::raw("0 as comment_count"))
                 ->addSelect(DB::raw("'' as permalink_url"))
@@ -206,8 +207,7 @@ class MonitoramentoController extends Controller
                         $name = $media->page->name;
                         $type = 'page';
                         $link = $media->permalink_url;
-                    } else {
-                        $media = FbPagePostComment::find($media->id); 
+                    } else { 
                         $img = '';
                         $name = '';  
                         $type = 'comment';                      
