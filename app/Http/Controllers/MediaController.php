@@ -36,7 +36,7 @@ class MediaController extends Controller
                 $media = FbPost::where('id',$id)->first();
                 break;
 
-            case 'facebook':
+            case 'page':
                 $media = FbPagePost::where('id',$id)->first();
                 break;
                 
