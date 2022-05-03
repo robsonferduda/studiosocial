@@ -232,7 +232,7 @@ class FbPageController extends Controller
             $query->whereRaw(" lower(message) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         });
 
-        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("sentiment as sentiment"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
+        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("sentiment as sentiment"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
         ->when($term, function($query) use ($term){
             $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         })
