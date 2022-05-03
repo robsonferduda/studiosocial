@@ -45,14 +45,10 @@ class MediaController extends Controller
                 break;
         }
 
-        echo $id;
-        echo "|";
-        echo $tipo;
-
-        dd($media);
-
         if($media){
             $media->sentiment = $sentimento;
+
+            dd($media);
 
             if($media->update()){
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
