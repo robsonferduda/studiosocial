@@ -45,6 +45,12 @@ class MediaController extends Controller
                 break;
         }
 
+        echo $id;
+        echo "|";
+        echo $tipo;
+
+        dd($media);
+
         if($media){
             $media->sentiment = $sentimento;
 
