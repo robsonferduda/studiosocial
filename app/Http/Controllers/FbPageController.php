@@ -224,7 +224,7 @@ class FbPageController extends Controller
 
         $term =  strtolower($request->term);
 
-        $medias_temp_a = FbPagePost::select('id','message', 'fb_page_monitor_id', 'updated_time')->addSelect(DB::raw("'0'as page_post_id"))->addSelect(DB::raw("'post' as tipo"))->whereHas('page')
+        $medias_temp_a = FbPagePost::select('id','message', 'fb_page_monitor_id', 'updated_time','sentiment')->addSelect(DB::raw("'0'as page_post_id"))->addSelect(DB::raw("'post' as tipo"))->whereHas('page')
         ->when($page, function($query) use ($page){
             $query->where('fb_page_monitor_id', $page);
         })
@@ -232,7 +232,7 @@ class FbPageController extends Controller
             $query->whereRaw(" lower(message) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         });
 
-        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
+        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("sentiment as sentiment"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
         ->when($term, function($query) use ($term){
             $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
         })
@@ -254,6 +254,7 @@ class FbPageController extends Controller
                 $name = $media->page->name;
                 $link = $media->permalink_url;
                 $type_message = 'page';
+
             } else {             
     
                 $img = '';
@@ -277,7 +278,7 @@ class FbPageController extends Controller
                 'text' => $media->message,
                 'username' => $name,
                 'created_at' => dateTimeUtcToLocal($media->updated_time),
-                'sentiment' => '',
+                'sentiment' => $media->sentiment,
                 'type_message' => $type_message,
                 'like_count' => $likes_count,
                 'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
