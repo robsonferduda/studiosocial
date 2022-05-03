@@ -207,7 +207,7 @@ class MonitoramentoController extends Controller
                         $type = 'page';
                         $link = $media->permalink_url;
                     } else {
-                        $media = FbPagePostComment::with('page')->find($media->id); 
+                        $media = FbPagePostComment::find($media->id); 
                         $img = '';
                         $name = '';  
                         $type = 'comment';                      
