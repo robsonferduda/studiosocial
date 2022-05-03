@@ -70,7 +70,7 @@ class MonitoramentoController extends Controller
                                         ->count();
 
            
-        $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
+        $totais = array('total_insta' => Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count() + $ig_comments_total, 
                         'total_face' => FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count() + $fb_post_pages_total + $fb_comments_total + $fb_post_pages_comments_total,
                         'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count());
 
