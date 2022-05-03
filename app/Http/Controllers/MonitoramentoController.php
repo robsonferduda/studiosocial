@@ -235,7 +235,7 @@ class MonitoramentoController extends Controller
                     $medias[] = array('id' => $media->id,
                                       'text' => $media->message,
                                       'username' => $name,
-                                      'created_at' => dateTimeUtcToLocal($media->updated_time),
+                                      'created_at' => ($media->updated_time) ? dateTimeUtcToLocal($media->updated_time) : null,
                                       'sentiment' => $media->sentiment,
                                       'type_message' => $type,
                                       'like_count' => $likes_count,
