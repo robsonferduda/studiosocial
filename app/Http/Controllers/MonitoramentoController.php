@@ -167,10 +167,12 @@ class MonitoramentoController extends Controller
                 ->addSelect(DB::raw("0 as fb_page_monitor_id"))
                 ->addSelect(DB::raw("'post' as tipo"))
                 ->addSelect(DB::raw("0 as page_post_id"))
+                ->addSelect(DB::raw("sentiment as sentiment"))
                 ->with('comments')->with('reactions')->where('client_id', $client_id);
                 $medias_temp_b = FbPagePost::select(['id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])
                 ->addSelect(DB::raw("'post_page' as tipo"))
                 ->addSelect(DB::raw("0 as page_post_id"))
+                ->addSelect(DB::raw("sentiment as sentiment"))
                 ->with('page')
                 ->with('reactions')
                 ->whereHas('terms', function ($query) use ($client_id){
@@ -179,7 +181,6 @@ class MonitoramentoController extends Controller
 
                 $medias_temp_c = FbPagePostComment::with('fbPagePost')->select('id')
                 ->addSelect(DB::raw("text as message"))
-                ->addSelect(DB::raw("sentiment as sentiment"))
                 ->addSelect(DB::raw("0 as share_count"))
                 ->addSelect(DB::raw("0 as comment_count"))
                 ->addSelect(DB::raw("'' as permalink_url"))
@@ -187,6 +188,7 @@ class MonitoramentoController extends Controller
                 ->addSelect(DB::raw("0 as fb_page_monitor_id"))
                 ->addSelect(DB::raw("'comment' as tipo"))
                 ->addSelect(DB::raw("page_post_id"))
+                ->addSelect(DB::raw("sentiment as sentiment"))
                 ->whereHas('terms', function ($query) use ($client_id){
                     $query->where('client_id', $client_id);
                 });
