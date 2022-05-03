@@ -43,11 +43,15 @@ class MediaController extends Controller
             case 'instagram':
                 $media = Media::where('id',$id)->first();
                 break;
+            
+            case 'comment':
+                $media = FbPagePostComment::where('id',$id)->first();
+                break;
         }
 
         if($media){
             $media->sentiment = $sentimento;
-            
+
             if($media->update()){
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
             }else{

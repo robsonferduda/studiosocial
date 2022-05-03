@@ -209,7 +209,7 @@ class MonitoramentoController extends Controller
                     } else {
                         $img = '';
                         $name = '';  
-                        $type = 'facebook';                      
+                        $type = 'comment';                      
                         $link = $media->fbPagePost->permalink_url;
                     }
 
