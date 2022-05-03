@@ -27,7 +27,7 @@ class MonitoramentoController extends Controller
     {
         $this->middleware('auth');
         $this->client_id = session('cliente')['id'];
-        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value - 1;
+        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
         Session::put('url','monitoramento');
     }
 
@@ -35,7 +35,7 @@ class MonitoramentoController extends Controller
     {
         $totais = array();
         $periodo_padrao = $this->periodo_padrao;
-        $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao)->format('d/m/Y'),
+        $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
         $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
@@ -75,8 +75,13 @@ class MonitoramentoController extends Controller
 
         for ($i=0; $i < $dias; $i++) { 
 
-            $data = $data_inicial->addDay()->format('Y-m-d');
-            $data_formatada = $data_inicial->format('d/m/Y');
+            if($i > 0){
+                $data = $data_inicial->addDay()->format('Y-m-d');
+                $data_formatada = $data_inicial->format('d/m/Y');
+            }else{
+                $data = $data_inicial->format('Y-m-d');
+                $data_formatada = $data_inicial->format('d/m/Y');
+            }
 
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
