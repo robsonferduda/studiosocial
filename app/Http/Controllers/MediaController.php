@@ -47,9 +47,7 @@ class MediaController extends Controller
 
         if($media){
             $media->sentiment = $sentimento;
-
-            dd($media);
-
+            
             if($media->update()){
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
             }else{
