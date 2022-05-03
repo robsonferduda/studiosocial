@@ -198,15 +198,18 @@ class MonitoramentoController extends Controller
                         $media = FbPost::find($media->id);
                         $img = '';
                         $name = '';
+                        $type = 'facebook';
                         $link = $media->permalink_url;
                     } elseif($media->tipo == 'post_page') {     
                         $media = FbPagePost::with('page')->find($media->id);                                        
                         $img = $media->page->picture_url;
                         $name = $media->page->name;
+                        $type = 'page';
                         $link = $media->permalink_url;
                     } else {
                         $img = '';
-                        $name = '';                        
+                        $name = '';  
+                        $type = 'facebook';                      
                         $link = $media->fbPagePost->permalink_url;
                     }
 
@@ -233,11 +236,11 @@ class MonitoramentoController extends Controller
                                       'username' => $name,
                                       'created_at' => dateTimeUtcToLocal($media->updated_time),
                                       'sentiment' => $media->sentiment,
-                                      'type_message' => 'facebook',
+                                      'type_message' => $type,
                                       'like_count' => $likes_count,
                                       'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                                       'social_media_id' => $media->social_media_id,
-                                      'tipo' => 'facebook',
+                                      'tipo' => $type,
                                       'comments' => $bag_comments,
                                       'link' => $link,
                                       'share_count' => !empty($media->share_count) ? $media->share_count : 0,
