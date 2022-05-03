@@ -35,6 +35,8 @@ class MonitoramentoController extends Controller
     {
         $totais = array();
         $periodo_padrao = $this->periodo_padrao;
+        $data_inicial = Carbon::now()->subDays($this->periodo_padrao - 1)->format('Y-m-d');
+        $data_final = Carbon::now()->format('Y-m-d');
         $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
@@ -44,21 +46,28 @@ class MonitoramentoController extends Controller
         $ig_comments_total = DB::table('ig_comments')
                             ->join('medias','medias.id','=','ig_comments.media_id')
                             ->where('medias.client_id','=',$this->client_id)
+                            ->whereBetween('ig_comments.timestamp', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
                             ->count();
 
         $fb_comments_total = DB::table('fb_comments')
                             ->join('fb_posts','fb_posts.id','=','fb_comments.post_id')
                             ->where('fb_posts.client_id','=',$this->client_id)
+                            ->whereBetween('fb_comments.created_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
                             ->count();
                         
         $fb_post_pages_total = DB::table('page_post_term')
                             ->join('terms', 'page_post_term.term_id','=','terms.id')
+                            ->join('fb_page_posts', 'page_post_term.page_post_id','=','fb_page_posts.id')
                             ->where('terms.client_id','=',$this->client_id)
+                            ->whereBetween('fb_page_posts.updated_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
                             ->count();
+
         $fb_post_pages_comments_total = DB::table('page_post_comment_term')
-                            ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
-                            ->where('terms.client_id','=',$this->client_id)
-                            ->count();
+                                        ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
+                                        ->join('fb_page_posts_comments', 'page_post_comment_term.page_post_comment_id','=','fb_page_posts_comments.id')
+                                        ->whereBetween('fb_page_posts_comments.created_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
+                                        ->where('terms.client_id','=',$this->client_id)
+                                        ->count();
 
            
         $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
@@ -104,6 +113,7 @@ class MonitoramentoController extends Controller
                                 ->whereBetween('fb_page_posts.updated_time', [$data.' 00:00:00',$data.' 23:23:59'])
                                 ->where('terms.client_id','=',$this->client_id)
                                 ->count();
+
             $fb_post_pages_comments_total = DB::table('page_post_comment_term')
                                 ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
                                 ->join('fb_page_posts_comments', 'page_post_comment_term.page_post_comment_id','=','fb_page_posts_comments.id')
