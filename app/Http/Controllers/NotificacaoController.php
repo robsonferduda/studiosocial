@@ -139,6 +139,7 @@ class NotificacaoController extends Controller
         $flag_enviar = false;
         $postagens = array();
         $postagens_twitter = array();
+        $postagens_instagram = array();
         $notificacoes_ativas = NotificationClient::where('status', true)->get();
 
         foreach ($notificacoes_ativas as $notification) {
