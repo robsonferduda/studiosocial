@@ -194,15 +194,18 @@ class MonitoramentoController extends Controller
                         $img = '';
                         $name = '';
                         $link = $media->permalink_url;
+                        $type_message = 'facebook';
                     } elseif($media->tipo == 'post_page') {     
                         $media = FbPagePost::with('page')->find($media->id);                                        
                         $img = $media->page->picture_url;
                         $name = $media->page->name;
                         $link = $media->permalink_url;
+                        $type_message = 'facebook-page';
                     } else {
                         $img = '';
                         $name = '';                        
                         $link = $media->fbPagePost->permalink_url;
+                        $type_message = 'facebook-page-comment';
                     }
 
                     $bag_comments = [];
@@ -228,7 +231,7 @@ class MonitoramentoController extends Controller
                                       'username' => $name,
                                       'created_at' => dateTimeUtcToLocal($media->updated_time),
                                       'sentiment' => $media->sentiment,
-                                      'type_message' => 'facebook',
+                                      'type_message' => $type_message,
                                       'like_count' => $likes_count,
                                       'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
                                       'social_media_id' => $media->social_media_id,
