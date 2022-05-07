@@ -16,12 +16,15 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         Commands\EmailCron::class,
-        Commands\NotificacaoCron::class
+        Commands\NotificacaoCron::class,
+        Commands\TwitterCron::class
     ];
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('notificacao:cron')->hourly();
+
+        $schedule->command('twitter:cron')->hourly();
 
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
