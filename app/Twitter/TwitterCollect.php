@@ -4,8 +4,12 @@ namespace App\Twitter;
 
 use App\Term;
 use App\Hashtag;
+use App\Collect;
 use App\MediaTwitter;
+use App\TypeMessage;
 use App\Enums\SocialMedia;
+use App\Enums\TypeCollect;
+use App\Enums\TypeMessage as EnumTypeMessage;
 
 class TwitterCollect{
 
@@ -66,6 +70,13 @@ class TwitterCollect{
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
                 $tweet->hashtags()->syncWithoutDetaching($hashtag->id);
             }   
+
+            $dados_coleta = array('id_type_collect' => TypeCollect::HASHTAG,
+                                  'id_social_media' => SocialMedia::TWITTER,
+                                  'id_type_message' => EnumTypeMessage::TWEETS,
+                                  'description' => $hashtag->hashtag);            
+
+            Collect::create($dados_coleta);
         }
     }
 
@@ -107,7 +118,14 @@ class TwitterCollect{
     
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
                 $tweet->terms()->syncWithoutDetaching($term->id);
-            }   
+            } 
+            
+            $dados_coleta = array('id_type_collect' => TypeCollect::TERMO,
+                                  'id_social_media' => SocialMedia::TWITTER,
+                                  'id_type_message' => EnumTypeMessage::TWEETS,
+                                  'description' => $term->term);
+
+            Collect::create($dados_coleta);
         }
     }
 }
