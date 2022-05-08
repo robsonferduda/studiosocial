@@ -78,7 +78,8 @@ class TwitterCollect{
                                   'id_social_media' => SocialMedia::TWITTER,
                                   'id_type_message' => EnumTypeMessage::TWEETS,
                                   'description' => $hashtag->hashtag,
-                                  'total' => $total);            
+                                  'total' => $total,
+                                  'client_id' =>$hashtag->client_id );            
 
             Collect::create($dados_coleta);
         }
@@ -130,7 +131,8 @@ class TwitterCollect{
                                   'id_social_media' => SocialMedia::TWITTER,
                                   'id_type_message' => EnumTypeMessage::TWEETS,
                                   'description' => $term->term,
-                                  'total' => $total);
+                                  'total' => $total,
+                                  'client_id' =>$term->client_id );
 
             Collect::create($dados_coleta);
         }
