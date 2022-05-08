@@ -36,6 +36,8 @@ class TwitterCollect{
         $hashtags_ativas = Hashtag::where('social_media_id', SocialMedia::TWITTER)->where('is_active',true)->get();
 
         foreach ($hashtags_ativas as $hashtag) {
+
+            $total = 0;
             
             $query = array(
                 "q" => "#".$hashtag->hashtag,
@@ -68,13 +70,15 @@ class TwitterCollect{
                             );
     
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
+                if($tweet->wasRecentlyCreated) $total++;
                 $tweet->hashtags()->syncWithoutDetaching($hashtag->id);
-            }   
-
+            }  
+            
             $dados_coleta = array('id_type_collect' => TypeCollect::HASHTAG,
                                   'id_social_media' => SocialMedia::TWITTER,
                                   'id_type_message' => EnumTypeMessage::TWEETS,
-                                  'description' => $hashtag->hashtag);            
+                                  'description' => $hashtag->hashtag,
+                                  'total' => $total);            
 
             Collect::create($dados_coleta);
         }
@@ -97,7 +101,8 @@ class TwitterCollect{
             );
     
             $tweets = $this->conn->get('search/tweets', $query);
-    
+
+            $total = 0;    
             foreach ($tweets->statuses as $tweet) {
     
                 $chave = array('twitter_id' => $tweet->id);
@@ -117,13 +122,15 @@ class TwitterCollect{
                             );
     
                 $tweet = MediaTwitter::updateOrCreate($chave, $dados); 
+                if($tweet->wasRecentlyCreated) $total++;
                 $tweet->terms()->syncWithoutDetaching($term->id);
-            } 
-            
+            }
+                       
             $dados_coleta = array('id_type_collect' => TypeCollect::TERMO,
                                   'id_social_media' => SocialMedia::TWITTER,
                                   'id_type_message' => EnumTypeMessage::TWEETS,
-                                  'description' => $term->term);
+                                  'description' => $term->term,
+                                  'total' => $total);
 
             Collect::create($dados_coleta);
         }
