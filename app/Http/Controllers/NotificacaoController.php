@@ -168,7 +168,7 @@ class NotificacaoController extends Controller
                 case NotificationType::KEYWORDS:
                            
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
-                                                    ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                    ->where('created_tweet_at','>', [$notification->dt_inicio])
                                                     ->where('full_text', "ilike", "%{$notification->valor}%")
                                                     ->where('fl_notification',false)
                                                     ->get();
@@ -190,7 +190,7 @@ class NotificacaoController extends Controller
                     }
 
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
-                                                ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                ->where('timestamp','>', [$notification->dt_inicio])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
                                                 ->where('fl_notification',false)
                                                 ->get();
@@ -223,7 +223,7 @@ class NotificacaoController extends Controller
                 case NotificationType::HASHTAG:
 
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
-                                                     ->whereBetween('created_tweet_at', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                     ->where('created_tweet_at','>', [$notification->dt_inicio])
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
                                                      ->where('fl_notification',false)
                                                      ->get();
@@ -245,7 +245,7 @@ class NotificacaoController extends Controller
                     }
 
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
-                                                ->whereBetween('timestamp', [$notification->dt_inicio,  Carbon::now()->format('Y-m-d')])
+                                                ->where('timestamp','>', [$notification->dt_inicio])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
                                                 ->where('fl_notification',false)
                                                 ->get();
