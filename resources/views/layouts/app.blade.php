@@ -71,6 +71,14 @@
                   </a>
                 </li>
                 @endpermission
+                @permission('notificacoes')
+                <li class="{{ (Session::has('url') and Session::get('url') == 'coletas') ? 'active' : '' }}">
+                  <a href="{{ url('coletas') }}">
+                  <i class="nc-icon nc-tag-content"></i>
+                  <p>COLETAS</p>
+                  </a>
+                </li>
+                @endpermission
                 @permission('relatorios')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'relatorios') ? 'active' : '' }}">
                     <a href="{{ url('relatorios') }}">

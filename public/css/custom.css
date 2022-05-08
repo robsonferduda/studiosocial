@@ -120,4 +120,7 @@
     background: #51bcda;
     border-bottom-right-radius: 8px !important;
     border-top-right-radius: 8px !important;
- }
+}
+.text-black{
+    color: #66615b;
+}

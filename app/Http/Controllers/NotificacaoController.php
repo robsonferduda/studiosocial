@@ -309,4 +309,12 @@ class NotificacaoController extends Controller
         }
 
     }
+
+    public function verificacao()
+    {
+        $this->verificar();
+        Flash::success("Envio de notificações enviadas com sucesso.");
+
+        return redirect('coletas')->withInput(); 
+    }
 }

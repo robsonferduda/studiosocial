@@ -21,6 +21,8 @@ Route::get('boletim/{id}/outlook','BoletimController@outlook');
 Route::get('boletim/{id}/visualizar','BoletimController@visualizar');
 Route::post('boletim/enviar/lista','BoletimController@enviarLista');
 
+Route::get('coletas','ColetaController@index');
+
 Route::get('clientes','ClientController@index');
 Route::get('cliente/get/json','ClientController@json');
 Route::get('clientes','ClientController@index')->name('clientes.index');
@@ -109,6 +111,7 @@ Route::get('notificacoes','NotificacaoController@index');
 Route::get('notificacoes/{id}/situacao','NotificacaoController@atualizarSituacao');
 Route::get('notificacoes/{id}/descricao','NotificacaoController@getDescricao');
 Route::get('notificacoes/verificar','NotificacaoController@verificar');
+Route::get('notificacoes/verificacao','NotificacaoController@verificacao');
 
 Route::post('check/token', 'TokenController@checkFacebookToken');
 
