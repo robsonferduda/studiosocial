@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Jobs\FbTerm as JobsFbTerm;
+use App\Jobs\Fbhashtag;
 
 class FbTerm{
 
@@ -12,7 +12,7 @@ class FbTerm{
 
     public function runJob()
     {
-        JobsFbTerm::dispatch();                
+        Fbhashtag::dispatch();                
     }
 
 }
