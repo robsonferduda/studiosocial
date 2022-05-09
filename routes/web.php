@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\FbHashtag;
 use App\Classes\FbTerm;
 use App\Classes\Rule as ClassesRule;
 use Illuminate\Support\Facades\Route;
@@ -149,6 +150,10 @@ Route::get('verificar-imagem-profile','FbPageController@verifyPicture');
 Route::get('atualiza-reacoes','FbPageController@updateReactions');
 Route::get('fb-terms', function(){
     (new FbTerm)->runJob();
+});
+
+Route::get('fb-hashtags', function(){
+    (new FbHashtag)->runJob();
 });
 
 Route::get('run-rules', function(){
