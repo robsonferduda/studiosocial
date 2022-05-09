@@ -168,7 +168,7 @@ class ClientController extends Controller
     public function getHashtags($client)
     {
         $client = Client::with(['hashtags' => function($query){
-            $query->withCount('mediasTwitter')->withCount('medias');
+            $query->withCount('mediasTwitter')->withCount('medias')->withCount('pagePosts')->withCount('pagePostsComments');
         }])->find($client);
 
         $social_medias = SocialMedia::where('fl_hashtag',true)->orderBy('name')->get();

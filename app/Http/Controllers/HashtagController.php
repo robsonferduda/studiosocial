@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FbReaction;
 use App\Utils;
 use App\Hashtag;
 use App\Enums\SocialMedia;
+use App\FbPagePost;
+use App\FbPagePostComment;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class HashtagController extends Controller
@@ -86,7 +90,82 @@ class HashtagController extends Controller
 
                 }
                 break;
+            case SocialMedia::FACEBOOK:
+
+                $medias_temp_a = DB::table('page_post_comment_hashtag')
+                ->join('hashtags', 'page_post_comment_hashtag.hashtag_id','=','hashtags.id')
+                ->join('fb_page_posts_comments', 'page_post_comment_hashtag.page_post_comment_id','=','fb_page_posts_comments.id')
+                ->join('fb_page_posts', 'fb_page_posts_comments.page_post_id','=','fb_page_posts.id')
+                ->select('fb_page_posts_comments.id')
+                ->addSelect(DB::raw("text as message"))
+                ->addSelect(DB::raw("0 as share_count"))
+                ->addSelect(DB::raw("0 as comment_count"))
+                ->addSelect(DB::raw("fb_page_posts.permalink_url"))
+                ->addSelect(DB::raw("created_time as updated_time"))
+                ->addSelect(DB::raw("0 as fb_page_monitor_id"))
+                ->addSelect(DB::raw("'comment' as tipo"))
+                ->addSelect(DB::raw("page_post_id"))
+                ->where('hashtags.id','=',$hashtag->id);
+    
+                $medias_temp_b = DB::table('page_post_hashtag')
+                ->join('hashtags', 'page_post_hashtag.hashtag_id','=','hashtags.id')
+                ->join('fb_page_posts', 'page_post_hashtag.page_post_id','=','fb_page_posts.id')
+                ->select(['fb_page_posts.id', 'message', 'share_count', 'comment_count', 'permalink_url','updated_time', 'fb_page_monitor_id'])
+                ->addSelect(DB::raw("'post_page' as tipo"))
+                ->addSelect(DB::raw("0 as page_post_id"))
+                ->where('hashtags.id','=',$hashtag->id);
+         
+                $medias_temp = $medias_temp_a->union($medias_temp_b)->orderBy('updated_time', 'DESC')->paginate(20);
+
+                $medias = [];
             
+                foreach ($medias_temp as $key => $media) {
+    
+                    $data = $media->updated_time;
+                    $link = $media->permalink_url;
+                    $message = $media->message;
+                       
+                    if($media->tipo == 'post_page') {     
+                        $media = FbPagePost::with('page')->find($media->id);                                        
+                        $img = $media->page->picture_url;
+                        $name = $media->page->name;
+                        $type_message = 'facebook-page';
+                          
+                    } else {
+                        $media = FbPagePostComment::find($media->id);        
+                        $img = '';
+                        $name = '';          
+                        $type_message = 'facebook-page-comment';                                     
+                    }
+            
+                    $likes_count = 0;
+                    $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
+                    $likes = $media->reactions()->wherePivot('reaction_id',FbReaction::LIKE)->first();
+                    if(!empty($loves)) {
+                        $likes_count += $loves->pivot->count;
+                    }
+            
+                    if(!empty($likes)) {
+                        $likes_count += $likes->pivot->count;
+                    }
+            
+                    $medias[] = array('id' => $media->id,
+                        'text' => $message,
+                        'username' => $name,
+                        'created_at' => dateTimeUtcToLocal($data),
+                        'sentiment' => '',
+                        'type_message' => $type_message,
+                        'like_count' => $likes_count,
+                        'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
+                        'social_media_id' => $media->social_media_id,
+                        'tipo' => 'facebook',
+                        'comments' => [],
+                        'link' => $link,
+                        'share_count' => !empty($media->share_count) ? $media->share_count : 0,
+                        'user_profile_image_url' => $img
+                    );
+            
+                }        
             default:
                 //
                 break;

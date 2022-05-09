@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($client->hashtags->sortBy('hashtag') as $key => $hashtag)
+                        @foreach($client->hashtags->sortBy('hashtag') as $key => $hashtag)                            
                             <tr>
                                 <td>{{ Carbon\Carbon::parse($hashtag->created_at)->format('d/m/Y H:i') }}</td>
                                 <td>{{ $hashtag->socialMedia->name }}</td>
@@ -44,6 +44,9 @@
                                             @break
                                         @case(App\Enums\SocialMedia::TWITTER)
                                             {{ $hashtag->medias_twitter_count }}
+                                            @break
+                                        @case(App\Enums\SocialMedia::FACEBOOK)
+                                            {{ $hashtag->page_posts_count + $hashtag->page_posts_comments_count }}
                                             @break
                                         @default                        
                                     @endswitch
