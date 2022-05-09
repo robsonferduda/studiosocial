@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use App\Jobs\Fbhashtag as JobsFbhashtag;
+use App\Jobs\FbHashtag as JobsFbHashtag;
 
 class FbHashtag{
 
@@ -12,7 +12,7 @@ class FbHashtag{
 
     public function runJob()
     {
-        JobsFbhashtag::dispatch();                
+        JobsFbHashtag::dispatch();                
     }
 
 }
