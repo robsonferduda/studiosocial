@@ -12,7 +12,7 @@ use App\FbPagePost;
 use App\FbPagePostComment;
 use App\Hashtag;
 
-class Fbhashtag implements ShouldQueue
+class FbHashtag implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
