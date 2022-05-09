@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Classes\FBFeed;
+use App\Classes\FbHashtag;
 use App\Classes\FBMention;
 use App\Classes\FbTerm;
 use App\Classes\IGHashTag;
@@ -32,8 +33,10 @@ class Kernel extends ConsoleKernel
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
             (new FBFeed())->pullMedias();   
+            (new FbTerm())->runJob();
+            (new FbHashtag())->runJob();
             (new Rule())->runJob();         
-            (new FbTerm())->runJob();    
+               
         })->hourly()->between('2:00', '23:00');
 
     }

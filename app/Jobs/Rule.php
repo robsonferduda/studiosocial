@@ -211,8 +211,14 @@ class Rule implements ShouldQueue
             $rule->fbComments()->sync($ids);
 
             //FACEBOOK PAGE POSTS
-            $medias = FbPagePost::whereHas('terms', function($query){
-                $query->where('client_id', $this->client_id);
+            $client_id = $this->client_id;
+            $medias = FbPagePost::where(function($query) use ($client_id){
+                $query->whereHas('terms', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                })
+                ->orWhereHas('hashtags', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                });
             });
             
             if(count($todas) > 0) {
@@ -253,8 +259,13 @@ class Rule implements ShouldQueue
             $rule->fbPagePosts()->sync($ids);
 
              //FACEBOOK PAGE POSTS COMMENTS
-             $medias = FbPagePostComment::whereHas('terms', function($query){
-                $query->where('client_id', $this->client_id);
+             $medias = FbPagePostComment::where(function($query) use ($client_id){
+                $query->whereHas('terms', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                })
+                ->orWhereHas('hashtags', function ($query) use ($client_id){
+                    $query->where('client_id', $client_id);
+                });
             });
             
             if(count($todas) > 0) {
