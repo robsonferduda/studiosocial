@@ -132,7 +132,6 @@ class NotificacaoController extends Controller
     public function verificar()
     {
         //Buscar notificações ativas, independente do cliente
-
         $msg = "";
         $valor_atual = 0;
         $total_post = 0;
@@ -285,6 +284,7 @@ class NotificacaoController extends Controller
 
             if($flag_enviar){
 
+                $titulo .= " - ".date("d/m/Y H:i:s"); 
                 $emails = Client::where('id', $notification->client_id)->first()->emails;
 
                 if(count($emails)){
