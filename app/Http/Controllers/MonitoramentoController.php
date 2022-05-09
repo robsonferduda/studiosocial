@@ -61,6 +61,14 @@ class MonitoramentoController extends Controller
                             ->where('terms.client_id','=',$this->client_id)
                             ->whereBetween('fb_page_posts.updated_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
                             ->count();
+        
+        $fb_post_pages_hashtags_total = DB::table('page_post_hashtag')
+                            ->join('hashtags', 'page_post_hashtag.hashtag_id','=','hashtags.id')
+                            ->join('fb_page_posts', 'page_post_hashtag.page_post_id','=','fb_page_posts.id')
+                            ->where('hashtags.client_id','=',$this->client_id)
+                            ->whereBetween('fb_page_posts.updated_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
+                            ->count();
+                            
 
         $fb_post_pages_comments_total = DB::table('page_post_comment_term')
                                         ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
@@ -69,9 +77,15 @@ class MonitoramentoController extends Controller
                                         ->where('terms.client_id','=',$this->client_id)
                                         ->count();
 
-           
+        $fb_post_pages_comments_hashtag_total = DB::table('page_post_comment_hashtag')
+                                        ->join('hashtags', 'page_post_comment_hashtag.hashtag_id','=','hashtags.id')
+                                        ->join('fb_page_posts_comments', 'page_post_comment_hashtag.page_post_comment_id','=','fb_page_posts_comments.id')
+                                        ->whereBetween('fb_page_posts_comments.created_time', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
+                                        ->where('hashtags.client_id','=',$this->client_id)
+                                        ->count(); 
+
         $totais = array('total_insta' => Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count() + $ig_comments_total, 
-                        'total_face' => FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count() + $fb_post_pages_total + $fb_comments_total + $fb_post_pages_comments_total,
+                        'total_face' => FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count() + $fb_post_pages_total + $fb_comments_total + $fb_post_pages_comments_total + $fb_post_pages_hashtags_total + $fb_post_pages_comments_hashtag_total,
                         'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data_inicial.' 00:00:00',$data_final.' 23:23:59'])->count());
 
         return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
@@ -113,6 +127,20 @@ class MonitoramentoController extends Controller
                                 ->whereBetween('fb_page_posts.updated_time', [$data.' 00:00:00',$data.' 23:23:59'])
                                 ->where('terms.client_id','=',$this->client_id)
                                 ->count();
+            
+            $fb_post_pages_hashtag_total = DB::table('page_post_hashtag')
+                                ->join('hashtags', 'page_post_hashtag.hashtag_id','=','hashtags.id')
+                                ->join('fb_page_posts', 'page_post_hashtag.page_post_id','=','fb_page_posts.id')
+                                ->whereBetween('fb_page_posts.updated_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->where('hashtags.client_id','=',$this->client_id)
+                                ->count();           
+                                
+            $fb_post_pages_comments_hashtag_total = DB::table('page_post_comment_hashtag')
+                                ->join('hashtags', 'page_post_comment_hashtag.hashtag_id','=','hashtags.id')
+                                ->join('fb_page_posts_comments', 'page_post_comment_hashtag.page_post_comment_id','=','fb_page_posts_comments.id')
+                                ->whereBetween('fb_page_posts_comments.created_time', [$data.' 00:00:00',$data.' 23:23:59'])
+                                ->where('hashtags.client_id','=',$this->client_id)
+                                ->count(); 
 
             $fb_post_pages_comments_total = DB::table('page_post_comment_term')
                                 ->join('terms', 'page_post_comment_term.term_id','=','terms.id')
@@ -122,7 +150,7 @@ class MonitoramentoController extends Controller
                                 ->count();
                                                 
             $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total + $fb_post_pages_total + $fb_post_pages_comments_total;
+            $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total + $fb_post_pages_total + $fb_post_pages_comments_total + $fb_post_pages_hashtag_total + $fb_post_pages_comments_hashtag_total;
             $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
         }
 
@@ -185,10 +213,15 @@ class MonitoramentoController extends Controller
                 ->addSelect(DB::raw("sentiment as sentiment"))
                 ->with('page')
                 ->with('reactions')
-                ->whereHas('terms', function ($query) use ($client_id){
-                    $query->where('client_id', $client_id);
+                ->where(function($query) use ($client_id){
+                    $query->whereHas('terms', function ($query) use ($client_id){
+                        $query->where('client_id', $client_id);
+                    })
+                    ->orWhereHas('hashtags', function ($query) use ($client_id){
+                        $query->where('client_id', $client_id);
+                    });
                 });
-
+                
                 $medias_temp_c = FbPagePostComment::with('fbPagePost')->select('id')
                 ->addSelect(DB::raw("text as message"))
                 ->addSelect(DB::raw("0 as share_count"))
@@ -199,8 +232,13 @@ class MonitoramentoController extends Controller
                 ->addSelect(DB::raw("'comment' as tipo"))
                 ->addSelect(DB::raw("page_post_id"))
                 ->addSelect(DB::raw("sentiment as sentiment"))
-                ->whereHas('terms', function ($query) use ($client_id){
-                    $query->where('client_id', $client_id);
+                ->where(function($query) use ($client_id){
+                    $query->whereHas('terms', function ($query) use ($client_id){
+                        $query->where('client_id', $client_id);
+                    })
+                    ->orWhereHas('hashtags', function ($query) use ($client_id){
+                        $query->where('client_id', $client_id);
+                    });
                 });
 
                 $medias_temp = $medias_temp_c->union($medias_temp_a)->union($medias_temp_b)->orderBy('updated_time','DESC')->paginate(20);

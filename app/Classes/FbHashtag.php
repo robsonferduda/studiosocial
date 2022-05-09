@@ -2,9 +2,9 @@
 
 namespace App\Classes;
 
-use App\Jobs\FbTerm as JobsFbTerm;
+use App\Jobs\FbHashtag as JobsFbHashtag;
 
-class FbTerm{
+class FbHashtag{
 
     function __construct() {
         
@@ -12,7 +12,7 @@ class FbTerm{
 
     public function runJob()
     {
-        JobsFbTerm::dispatch();                
+        JobsFbHashtag::dispatch();                
     }
 
 }

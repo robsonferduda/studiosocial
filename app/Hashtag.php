@@ -32,4 +32,14 @@ class Hashtag extends Model
     {
         return $this->belongsTo('App\Client', 'client_id', 'id');
     }
+
+    public function pagePosts()
+    {
+        return $this->belongsToMany('App\FbPagePost','page_post_hashtag','hashtag_id','page_post_id')->withTimestamps();
+    }
+
+    public function pagePostsComments()
+    {
+        return $this->belongsToMany('App\FbPagePostComment','page_post_comment_hashtag','hashtag_id','page_post_comment_id')->withTimestamps();
+    }
 }
