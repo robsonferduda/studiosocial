@@ -16,19 +16,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card-body">
-                        <a class="btn btn-twitter" href="{{ url('twitter') }}">
+                        <a class="btn btn-twitter btn-coleta" href="{{ url('twitter') }}">
                             <i class="fa fa-twitter"></i> Coletar Twitter
                         </a>
-                        <a class="btn btn-facebook disabled" href="">
+                        <a class="btn btn-facebook btn-coleta disabled" href="">
                             <i class="fa fa-facebook"></i> Coletar Facebook Perfil
                         </a>
-                        <a class="btn btn-facebook disabled" href="">
+                        <a class="btn btn-facebook btn-coleta disabled" href="">
                             <i class="fa fa-facebook"></i> Coletar Facebook Páginas
                         </a>
-                        <a class="btn btn-dribbble disabled" href="">
+                        <a class="btn btn-dribbble btn-coleta disabled" href="">
                             <i class="fa fa-dribbble"></i> Coletar Instagram
                         </a>
-                        <a class="btn btn-success" href="{{ url('notificacoes/verificacao') }}">
+                        <a class="btn btn-success btn-notificacao" href="{{ url('notificacoes/verificacao') }}">
                             <i class="fa fa-send"></i> Notificar Coletas
                         </a>
                     </div>
@@ -46,7 +46,7 @@
                                         <th>Cliente</th>
                                         <th>Rede Social</th>
                                         <th>Mídia</th>
-                                        <th>Tipo</th>
+                                        <th>Tipo de Coleta</th>
                                         <th>Termo</th>
                                         <th class="center">Total</th>
                                     </tr>
@@ -69,6 +69,41 @@
                     </div>
                 </div>
             </div>
+            <div class="row">                
+                <div class="col-lg-12 col-md-12">
+                    <div class="card card-stats card-notificacao">
+                        <div class="card-body ">
+                            <h6 class="text-left">Últimas Notificações</h6>
+                            <table class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Cliente</th>
+                                        <th>Rede Social</th>
+                                        <th>Mídia</th>
+                                        <th>Tipo de Notificação</th>
+                                        <th>Termo</th>
+                                        <th class="center">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($notificacoes as $notificacao)
+                                        <tr>
+                                            <td>{{ date('d/m/Y H:i:s', strtotime($notificacao->created_at )) }}</td>
+                                            <td>{{ ($notificacao->client) ? $notificacao->client->name : "" }}</td>
+                                            <td>{{ $notificacao->socialMedia->name }}</td>
+                                            <td>{{ $notificacao->typeMessage->type }}</td>
+                                            <td>{{ $notificacao->notification->name }}</td>
+                                            <td>{{ $notificacao->description }}</td>
+                                            <td class="center">{{ $notificacao->total }}</td>
+                                        </tr>
+                                @endforeach                                    
+                                </tbody>
+                            </table>   
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div> 
@@ -77,8 +112,12 @@
 <script>
     $(document).ready(function() {
 
-        $(".btn").click(function(){
+        $(".btn-coleta").click(function(){
             $('.card-result').loader('show');
+        });
+
+        $(".btn-notificacao").click(function(){
+            $('.card-notificacao').loader('show');
         });
 
     });

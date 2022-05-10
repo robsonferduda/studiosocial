@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Collect;
+use App\NotificationLog;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use App\Http\Requests\EmailRequest;
@@ -19,6 +20,8 @@ class ColetaController extends Controller
     public function index()
     {
         $coletas = Collect::with('client')->orderBy('created_at','DESC')->paginate(10);
-        return view('coleta/index', compact('coletas'));
+        $notificacoes = NotificationLog::with('client')->orderBy('created_at','DESC')->paginate(10);
+
+        return view('coleta/index', compact('coletas','notificacoes'));
     }
 }

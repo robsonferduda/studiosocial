@@ -6,6 +6,7 @@ use Mail;
 use App\Utils;
 use App\Client;
 use App\Media;
+use App\NotificationLog;
 use App\MediaTwitter;
 use App\Notification;
 use App\NotificationClient;
@@ -13,6 +14,8 @@ use Carbon\Carbon;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use App\Enums\NotificationType;
+use App\Enums\SocialMedia;
+use App\Enums\TypeMessage;
 use App\Notifications\NotificacaoProcessNotification;
 use App\Http\Requests\NotificationRequest;
 use Illuminate\Support\Facades\Session;
@@ -217,6 +220,14 @@ class NotificacaoController extends Controller
                         $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
                     }
 
+                    //Log do envio
+                    $dados_notificacao = array('id_notification' => NotificationType::KEYWORDS,
+                                  'id_social_media' => SocialMedia::TWITTER,
+                                  'id_type_message' => TypeMessage::TWEETS,
+                                  'description' => $notification->valor,
+                                  'total' => $total_post,
+                                  'client_id' =>$notification->client_id);            
+
                     break;
 
                 case NotificationType::HASHTAG:
@@ -275,6 +286,14 @@ class NotificacaoController extends Controller
                         $msg = "Foram resgistradas novas postagens em relação ao monitoramento da hashtag '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
 
                     }
+
+                    //Log do envio
+                    $dados_notificacao = array('id_notification' => NotificationType::HASHTAG,
+                                                'id_social_media' => SocialMedia::TWITTER,
+                                                'id_type_message' => TypeMessage::TWEETS,
+                                                'description' => $notification->valor,
+                                                'total' => $total_post,
+                                                'client_id' => $notification->client_id);  
                     break;
             }
 
@@ -301,6 +320,8 @@ class NotificacaoController extends Controller
                         });
                     }
                 }
+
+                NotificationLog::create($dados_notificacao);
 
             }
        
