@@ -27,13 +27,13 @@
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Inicial</label>
-                                        <input type="text" class="form-control datepicker" name="dt_inicial" value="{{ old("dt_inicial") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_inicial" value="{{ (old("dt_inicial")) ? old("dt_inicial") : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Final</label>
-                                        <input type="text" class="form-control datepicker" name="dt_final" valur="{{ old("dt_final") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_final" value="{{ (old("dt_final")) ? old("dt_final") : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-sm-12">
@@ -44,7 +44,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 checkbox-radios">
+                                <div class="col-md-12 checkbox-radios mb-0">
                                     <div class="form-check">
                                         <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="facebook">
@@ -66,15 +66,84 @@
                                             Twitter
                                         </label>
                                     </div>
+                                    <button type="submit" id="btn-find" class="btn btn-primary mb-3"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group mx-sm-3 mb-2 w-50">
-                            <button type="submit" id="btn-find" class="btn btn-primary mb-3"><i class="fa fa-search"></i> Buscar</button>
-                        </div>
                     {!! Form::close() !!} 
                 </div>
-            </div>   
+            </div> 
+            <div class="col-md-12">
+                <h6 class="ml-1 mt-5 mb-3">Mostrando {{ $medias->count() }} de {{ $medias->total() }} Páginas</h6>
+                @if($term)
+                    {{ $medias->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
+                @else
+                    {{ $medias->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+                @endif
+                
+                @foreach($medias as $key => $media)
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-2 text-center">
+                                    @if(false)
+                                        <img src="{{ str_replace('normal','400x400', $media['user_profile_image_url']) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">      
+                                    @else
+                                        <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
+                                    @endif
+                                    <p>Usuário</p>                                     
+                                   
+                                    @switch($media->rede)
+                                        @case('instagram')
+                                            <h3><i class="fa fa-instagram text-pink"></i></h3>
+                                            @break
+                                        @case('facebook')
+                                            <h3 class="text-center"><i class="fa fa-facebook text-facebook"></i></h3>
+                                            @break
+                                        @case('twitter')
+                                            <h3 class="text-center"><i class="fa fa-twitter text-info"></i></h3>
+                                            @break
+                                        @default                                        
+                                    @endswitch
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="mb-2">                                   
+                                        <span class="badge badge-pill badge-primary">
+                                            <i class="fa fa-thumbs-up"></i> 
+                                        </span>
+                                        @if($media->rede == 'instagram' || $media->rede == 'facebook' )
+                                            <span class="badge badge-pill badge-danger">
+                                                <i class="fa fa-comments"></i> 
+                                            </span>   
+                                        @endif
+                                        @if($media->rede == 'twitter')
+                                            <span class="badge badge-pill badge-success">
+                                                <i class="fa fa-share"></i> 
+                                            </span> 
+                                        @endif
+                                        @if($media->rede == 'facebook')
+                                            <span class="badge badge-pill badge-info">
+                                                <i class="fa fa-users"></i>
+                                            </span> 
+                                        @endif
+                                        <span class="badge badge-pill badge-warning">
+                                            <i class="fa fa-link"></i> <a href="" target="_blank" >Mídia</a>  
+                                        </span>
+                                        <span class="float-right">{{ Carbon\Carbon::parse($media->date)->format('d/m/Y H:i') }}</span>
+                                    </div>
+                                    <p>{{ $media->text }}</p>
+                                    @include('layouts.sentiment-obj')
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @if($term)
+                    {{ $medias->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
+                @else
+                    {{ $medias->onEachSide(1)->links('vendor.pagination.bootstrap-4') }} 
+                @endif
+            </div>  
         </div>
     </div>
 </div> 

@@ -23,13 +23,76 @@ class SocialSearchController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');        
+        $this->middleware('auth');      
+        $this->client_id = session('cliente')['id'];  
         Session::put('url','social-search');
     }
 
     public function index(SocialSearchRequest $request)
     {
-        return view('social-search/index');
+        $carbon = new Carbon();
+        $term =  strtolower($request->termo);
+        $dt_inicial = ($request->dt_inicial) ? $carbon->createFromFormat('d/m/Y', $request->dt_inicial)->format('Y-m-d')." 00:00:00" : null;
+        $dt_final = ($request->dt_final) ? $carbon->createFromFormat('d/m/Y', $request->dt_final)->format('Y-m-d')." 23:59:59" : null;
+
+        //* Dados do Facebook
+        $fb_posts = DB::table('fb_posts')  
+                    ->select('id')          
+                    ->addSelect(DB::raw("created_at as date"))  
+                    ->addSelect(DB::raw("message as text")) 
+                    ->addSelect(DB::raw("'facebook' as tipo"))  
+                    ->addSelect(DB::raw("'facebook' as rede")) 
+                    ->addSelect(DB::raw("'username' as user")) 
+                    ->addSelect(DB::raw("sentiment"))     
+                    ->when($dt_inicial, function ($q) use($dt_inicial, $dt_final){
+                        $q->whereBetween('created_at', [$dt_inicial, $dt_final]);
+                    })     
+                    ->when($term, function ($q) use($term){
+                        $q->where('message','ilike','%'.$term.'%');
+                    })   
+                    ->where('client_id','=',$this->client_id);
+
+        //* Dados do Instagram
+        $medias_insta = DB::table('medias')  
+                    ->select('id')          
+                    ->addSelect(DB::raw("timestamp as date"))  
+                    ->addSelect(DB::raw("caption as text")) 
+                    ->addSelect(DB::raw("'instagram' as tipo"))  
+                    ->addSelect(DB::raw("'instagram' as rede")) 
+                    ->addSelect(DB::raw("username as user")) 
+                    ->addSelect(DB::raw("sentiment"))     
+                    ->when($dt_inicial, function ($q) use($dt_inicial, $dt_final){
+                        $q->whereBetween('timestamp', [$dt_inicial, $dt_final]);
+                    })     
+                    ->when($term, function ($q) use($term){
+                        $q->where('caption','ilike','%'.$term.'%');
+                    })   
+                    ->where('client_id','=',$this->client_id);
+                    
+        // Dados do Twitter
+        $media_twitter = DB::table('media_twitter')  
+                    ->select('id')          
+                    ->addSelect(DB::raw("created_tweet_at as date"))  
+                    ->addSelect(DB::raw("full_text as text")) 
+                    ->addSelect(DB::raw("'twitter' as tipo"))  
+                    ->addSelect(DB::raw("'twitter' as rede")) 
+                    ->addSelect(DB::raw("user_name as user")) 
+                    ->addSelect(DB::raw("sentiment"))   
+                    ->when($dt_inicial, function ($q) use($dt_inicial, $dt_final){
+                        $q->whereBetween('created_tweet_at', [$dt_inicial, $dt_final]);
+                    })     
+                    ->when($term, function ($q) use($term){
+                        $q->where('full_text','ilike','%'.$term.'%');
+                    })      
+                    ->where('client_id','=',$this->client_id);
+
+        // Dados do Instagram
+                         
+        $medias = $fb_posts->union($media_twitter)->union($medias_insta)
+                ->orderBy('date','DESC')
+                ->paginate(20);
+
+        return view('social-search/index', compact('medias','term'));
     }
 
     public function buscar()
