@@ -79,6 +79,14 @@
                   </a>
                 </li>
                 @endpermission
+                @permission('notificacoes')
+                <li class="{{ (Session::has('url') and Session::get('url') == 'search') ? 'active' : '' }}">
+                  <a href="{{ url('social-search') }}">
+                  <i class="nc-icon nc-zoom-split"></i>
+                  <p>SOCIAL SEARCH</p>
+                  </a>
+                </li>
+                @endpermission
                 @permission('relatorios')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'relatorios') ? 'active' : '' }}">
                     <a href="{{ url('relatorios') }}">
