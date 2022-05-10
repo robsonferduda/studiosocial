@@ -124,8 +124,7 @@ Route::post('fb-webhook', 'FBWebhookController@receive');
 
 Route::get('/test-api', 'TestApiController@test');
 
-Route::get('social-search', 'SocialSearchController@index');
-Route::post('social-search/buscar', 'SocialSearchController@buscar');
+Route::match(array('GET', 'POST'),'social-search','SocialSearchController@index');
 
 Route::get('twitter', 'TwitterController@index');
 Route::get('twitter/postagens/user/{user}/sentimento/{sentimento}', 'TwitterController@getTweetByUserAndSentiment');

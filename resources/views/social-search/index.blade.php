@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-12 col-sm-12">
                     <h4 class="card-title ml-2">
                         <i class="nc-icon nc-zoom-split"></i> Social Search 
                         <i class="fa fa-angle-double-right" aria-hidden="true"></i> Buscar Mídias 
@@ -21,22 +21,25 @@
             </div>
             <div class="col-md-12">
                 <div class="card">
-                    {!! Form::open(['id' => 'frm_search_page', 'class' => 'form-horizontal', 'url' => ['social-search/buscar']]) !!}
+                    {!! Form::open(['id' => 'frm_search_page', 'class' => 'form-horizontal', 'url' => ['social-search']]) !!}
                         <div class="form-group m-3 w-70">
                             <div class="row">
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="__/__/____">
+                                        <label>Data Inicial</label>
+                                        <input type="text" class="form-control datepicker" name="dt_inicial" value="{{ old("dt_inicial") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="__/__/____">
+                                        <label>Data Final</label>
+                                        <input type="text" class="form-control datepicker" name="dt_final" valur="{{ old("dt_final") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
-                                <div class="col-md-8">
+                                <div class="col-md-8 col-sm-12">
                                     <div class="form-group">
-                                        <input type="text" class="form-control" placeholder="Termo">
+                                        <label>Termo para busca <span class="text-primary">Mínimo de 3 caracteres</span></label>
+                                        <input type="text" class="form-control" name="termo" placeholder="Termo" value="{{ old('termo') }}">
                                     </div>
                                 </div>
                             </div>
@@ -44,28 +47,21 @@
                                 <div class="col-md-12 checkbox-radios">
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox">
+                                        <input class="form-check-input" type="checkbox" name="facebook">
                                         <span class="form-check-sign"></span>
-                                            Facebook Páginas
+                                            Facebook
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox">
-                                        <span class="form-check-sign"></span>
-                                            Facebook Perfil
-                                        </label>
-                                    </div>
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox">
+                                        <input class="form-check-input" type="checkbox" name="instagram">
                                         <span class="form-check-sign"></span>
                                             Instagram
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox">
+                                        <input class="form-check-input" type="checkbox" name="twitter">
                                         <span class="form-check-sign"></span>
                                             Twitter
                                         </label>

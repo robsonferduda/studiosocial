@@ -14,6 +14,7 @@ use App\FbPost;
 use App\MediaTwitter;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Http\Requests\SocialSearchRequest;
 use Illuminate\Support\Facades\Session;
 
 class SocialSearchController extends Controller
@@ -26,7 +27,7 @@ class SocialSearchController extends Controller
         Session::put('url','social-search');
     }
 
-    public function index()
+    public function index(SocialSearchRequest $request)
     {
         return view('social-search/index');
     }
