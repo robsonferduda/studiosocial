@@ -214,6 +214,8 @@ class FBFeed{
 
     public function fetchPostCount()
     {
+        set_time_limit(0);
+
         $pages = FbPageMonitor::get();
 
         foreach ($pages as $page) {
