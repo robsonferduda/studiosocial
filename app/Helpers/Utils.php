@@ -28,11 +28,11 @@ function isLanguagePortuguese($text): Bool
 {
     $ld = new Text_LanguageDetect();
 
-    $results = $ld->detect($text, 3);
+    $result = $ld->detectSimple($text);
         
-    if(isset($results['portuguese'])) {
+    if($result == 'portuguese') {
         return true;        
     }
-
+    
     return false;
 }
