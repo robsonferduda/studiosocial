@@ -220,15 +220,13 @@ class FBFeed{
 
         foreach ($pages as $page) {
 
-            $posts = $page->fbPagesPost()->with(['fbPagePostComment' => function($query){
-                $query->select('id', 'page_post_id');
-            }])->select('id', 'fb_page_monitor_id')->get();
+            $posts = $page->fbPagesPost()->withCount('fbPagePostComment')->get();
 
             $page_post_count = $posts->count();
             $page_post_comment_count = 0;
            
             foreach ($posts as $post) {
-                $page_post_comment_count += $post->fbPagePostComment->count();
+                $page_post_comment_count += $post->fb_page_post_comment_count;
             }
 
             $page->update([
