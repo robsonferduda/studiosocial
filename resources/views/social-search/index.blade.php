@@ -27,19 +27,19 @@
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Inicial</label>
-                                        <input type="text" class="form-control datepicker" name="dt_inicial" required="true" value="{{ (old("dt_inicial")) ? old("dt_inicial") : date("d/m/Y") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_inicial" required="true" value="{{ ($dt_inicial) ? \Carbon\Carbon::parse($dt_inicial)->format('d/m/Y') : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Final</label>
-                                        <input type="text" class="form-control datepicker" name="dt_final" required="true" value="{{ (old("dt_final")) ? old("dt_final") : date("d/m/Y") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_final" required="true" value="{{ ($dt_final) ? \Carbon\Carbon::parse($dt_final)->format('d/m/Y') : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-sm-12">
                                     <div class="form-group">
-                                        <label>Termo para busca <span class="text-primary">Mínimo de 3 caracteres</span></label>
-                                        <input type="text" class="form-control" name="termo" id="termo" minlength="3" required="true" placeholder="Termo" value="{{ old('termo') }}">
+                                        <label>Termo para busca <span class="text-primary">Não obrigatório</span></label>
+                                        <input type="text" class="form-control" name="termo" id="termo" minlength="3" placeholder="Termo" value="{{ ($term) ? $term : old('term') }}">
                                     </div>
                                 </div>
                             </div>
@@ -76,7 +76,9 @@
                 </div>
             </div> 
             <div class="col-md-12">
-                <h6 class="ml-1 mt-5 mb-3">Mostrando {{ $medias->count() }} de {{ $medias->total() }} MÍDIAS</h6>
+                @if($medias->count())
+                    <h6 class="ml-1 mt-5 mb-3">Mostrando {{ $medias->count() }} de {{ $medias->total() }} MÍDIAS</h6>
+                @endif
                 @if($term)
                     {{ $medias->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
                 @else

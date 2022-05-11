@@ -20,8 +20,7 @@ class SocialSearchRequest extends FormRequest
     {
         return [
             'dt_inicial' => 'required',
-            'dt_final' => 'required',
-            'termo' => 'required'
+            'dt_final' => 'required'
         ];
     }
 
@@ -36,8 +35,7 @@ class SocialSearchRequest extends FormRequest
     {
         return [
             'dt_inicial.required' => 'Campo <strong>Data Inicial</strong> é obrigatório',
-            'dt_final.required' => 'Campo <strong>Data Final</strong> é obrigatório',
-            'termo.required' => 'Campo <strong>Termo</strong> é obrigatório'
+            'dt_final.required' => 'Campo <strong>Data Final</strong> é obrigatório'
         ];
     }
 }

@@ -31,13 +31,16 @@ class SocialSearchController extends Controller
     public function index(SocialSearchRequest $request)
     {
         $carbon = new Carbon();
-        $term =  strtolower($request->termo);
-        $dt_inicial = ($request->dt_inicial) ? $carbon->createFromFormat('d/m/Y', $request->dt_inicial)->format('Y-m-d')." 00:00:00" : null;
-        $dt_final = ($request->dt_final) ? $carbon->createFromFormat('d/m/Y', $request->dt_final)->format('Y-m-d')." 23:59:59" : null;
+        $term =  (trim($request->termo)) ? strtolower($request->termo) : null;
+        $dt_inicial = ($request->dt_inicial) ? $carbon->createFromFormat('d/m/Y', $request->dt_inicial)->format('Y-m-d')." 00:00:00" : date("Y-m-d")." 00:00:00";
+        $dt_final = ($request->dt_final) ? $carbon->createFromFormat('d/m/Y', $request->dt_final)->format('Y-m-d')." 23:59:59" : date("Y-m-d")." 23:59:59";
 
         $fl_instagram = (!isset($request->instagram))? false : true;
         $fl_facebook = (!isset($request->facebook))? false : true;
         $fl_twitter = (!isset($request->twitter))? false : true;
+
+        $union = false;
+        $medias = null;
 
         //* Dados do Facebook
         $fb_posts = DB::table('fb_posts')  
@@ -90,13 +93,28 @@ class SocialSearchController extends Controller
                     })      
                     ->where('client_id','=',$this->client_id);
 
-        // Dados do Instagram
-                         
-        $medias = $fb_posts->union($media_twitter)->union($medias_insta)
-                ->orderBy('date','DESC')
-                ->paginate(20);
+        if($fl_facebook){
+            $union = true;
+            $medias = ($medias) ? $medias->union($fb_posts) : $fb_posts;
+        }
 
-        return view('social-search/index', compact('medias','term'));
+        if($fl_instagram){
+            $union = true;
+            $medias = ($medias) ? $medias->union($medias_insta) : $medias_insta;
+        }
+
+        if($fl_twitter){
+            $union = true;
+            $medias = ($medias) ? $medias->union($media_twitter) : $media_twitter;
+        }
+
+        if(!$union){
+            $medias = $fb_posts->union($media_twitter)->union($medias_insta)->orderBy('date','DESC')->paginate(20);
+        }else{
+            $medias = $medias->orderBy('date','DESC')->paginate(20);
+        }
+       
+        return view('social-search/index', compact('medias','term','term','dt_inicial','dt_final'));
     }
 
     public function buscar()
