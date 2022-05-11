@@ -174,8 +174,8 @@ Route::get('delete-media-language', function(){
     set_time_limit(0);
     $medias = Media::get();  
     foreach($medias as $media) {
-        if(isLanguagePortuguese($media['caption']) == false)
-            $media->delete();
-    }
-    
+        if(isLanguagePortuguese($media['caption']) == false) {
+           $media->delete();
+        }       
+    }    
 });
