@@ -1,6 +1,7 @@
 <?php 
 
 use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Expr\Cast\Bool_;
 
 function dateTimeUtcToLocal(String $date_time): \DateTime
 {
@@ -21,4 +22,17 @@ function getTokenApp(): String
 
     $response = Http::get($url,$params);
     return $response->json()['access_token'];
+}
+
+function isLanguagePortuguese($text): Bool
+{
+    $ld = new Text_LanguageDetect();
+
+    $results = $ld->detect($text, 3);
+        
+    if(isset($results['portuguese'])) {
+        return true;        
+    }
+
+    return false;
 }
