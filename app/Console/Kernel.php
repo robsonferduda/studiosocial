@@ -35,7 +35,8 @@ class Kernel extends ConsoleKernel
             (new FBFeed())->pullMedias();   
             (new FbTerm())->runJob();
             (new FbHashtag())->runJob();
-            (new Rule())->runJob();         
+            (new Rule())->runJob();       
+            (new FBFeed())->fetchPostCount();
                
         })->hourly()->between('2:00', '23:00');
 
