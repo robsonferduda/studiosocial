@@ -222,9 +222,8 @@ class FBFeed{
 
             $page_post_count = $posts->count();
             $page_post_comment_count = 0;
-
-            foreach ($posts as $post) {
-
+           
+            foreach ($posts->get() as $post) {
                 $page_post_comment_count += $post->fbPagePostComment()->count();
             }
 
