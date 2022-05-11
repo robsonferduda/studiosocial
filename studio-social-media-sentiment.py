@@ -141,7 +141,7 @@ medias = cur.fetchall()
 
 for media in medias:
 
-    texto = [media['text']]
+    texto = [media['message']]
     freq_testes = vectorizer.transform(texto)
 
     for t, c in zip (texto,modelo.predict(freq_testes)): 
