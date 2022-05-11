@@ -33,12 +33,13 @@ class FbPageController extends Controller
 
         $page_term =  strtolower($request->page_term);
 
-        $pages = FbPageMonitor::withCount('fbPagesPost')->when($quantidade > 0, function($query) use ($quantidade) {
-            $query->has('fbPagesPost', '>=', $quantidade);
-        })
-        ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
-            $query->doesntHave('fbPagesPost');
-        })
+        $pages = FbPageMonitor::withCount('fbPagesPost')
+        // ->when($quantidade > 0, function($query) use ($quantidade) {
+        //     $query->has('fbPagesPost', '>=', $quantidade);
+        // })
+        // ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
+        //     $query->doesntHave('fbPagesPost');
+        // })
         ->when($page_term, function($query) use ($page_term){
             $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
         })
