@@ -43,7 +43,7 @@ class SocialSearchController extends Controller
         $medias = null;
 
         //* Dados do Facebook
-        $fb_posts = DB::table('fb_posts')  
+        $temp_a = DB::table('fb_posts')  
                     ->select('id')          
                     ->addSelect(DB::raw("created_at as date"))  
                     ->addSelect(DB::raw("message as text")) 
@@ -56,8 +56,39 @@ class SocialSearchController extends Controller
                     })     
                     ->when($term, function ($q) use($term){
                         $q->where('message','ilike','%'.$term.'%');
-                    })   
-                    ->where('client_id','=',$this->client_id);
+                    });
+
+        $temp_b = DB::table('fb_page_posts')  
+                    ->select('id')          
+                    ->addSelect(DB::raw("created_at as date"))  
+                    ->addSelect(DB::raw("message as text")) 
+                    ->addSelect(DB::raw("'facebook-page' as tipo"))  
+                    ->addSelect(DB::raw("'facebook' as rede")) 
+                    ->addSelect(DB::raw("'username' as user")) 
+                    ->addSelect(DB::raw("sentiment"))    
+                    ->when($dt_inicial, function ($q) use($dt_inicial, $dt_final){
+                        $q->whereBetween('created_at', [$dt_inicial, $dt_final]);
+                    })     
+                    ->when($term, function ($q) use($term){
+                        $q->where('message','ilike','%'.$term.'%');
+                    });  
+
+        $temp_c = DB::table('fb_page_posts_comments')  
+                    ->select('id')          
+                    ->addSelect(DB::raw("created_at as date"))  
+                    ->addSelect(DB::raw("text as text")) 
+                    ->addSelect(DB::raw("'facebook-page-comment' as tipo"))  
+                    ->addSelect(DB::raw("'facebook' as rede")) 
+                    ->addSelect(DB::raw("'username' as user")) 
+                    ->addSelect(DB::raw("sentiment"))    
+                    ->when($dt_inicial, function ($q) use($dt_inicial, $dt_final){
+                        $q->whereBetween('created_at', [$dt_inicial, $dt_final]);
+                    })     
+                    ->when($term, function ($q) use($term){
+                        $q->where('text','ilike','%'.$term.'%');
+                    }); 
+
+        $fb_posts = $temp_a->union($temp_b)->union($temp_c);
 
         //* Dados do Instagram
         $medias_insta = DB::table('medias')  
@@ -73,8 +104,7 @@ class SocialSearchController extends Controller
                     })     
                     ->when($term, function ($q) use($term){
                         $q->where('caption','ilike','%'.$term.'%');
-                    })   
-                    ->where('client_id','=',$this->client_id);
+                    });
                     
         // Dados do Twitter
         $media_twitter = DB::table('media_twitter')  
@@ -90,8 +120,7 @@ class SocialSearchController extends Controller
                     })     
                     ->when($term, function ($q) use($term){
                         $q->where('full_text','ilike','%'.$term.'%');
-                    })      
-                    ->where('client_id','=',$this->client_id);
+                    });
 
         if($fl_facebook){
             $union = true;
