@@ -216,21 +216,17 @@ class FBFeed{
     {
         set_time_limit(0);
 
-        $pages = FbPageMonitor::select('id')->with(['fbPagesPost'=> function($query){
-            $query->select('id','fb_page_monitor_id')->with(['fbPagePostComment' => function($query){
-                $query->select('id', 'page_post_id');
-            }]);
-        }])->get();
+        $pages = FbPageMonitor::select('id')->get();
 
         foreach ($pages as $page) {
 
-            $posts = $page->fbPagesPost;
+            $posts = $page->fbPagesPost()->select('id', 'fb_page_monitor_id')->get();
 
             $page_post_count = $posts->count();
             $page_post_comment_count = 0;
            
-            foreach ($posts as $post) {
-                $page_post_comment_count += $post->fbPagePostComment->count();
+            foreach ($posts->get() as $post) {
+                $page_post_comment_count += $post->fbPagePostComment()->count();
             }
 
             $page->update([
