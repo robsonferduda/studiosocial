@@ -173,7 +173,7 @@ Route::get('processamento','ProcessamentoController@index');
 Route::get('delete-media-language', function(){
     $ld = new Text_LanguageDetect();
     
-    $medias = Media::take(10)->get();  
+    $medias = Media::take(100)->get();  
     foreach($medias as $media) {
 
         $results = $ld->detect($media->caption, 3);
