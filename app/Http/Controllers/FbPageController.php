@@ -45,7 +45,6 @@ class FbPageController extends Controller
         //     $query->doesntHave('fbPagesPost');
         // })
        
-
         $clients = Client::select(['id', 'name'])->get();
 
         return view('pages/index', compact('pages', 'clients', 'page_term'));

@@ -214,18 +214,16 @@ class FBFeed{
 
     public function fetchPostCount()
     {
-        $pages = FbPageMonitor::with(['fbPagesPost' => function($query){
-            $query->withCount('fbPagePostComment');
-        }])->withCount('fbPagesPost')->get();
+        $pages = FbPageMonitor::get();
 
         foreach ($pages as $page) {
 
-            $page_post_count = $page->fb_pages_post_count;
+            $page_post_count = $page->fbPagesPost()->count();
             $page_post_comment_count = 0;
 
-            foreach ($page->fbPagesPost as $post) {
+            foreach ($page->fbPagesPost() as $post) {
 
-                $page_post_comment_count += $post->fb_page_post_comment_count;
+                $page_post_comment_count += $post->fbPagePostComment()->count();
             }
 
             $page->update([
