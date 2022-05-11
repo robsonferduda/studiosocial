@@ -74,6 +74,11 @@ class IGHashTag{
                                 }
                                                                     
                                 foreach ($medias['data'] as $media) {
+
+                                    if(!empty($media['caption'])) {
+                                        if(isLanguagePortuguese($media['caption']) == false)
+                                            continue;
+                                    }
         
                                     $media = Media::updateOrCreate(
                                     [
