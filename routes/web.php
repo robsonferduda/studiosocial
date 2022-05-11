@@ -3,6 +3,7 @@
 use App\Classes\FbHashtag;
 use App\Classes\FbTerm;
 use App\Classes\Rule as ClassesRule;
+use App\Media;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
@@ -169,3 +170,12 @@ ROute::get('transcricao/audios/{emissora}','ProcessamentoController@audios');
 Route::get('processamento','ProcessamentoController@index');
 
 
+Route::get('delete-media-language', function(){
+
+    $medias = Media::get();  
+    foreach($medias as $media) {
+        if(isLanguagePortuguese($media['caption']) == false)
+            $media->delete();
+    }
+    
+});
