@@ -21,51 +21,53 @@
             </div>
             <div class="col-md-12">
                 <div class="card">
-                    {!! Form::open(['id' => 'frm_search_page', 'class' => 'form-horizontal', 'url' => ['social-search']]) !!}
+                    {!! Form::open(['id' => 'frm_social_search', 'class' => 'form-horizontal', 'url' => ['social-search']]) !!}
                         <div class="form-group m-3 w-70">
                             <div class="row">
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Inicial</label>
-                                        <input type="text" class="form-control datepicker" name="dt_inicial" value="{{ (old("dt_inicial")) ? old("dt_inicial") : date("d/m/Y") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_inicial" required="true" value="{{ (old("dt_inicial")) ? old("dt_inicial") : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-2 col-sm-6">
                                     <div class="form-group">
                                         <label>Data Final</label>
-                                        <input type="text" class="form-control datepicker" name="dt_final" value="{{ (old("dt_final")) ? old("dt_final") : date("d/m/Y") }}" placeholder="__/__/____">
+                                        <input type="text" class="form-control datepicker" name="dt_final" required="true" value="{{ (old("dt_final")) ? old("dt_final") : date("d/m/Y") }}" placeholder="__/__/____">
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-sm-12">
                                     <div class="form-group">
                                         <label>Termo para busca <span class="text-primary">Mínimo de 3 caracteres</span></label>
-                                        <input type="text" class="form-control" name="termo" placeholder="Termo" value="{{ old('termo') }}">
+                                        <input type="text" class="form-control" name="termo" id="termo" minlength="3" required="true" placeholder="Termo" value="{{ old('termo') }}">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-12 checkbox-radios mb-0">
-                                    <div class="form-check">
+                                    <div class="form-check form-check-inline">
                                         <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="facebook">
                                         <span class="form-check-sign"></span>
-                                            Facebook
+                                            <i class="fa fa-facebook fa-2x text-facebook"></i>
                                         </label>
                                     </div>
-                                    <div class="form-check">
+                                    <div class="form-check form-check-inline">
                                         <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="instagram">
                                         <span class="form-check-sign"></span>
-                                            Instagram
+                                            <i class="fa fa-instagram fa-2x text-pink"></i>
                                         </label>
                                     </div>
-                                    <div class="form-check">
+                                    <div class="form-check form-check-inline">
                                         <label class="form-check-label">
                                         <input class="form-check-input" type="checkbox" name="twitter">
                                         <span class="form-check-sign"></span>
-                                            Twitter
+                                            <i class="fa fa-twitter fa-2x text-info"></i>
                                         </label>
                                     </div>
+                                </div>
+                                <div class="col-md-12 checkbox-radios mb-0">
                                     <button type="submit" id="btn-find" class="btn btn-primary mb-3"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
@@ -74,7 +76,7 @@
                 </div>
             </div> 
             <div class="col-md-12">
-                <h6 class="ml-1 mt-5 mb-3">Mostrando {{ $medias->count() }} de {{ $medias->total() }} Páginas</h6>
+                <h6 class="ml-1 mt-5 mb-3">Mostrando {{ $medias->count() }} de {{ $medias->total() }} MÍDIAS</h6>
                 @if($term)
                     {{ $medias->onEachSide(1)->appends(['term' => $term])->links('vendor.pagination.bootstrap-4') }} 
                 @else
@@ -91,7 +93,7 @@
                                     @else
                                         <img src="{{ url('img/user.png') }}" alt="Imagem de Perfil" class="rounded-pill">
                                     @endif
-                                    <p>Usuário</p>                                     
+                                    <p class="mt-2 mb-0">{{ $media->user }}</p>                                     
                                    
                                     @switch($media->rede)
                                         @case('instagram')

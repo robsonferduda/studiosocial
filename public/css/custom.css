@@ -87,7 +87,7 @@
     border-radius: 5px;
 }
 .error{
-    color: #dd0808;
+    color: #dd0808 !important;
     margin-top: 5px;
 }
 .box_hashtags{ display: none;}

@@ -315,9 +315,11 @@
       $('.select2').select2();
 
       $('#frm_notification_create').validate();
+      $('#frm_social_search').validate();
       
       jQuery.extend(jQuery.validator.messages, {
-        required: "Campo obrigatório"
+        required: "Campo obrigatório",
+        minlength: jQuery.validator.format("Tamanho mínimo do campo é de {0} cadacteres")
       });
       
       $('#datatable').DataTable({

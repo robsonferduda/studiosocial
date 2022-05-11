@@ -35,6 +35,10 @@ class SocialSearchController extends Controller
         $dt_inicial = ($request->dt_inicial) ? $carbon->createFromFormat('d/m/Y', $request->dt_inicial)->format('Y-m-d')." 00:00:00" : null;
         $dt_final = ($request->dt_final) ? $carbon->createFromFormat('d/m/Y', $request->dt_final)->format('Y-m-d')." 23:59:59" : null;
 
+        $fl_instagram = (!isset($request->instagram))? false : true;
+        $fl_facebook = (!isset($request->facebook))? false : true;
+        $fl_twitter = (!isset($request->twitter))? false : true;
+
         //* Dados do Facebook
         $fb_posts = DB::table('fb_posts')  
                     ->select('id')          
