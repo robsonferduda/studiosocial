@@ -216,8 +216,8 @@ class FBFeed{
     {
         set_time_limit(0);
 
-        $pages = FbPageMonitor::with(['fbPagesPost'=> function($query){
-            $query->with('fbPagePostComment');
+        $pages = FbPageMonitor::select('id')->with(['fbPagesPost'=> function($query){
+            $query->select('id','fb_page_monitor_id')->with('fbPagePostComment');
         }])->get();
 
         foreach ($pages as $page) {
