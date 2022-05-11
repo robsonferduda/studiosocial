@@ -45,7 +45,7 @@
                                 <div class="col-md-3 text-center">
                                     <img src="{{ str_replace('normal','400x400', $page->picture_url) }}" alt="Imagem de Perfil" class="rounded-pill img-perfil">
                                     <h6 class="m-2"><a href="{{ $page->url }}" target="_blank" rel="noopener noreferrer">{{ $page->name }}</a></h6>
-                                    <p><a href="{{ url('facebook-paginas/monitoramento/'.$page->id) }}">{{ $page->fb_pages_post_count }} Postagens</a></p>
+                                    <p><a href="{{ url('facebook-paginas/monitoramento/'.$page->id) }}">{{ $page->page_post_count }} Postagens / {{ $page->page_post_comment_count }} Comentários</a></p>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="pull-right">

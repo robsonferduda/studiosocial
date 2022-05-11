@@ -33,18 +33,18 @@ class FbPageController extends Controller
 
         $page_term =  strtolower($request->page_term);
 
-        $pages = FbPageMonitor::withCount('fbPagesPost')
+        $pages = FbPageMonitor::when($page_term, function($query) use ($page_term){
+            $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
+        })
+        ->orderby('page_post_count', 'desc')
+        ->paginate(20);
         // ->when($quantidade > 0, function($query) use ($quantidade) {
         //     $query->has('fbPagesPost', '>=', $quantidade);
         // })
         // ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
         //     $query->doesntHave('fbPagesPost');
         // })
-        ->when($page_term, function($query) use ($page_term){
-            $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
-        })
-        ->orderby('fb_pages_post_count', 'desc')
-        ->paginate(10);
+       
 
         $clients = Client::select(['id', 'name'])->get();
 
@@ -298,7 +298,8 @@ class FbPageController extends Controller
 
     public function pullMedias()
     {
-        (new FBFeed())->pullMedias();
+        (new FBFeed())->fetchPostCount();
+        //(new FBFeed())->pullMedias();
     }
 
     public function associarCliente(PageRequest $request)
