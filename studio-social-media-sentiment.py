@@ -132,4 +132,42 @@ for media in medias:
 
     sql = 'update fb_comments SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
     cur.execute(sql)
+    con.commit()
+
+sql = 'select * from fb_page_posts where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['text']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update fb_page_posts SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
+    cur.execute(sql)
+    con.commit()  
+
+sql = 'select * from fb_page_posts_comments where sentiment isnull'
+
+cur.execute(sql)
+medias = cur.fetchall()
+
+for media in medias:
+
+    texto = [media['text']]
+    freq_testes = vectorizer.transform(texto)
+
+    for t, c in zip (texto,modelo.predict(freq_testes)): 
+        if c == 'neutro' : sent = 0
+        if c == 'positivo' : sent = 1
+        if c == 'negativo' : sent = -1
+
+    sql = 'update fb_page_posts_comments SET sentiment = '+str(sent)+' WHERE id = '+str(media['id'])
+    cur.execute(sql)
     con.commit() 
