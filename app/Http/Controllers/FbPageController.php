@@ -43,7 +43,7 @@ class FbPageController extends Controller
             $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
         })
         ->orderby('fb_pages_post_count', 'desc')
-        ->paginate(20);
+        ->paginate(10);
 
         $clients = Client::select(['id', 'name'])->get();
 
