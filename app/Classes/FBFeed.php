@@ -52,10 +52,10 @@ class FBFeed{
                     $reactions = $this->getReactions($post);
                     $comments = [];
 
-                    if(!empty($post['message'])) {
-                        if(isLanguagePortuguese($post['message']) == false)
-                            continue;
-                    }
+                    // if(!empty($post['message'])) {
+                    //     if(isLanguagePortuguese($post['message']) == false)
+                    //         continue;
+                    // }
 
                     if(isset($post['comments']['data'])) {
                         $comments = $post['comments'];
