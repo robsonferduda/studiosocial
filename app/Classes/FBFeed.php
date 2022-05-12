@@ -6,6 +6,7 @@ use App\FbAccount;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\FbPagePostComment;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class FBFeed{
@@ -216,20 +217,27 @@ class FBFeed{
     {
         set_time_limit(0);
 
-        $pages = FbPageMonitor::select('id')->get();
+        $pages = DB::select("select 	
+                                t0.id,	
+                                count(distinct t1.id) as post_count ,
+                                count(t2.id) as comment_count
+                            from 
+                                fb_pages_monitor t0
+                                inner join fb_page_posts t1 on (t0.id = t1.fb_page_monitor_id)
+                                left join fb_page_posts_comments t2 on (t1.id = t2.page_post_id)
+                            where
+                                t0.deleted_at is null
+                            group by 
+                                t0.id
+                            having count(distinct t1.id) > 0
+                            order by count(distinct t1.id) desc");
 
         foreach ($pages as $page) {
 
-            $posts = $page->fbPagesPost()->withCount('fbPagePostComment')->get();
+            $page_post_count = $page->post_count;
+            $page_post_comment_count = $page->comment_count;
 
-            $page_post_count = $posts->count();
-            $page_post_comment_count = 0;
-           
-            foreach ($posts as $post) {
-                $page_post_comment_count += $post->fb_page_post_comment_count;
-            }
-
-            $page->update([
+            DB::table('fb_pages_monitor')->where('id', $page->id)->update([
                 'page_post_count' => $page_post_count,
                 'page_post_comment_count' => $page_post_comment_count
             ]);
