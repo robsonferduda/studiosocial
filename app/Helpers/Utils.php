@@ -28,7 +28,7 @@ function isLanguagePortuguese($text): Bool
 {
     $ld = new Text_LanguageDetect();
 
-    $result = $ld->detect($text,5);
+    $result = $ld->detect($text,4);
 
     // echo '<pre>';
     // print_r($result); echo '<br><br>';
