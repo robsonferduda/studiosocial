@@ -297,8 +297,8 @@ class FbPageController extends Controller
 
     public function pullMedias()
     {
-        (new FBFeed())->fetchPostCount();
-        //(new FBFeed())->pullMedias();
+        //(new FBFeed())->fetchPostCount();
+        (new FBFeed())->pullMedias();
     }
 
     public function associarCliente(PageRequest $request)
