@@ -349,7 +349,7 @@ class FbPageController extends Controller
 
             }catch(Exception $e){
 
-                dd($response);
+                dd($e);
             
             }
 
