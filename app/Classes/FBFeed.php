@@ -6,6 +6,7 @@ use App\FbAccount;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\FbPagePostComment;
+use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
@@ -43,8 +44,12 @@ class FBFeed{
                     'limit' => $limit
                 ];
         
-                $posts = $fb_feed->getFeed($params);
-                
+                try{
+                    $posts = $fb_feed->getFeed($params);
+                }catch(Exception $e){
+                    continue;
+                }
+
                 if(empty($posts['data'])) {
                     continue;
                 }
