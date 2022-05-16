@@ -69,70 +69,65 @@ class FbPageController extends Controller
 
         $token_app = env('COLETA1');//getTokenApp();
 
-        try{
+        $fb_api = new FBSearchPageApi();
 
-            $fb_api = new FBSearchPageApi();
+        $fields = $fb_api->getPageInfoFields();
+                            
+        $params = [      
+            'q' => strtolower($request->termo),   
+            'access_token' => $token_app,
+            'after' => $request->after,
+            'before' => $request->before,
+            'limit' => 10
+        ];
 
-            $fields = $fb_api->getPageInfoFields();
+        $pages = $fb_api->getPages($params);
+
+        $dados = [];
+        $dados['limit_exceeded'] =  false;
+
+        if(isset($pages['headers']['x-app-usage'][0])) {
+            $x_app_usage = json_decode($pages['headers']['x-app-usage'][0]);
+
+            if((int) $x_app_usage->call_count > 50) {
+                $dados['limit_exceeded'] = true;
+                echo json_encode($dados);  
+                exit;
+            }
+        }
+
+        $pages = $pages['body'];
+
+        foreach ($pages['data'] as $page) {
+
+            $page_id = $page['id'];
                                 
             $params = [      
-                'q' => strtolower($request->termo),   
-                'access_token' => $token_app,
-                'after' => $request->after,
-                'before' => $request->before,
-                'limit' => 10
+                'fields' => $fields,   
+                'access_token' => $token_app                
             ];
 
-            $pages = $fb_api->getPages($params);
+            $infos = $fb_api->getPageInfo($page_id, $params);
 
-            $dados = [];
-            $dados['limit_exceeded'] =  false;
-
-            if(isset($pages['headers']['x-app-usage'][0])) {
-                $x_app_usage = json_decode($pages['headers']['x-app-usage'][0]);
-
-                if((int) $x_app_usage->call_count > 50) {
-                    $dados['limit_exceeded'] = true;
-                    echo json_encode($dados);  
-                    exit;
-                }
-            }
-
-            $pages = $pages['body'];
-
-            foreach ($pages['data'] as $page) {
-
-                $page_id = $page['id'];
-                                    
-                $params = [      
-                    'fields' => $fields,   
-                    'access_token' => $token_app                
-                ];
-
-                $infos = $fb_api->getPageInfo($page_id, $params);
-
-                $dados['data'][] =  array(
-                                'id' => $infos['id'],
-                                'name' => $infos['name'],
-                                'link' => $infos['link'],
-                                'description' => isset($infos['description']) ? $infos['description'] : '',
-                                'category' => $infos['category'],
-                                'picture' => $infos['picture']['data']['url'],
-                                'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false ),
-                                'location' => isset($infos['location']) ? $infos['location'] : ''
-                            );
-            }
-
-            if($fb_api->hasAfter($pages) || $fb_api->hasBefore($pages) ) {
-                $dados['info']['after'] = $fb_api->getAfter($pages);
-                $dados['info']['before'] = $fb_api->getBefore($pages);
-                $dados['info']['query'] = $request->termo;
-            }
-            
-            echo json_encode($dados);   
-        }catch(Exception $e){
-            //nada
+            $dados['data'][] =  array(
+                            'id' => $infos['id'],
+                            'name' => $infos['name'],
+                            'link' => $infos['link'],
+                            'description' => isset($infos['description']) ? $infos['description'] : '',
+                            'category' => $infos['category'],
+                            'picture' => $infos['picture']['data']['url'],
+                            'registered' =>  ( in_array($infos['id'], $pages_monitor) ? true : false ),
+                            'location' => isset($infos['location']) ? $infos['location'] : ''
+                        );
         }
+
+        if($fb_api->hasAfter($pages) || $fb_api->hasBefore($pages) ) {
+            $dados['info']['after'] = $fb_api->getAfter($pages);
+            $dados['info']['before'] = $fb_api->getBefore($pages);
+            $dados['info']['query'] = $request->termo;
+        }
+        
+        echo json_encode($dados);   
     
     }
 
