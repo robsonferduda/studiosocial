@@ -324,7 +324,7 @@ class FbPageController extends Controller
 
             try {
                
-                $response = Http::timeout(120)->get($page->picture_url);
+                $response = Http::get($page->picture_url);
 
                 if($response->status() == 200){
                     continue;
@@ -349,7 +349,7 @@ class FbPageController extends Controller
 
             }catch(Exception $e){
 
-                dd($e);
+                //dd($e);
             
             }
 
