@@ -47,9 +47,11 @@ class FBFeed{
                 try{
                     $posts = $fb_feed->getFeed($params);
                 }catch(Exception $e){
-                    continue;
+                    dd($posts);
                 }
 
+                
+                
                 if(empty($posts['data'])) {
                     continue;
                 }
