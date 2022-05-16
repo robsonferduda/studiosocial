@@ -321,27 +321,39 @@ class FbPageController extends Controller
 
         foreach ($pages_monitor as $page) {
 
-            $response = Http::get($page->picture_url);
 
-            if($response->status() == 200){
-                continue;
-            } 
+            try {
+               
+                $response = Http::get($page->picture_url);
 
-            $token_app = env('COLETA1');//getTokenApp();
+                if($response->status() == 200){
+                    continue;
+                } 
+    
+                $token_app = env('COLETA1');//getTokenApp();
+    
+                $fb_api = new FBSearchPageApi();
+                                    
+                $params = [      
+                    'access_token' => $token_app,
+                    'redirect' => 0,
+                    'fields' => 'url'
+                ];
+    
+                $picture = $fb_api->getPagePicture($page->page_id, $params);
+    
+                $page->picture_url = $picture['data']['url'];
+                
+                $page->save();
 
-            $fb_api = new FBSearchPageApi();
-                                
-            $params = [      
-                'access_token' => $token_app,
-                'redirect' => 0,
-                'fields' => 'url'
-            ];
 
-            $picture = $fb_api->getPagePicture($page->page_id, $params);
+            }catch(Exception $e){
 
-            $page->picture_url = $picture['data']['url'];
+                dd($page);
             
-            $page->save();
+            }
+
+           
         }
 
     }
