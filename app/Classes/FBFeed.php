@@ -44,13 +44,7 @@ class FBFeed{
                     'limit' => $limit
                 ];
         
-                try{
-                    $posts = $fb_feed->getFeed($params);
-                }catch(Exception $e){
-                    dd($posts);
-                }
-
-                
+                $posts = $fb_feed->getFeed($params);
                 
                 if(empty($posts['data'])) {
                     continue;
