@@ -324,7 +324,7 @@ class FbPageController extends Controller
 
             try {
                
-                $response = Http::get($page->picture_url);
+                $response = Http::connectTimeout(120)->get($page->picture_url);
 
                 if($response->status() == 200){
                     continue;
