@@ -188,8 +188,8 @@ class NotificacaoController extends Controller
                         foreach ($postagens_twitter as $key => $post) {
 
                             $postagens[] = array('img' => 'twitter',
-                                            'msg'  => $post->full_text,
-                                            'link' => 'https://twitter.com/'.$post->user_screen_name.'/status/'.$post->twitter_id);
+                                                 'msg'  => $post->full_text,
+                                                 'link' => 'https://twitter.com/'.$post->user_screen_name.'/status/'.$post->twitter_id);
 
                             $post->fl_notification = true;
                             $post->save();
@@ -206,7 +206,6 @@ class NotificacaoController extends Controller
                     }
 
                     //Bloco coleta Instagram
-
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->where('timestamp','>', [$notification->dt_inicio])
                                                 ->where('caption', "ilike", "%{$notification->valor}%")
@@ -220,8 +219,8 @@ class NotificacaoController extends Controller
                         foreach ($postagens_instagram as $key => $post) {
 
                             $postagens[] = array('img' => 'instagram',
-                                            'msg'  => $post->caption,
-                                            'link' => $post->permalink );
+                                                 'msg'  => $post->caption,
+                                                 'link' => $post->permalink );
 
                             $post->fl_notification = true;
                             $post->save();
@@ -249,7 +248,7 @@ class NotificacaoController extends Controller
 
                         foreach ($postagens_facebook as $key => $post) {
 
-                            $postagens[] = array('img' => 'instagram',
+                            $postagens[] = array('img' => 'facebook',
                                                  'msg'  => $post->message,
                                                  'link' => 'link' );
 
@@ -271,7 +270,7 @@ class NotificacaoController extends Controller
                     if($total_post){
                         $flag_enviar = true;
                         $titulo = "Alerta para a palavra-chave ".$notification->valor;
-                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
+                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: ".count($postagens);
                     }                              
 
                     break;
@@ -351,9 +350,9 @@ class NotificacaoController extends Controller
 
                         foreach ($postagens_facebook as $key => $post) {
 
-                            $postagens[] = array('img' => 'instagram',
-                                            'msg'  => $post->message,
-                                            'link' => 'link' );
+                            $postagens[] = array('img' => 'facebook',
+                                                 'msg'  => $post->message,
+                                                'link' => 'link' );
 
                             $post->fl_notification = true;
                             $post->save();
@@ -375,7 +374,7 @@ class NotificacaoController extends Controller
                         $flag_enviar = true;
 
                         $titulo = "Alerta para a hashtag ".$notification->valor;
-                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da hashtag '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
+                        $msg = "Foram resgistradas novas postagens em relação ao monitoramento da hashtag '{$notification->valor}'. <br/> Total de mensagens descobertas: ".count($postagens);
 
                     }
 
