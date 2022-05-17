@@ -152,6 +152,7 @@ class NotificacaoController extends Controller
             $postagens_twitter = array(); //Inicializa as coleções de postagens do Twitter
             $postagens_instagram = array(); //Inicializa as coleções de postagens do Instagram
             $postagens_facebook = array(); //Inicializa as coleções de postagens do Facebook
+            $postagens = array();
 
             //Trata cada notificação de acordo com o tipo
             switch ($notification->notification_id) {
