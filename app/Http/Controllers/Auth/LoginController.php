@@ -60,6 +60,11 @@ class LoginController extends Controller
             if($u->hasRole('administradores')){
 
                 $id_cliente_padrao = Configs::where('key', 'cliente_padrao')->first()->value;
+                $flag_regras = Configs::where('key', 'flag_regras')->first()->value;
+
+                if(!Session::get('flag_regras') and $flag_regras){
+                    ($flag_regras) ? Session::put('flag_regras', true) : Session::put('flag_regras', false);
+                }
 
                 if(!Session::get('cliente')){
                     $cliente = Client::find($id_cliente_padrao);

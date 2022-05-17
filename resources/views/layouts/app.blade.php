@@ -203,13 +203,25 @@
             </div>
             <a class="navbar-brand upper" href="{{ url('dashboard') }}">Studio Social</a>
             @role('administradores')
-              <div>
+            <div><span class="flag_regras" data-value="{{ Session::get('flag_regras') }}">
+              @if(Session::get('flag_regras'))
+                  <span class="badge badge-pill badge-info">POSTAGENS FILTRADAS POR REGRAS</span>
+              @else
+                  <span class="badge badge-pill badge-danger">POSTAGENS NÃO FILTRADAS</span>
+              @endif
+            </span>
+
+            </div>
+              <div class="mb-1 ml-2">
+                
+
                 @if(Session::get('cliente'))
                   <p>{{ Session::get('cliente')['nome'] }}</p>
                 @else
                   <p>Nenhum cliente selecionado</p>
                 @endif
                 <span class="troca_cliente"><i class="fa fa-refresh ml-1"></i></span>
+
               </div>
             @endrole
           </div>

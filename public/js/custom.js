@@ -6,6 +6,25 @@ $(document).ready(function() {
     $('.dt_inicial_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
     $('.dt_final_relatorio').mask('00/00/0000',{ "placeholder": "dd/mm/YYYY" });
 
+    var host =  $('meta[name="base-url"]').attr('content');
+    var token = $('meta[name="csrf-token"]').attr('content');
+            
+    $(".flag_regras").click(function(){
+
+        var flag = $(this).data("value");
+
+        $.ajax({
+            url: host+'/configuracoes/flag-regras/atualizar',
+            type: 'POST',
+            data: { "_token": token,
+                    "valor": flag },
+            success: function(response) {
+                window.location.reload();
+            }
+        }); 
+
+    });
+
     $('body').on("click", ".btn-enviar", function(e) {
         e.preventDefault();
         var url = $(this).attr("href");

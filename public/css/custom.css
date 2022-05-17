@@ -124,3 +124,6 @@
 .text-black{
     color: #66615b;
 }
+.flag_regras:hover{
+    cursor: pointer;
+}

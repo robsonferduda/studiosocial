@@ -14,11 +14,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <p>São mostrados os resultados das coletas das redes sociais para o cliente selecionado. Utilize a opção "Regras" para filtrar os resultados de acordo com as expressões desejadas.</p>
-                </div>
-            </div>
+            @include('layouts.aviso-regra')
             <div class="row">                
                 <div class="col-lg-6 col-md-6">
                     <div class="row">

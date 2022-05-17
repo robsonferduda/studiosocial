@@ -39,10 +39,32 @@
                             <td><span class="periodo_atual">{{ $periodo }}</span> {{ ($periodo) > 1 ? 'dias' : 'dia' }}</td>
                             <td><a title="Editar" class="btn btn-primary btn-link btn-icon config_periodo"><i class="fa fa-edit fa-2x"></i></a></td>
                         </tr>
+                        <tr>
+                            <td>Postagens - Filtro por Regras</td>
+                            <td>Define se as listas e totais de postagens são filtrados por regras ou não possuem filtros</td>
+                            <td colspan="2">
+                                <span class="flag_regras" data-value="{{ $flag_regras }}">
+                                    @if($flag_regras)
+                                        <span class="badge badge-pill badge-info">POSTAGENS FILTRADAS POR REGRAS</span>
+                                    @else
+                                        <span class="badge badge-pill badge-danger">POSTAGENS NÃO FILTRADAS</span>
+                                    @endif
+                                </span>
+                            </td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>  
             </div>         
         </div>
     </div>
 </div> 
+@endsection
+@section('script')
+    <script>
+        $(document).ready(function() {
+
+            
+        });
+    </script>
 @endsection
