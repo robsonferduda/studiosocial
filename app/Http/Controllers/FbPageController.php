@@ -33,18 +33,18 @@ class FbPageController extends Controller
 
         $page_term =  strtolower($request->page_term);
 
-        $pages = FbPageMonitor::withCount('fbPagesPost')->when($quantidade > 0, function($query) use ($quantidade) {
-            $query->has('fbPagesPost', '>=', $quantidade);
-        })
-        ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
-            $query->doesntHave('fbPagesPost');
-        })
-        ->when($page_term, function($query) use ($page_term){
+        $pages = FbPageMonitor::when($page_term, function($query) use ($page_term){
             $query->whereRaw(" lower(name) SIMILAR TO '%{$page_term}%' ");
         })
-        ->orderby('fb_pages_post_count', 'desc')
+        ->orderby('page_post_count', 'desc')
         ->paginate(20);
-
+        // ->when($quantidade > 0, function($query) use ($quantidade) {
+        //     $query->has('fbPagesPost', '>=', $quantidade);
+        // })
+        // ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
+        //     $query->doesntHave('fbPagesPost');
+        // })
+       
         $clients = Client::select(['id', 'name'])->get();
 
         return view('pages/index', compact('pages', 'clients', 'page_term'));
@@ -297,6 +297,7 @@ class FbPageController extends Controller
 
     public function pullMedias()
     {
+        //(new FBFeed())->fetchPostCount();
         (new FBFeed())->pullMedias();
     }
 
@@ -320,27 +321,39 @@ class FbPageController extends Controller
 
         foreach ($pages_monitor as $page) {
 
-            $response = Http::get($page->picture_url);
 
-            if($response->status() == 200){
-                continue;
-            } 
+            try {
+               
+                $response = Http::get($page->picture_url);
 
-            $token_app = env('COLETA1');//getTokenApp();
+                if($response->status() == 200){
+                    continue;
+                } 
+    
+                $token_app = env('COLETA1');//getTokenApp();
+    
+                $fb_api = new FBSearchPageApi();
+                                    
+                $params = [      
+                    'access_token' => $token_app,
+                    'redirect' => 0,
+                    'fields' => 'url'
+                ];
+    
+                $picture = $fb_api->getPagePicture($page->page_id, $params);
+    
+                $page->picture_url = $picture['data']['url'];
+                
+                $page->save();
 
-            $fb_api = new FBSearchPageApi();
-                                
-            $params = [      
-                'access_token' => $token_app,
-                'redirect' => 0,
-                'fields' => 'url'
-            ];
 
-            $picture = $fb_api->getPagePicture($page->page_id, $params);
+            }catch(Exception $e){
 
-            $page->picture_url = $picture['data']['url'];
+                //dd($e);
             
-            $page->save();
+            }
+
+           
         }
 
     }

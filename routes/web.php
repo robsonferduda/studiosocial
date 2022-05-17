@@ -3,6 +3,8 @@
 use App\Classes\FbHashtag;
 use App\Classes\FbTerm;
 use App\Classes\Rule as ClassesRule;
+use App\FbPagePost;
+use App\Media;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
@@ -168,3 +170,14 @@ Route::get('transcricao/baixar/{pasta}','ProcessamentoController@baixar');
 Route::get('transcricao/processar/{pasta}','ProcessamentoController@processar');
 ROute::get('transcricao/audios/{emissora}','ProcessamentoController@audios');
 Route::get('processamento','ProcessamentoController@index');
+
+
+Route::get('delete-media-language', function(){
+    set_time_limit(0);
+    $medias = FbPagePost::withTrashed()->take(1000)->WhereNotNull('message')->get();  
+    foreach($medias as $media) {
+        if(isLanguagePortuguese($media['message']) == false) {
+           $media->delete();
+        } 
+    }    
+});
