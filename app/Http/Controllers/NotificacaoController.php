@@ -9,6 +9,7 @@ use App\Media;
 use App\NotificationLog;
 use App\MediaTwitter;
 use App\Notification;
+use App\FbPagePost;
 use App\NotificationClient;
 use Carbon\Carbon;
 use Laracasts\Flash\Flash;
@@ -142,11 +143,15 @@ class NotificacaoController extends Controller
         $postagens = array();
         $postagens_twitter = array();
         $postagens_instagram = array();
+        $postagens_facebook = array();
         $notificacoes_ativas = NotificationClient::where('status', true)->get();
 
         foreach ($notificacoes_ativas as $notification) {
 
             $flag_enviar = false; //Sempre inicializa o envio da mensagem como falso
+            $postagens_twitter = array(); //Inicializa as coleções de postagens do Twitter
+            $postagens_instagram = array(); //Inicializa as coleções de postagens do Instagram
+            $postagens_facebook = array(); //Inicializa as coleções de postagens do Facebook
 
             //Trata cada notificação de acordo com o tipo
             switch ($notification->notification_id) {
@@ -169,6 +174,7 @@ class NotificacaoController extends Controller
                 
                 case NotificationType::KEYWORDS:
                            
+                    //Bloco coleta Twitter
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                     ->where('created_tweet_at','>', [$notification->dt_inicio])
                                                     ->where('full_text', "ilike", "%{$notification->valor}%")
@@ -189,7 +195,17 @@ class NotificacaoController extends Controller
                             $post->save();
                         }
 
+                    //Log do envio
+                    $dados_notificacao = array('id_notification' => NotificationType::KEYWORDS,
+                                                'id_social_media' => SocialMedia::TWITTER,
+                                                'id_type_message' => TypeMessage::TWEETS,
+                                                'description' => $notification->valor,
+                                                'total' => $total_post_twitter,
+                                                'client_id' =>$notification->client_id); 
+
                     }
+
+                    //Bloco coleta Instagram
 
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->where('timestamp','>', [$notification->dt_inicio])
@@ -210,28 +226,59 @@ class NotificacaoController extends Controller
                             $post->fl_notification = true;
                             $post->save();
                         }
+
+                        //Log do envio
+                        $dados_notificacao = array('id_notification' => NotificationType::KEYWORDS,
+                                                    'id_social_media' => SocialMedia::INSTAGRAM,
+                                                    'id_type_message' => TypeMessage::IG_POSTS,
+                                                    'description' => $notification->valor,
+                                                    'total' => $total_post_instagram,
+                                                    'client_id' =>$notification->client_id); 
                     }
 
-                    $total_post = $total_post_twitter + $total_post_instagram;
+                    //Bloco coleta Facebook
+
+                    $postagens_facebook = FbPagePost::where('updated_time','>', [$notification->dt_inicio])
+                                                    ->where('message', "ilike", "%{$notification->valor}%")
+                                                    ->where('fl_notification',false)
+                                                    ->get();
+
+                    $total_post_facebook = count($postagens_facebook);
+
+                    if($total_post_facebook){
+
+                        foreach ($postagens_facebook as $key => $post) {
+
+                            $postagens[] = array('img' => 'instagram',
+                                                 'msg'  => $post->message,
+                                                 'link' => 'link' );
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+
+                         //Log do envio
+                        $dados_notificacao = array('id_notification' => NotificationType::KEYWORDS,
+                                                    'id_social_media' => SocialMedia::FACEBOOK,
+                                                    'id_type_message' => TypeMessage::FB_PAGE_POST,
+                                                    'description' => $notification->valor,
+                                                    'total' => $total_post_facebook,
+                                                    'client_id' =>$notification->client_id); 
+                    }
+
+                    $total_post = $total_post_twitter + $total_post_instagram + $total_post_facebook;
 
                     if($total_post){
                         $flag_enviar = true;
                         $titulo = "Alerta para a palavra-chave ".$notification->valor;
                         $msg = "Foram resgistradas novas postagens em relação ao monitoramento da palavra-chave '{$notification->valor}'. <br/> Total de mensagens descobertas: {$total_post}";
-                    }
-
-                    //Log do envio
-                    $dados_notificacao = array('id_notification' => NotificationType::KEYWORDS,
-                                  'id_social_media' => SocialMedia::TWITTER,
-                                  'id_type_message' => TypeMessage::TWEETS,
-                                  'description' => $notification->valor,
-                                  'total' => $total_post,
-                                  'client_id' =>$notification->client_id);            
+                    }                              
 
                     break;
 
                 case NotificationType::HASHTAG:
 
+                    //Bloco coleta Twitter
                     $postagens_twitter = MediaTwitter::where('client_id', $notification->client_id)
                                                      ->where('created_tweet_at','>', [$notification->dt_inicio])
                                                      ->where('full_text', "ilike", "%{$notification->valor}%")
@@ -252,7 +299,16 @@ class NotificacaoController extends Controller
                             $post->save();
                         }
 
+                        $dados_notificacao = array('id_notification' => NotificationType::HASHTAG,
+                                                    'id_social_media' => SocialMedia::TWITTER,
+                                                    'id_type_message' => TypeMessage::TWEETS,
+                                                    'description' => $notification->valor,
+                                                    'total' => $total_post_twitter,
+                                                    'client_id' =>$notification->client_id); 
+
                     }
+
+                    //Bloco coleta Instagram
 
                     $postagens_instagram = Media::where('client_id', $notification->client_id)
                                                 ->where('timestamp','>', [$notification->dt_inicio])
@@ -274,9 +330,45 @@ class NotificacaoController extends Controller
                             $post->save();
                         }
 
+                        //Log do envio
+                        $dados_notificacao = array('id_notification' => NotificationType::HASHTAG,
+                                                    'id_social_media' => SocialMedia::INSTAGRAM,
+                                                    'id_type_message' => TypeMessage::IG_POSTS,
+                                                    'description' => $notification->valor,
+                                                    'total' => $total_post_instagram,
+                                                    'client_id' =>$notification->client_id); 
+
                     }
 
-                    $total_post = $total_post_twitter + $total_post_instagram;
+                    $postagens_facebook = FbPagePost::where('updated_time','>', [$notification->dt_inicio])
+                                                    ->where('message', "ilike", "%{$notification->valor}%")
+                                                    ->where('fl_notification',false)
+                                                    ->get();
+
+                    $total_post_facebook = count($postagens_facebook);
+
+                    if($total_post_facebook){
+
+                        foreach ($postagens_facebook as $key => $post) {
+
+                            $postagens[] = array('img' => 'instagram',
+                                            'msg'  => $post->message,
+                                            'link' => 'link' );
+
+                            $post->fl_notification = true;
+                            $post->save();
+                        }
+
+                        //Log do envio
+                        $dados_notificacao = array('id_notification' => NotificationType::HASHTAG,
+                                                    'id_social_media' => SocialMedia::FACEBOOK,
+                                                    'id_type_message' => TypeMessage::FB_PAGE_POST,
+                                                    'description' => $notification->valor,
+                                                    'total' => $total_post_facebook,
+                                                    'client_id' =>$notification->client_id); 
+                    }
+
+                    $total_post = $total_post_twitter + $total_post_instagram + $total_post_facebook;
                     
                     if($total_post){
 
