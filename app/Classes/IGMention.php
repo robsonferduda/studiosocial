@@ -6,6 +6,10 @@ use App\Media;
 use App\Client;
 use App\IgPage;
 use App\IgComment;
+use App\Collect;
+use App\Enums\SocialMedia;
+use App\Enums\TypeCollect;
+use App\Enums\TypeMessage;
 use Illuminate\Support\Facades\Log;
 
 class IGMention{
