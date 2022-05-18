@@ -34,6 +34,8 @@ class IGMention{
 
                     if(isset($fbPage->igPage)){
 
+                        $total = 0;
+
                         $access_token = $fbAccount->token;
                         $id_user_id = $fbPage->igPage->page_id;
 
