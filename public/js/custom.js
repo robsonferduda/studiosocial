@@ -99,6 +99,8 @@ $(document).ready(function() {
     $('body').on("click", ".btn-delete-media", function(e) {
         e.preventDefault();
         var url = $(this).attr("href");
+        var clique = $(this);
+
         Swal.fire({
             title: "Tem certeza que deseja excluir?",
             text: "Você não poderá recuperar o registro excluído",
@@ -110,7 +112,17 @@ $(document).ready(function() {
             cancelButtonText: '<i class="fa fa-times"></i> Cancelar'
         }).then(function(result) {
             if (result.value) {
-                window.location.href = url;
+
+                var div_pai = clique.closest('.card');                
+                div_pai.loader('show');
+
+                
+
+                return false;
+
+
+
+                //window.location.href = url;
             }
         });
     }); 
