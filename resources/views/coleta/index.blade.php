@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card-body">
-                        <a class="btn btn-twitter btn-coleta" href="{{ url('twitter') }}">
+                        <a class="btn btn-twitter btn-coleta" href="{{ url('coletas/twitter') }}">
                             <i class="fa fa-twitter"></i> Coletar Twitter
                         </a>
                         <a class="btn btn-facebook btn-coleta disabled" href="">
@@ -25,8 +25,8 @@
                         <a class="btn btn-facebook btn-coleta disabled" href="">
                             <i class="fa fa-facebook"></i> Coletar Facebook Páginas
                         </a>
-                        <a class="btn btn-dribbble btn-coleta disabled" href="">
-                            <i class="fa fa-dribbble"></i> Coletar Instagram
+                        <a class="btn btn-dribbble btn-coleta" href="{{ url('coletas/instagram') }}">
+                            <i class="fa fa-instagram"></i> Coletar Instagram
                         </a>
                         <a class="btn btn-success btn-notificacao" href="{{ url('notificacoes/verificacao') }}">
                             <i class="fa fa-send"></i> Notificar Coletas

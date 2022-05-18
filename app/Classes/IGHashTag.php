@@ -3,7 +3,10 @@
 namespace App\Classes;
 
 use App\Client;
+use App\Collect;
 use App\Enums\SocialMedia;
+use App\Enums\TypeCollect;
+use App\Enums\TypeMessage;
 use App\Media;
 
 class IGHashTag{
@@ -32,6 +35,8 @@ class IGHashTag{
                         $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->where('is_active',true)->get();
 
                         foreach ($hashtags as $hashtag) {     
+
+                            $total = 0;
                             
                             if(in_array($hashtag->hashtag, $hashtags_pulled)){
                                 continue;
@@ -96,13 +101,23 @@ class IGHashTag{
                                         'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,                                        
                                         'hashtagged' => 'S'
                                     ]);
-                                  
+
+                                    if($media->wasRecentlyCreated) $total++;                                  
                                     $media->hashtags()->syncWithoutDetaching($hashtag->id);                                   
                                 }            
                                
                                 $after = $ig_hash_tag->getAfter($medias);
         
                             } while($ig_hash_tag->hasAfter($medias) && count($medias['data']) >= 50);
+
+                            $dados_coleta = array('id_type_collect' => TypeCollect::HASHTAG,
+                                                 'id_social_media' => SocialMedia::INSTAGRAM,
+                                                 'id_type_message' => TypeMessage::IG_POSTS,
+                                                 'description' => $hashtag->hashtag,
+                                                 'total' => $total,
+                                                 'client_id' =>$hashtag->client_id );            
+
+                            Collect::create($dados_coleta);
                         }
                     }
                 }

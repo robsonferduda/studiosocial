@@ -25,6 +25,8 @@ Route::get('boletim/{id}/visualizar','BoletimController@visualizar');
 Route::post('boletim/enviar/lista','BoletimController@enviarLista');
 
 Route::get('coletas','ColetaController@index');
+Route::get('coletas/twitter','ColetaController@twitter');
+Route::get('coletas/instagram','ColetaController@instagram');
 
 Route::get('clientes','ClientController@index');
 Route::get('cliente/get/json','ClientController@json');

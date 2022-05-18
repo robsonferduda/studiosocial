@@ -108,8 +108,19 @@ class IGMention{
                                     'username' =>  isset($media['username']) ? $media['username']: null,
                                     'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                    
                                     'mentioned' => 'S'
-                            ]);                                 
+                            ]);    
+                            
+                            if($media->wasRecentlyCreated) $total++; 
                         }
+
+                        $dados_coleta = array('id_type_collect' => TypeCollect::HASHTAG,
+                                                 'id_social_media' => SocialMedia::INSTAGRAM,
+                                                 'id_type_message' => TypeMessage::IG_COMMENT,
+                                                 'description' => $hashtag->hashtag,
+                                                 'total' => $total,
+                                                 'client_id' =>$hashtag->client_id );            
+
+                        Collect::create($dados_coleta);
                     }
                 }
             }
