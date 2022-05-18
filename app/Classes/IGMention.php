@@ -120,9 +120,9 @@ class IGMention{
                         $dados_coleta = array('id_type_collect' => TypeCollect::HASHTAG,
                                                  'id_social_media' => SocialMedia::INSTAGRAM,
                                                  'id_type_message' => TypeMessage::IG_COMMENT,
-                                                 'description' => $hashtag->hashtag,
+                                                 'description' => '',
                                                  'total' => $total,
-                                                 'client_id' =>$hashtag->client_id );            
+                                                 'client_id' => $client->id);            
 
                         Collect::create($dados_coleta);
                     }
