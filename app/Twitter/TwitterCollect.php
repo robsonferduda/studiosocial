@@ -66,6 +66,7 @@ class TwitterCollect{
                             'user_friends_count' => $tweet->user->friends_count,
                             'user_profile_image_url' => $tweet->user->profile_image_url,
                             'created_tweet_at' => $tweet->created_at,
+                            'permalink' => 'https://twitter.com/'.$tweet->user->screen_name.'/status/'.$tweet->id,
                             'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
                             );
     
@@ -119,6 +120,7 @@ class TwitterCollect{
                             'user_friends_count' => $tweet->user->friends_count,
                             'user_profile_image_url' => $tweet->user->profile_image_url,
                             'created_tweet_at' => $tweet->created_at,
+                            'permalink' => 'https://twitter.com/'.$tweet->user->screen_name.'/status/'.$tweet->id,
                             'place_name' => ($tweet->place and $tweet->place->place_type) ? $tweet->place->name : ''
                             );
     
