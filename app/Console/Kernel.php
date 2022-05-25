@@ -26,7 +26,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('notificacao:cron')->hourly();
 
-        $schedule->command('media_view:cron')->everyThreeMinutes();
+        $schedule->command('media_view:cron')->everyThirtyMinutes();
 
         $schedule->command('twitter:cron')->hourly();
 
