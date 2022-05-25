@@ -18,12 +18,15 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\EmailCron::class,
         Commands\NotificacaoCron::class,
-        Commands\TwitterCron::class
+        Commands\TwitterCron::class,
+        Commands\MediaViewCron::class,
     ];
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('notificacao:cron')->hourly();
+
+        $schedule->command('media_view:cron')->everyThreeMinutes();
 
         $schedule->command('twitter:cron')->hourly();
 
