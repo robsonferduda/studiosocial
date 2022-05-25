@@ -353,7 +353,7 @@ class NotificacaoController extends Controller
 
                             $postagens[] = array('img' => 'facebook',
                                                  'msg'  => $post->message,
-                                                'link' => 'link' );
+                                                'link' => $post->permalink_url );
 
                             $post->fl_notification = true;
                             $post->save();
