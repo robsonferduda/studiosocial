@@ -28,7 +28,8 @@ class MediaTwitter extends Model implements Auditable
                             'place_name',
                             'created_tweet_at',
                             'client_id',
-                            'user_profile_image_url'
+                            'user_profile_image_url',
+                            'permalink'
                         ];
 
     public function hashtags()
