@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Session;
 class HomeController extends Controller
 {
     private $client_id;
+    private $periodo_padrao;
 
     public function __construct()
     {
@@ -33,6 +34,8 @@ class HomeController extends Controller
         $this->client_id = session('cliente')['id'];
         
         Session::put('url','home');
+
+        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
     }
 
     public function index()
@@ -41,6 +44,7 @@ class HomeController extends Controller
         $users = null;
         $clientes = null;
         $periodo_relatorio = null;
+        $periodo_padrao = $this->periodo_padrao;
 
         $ig_comments_total = DB::table('ig_comments')
                                 ->join('medias','medias.id','=','ig_comments.media_id')
@@ -85,7 +89,7 @@ class HomeController extends Controller
                             'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
                             'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
 
-            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter'));
+            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','periodo_padrao'));
                 
         }     
 
