@@ -156,8 +156,11 @@
                                                         @break
                                                     @case(App\Enums\SocialMedia::TWITTER)
                                                         {{ $hashtag->mediasTwitter->count() }}
+                                                        @break 
+                                                    @case(App\Enums\SocialMedia::FACEBOOK)
+                                                        {{ $hashtag->pagePosts->count() + $hashtag->pagePostsComments->count() }}
                                                         @break
-                                                    @default                        
+                                                    @default                         
                                                 @endswitch
                                             </td>
                                         </tr>
