@@ -312,13 +312,13 @@ class RelatorioController extends Controller
         }
 
         foreach($media_instagram as $instagram){
-          $insta_positivo = ($facebook->sentiment == 1) ? $insta_positivo + 1 : $insta_positivo;
-          $insta_negativo = ($facebook->sentiment == -1) ? $insta_negativo + 1 : $insta_negativo;
-          $insta_neutro   = ($facebook->sentiment == 0) ? $insta_neutro + 1 : $insta_neutro;
+          $insta_positivo = ($instagram->sentiment == 1) ? $insta_positivo + 1 : $insta_positivo;
+          $insta_negativo = ($instagram->sentiment == -1) ? $insta_negativo + 1 : $insta_negativo;
+          $insta_neutro   = ($instagram->sentiment == 0) ? $insta_neutro + 1 : $insta_neutro;
         }
 
         foreach($media_twitter as $twitter){
-          $facebook_positivo = ($twitter->sentiment == 1) ? $twitter_positivo + 1 : $twitter_positivo;
+          $twitter_positivo  = ($twitter->sentiment == 1) ? $twitter_positivo + 1 : $twitter_positivo;
           $twitter_negativo  = ($twitter->sentiment == -1) ? $twitter_negativo + 1 : $twitter_negativo;
           $twitter_neutro    = ($twitter->sentiment == 0) ? $twitter_neutro + 1 : $twitter_neutro;
         }
