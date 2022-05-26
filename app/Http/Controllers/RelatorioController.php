@@ -276,7 +276,9 @@ class RelatorioController extends Controller
       $twitter_negativo = 0;
       $twitter_neutro = 0; 
 
-      if(false) {
+      $rule = $this->rule_id;
+      
+      if($rule) {
         $mediaModel = new MediaRuleFilteredVw();
       }else{
         $mediaModel = new MediaFilteredVw();
@@ -290,20 +292,29 @@ class RelatorioController extends Controller
               })
               ->where('client_id', $this->client_id)
               ->whereBetween('date', [$this->data_inicial ,$this->data_final])
+              ->when($rule, function ($q) use($rule){
+                //$q->where('rule_id',$this->rule_id);
+              })
               ->get();
 
         $media_instagram = $mediaModel::where(function($query) {
-            $query->Orwhere('tipo', 'IG_POSTS')
-            ->Orwhere('tipo', 'IG_COMMENT');
-        })
-        ->where('client_id', $this->client_id)
-        ->whereBetween('date', [$this->data_inicial, $this->data_final])
-        ->get();
+                                $query->Orwhere('tipo', 'IG_POSTS')
+                                      ->Orwhere('tipo', 'IG_COMMENT');
+                            })
+                            ->where('client_id', $this->client_id)
+                            ->whereBetween('date', [$this->data_inicial, $this->data_final])
+                            ->when($rule, function ($q) use($rule){
+                              //$q->where('rule_id',$this->rule_id);
+                            })
+                            ->get();
 
         $media_twitter = $mediaModel::where('tipo', 'TWEETS')
-        ->where('client_id', $this->client_id)
-        ->whereBetween('date', [$this->data_inicial, $this->data_final])
-        ->get();
+                                    ->where('client_id', $this->client_id)
+                                    ->whereBetween('date', [$this->data_inicial, $this->data_final])
+                                    ->when($rule, function ($q) use($rule){
+                                      //$q->where('rule_id',$this->rule_id);
+                                    })
+                                    ->get();
 
         foreach($media_facebook as $facebook){
           $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
