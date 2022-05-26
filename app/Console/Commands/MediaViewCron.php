@@ -39,5 +39,6 @@ class MediaViewCron extends Command
     public function handle()
     {
         DB::statement('REFRESH MATERIALIZED VIEW medias_materialized_filtered_vw');
+        DB::statement('REFRESH MATERIALIZED VIEW medias_materialized_rule_filtered_vw');
     }
 }
