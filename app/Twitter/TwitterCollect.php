@@ -48,6 +48,9 @@ class TwitterCollect{
                 "retweeted" => false,
                 "tweet_mode" => "extended"
             );
+
+            $locations = array("id" => 23424768);
+            $tweets = $this->conn->get('trends/place', $locations);
     
             $tweets = $this->conn->get('search/tweets', $query);
     
