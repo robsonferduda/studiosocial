@@ -15,6 +15,7 @@ use App\WordCloudText;
 use App\WordsExecption;
 use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
+use App\Enums\TypeMessage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -285,21 +286,23 @@ class RelatorioController extends Controller
       }
 
       $media_facebook = $mediaModel::where(function($query) {
-               $query->Orwhere('tipo', 'FB_COMMENT')
-              ->Orwhere('tipo', 'FB_PAGE_POST')
-              ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
-              ->Orwhere('tipo', 'FB_POSTS');
+               $query->orWhere('tipo', 'FB_COMMENT')
+              ->orWhere('tipo', 'FB_PAGE_POST')
+              ->orWhere('tipo', 'FB_PAGE_POST_COMMENT')
+              ->orWhere('tipo', 'FB_POSTS');
               })
               ->where('client_id', $this->client_id)
               ->whereBetween('date', [$this->data_inicial ,$this->data_final])
               ->when($rule, function ($q) use($rule){
-                //$q->where('rule_id',$this->rule_id);
+                $q->with(['regra' => function ($q){
+                  return $q->where('rule_id', $rule)->whereIn('rules_type',[TypeMessage::FB_COMMENT]);
+                }]);
               })
               ->get();
 
         $media_instagram = $mediaModel::where(function($query) {
-                                $query->Orwhere('tipo', 'IG_POSTS')
-                                      ->Orwhere('tipo', 'IG_COMMENT');
+                                $query->orWhere('tipo', 'IG_POSTS')
+                                      ->orWhere('tipo', 'IG_COMMENT');
                             })
                             ->where('client_id', $this->client_id)
                             ->whereBetween('date', [$this->data_inicial, $this->data_final])
