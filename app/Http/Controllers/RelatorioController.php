@@ -280,44 +280,38 @@ class RelatorioController extends Controller
       $rule = $this->rule_id;
       
       if($rule) {
-        $mediaModel = new MediaRuleFilteredVw();
+        $tabela = 'medias_materialized_rule_filtered_vw';
       }else{
-        $mediaModel = new MediaFilteredVw();
+        $tabela = 'medias_materialized_filtered_vw';
       }
 
-      $media_facebook = $mediaModel::where(function($query) {
-               $query->orWhere('tipo', 'FB_COMMENT')
-              ->orWhere('tipo', 'FB_PAGE_POST')
-              ->orWhere('tipo', 'FB_PAGE_POST_COMMENT')
-              ->orWhere('tipo', 'FB_POSTS');
-              })
+        $media_facebook = DB::table($tabela)
+              ->whereIn('tipo', ['FB_COMMENT','FB_PAGE_POST','FB_PAGE_POST_COMMENT','FB_POSTS'])
               ->where('client_id', $this->client_id)
-              ->whereBetween('date', [$this->data_inicial ,$this->data_final])
+              ->whereBetween('date', [$this->data_inicial, $this->data_final])
               ->when($rule, function ($q) use($rule){
-                $q->with(['rule' => function ($q){
-                  return $q->where('rule_id', $rule);
-                }]);
+                return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
               })
               ->get();
+        
 
-        $media_instagram = $mediaModel::where(function($query) {
-                                $query->orWhere('tipo', 'IG_POSTS')
-                                      ->orWhere('tipo', 'IG_COMMENT');
-                            })
+        $media_instagram = DB::table($tabela)
+                            ->whereIn('tipo', ['IG_POSTS','IG_COMMENT'])
                             ->where('client_id', $this->client_id)
                             ->whereBetween('date', [$this->data_inicial, $this->data_final])
                             ->when($rule, function ($q) use($rule){
-                              //$q->where('rule_id',$this->rule_id);
+                              return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
                             })
                             ->get();
 
-        $media_twitter = $mediaModel::where('tipo', 'TWEETS')
-                                    ->where('client_id', $this->client_id)
-                                    ->whereBetween('date', [$this->data_inicial, $this->data_final])
-                                    ->when($rule, function ($q) use($rule){
-                                      //$q->where('rule_id',$this->rule_id);
-                                    })
-                                    ->get();
+        $media_twitter = DB::table($tabela)
+                          ->where('tipo', 'TWEETS')
+                          ->where('client_id', $this->client_id)
+                          ->whereBetween('date', [$this->data_inicial, $this->data_final])
+                          ->when($rule, function ($q) use($rule){
+                            return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+                          })
+                          ->get();
 
         foreach($media_facebook as $facebook){
           $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
