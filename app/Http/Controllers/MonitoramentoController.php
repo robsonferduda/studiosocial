@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\Configs;
 use App\Hashtag;
 use App\Term;
 use Carbon\Carbon;
-use App\Enums\TypeMessage;
 use App\MediaFilteredVw;
+use App\MediaRuleFilteredVw;
 use Illuminate\Support\Facades\Session;
 
 class MonitoramentoController extends Controller
@@ -39,8 +38,14 @@ class MonitoramentoController extends Controller
         $terms = Term::with('mediasTwitter')->with('medias')->with('pagePosts')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
         $ig_comments_total = 0;
-                                                                 
-        $fb_total = MediaFilteredVw::where(function($query) {
+
+        if($this->flag_regras) {
+            $mediaModel = new MediaRuleFilteredVw();
+        } else {
+            $mediaModel = new MediaFilteredVw();
+        }
+
+        $fb_total = $mediaModel::where(function($query) {
             $query->Orwhere('tipo', 'FB_COMMENT')
             ->Orwhere('tipo', 'FB_PAGE_POST')
             ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
@@ -51,7 +56,7 @@ class MonitoramentoController extends Controller
         ->select('id')
         ->count();
 
-        $ig_total = MediaFilteredVw::where(function($query) {
+        $ig_total = $mediaModel::where(function($query) {
             $query->Orwhere('tipo', 'IG_POSTS')
             ->Orwhere('tipo', 'IG_COMMENT');
         })
@@ -60,7 +65,7 @@ class MonitoramentoController extends Controller
         ->select('id')
         ->count();
 
-        $twitter_total = MediaFilteredVw::where('tipo', 'TWEETS')
+        $twitter_total = $mediaModel::where('tipo', 'TWEETS')
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
         ->select('id')
@@ -75,6 +80,13 @@ class MonitoramentoController extends Controller
 
     public function getHistorico($dias)
     {
+
+        if($this->flag_regras) {
+            $mediaModel = new MediaRuleFilteredVw();
+        } else {
+            $mediaModel = new MediaFilteredVw();
+        }
+
         $data_inicial = Carbon::now()->subDays($dias - 1);
         $dados = array();
 
@@ -91,7 +103,7 @@ class MonitoramentoController extends Controller
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
 
-            $fb_total = MediaFilteredVw::where(function($query) {
+            $fb_total = $mediaModel::where(function($query) {
                 $query->Orwhere('tipo', 'FB_COMMENT')
                 ->Orwhere('tipo', 'FB_PAGE_POST')
                 ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
@@ -102,7 +114,7 @@ class MonitoramentoController extends Controller
             ->select('id')
             ->count();
     
-            $ig_total = MediaFilteredVw::where(function($query) {
+            $ig_total = $mediaModel::where(function($query) {
                 $query->Orwhere('tipo', 'IG_POSTS')
                 ->Orwhere('tipo', 'IG_COMMENT');
             })
@@ -111,7 +123,7 @@ class MonitoramentoController extends Controller
             ->select('id')
             ->count();
     
-            $twitter_total = MediaFilteredVw::where('tipo', 'TWEETS')
+            $twitter_total = $mediaModel::where('tipo', 'TWEETS')
             ->where('client_id', $this->client_id)
             ->whereBetween('date', [$data.' 00:00:00',$data.' 23:23:59'])
             ->select('id')
@@ -134,13 +146,20 @@ class MonitoramentoController extends Controller
 
     public function seleciona($rede)
     {
+
+        if($this->flag_regras) {
+            $mediaModel = new MediaRuleFilteredVw();
+        } else {
+            $mediaModel = new MediaFilteredVw();
+        }
+
         $client_id = Session::get('cliente')['id'];
         $medias = array();
 
         switch ($rede) {
             case 'instagram':
                
-                $medias_temp =  MediaFilteredVw::where('tipo', 'IG_POSTS');
+                $medias_temp =  $mediaModel::where('tipo', 'IG_POSTS');
 
                 $medias_temp = $medias_temp->where('client_id', $client_id)
                 ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
@@ -168,7 +187,7 @@ class MonitoramentoController extends Controller
 
             case 'facebook':
 
-                $medias_temp =  MediaFilteredVw::where(function($query) {
+                $medias_temp =  $mediaModel::where(function($query) {
                     $query->Orwhere('tipo', 'FB_COMMENT')
                     ->Orwhere('tipo', 'FB_PAGE_POST')
                     ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
@@ -216,7 +235,7 @@ class MonitoramentoController extends Controller
                 break;
             
             case 'twitter':
-                $medias_temp =  MediaFilteredVw::where('tipo', 'TWEETS');
+                $medias_temp =  $mediaModel::where('tipo', 'TWEETS');
                
                 $medias_temp = $medias_temp->where('client_id', $client_id)
                 ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
