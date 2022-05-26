@@ -295,7 +295,7 @@ class RelatorioController extends Controller
               ->whereBetween('date', [$this->data_inicial ,$this->data_final])
               ->when($rule, function ($q) use($rule){
                 $q->with(['rule' => function ($q){
-                  return $q->where('rule_id', $rule)->whereIn('rules_type',[TypeMessage::FB_COMMENT]);
+                  return $q->where('rule_id', $rule)->where('rules_type', TypeMessage::FB_COMMENT);
                 }]);
               })
               ->get();
