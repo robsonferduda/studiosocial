@@ -71,7 +71,7 @@
                   </a>
                 </li>
                 @endpermission
-                @permission('notificacoes')
+                @permission('coletas')
                 <li class="{{ (Session::has('url') and Session::get('url') == 'coletas') ? 'active' : '' }}">
                   <a href="{{ url('coletas') }}">
                   <i class="nc-icon nc-tag-content"></i>
@@ -79,7 +79,7 @@
                   </a>
                 </li>
                 @endpermission
-                @permission('notificacoes')
+                @permission('social-search')
                 <li class="{{ (Session::has('url') and Session::get('url') == 'search') ? 'active' : '' }}">
                   <a href="{{ url('social-search') }}">
                   <i class="nc-icon nc-zoom-split"></i>
