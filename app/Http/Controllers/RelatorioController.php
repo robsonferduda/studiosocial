@@ -264,10 +264,17 @@ class RelatorioController extends Controller
 
     public function getSentimentos()
     {
-
       $facebook_positivo = 0;
       $facebook_negativo = 0;
       $facebook_neutro = 0; 
+
+      $insta_positivo = 0;
+      $insta_negativo = 0;
+      $insta_neutro = 0; 
+
+      $twitter_positivo = 0;
+      $twitter_negativo = 0;
+      $twitter_neutro = 0; 
 
       if(false) {
         $mediaModel = new MediaRuleFilteredVw();
@@ -276,14 +283,14 @@ class RelatorioController extends Controller
       }
 
       $media_facebook = $mediaModel::where(function($query) {
-        $query->Orwhere('tipo', 'FB_COMMENT')
-        ->Orwhere('tipo', 'FB_PAGE_POST')
-        ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
-        ->Orwhere('tipo', 'FB_POSTS');
-        })
-        ->where('client_id', $this->client_id)
-        ->whereBetween('date', [$this->data_inicial ,$this->data_final])
-        ->get();
+               $query->Orwhere('tipo', 'FB_COMMENT')
+              ->Orwhere('tipo', 'FB_PAGE_POST')
+              ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
+              ->Orwhere('tipo', 'FB_POSTS');
+              })
+              ->where('client_id', $this->client_id)
+              ->whereBetween('date', [$this->data_inicial ,$this->data_final])
+              ->get();
 
         $media_instagram = $mediaModel::where(function($query) {
             $query->Orwhere('tipo', 'IG_POSTS')
@@ -299,14 +306,22 @@ class RelatorioController extends Controller
         ->get();
 
         foreach($media_facebook as $facebook){
-            $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
-            $facebook_negativo = ($facebook->sentiment == -1) ? $facebook_negativo + 1 : $facebook_negativo;
-            $facebook_neutro   = ($facebook->sentiment == 0) ? $facebook_neutro + 1 : $facebook_neutro;
+          $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
+          $facebook_negativo = ($facebook->sentiment == -1) ? $facebook_negativo + 1 : $facebook_negativo;
+          $facebook_neutro   = ($facebook->sentiment == 0) ? $facebook_neutro + 1 : $facebook_neutro;
         }
 
-        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
-        $sentimentos_facebook = (new FbPost())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
-        $sentimentos_instagram = (new Media())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
+        foreach($media_instagram as $instagram){
+          $insta_positivo = ($facebook->sentiment == 1) ? $insta_positivo + 1 : $insta_positivo;
+          $insta_negativo = ($facebook->sentiment == -1) ? $insta_negativo + 1 : $insta_negativo;
+          $insta_neutro   = ($facebook->sentiment == 0) ? $insta_neutro + 1 : $insta_neutro;
+        }
+
+        foreach($media_twitter as $twitter){
+          $facebook_positivo = ($twitter->sentiment == 1) ? $twitter_positivo + 1 : $twitter_positivo;
+          $twitter_negativo  = ($twitter->sentiment == -1) ? $twitter_negativo + 1 : $twitter_negativo;
+          $twitter_neutro    = ($twitter->sentiment == 0) ? $twitter_neutro + 1 : $twitter_neutro;
+        }
 
         $sentimentos['facebook'] = array('rede_social' => "Facebook",
                                         'total_positivo' => $facebook_positivo,
@@ -314,14 +329,14 @@ class RelatorioController extends Controller
                                         'total_neutro' => $facebook_neutro);
 
         $sentimentos['instagram'] = array('rede_social' => "Instagram",
-                                          'total_positivo' => ($sentimentos_instagram and isset($sentimentos_instagram[2])) ? $sentimentos_instagram[2]->total : 0,
-                                          'total_negativo' => ($sentimentos_instagram and isset($sentimentos_instagram[0])) ? $sentimentos_instagram[0]->total : 0,
-                                          'total_neutro' => ($sentimentos_instagram and isset($sentimentos_instagram[1])) ? $sentimentos_instagram[1]->total : 0,);
+                                          'total_positivo' => $insta_positivo,
+                                          'total_negativo' => $insta_negativo,
+                                          'total_neutro' => $insta_neutro);
 
         $sentimentos['twitter'] = array('rede_social' => "Twitter",
-                                        'total_positivo' => ($sentimentos_twitter and isset($sentimentos_twitter[2])) ? $sentimentos_twitter[2]->total : 0,
-                                        'total_negativo' => ($sentimentos_twitter and isset($sentimentos_twitter[0])) ? $sentimentos_twitter[0]->total : 0,
-                                        'total_neutro' => ($sentimentos_twitter and isset($sentimentos_twitter[1])) ? $sentimentos_twitter[1]->total : 0);
+                                        'total_positivo' => $twitter_positivo,
+                                        'total_negativo' => $twitter_negativo,
+                                        'total_neutro' => $twitter_neutro);
 
         return $sentimentos;
     }
