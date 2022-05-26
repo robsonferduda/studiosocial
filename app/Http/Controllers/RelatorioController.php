@@ -298,8 +298,6 @@ class RelatorioController extends Controller
         ->whereBetween('date', [$this->data_inicial, $this->data_final])
         ->get();
 
-        dd($media_facebook);
-
         foreach($media_facebook as $facebook){
             $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
             $facebook_negativo = ($facebook->sentiment == -1) ? $facebook_negativo + 1 : $facebook_negativo;
