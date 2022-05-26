@@ -122,6 +122,9 @@
                                                     @case(App\Enums\SocialMedia::TWITTER)
                                                         {{ $term->mediasTwitter->count() }}
                                                         @break
+                                                    @case(App\Enums\SocialMedia::FACEBOOK)
+                                                        {{ $term->pagePosts->count() + $term->pagePostsComments->count() }}
+                                                        @break
                                                     @default                        
                                                 @endswitch
                                             </td>
