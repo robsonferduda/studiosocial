@@ -90,6 +90,15 @@ class HomeController extends Controller
         ->select('id')
         ->count();
 
+        $ig_total = $mediaModel::where(function($query) {
+            $query->Orwhere('tipo', 'IG_POSTS')
+            ->Orwhere('tipo', 'IG_COMMENT');
+        })
+        ->where('client_id', $this->client_id)
+        ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
+        ->select('id')
+        ->count();
+
         if($u->hasRole('administradores')){
 
             $users = User::whereNull('client_id')->count();
@@ -108,7 +117,7 @@ class HomeController extends Controller
             $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
             $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
-            $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
+            $totais = array('total_insta' => $ig_total, 
                             'total_face' => $fb_total,
                             'total_twitter' => $twitter_total);
 
