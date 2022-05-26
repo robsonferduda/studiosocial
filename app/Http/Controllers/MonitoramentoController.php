@@ -163,7 +163,7 @@ class MonitoramentoController extends Controller
 
                 $medias_temp = $medias_temp->where('client_id', $client_id)
                 ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
-                ->distinct()
+                ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
                 ->orderBy('date', 'DESC')->paginate(20);
 
                 foreach($medias_temp as $media) {
@@ -196,9 +196,9 @@ class MonitoramentoController extends Controller
                
                 $medias_temp = $medias_temp->where('client_id', $client_id)
                 ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
-                ->distinct()
+                ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
                 ->orderBy('date', 'DESC')->paginate(20);
-
+                
                 foreach($medias_temp as $media) {
                     
                     switch ($media->tipo) {
@@ -239,7 +239,7 @@ class MonitoramentoController extends Controller
                
                 $medias_temp = $medias_temp->where('client_id', $client_id)
                 ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
-                ->distinct()
+                ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
                 ->orderBy('date', 'DESC')->paginate(20);
 
                 foreach($medias_temp as $media) {
@@ -262,9 +262,6 @@ class MonitoramentoController extends Controller
                 
             break;
         }
-
-
-        
     
         return view('monitoramento/medias', compact('medias', 'medias_temp'));
     }
