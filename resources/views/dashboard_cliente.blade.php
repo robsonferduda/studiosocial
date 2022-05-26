@@ -165,7 +165,7 @@
         var host =  $('meta[name="base-url"]').attr('content');
 
         $.ajax({
-            url: host+'/monitoramento/medias/historico/30',
+            url: host+'/monitoramento/medias/historico/7',
             type: 'GET',
             success: function(response) {
                 dados = response;
