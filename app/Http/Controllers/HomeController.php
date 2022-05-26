@@ -84,6 +84,12 @@ class HomeController extends Controller
         ->select('id')
         ->count();
 
+        $twitter_total = $mediaModel::where('tipo', 'TWEETS')
+        ->where('client_id', $this->client_id)
+        ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
+        ->select('id')
+        ->count();
+
         if($u->hasRole('administradores')){
 
             $users = User::whereNull('client_id')->count();
@@ -103,8 +109,8 @@ class HomeController extends Controller
             $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
             $totais = array('total_insta' => Media::where('client_id',$this->client_id)->count() + $ig_comments_total, 
-                            'total_face' => FbPost::where('client_id',$this->client_id)->count() + $fb_comments_total,
-                            'total_twitter' => MediaTwitter::where('client_id',$this->client_id)->count());
+                            'total_face' => $fb_total,
+                            'total_twitter' => $twitter_total);
 
             return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','periodo_padrao'));
                 
