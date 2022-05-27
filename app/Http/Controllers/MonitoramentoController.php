@@ -8,6 +8,7 @@ use App\Term;
 use Carbon\Carbon;
 use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class MonitoramentoController extends Controller
@@ -34,9 +35,6 @@ class MonitoramentoController extends Controller
         $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays($this->periodo_padrao - 1)->format('d/m/Y'),
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
-        $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-        $terms = Term::with('mediasTwitter')->with('medias')->with('pagePosts')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
-
         $ig_comments_total = 0;
 
         if($this->flag_regras) {
@@ -44,6 +42,30 @@ class MonitoramentoController extends Controller
         } else {
             $mediaModel = new MediaFilteredVw();
         }
+
+        $hashtags = DB::table($mediaModel->getTable())
+        ->select(DB::raw('count('.strval($mediaModel->getTable()).'.id'.') as hashtag_count'), 'hashtag', 'social_media.name')
+        ->join('hashtags', function($join) use ($mediaModel) {
+            $join->on(strval($mediaModel->getTable()).'.hashtag_id', '=' , 'hashtags.id')
+            ->on(strval($mediaModel->getTable()).'.client_id', '=' , 'hashtags.client_id');
+        })
+        ->rightJoin('social_media', 'hashtags.social_media_id', '=', 'social_media.id')
+        ->where('hashtags.client_id', $this->client_id)
+        ->groupBy('hashtag', 'social_media.name')
+        ->orderBy('social_media.name')
+        ->get();
+
+        $terms = DB::table($mediaModel->getTable())
+        ->select(DB::raw('count('.strval($mediaModel->getTable()).'.id'.') as term_count'), 'term', 'social_media.name')
+        ->rightJoin('terms', function($join) use ($mediaModel) {
+            $join->on(strval($mediaModel->getTable()).'.term_id', '=' , 'terms.id')
+            ->on(strval($mediaModel->getTable()).'.client_id', '=' , 'terms.client_id');
+        })
+        ->join('social_media', 'terms.social_media_id', '=', 'social_media.id')
+        ->where('terms.client_id', $this->client_id)
+        ->groupBy('term', 'social_media.name')
+        ->orderBy('social_media.name')
+        ->get();
 
         $fb_total = $mediaModel::where(function($query) {
             $query->Orwhere('tipo', 'FB_COMMENT')

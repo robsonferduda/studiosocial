@@ -98,21 +98,10 @@
                                 <tbody>
                                     @foreach($terms as $term)
                                         <tr>
-                                            <td>{{ $term->socialMedia->name }}</td>
+                                            <td>{{ $term->name }}</td>
                                             <td>{{ $term->term }}</td>
                                             <td class="text-center">
-                                                @switch($term->social_media_id)
-                                                    @case(App\Enums\SocialMedia::INSTAGRAM)
-                                                        {{ $term->medias->count() }}
-                                                        @break
-                                                    @case(App\Enums\SocialMedia::TWITTER)
-                                                        {{ $term->mediasTwitter->count() }}
-                                                        @break
-                                                    @case(App\Enums\SocialMedia::FACEBOOK)
-                                                        {{ $term->pagePosts->count() + $term->pagePostsComments->count() }}
-                                                        @break
-                                                    @default                        
-                                                @endswitch
+                                                {{ $term->term_count }}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -135,21 +124,10 @@
                                 <tbody>
                                     @foreach($hashtags as $hashtag)
                                         <tr>
-                                            <td>{{ $hashtag->socialMedia->name }}</td>
+                                            <td>{{ $hashtag->name }}</td>
                                             <td>#{{ $hashtag->hashtag }}</td>
                                             <td class="text-center">
-                                                @switch($hashtag->social_media_id)
-                                                    @case(App\Enums\SocialMedia::INSTAGRAM)
-                                                        {{ $hashtag->medias->count() }}
-                                                        @break
-                                                    @case(App\Enums\SocialMedia::TWITTER)
-                                                        {{ $hashtag->mediasTwitter->count() }}
-                                                        @break
-                                                    @case(App\Enums\SocialMedia::FACEBOOK)
-                                                        {{ $hashtag->pagePosts->count() + $hashtag->pagePostsComments->count() }}
-                                                        @break
-                                                    @default                        
-                                                @endswitch
+                                                {{ $hashtag->hashtag_count }}
                                             </td>
                                         </tr>
                                     @endforeach
