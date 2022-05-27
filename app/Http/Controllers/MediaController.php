@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\FbPagePost;
-use App\FbPagePostComment;
 use App\FbPost;
 use App\Media;
 use App\MediaTwitter;
+use App\FbPagePost;
+use App\FbPagePostComment;
+use App\Enums\TypeMessage;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -23,34 +24,56 @@ class MediaController extends Controller
         
     }
 
+    const FB_POSTS = 1;
+    const FB_COMMENT = 2;
+    const TWEETS = 3;
+    const IG_POSTS = 4;
+    const IG_COMMENT = 5;
+    const FB_PAGE_POST = 7;
+    const FB_PAGE_POST_COMMENT = 8;
+
     public function atualizaSentimento($id, $tipo, $sentimento)
     {
         $media = null;
+        $media_materializada = null;
+        $media_materializada_regra = null;
 
         switch ($tipo) {
             case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::TWEETS)->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::TWEETS)->where('id',$id)->first();
                 break;
             
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_POSTS)->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_POSTS)->where('id',$id)->first();
                 break;
 
             case 'facebook-page':
                 $media = FbPagePost::where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST)->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST)->where('id',$id)->first();
                 break;
                 
             case 'instagram':
                 $media = Media::where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::IG_POSTS)->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::IG_POSTS)->where('id',$id)->first();
                 break;
             
             case 'facebook-page-comment':
                 $media = FbPagePostComment::where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST_COMMENT)->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST_COMMENT)->where('id',$id)->first();
                 break;
         }
 
         if($media){
             $media->sentiment = $sentimento;
+            $media_materializada = $sentimento;
+            $media_materializada_regra = $sentimento;
 
             if($media->update()){
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
