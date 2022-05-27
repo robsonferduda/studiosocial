@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Configs;
-use App\Hashtag;
-use App\Term;
 use Carbon\Carbon;
 use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
@@ -45,11 +43,11 @@ class MonitoramentoController extends Controller
 
         $hashtags = DB::table($mediaModel->getTable())
         ->select(DB::raw('count('.strval($mediaModel->getTable()).'.id'.') as hashtag_count'), 'hashtag', 'social_media.name')
-        ->join('hashtags', function($join) use ($mediaModel) {
+        ->rightJoin('hashtags', function($join) use ($mediaModel) {
             $join->on(strval($mediaModel->getTable()).'.hashtag_id', '=' , 'hashtags.id')
             ->on(strval($mediaModel->getTable()).'.client_id', '=' , 'hashtags.client_id');
         })
-        ->rightJoin('social_media', 'hashtags.social_media_id', '=', 'social_media.id')
+        ->join('social_media', 'hashtags.social_media_id', '=', 'social_media.id')
         ->where('hashtags.client_id', $this->client_id)
         ->groupBy('hashtag', 'social_media.name')
         ->orderBy('social_media.name')

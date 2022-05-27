@@ -13,18 +13,8 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-6 col-md-6">
-                    <div class="card car-chart">
-                        <div class="card-header">
-                          <h5 class="card-title">Monitoramento de Redes Sociais</h5>
-                          <p class="">Total de coletas diárias por rede social no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>
-                        </div>
-                        <div class="card-body">
-                          <canvas id="chartActivity"></canvas>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6">
+
+                <div class="col-lg-2 col-md-2 col-sm-12">
                     <div class="col-lg-12 col-md-12 col-sm-12">
                         <div class="card card-stats">
                             <div class="card-body ">
@@ -80,6 +70,31 @@
                         </div>
                     </div>   
                 </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-12">
+                    <div class="card card-stats">
+                        <div class="card-body ">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="custom-cloud" id='cloud'></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="card car-chart">
+                        <div class="card-header">
+                          <h5 class="card-title">Monitoramento de Redes Sociais</h5>
+                          <p class="">Total de coletas diárias por rede social no período de {{ $periodo_relatorio['data_inicial'] }} à {{ $periodo_relatorio['data_final'] }}</p>
+                        </div>
+                        <div class="card-body">
+                          <canvas id="chartActivity"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-6">
@@ -106,6 +121,9 @@
                                                         @break
                                                     @case(App\Enums\SocialMedia::TWITTER)
                                                         {{ $term->mediasTwitter->count() }}
+                                                        @break
+                                                    @case(App\Enums\SocialMedia::FACEBOOK)
+                                                        {{ $term->pagePosts->count() + $term->pagePostsComments->count() }}
                                                         @break
                                                     @default                        
                                                 @endswitch
@@ -141,8 +159,11 @@
                                                         @break
                                                     @case(App\Enums\SocialMedia::TWITTER)
                                                         {{ $hashtag->mediasTwitter->count() }}
+                                                        @break 
+                                                    @case(App\Enums\SocialMedia::FACEBOOK)
+                                                        {{ $hashtag->pagePosts->count() + $hashtag->pagePostsComments->count() }}
                                                         @break
-                                                    @default                        
+                                                    @default                         
                                                 @endswitch
                                             </td>
                                         </tr>
@@ -164,8 +185,50 @@
         var dados = null;
         var host =  $('meta[name="base-url"]').attr('content');
 
+        var APP_URL = {!! json_encode(url('/')) !!};
+        var tamanho = 0.02;
+
+        fetch(APP_URL+'/nuvem-palavras/words', {
+            method: 'GET', 
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        }).then(function(response) {
+            return response.json();
+        }).then(function(response){
+            
+            let words = [];
+
+            $('body').loader('hide');
+            const _token = $('meta[name="csrf-token"]').attr('content');
+
+            Object.entries(response).forEach(element => {
+                words.push(
+                    {
+                        text: element[0], 
+                        weight: element[1],
+                        html: {
+                            class: 'cloud-word'
+                        },                        
+                    }
+                );
+            });
+
+            let cloud = $('#cloud').jQCloud(words, {
+                autoResize: true,
+                classPattern: null,
+                colors: ["#66C2A5", "#FC8D62", "#800026", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3"],
+                fontSize: function (width, height, step) {
+                    if (step < 5)
+                        tamanho = tamanho - 0.001;
+                    return width * tamanho * step + 'px';
+                }
+            });            
+        });
+
         $.ajax({
-            url: host+'/monitoramento/medias/historico/30',
+            url: host+'/monitoramento/medias/historico/{{ $periodo_padrao }}',
             type: 'GET',
             success: function(response) {
                 dados = response;

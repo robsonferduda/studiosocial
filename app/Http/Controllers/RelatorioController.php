@@ -13,6 +13,9 @@ use App\FbReaction;
 use App\MediaTwitter;
 use App\WordCloudText;
 use App\WordsExecption;
+use App\MediaFilteredVw;
+use App\MediaRuleFilteredVw;
+use App\Enums\TypeMessage;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -251,6 +254,101 @@ class RelatorioController extends Controller
       return view('relatorios/sentimentos', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
     }
 
+    public function getSentimentosRede(Request $request)
+    {
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+      $this->rule_id = $request->regra; 
+      $sentimentos = $this->getSentimentos();   
+
+      return response()->json($sentimentos);
+    }
+
+    public function getSentimentos()
+    {
+      $facebook_positivo = 0;
+      $facebook_negativo = 0;
+      $facebook_neutro = 0; 
+
+      $insta_positivo = 0;
+      $insta_negativo = 0;
+      $insta_neutro = 0; 
+
+      $twitter_positivo = 0;
+      $twitter_negativo = 0;
+      $twitter_neutro = 0; 
+
+      $rule = $this->rule_id;
+      
+      if($rule) {
+        $tabela = 'medias_materialized_rule_filtered_vw';
+      }else{
+        $tabela = 'medias_materialized_filtered_vw';
+      }
+
+        $media_facebook = DB::table($tabela)
+              ->whereIn('tipo', ['FB_COMMENT','FB_PAGE_POST','FB_PAGE_POST_COMMENT','FB_POSTS'])
+              ->where('client_id', $this->client_id)
+              ->whereBetween('date', [$this->data_inicial, $this->data_final])
+              ->when($rule, function ($q) use($rule){
+                return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+              })
+              ->get();
+        
+
+        $media_instagram = DB::table($tabela)
+                            ->whereIn('tipo', ['IG_POSTS','IG_COMMENT'])
+                            ->where('client_id', $this->client_id)
+                            ->whereBetween('date', [$this->data_inicial, $this->data_final])
+                            ->when($rule, function ($q) use($rule){
+                              return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+                            })
+                            ->get();
+
+        $media_twitter = DB::table($tabela)
+                          ->where('tipo', 'TWEETS')
+                          ->where('client_id', $this->client_id)
+                          ->whereBetween('date', [$this->data_inicial, $this->data_final])
+                          ->when($rule, function ($q) use($rule){
+                            return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+                          })
+                          ->get();
+
+        foreach($media_facebook as $facebook){
+          $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
+          $facebook_negativo = ($facebook->sentiment == -1) ? $facebook_negativo + 1 : $facebook_negativo;
+          $facebook_neutro   = ($facebook->sentiment == 0) ? $facebook_neutro + 1 : $facebook_neutro;
+        }
+
+        foreach($media_instagram as $instagram){
+          $insta_positivo = ($instagram->sentiment == 1) ? $insta_positivo + 1 : $insta_positivo;
+          $insta_negativo = ($instagram->sentiment == -1) ? $insta_negativo + 1 : $insta_negativo;
+          $insta_neutro   = ($instagram->sentiment == 0) ? $insta_neutro + 1 : $insta_neutro;
+        }
+
+        foreach($media_twitter as $twitter){
+          $twitter_positivo  = ($twitter->sentiment == 1) ? $twitter_positivo + 1 : $twitter_positivo;
+          $twitter_negativo  = ($twitter->sentiment == -1) ? $twitter_negativo + 1 : $twitter_negativo;
+          $twitter_neutro    = ($twitter->sentiment == 0) ? $twitter_neutro + 1 : $twitter_neutro;
+        }
+
+        $sentimentos['facebook'] = array('rede_social' => "Facebook",
+                                        'total_positivo' => $facebook_positivo,
+                                        'total_negativo' => $facebook_negativo,
+                                        'total_neutro' => $facebook_neutro);
+
+        $sentimentos['instagram'] = array('rede_social' => "Instagram",
+                                          'total_positivo' => $insta_positivo,
+                                          'total_negativo' => $insta_negativo,
+                                          'total_neutro' => $insta_neutro);
+
+        $sentimentos['twitter'] = array('rede_social' => "Twitter",
+                                        'total_positivo' => $twitter_positivo,
+                                        'total_negativo' => $twitter_negativo,
+                                        'total_neutro' => $twitter_neutro);
+
+        return $sentimentos;
+    }
+
     public function wordcloud()
     {
       $rules = $this->rules;
@@ -479,15 +577,6 @@ class RelatorioController extends Controller
       return response()->json($dados);
     }
 
-    public function getSentimentosRede(Request $request)
-    {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-      $this->rule_id = $request->regra; 
-      $sentimentos = $this->getSentimentos();   
-
-      return response()->json($sentimentos);
-    }
-
     public function getLocalizacao(Request $request)
     {
         $dados = array();
@@ -501,30 +590,6 @@ class RelatorioController extends Controller
     public function getDadosReactions()
     {
       return (new FbPost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
-    }
-
-    public function getSentimentos()
-    {
-        $sentimentos_twitter = (new MediaTwitter())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
-        $sentimentos_facebook = (new FbPost())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
-        $sentimentos_instagram = (new Media())->getSentimentos($this->client_id, $this->data_inicial, $this->data_final);
-
-        $sentimentos['facebook'] = array('rede_social' => "Facebook",
-                                        'total_positivo' => ($sentimentos_facebook) ? $sentimentos_facebook[2]->total : 0,
-                                        'total_negativo' => ($sentimentos_facebook) ? $sentimentos_facebook[0]->total : 0,
-                                        'total_neutro' => ($sentimentos_facebook) ? $sentimentos_facebook[1]->total : 0);
-
-        $sentimentos['instagram'] = array('rede_social' => "Instagram",
-                                          'total_positivo' => ($sentimentos_instagram and isset($sentimentos_instagram[2])) ? $sentimentos_instagram[2]->total : 0,
-                                          'total_negativo' => ($sentimentos_instagram and isset($sentimentos_instagram[0])) ? $sentimentos_instagram[0]->total : 0,
-                                          'total_neutro' => ($sentimentos_instagram and isset($sentimentos_instagram[1])) ? $sentimentos_instagram[1]->total : 0,);
-
-        $sentimentos['twitter'] = array('rede_social' => "Twitter",
-                                        'total_positivo' => ($sentimentos_twitter and isset($sentimentos_twitter[2])) ? $sentimentos_twitter[2]->total : 0,
-                                        'total_negativo' => ($sentimentos_twitter and isset($sentimentos_twitter[0])) ? $sentimentos_twitter[0]->total : 0,
-                                        'total_neutro' => ($sentimentos_twitter and isset($sentimentos_twitter[1])) ? $sentimentos_twitter[1]->total : 0);
-
-        return $sentimentos;
     }
 
     public function getDadosLocalizacao()
