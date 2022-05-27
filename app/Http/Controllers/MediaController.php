@@ -78,6 +78,10 @@ class MediaController extends Controller
             $media_materializada_regra = $sentimento;
 
             if($media->update()){
+
+                $media_materializada->update();
+                $media_materializada_regra->update();
+
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
             }else{
                 Flash::error('<i class="fa fa-check"></i> Erro ao atualizar o sentimento da mídia');
