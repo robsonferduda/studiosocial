@@ -7,6 +7,8 @@ use App\Media;
 use App\MediaTwitter;
 use App\FbPagePost;
 use App\FbPagePostComment;
+use App\MediaFilteredVw;
+use App\MediaRuleFilteredVw;
 use App\Enums\TypeMessage;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
