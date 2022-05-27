@@ -43,32 +43,32 @@ class MediaController extends Controller
         switch ($tipo) {
             case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::TWEETS)->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::TWEETS)->where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', 'TWEETS')->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'TWEETS')->where('id',$id)->first();
                 break;
             
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_POSTS)->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_POSTS)->where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', 'FB_POSTS')->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_POSTS')->where('id',$id)->first();
                 break;
 
             case 'facebook-page':
                 $media = FbPagePost::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST)->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST)->where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', 'FB_PAGE_POST')->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_PAGE_POST')->where('id',$id)->first();
                 break;
                 
             case 'instagram':
                 $media = Media::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::IG_POSTS)->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::IG_POSTS)->where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', 'IG_POSTS')->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'IG_POSTS')->where('id',$id)->first();
                 break;
             
             case 'facebook-page-comment':
                 $media = FbPagePostComment::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST_COMMENT)->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', TypeMessage::FB_PAGE_POST_COMMENT)->where('id',$id)->first();
+                $media_materializada = MediaFilteredVw::where('tipo', 'FB_PAGE_POST_COMMENT')->where('id',$id)->first();
+                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_PAGE_POST_COMMENT')->where('id',$id)->first();
                 break;
         }
 
