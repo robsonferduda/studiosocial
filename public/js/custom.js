@@ -13,6 +13,8 @@ $(document).ready(function() {
 
         var flag = $(this).data("value");
 
+        $('.content').loader('show');
+
         $.ajax({
             url: host+'/configuracoes/flag-regras/atualizar',
             type: 'POST',
@@ -20,6 +22,9 @@ $(document).ready(function() {
                     "valor": flag },
             success: function(response) {
                 window.location.reload();
+            },
+            complete: function(){
+                $('.content').loader('hide');
             }
         }); 
 
