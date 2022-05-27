@@ -12,7 +12,6 @@ class MediaFilteredVw extends Model
     public $timestamps = false;
     public $incrementing = false;
 
-
     protected function setKeysForSaveQuery(Builder $query)
     {
         $keys = $this->getKeyName();

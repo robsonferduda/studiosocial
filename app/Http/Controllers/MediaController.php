@@ -37,51 +37,33 @@ class MediaController extends Controller
     public function atualizaSentimento($id, $tipo, $sentimento)
     {
         $media = null;
-        $media_materializada = null;
-        $media_materializada_regra = null;
 
         switch ($tipo) {
             case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', 'TWEETS')->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'TWEETS')->where('id',$id)->first();
                 break;
             
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', 'FB_POSTS')->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_POSTS')->where('id',$id)->first();
                 break;
 
             case 'facebook-page':
                 $media = FbPagePost::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', 'FB_PAGE_POST')->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_PAGE_POST')->where('id',$id)->first();
                 break;
                 
             case 'instagram':
                 $media = Media::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', 'IG_POSTS')->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'IG_POSTS')->where('id',$id)->first();
                 break;
             
             case 'facebook-page-comment':
                 $media = FbPagePostComment::where('id',$id)->first();
-                $media_materializada = MediaFilteredVw::where('tipo', 'FB_PAGE_POST_COMMENT')->where('id',$id)->first();
-                $media_materializada_regra = MediaRuleFilteredVw::where('tipo', 'FB_PAGE_POST_COMMENT')->where('id',$id)->first();
                 break;
         }
 
         if($media){
             $media->sentiment = $sentimento;
-            $media_materializada->sentiment = $sentimento;
-            $media_materializada_regra->sentiment = $sentimento;
-
+    
             if($media->update()){
-
-                if($media_materializada) $media_materializada->update();
-                if($media_materializada_regra) $media_materializada_regra->update();
-
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
             }else{
                 Flash::error('<i class="fa fa-check"></i> Erro ao atualizar o sentimento da mídia');
