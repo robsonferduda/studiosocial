@@ -11,11 +11,6 @@ class MediaRuleFilteredVw extends Model
     protected $primaryKey = ['id', 'tipo'];
     public $timestamps = false;
     
-    public function rule()
-    {
-        return $this->hasOne('App\RuleMessage', 'message_id', 'id');
-    } 
-
     protected function setKeysForSaveQuery(Builder $query)
     {
         $keys = $this->getKeyName();
@@ -29,7 +24,6 @@ class MediaRuleFilteredVw extends Model
 
         return $query;
     }
-
 
     protected function getKeyForSaveQuery($keyName = null)
     {
