@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Configs;
 use Carbon\Carbon;
 use App\MediaFilteredVw;
+use App\MediaMaterializedFilteredVw;
+use App\MediaMaterializedRuleFilteredVw;
 use App\MediaRuleFilteredVw;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -102,9 +104,9 @@ class MonitoramentoController extends Controller
     {
 
         if($this->flag_regras) {
-            $mediaModel = new MediaRuleFilteredVw();
+            $mediaModel = new MediaMaterializedRuleFilteredVw();
         } else {
-            $mediaModel = new MediaFilteredVw();
+            $mediaModel = new MediaMaterializedFilteredVw();
         }
 
         $data_inicial = Carbon::now()->subDays($dias - 1);
