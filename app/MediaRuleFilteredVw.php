@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class MediaRuleFilteredVw extends Model
 {
-    protected $table = 'medias_materialized_rule_filtered_vw';
+    protected $table = 'medias_rule_filtered_vw';
 
     public function rule()
     {
