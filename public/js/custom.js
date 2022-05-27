@@ -121,13 +121,31 @@ $(document).ready(function() {
                 var div_pai = clique.closest('.card');                
                 div_pai.loader('show');
 
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(response) {
+                        div_pai.remove();             
+                    },
+                    error: function(response){
+
+                        Swal.fire({
+                            title: "Erro ao realizar operação",
+                            text: "Houve um erro ao realizar a exclusão",
+                            type: "error",
+                            icon: "error",
+                            showCancelButton: false,
+                            confirmButtonColor: "#28a745",
+                            confirmButtonText: "Ok"
+                        });
+                        
+                    },
+                    complete: function(response){
+                        div_pai.loader('hide');
+                    }
+                });
                 
-
                 return false;
-
-
-
-                //window.location.href = url;
             }
         });
     }); 

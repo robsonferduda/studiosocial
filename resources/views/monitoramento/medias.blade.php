@@ -5,7 +5,12 @@
         <div class="card-header">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="card-title ml-2"><i class="fa fa-hashtag"></i> Monitoramento </h4>
+                    <h4 class="card-title">
+                        <i class="nc-icon nc-sound-wave"></i> Monitoramento 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Cliente 
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> {{ session('cliente')['nome'] }}
+                        <i class="fa fa-angle-double-right" aria-hidden="true"></i> Mensagens 
+                    </h4>
                 </div>
                 <div class="col-md-6">
                     <a href="{{ url('monitoramento') }}" class="btn btn-primary pull-right" style="margin-right: 12px;"><i class="nc-icon nc-sound-wave"></i> Monitoramento</a>
