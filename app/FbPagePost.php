@@ -64,7 +64,7 @@ class FbPagePost extends Model implements Auditable
                             WHERE t1.id = t2.page_post_id 
                             AND t2.reaction_id = t3.id 
                             AND t1.fb_page_monitor_id = t4.fb_page_monitor_id 
-                            AND t1.updated_time BETWEEN '2019/01/01 00:00:00' AND '2022/12/31 23:59:59'
+                            AND t1.updated_time BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             AND t4.client_id = $client_id
                             GROUP BY t3.name, t3.color, t3.icon");
     }
