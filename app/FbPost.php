@@ -56,7 +56,9 @@ class FbPost extends Model implements Auditable
         $dt_final = $data_final->format('Y-m-d');
 
         return DB::select("SELECT t3.name, t3.color, t3.icon, count(*) 
-                              FROM fb_posts t1, fb_post_reaction t2, fb_reactions t3
+                              FROM fb_posts t1, 
+                                   fb_post_reaction t2, 
+                                   fb_reactions t3
                               WHERE t1.id = t2.post_id 
                               AND t2.reaction_id = t3.id 
                               AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'

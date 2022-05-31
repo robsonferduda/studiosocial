@@ -7,6 +7,7 @@ use DOMPDF;
 use App\Configs;
 use App\Rule;
 use App\FbPost;
+use App\FbPagePost;
 use App\Media;
 use App\Utils;
 use App\FbReaction;
@@ -244,6 +245,34 @@ class RelatorioController extends Controller
 
     //FIM Métodos do Relatório de Redes Sociais
 
+    public function reactions()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Total de reações nas postagens";
+
+      return view('relatorios/reactions', compact('rules','periodo_relatorio','periodo_padrao' ,'mensagem'));
+    }
+
+    public function getReactions(Request $request)
+    {
+      $dados = array();
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      $this->rule_id = $request->regra;
+      $dados = $this->getDadosReactions();
+
+      return response()->json($dados);
+    }
+
+    public function getDadosReactions()
+    {
+        $total_post = (new FbPost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+        $total_post = (new FbPagePost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
+
+        return $total_post;
+    }
+
     public function sentimentos()
     {
       $rules = $this->rules;
@@ -357,16 +386,6 @@ class RelatorioController extends Controller
       $mensagem = "Nuvem baseada no volume de palavras";
       
       return view('relatorios/wordcloud', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
-    }
-
-    public function reactions()
-    {
-      $rules = $this->rules;
-      $periodo_padrao = $this->periodo_padrao;
-      $periodo_relatorio = $this->retornaDataPeriodo();
-      $mensagem = "Total de reações nas postagens";
-
-      return view('relatorios/reactions', compact('rules','periodo_relatorio','periodo_padrao' ,'mensagem'));
     }
 
     //INÍCIO Métodos do Relatório de Hashtags
@@ -567,16 +586,6 @@ class RelatorioController extends Controller
         $this->data_final = $data_final;
     } 
 
-    public function getReactions(Request $request)
-    {
-      $dados = array();
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-      $this->rule_id = $request->regra;
-      $dados = $this->getDadosReactions();
-
-      return response()->json($dados);
-    }
-
     public function getLocalizacao(Request $request)
     {
         $dados = array();
@@ -585,11 +594,6 @@ class RelatorioController extends Controller
         $dados = $this->getDadosLocalizacao();      
 
         return response()->json($dados);
-    }
-
-    public function getDadosReactions()
-    {
-      return (new FbPost())->getReactions($this->client_id, $this->data_inicial, $this->data_final, $this->rule_id);
     }
 
     public function getDadosLocalizacao()
