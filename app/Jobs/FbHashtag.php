@@ -16,7 +16,7 @@ class FbHashtag implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 1000;
+    public $timeout = 2000;
 
     /**
      * Create a new job instance.
@@ -38,7 +38,7 @@ class FbHashtag implements ShouldQueue
         $hashtags_ativas = Hashtag::where('social_media_id', SocialMedia::FACEBOOK)
                         ->where('is_active',true)->get();
 
-        foreach ($hashtags_ativas as $hashtag) {                    
+        foreach ($hashtags_ativas as $hashtag) {
             $last = $hashtag->pagePosts()->latest('created_at')->first();
             $last_comment = $hashtag->pagePostsComments()->latest('created_at')->first();
             $posts = FbPagePost::select('id')->where(function ($query) use ($hashtag) {
@@ -48,10 +48,10 @@ class FbHashtag implements ShouldQueue
                     })
                     ->when($last, function ($q) use ($last){
                         return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
-                    })                                    
+                    })
                     ->get();
             $hashtag->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
-            
+
             $comments = FbPagePostComment::select('id')->where(function ($query) use ($hashtag) {
                     $query->where('text', 'ilike', '% #'.strtolower($hashtag->hashtag).' %')
                         ->orWhere('text', 'ilike', '%#'.strtolower($hashtag->hashtag).' %')
@@ -59,11 +59,11 @@ class FbHashtag implements ShouldQueue
                     })
                     ->when($last_comment, function ($q) use ($last_comment){
                         return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
-                    })                                    
+                    })
                     ->get();
             $hashtag->pagePostsComments()->syncWithoutDetaching($comments->pluck('id')->toArray());
 
         }
-       
+
     }
 }
