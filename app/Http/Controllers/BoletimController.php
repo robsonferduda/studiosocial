@@ -84,6 +84,7 @@ class BoletimController extends Controller
                             array('nome' => 'Cris Vieira', 'email' => 'cris.vieira@zurichairportbrasil.com'),
                             array('nome' => 'Davi Piza', 'email' => 'davi.piza@zurichairportbrasil.com'),
                             array('nome' => 'Fabio Marques', 'email' => 'fabio.marques@zurichairportbrasil.com'),
+                            array('nome' => 'Felipe', 'email' => 'felipe.schneider@zurichairportbrasil.com'),
                             array('nome' => 'Fernando Castro', 'email' => 'fernando.castro@zurichairportbrasil.com'),
                             array('nome' => 'Giovani Montibeller ', 'email' => 'giovani.montibeller@zurichairportbrasil.com'),
                             array('nome' => 'Gustavo Brighenti', 'email' => 'gustavo.brighenti@zurichairportbrasil.com'),

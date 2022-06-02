@@ -396,7 +396,7 @@ class NotificacaoController extends Controller
             if($flag_enviar){
 
                 $titulo .= " - ".date("d/m/Y H:i:s"); 
-                $emails = (Client::where('id', $notification->client_id)->first()) ? Client::where('id', $notification->client_id)->first()->emails : null;
+                $emails = (Client::where('id', $notification->client_id)->first()) ? Client::where('id', $notification->client_id)->first()->emails : array();
 
                 if(count($emails)){
 
