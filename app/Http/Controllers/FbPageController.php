@@ -10,6 +10,7 @@ use App\FbPagePost;
 use App\Client;
 use App\Enums\FbReaction;
 use App\FbPagePostComment;
+use App\MediaNotFilteredVw;
 use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
@@ -44,7 +45,7 @@ class FbPageController extends Controller
         // ->when($quantidade <= 0 && is_numeric($quantidade), function($query) use ($quantidade) {
         //     $query->doesntHave('fbPagesPost');
         // })
-       
+
         $clients = Client::select(['id', 'name'])->get();
 
         return view('pages/index', compact('pages', 'clients', 'page_term'));
@@ -72,9 +73,9 @@ class FbPageController extends Controller
         $fb_api = new FBSearchPageApi();
 
         $fields = $fb_api->getPageInfoFields();
-                            
-        $params = [      
-            'q' => strtolower($request->termo),   
+
+        $params = [
+            'q' => strtolower($request->termo),
             'access_token' => $token_app,
             'after' => $request->after,
             'before' => $request->before,
@@ -91,7 +92,7 @@ class FbPageController extends Controller
 
             if((int) $x_app_usage->call_count > 50) {
                 $dados['limit_exceeded'] = true;
-                echo json_encode($dados);  
+                echo json_encode($dados);
                 exit;
             }
         }
@@ -101,10 +102,10 @@ class FbPageController extends Controller
         foreach ($pages['data'] as $page) {
 
             $page_id = $page['id'];
-                                
-            $params = [      
-                'fields' => $fields,   
-                'access_token' => $token_app                
+
+            $params = [
+                'fields' => $fields,
+                'access_token' => $token_app
             ];
 
             $infos = $fb_api->getPageInfo($page_id, $params);
@@ -126,9 +127,9 @@ class FbPageController extends Controller
             $dados['info']['before'] = $fb_api->getBefore($pages);
             $dados['info']['query'] = $request->termo;
         }
-        
-        echo json_encode($dados);   
-    
+
+        echo json_encode($dados);
+
     }
 
     public function show($id) {
@@ -141,7 +142,7 @@ class FbPageController extends Controller
     {
         try {
             $page = FbPageMonitor::create([
-                'name' => $request->name, 
+                'name' => $request->name,
                 'url' => $request->link,
                 'page_id' => $request->id,
                 'picture_url' => $request->picture
@@ -158,7 +159,7 @@ class FbPageController extends Controller
                              'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
 
         } catch (Exception $e) {
-            
+
             $retorno = array('flag' => false,
                              'msg' => "Ocorreu um erro ao inserir o registro");
         }
@@ -171,7 +172,7 @@ class FbPageController extends Controller
     }
 
     public function update(Request $request)
-    {   
+    {
         try {
             $page = FbPageMonitor::where('id', $request->id)->first();
 
@@ -191,7 +192,7 @@ class FbPageController extends Controller
                              'msg' => Utils::getDatabaseMessageByCode($e->getCode()));
 
         } catch (Exception $e) {
-            
+
             $retorno = array('flag' => true,
                              'msg' => "Ocorreu um erro ao atualizar o registro");
         }
@@ -221,78 +222,44 @@ class FbPageController extends Controller
 
     public function medias(Request $request, $page = NULL)
     {
-
         $term =  strtolower($request->term);
 
-        $medias_temp_a = FbPagePost::select('id','message', 'fb_page_monitor_id', 'updated_time')->addSelect(DB::raw("'0'as page_post_id"))->addSelect(DB::raw("'post' as tipo"))->whereHas('page')
-        ->when($page, function($query) use ($page){
-            $query->where('fb_page_monitor_id', $page);
-        })
-        ->when($term, function($query) use ($term){
-            $query->whereRaw(" lower(message) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-        });
-
-        $medias_temp_b = FbPagePostComment::with('fbPagePost')->select('id')->addSelect(DB::raw("text as message"))->addSelect(DB::raw("0 as fb_page_monitor_id"))->addSelect(DB::raw("created_time as updated_time"))->addSelect(DB::raw("page_post_id as page_post_id"))->addSelect(DB::raw("'comment' as tipo"))
-        ->when($term, function($query) use ($term){
-            $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-        })
-        ->when($page, function($query) use ($page){
-            $query->whereHas('FbPagePost', function($query) use ($page){
-                $query->where('fb_page_monitor_id', $page);
-            });
-        });
-
-        $medias_temp = $medias_temp_b->union($medias_temp_a)->orderBy('updated_time','DESC')->paginate(20);
-
-        $medias = [];
+        $medias_temp = MediaNotFilteredVw::whereIn('tipo', ['FB_PAGE_POST_COMMENT','FB_PAGE_POST'])
+                    ->when($page, function($query) use ($page){
+                        $query->where('page_monitor_id', $page);
+                    })
+                    ->when($term, function($query) use ($term){
+                        $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
+                    })
+                    ->orderBy('date','DESC')->paginate(20);
 
         foreach ($medias_temp as $key => $media) {
-            
-            if($media->tipo == 'post') {
-                $media = FbPagePost::find($media->id);
-                $img = $media->page->picture_url;
-                $name = $media->page->name;
-                $link = $media->permalink_url;
+
+            if($media->tipo == 'FB_PAGE_POST') {
+                $name = $media->name;
                 $type_message = 'facebook-page';
-            } else {             
-    
-                $img = '';
-                $name = '';               
-                $link = ($media->fbPagePost) ? $media->fbPagePost->permalink_url : '';
+            } else {
+                $name = '';
                 $type_message = 'facebook-page-comment';
             }
 
-            $likes_count = 0;
-            $loves = $media->reactions()->wherePivot('reaction_id',FbReaction::LOVE)->first();                
-            $likes = $media->reactions()->wherePivot('reaction_id',FbReaction::LIKE)->first();
-            if(!empty($loves)) {
-                $likes_count += $loves->pivot->count;
-            }
-
-            if(!empty($likes)) {
-                $likes_count += $likes->pivot->count;
-            }
-
             $medias[] = array('id' => $media->id,
-                'text' => $media->message,
+                'text' => $media->text,
                 'username' => $name,
-                'created_at' => dateTimeUtcToLocal($media->updated_time),
+                'created_at' => dateTimeUtcToLocal($media->date),
                 'sentiment' => '',
                 'type_message' => $type_message,
-                'like_count' => $likes_count,
+                'like_count' => $media->like_count,
                 'comments_count' => !empty($media->comment_count) ? $media->comment_count : 0,
-                'social_media_id' => $media->social_media_id,
                 'tipo' => 'facebook',
-                'comments' => [],
-                'link' => $link,
+                'link' =>  $media->link,
                 'share_count' => !empty($media->share_count) ? $media->share_count : 0,
-                'user_profile_image_url' => $img
+                'user_profile_image_url' => $media->img_link
              );
 
         }
 
         return view('pages/medias', compact('medias', 'medias_temp', 'term'));
-
     }
 
     public function pullMedias()
@@ -306,9 +273,9 @@ class FbPageController extends Controller
         $clients = $request->clientes;
         $pages = $request->paginas;
 
-        for ($i=0; $i < count($clients); $i++) {    
+        for ($i=0; $i < count($clients); $i++) {
             $client = Client::where('id', $clients[$i])->first();
-            $result = $client->pagesMonitor()->sync($pages);           
+            $result = $client->pagesMonitor()->sync($pages);
         }
 
         Flash::success('<i class="fa fa-check"></i> Associações de clientes e páginas atualizadas com sucesso');
@@ -323,37 +290,37 @@ class FbPageController extends Controller
 
 
             try {
-               
+
                 $response = Http::get($page->picture_url);
 
                 if($response->status() == 200){
                     continue;
-                } 
-    
+                }
+
                 $token_app = env('COLETA1');//getTokenApp();
-    
+
                 $fb_api = new FBSearchPageApi();
-                                    
-                $params = [      
+
+                $params = [
                     'access_token' => $token_app,
                     'redirect' => 0,
                     'fields' => 'url'
                 ];
-    
+
                 $picture = $fb_api->getPagePicture($page->page_id, $params);
-    
+
                 $page->picture_url = $picture['data']['url'];
-                
+
                 $page->save();
 
 
             }catch(Exception $e){
 
                 //dd($e);
-            
+
             }
 
-           
+
         }
 
     }
@@ -377,11 +344,11 @@ class FbPageController extends Controller
 
                     $reaction = constant('App\Enums\FbReaction::'. $type);
                     $reaction_buffer[$reaction] = ['count' => $qtd];
-                               
-                }                                    
+
+                }
             }
 
-            if (!empty($reaction_buffer)) {                
+            if (!empty($reaction_buffer)) {
                 $post->reactions()->sync($reaction_buffer);
             }
         }
@@ -417,6 +384,6 @@ class FbPageController extends Controller
         ];
 
         return $reactions;
-        
+
     }
 }
