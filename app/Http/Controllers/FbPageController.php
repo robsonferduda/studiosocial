@@ -10,7 +10,7 @@ use App\FbPagePost;
 use App\Client;
 use App\Enums\FbReaction;
 use App\FbPagePostComment;
-use App\MediaNotFilteredVw;
+use App\FbMediaNotFilteredVw;
 use App\Utils;
 use Exception;
 use Illuminate\Http\Request;
@@ -224,7 +224,7 @@ class FbPageController extends Controller
     {
         $term =  strtolower($request->term);
 
-        $medias_temp = MediaNotFilteredVw::whereIn('tipo', ['FB_PAGE_POST_COMMENT','FB_PAGE_POST'])
+        $medias_temp = FbMediaNotFilteredVw::whereIn('tipo', ['FB_PAGE_POST_COMMENT','FB_PAGE_POST'])
                     ->when($page, function($query) use ($page){
                         $query->where('page_monitor_id', $page);
                     })
