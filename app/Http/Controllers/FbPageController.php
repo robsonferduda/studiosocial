@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Classes\FBFeed;
 use App\Classes\FBFeedApi;
 use App\Classes\FBSearchPageApi;
+use App\Enums\TypeMessage;
 use App\FbPageMonitor;
 use App\FbPagePost;
 use App\Client;
@@ -224,7 +225,7 @@ class FbPageController extends Controller
     {
         $term =  strtolower($request->term);
 
-        $medias_temp = FbMediaNotFilteredVw::whereIn('tipo', ['FB_PAGE_POST_COMMENT','FB_PAGE_POST'])
+        $medias_temp = FbMediaNotFilteredVw::whereIn('tipo', [TypeMessage::FB_PAGE_POST,TypeMessage::FB_PAGE_POST_COMMENT])
                     ->when($page, function($query) use ($page){
                         $query->where('page_monitor_id', $page);
                     })
@@ -235,7 +236,7 @@ class FbPageController extends Controller
 
         foreach ($medias_temp as $key => $media) {
 
-            if($media->tipo == 'FB_PAGE_POST') {
+            if($media->tipo == TypeMessage::FB_PAGE_POST) {
                 $name = $media->name;
                 $type_message = 'facebook-page';
             } else {
