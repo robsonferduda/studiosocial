@@ -225,15 +225,15 @@ class FbPageController extends Controller
     {
         $term =  strtolower($request->term);
 
-        $medias_temp = FbMediaNotFilteredVw::whereIn('tipo', [TypeMessage::FB_PAGE_POST,TypeMessage::FB_PAGE_POST_COMMENT])
-                    ->when($page, function($query) use ($page){
+        $medias_temp = FbMediaNotFilteredVw::when($page, function($query) use ($page){
                         $query->where('page_monitor_id', $page);
                     })
                     ->when($term, function($query) use ($term){
                         $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
                     })
+                    //->whereIn('tipo', [TypeMessage::FB_PAGE_POST,TypeMessage::FB_PAGE_POST_COMMENT])
                     ->orderBy('date','DESC')->simplePaginate(20);
-       // dd($medias_temp);
+       //dd($medias_temp);
 
         foreach ($medias_temp as $key => $media) {
 
