@@ -232,7 +232,8 @@ class FbPageController extends Controller
                     ->when($term, function($query) use ($term){
                         $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
                     })
-                    ->orderBy('date','DESC')->paginate(20);
+                    ->orderBy('date','DESC')->simplePaginate(20);
+       // dd($medias_temp);
 
         foreach ($medias_temp as $key => $media) {
 
