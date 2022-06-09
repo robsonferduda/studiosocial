@@ -228,6 +228,11 @@ class FbPageController extends Controller
     {
         $term =  strtolower($request->term);
 
+        $take = 10000;
+        if($term) {
+            $take = 500;
+        }
+
         $date_limit = Carbon::now();
 
         $media_a = FbPagePostNotFilteredVw::when($page, function($query) use ($page){
@@ -235,18 +240,18 @@ class FbPageController extends Controller
             })
             ->when($term, function($query) use ($term){
                 $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-            })->take(10000)
+            })->take($take)
             ->orderBy('date','DESC');
         $media_b = FbPagePostCommentNotFilteredVw::when($page, function($query) use ($page){
                 $query->where('page_monitor_id', $page);
             })
             ->when($term, function($query) use ($term){
                 $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-            })->take(10000)
+            })->take($take)
             ->orderBy('date','DESC');
 
         $medias_temp = $media_b->unionAll($media_a)->orderBy('date', 'DESC')->simplePaginate(20);
-        
+
         $medias = [];
 
         foreach ($medias_temp as $key => $media) {
