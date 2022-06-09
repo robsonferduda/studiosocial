@@ -12,7 +12,10 @@ use App\Client;
 use App\Enums\FbReaction;
 use App\FbPagePostComment;
 use App\FbMediaNotFilteredVw;
+use App\FbPagePostCommentNotFilteredVw;
+use App\FbPagePostNotFilteredVw;
 use App\Utils;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\PageRequest;
@@ -225,15 +228,28 @@ class FbPageController extends Controller
     {
         $term =  strtolower($request->term);
 
-        $medias_temp = FbMediaNotFilteredVw::when($page, function($query) use ($page){
-                        $query->where('page_monitor_id', $page);
-                    })
-                    ->when($term, function($query) use ($term){
-                        $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-                    })
-                    //->whereIn('tipo', [TypeMessage::FB_PAGE_POST,TypeMessage::FB_PAGE_POST_COMMENT])
-                    ->orderBy('date','DESC')->simplePaginate(20);
-       //dd($medias_temp);
+        $date_limit = Carbon::now();
+
+        $media_a = FbPagePostNotFilteredVw::when($page, function($query) use ($page){
+                $query->where('page_monitor_id', $page);
+            })
+            ->when($term, function($query) use ($term){
+                $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
+            })->take(1000)
+            ->orderBy('date','DESC');
+        $media_b = FbPagePostCommentNotFilteredVw::when($page, function($query) use ($page){
+                $query->where('page_monitor_id', $page);
+            })
+            ->when($term, function($query) use ($term){
+                $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
+            })->take(1000)
+            ->orderBy('date','DESC');
+
+        $medias_temp = $media_b->unionAll($media_a)->orderBy('date', 'DESC')->simplePaginate(20);
+
+        //dd($medias_temp);
+
+        //dd($request->page);
 
         foreach ($medias_temp as $key => $media) {
 
