@@ -235,14 +235,14 @@ class FbPageController extends Controller
             })
             ->when($term, function($query) use ($term){
                 $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-            })->take(100000)
+            })->take(10000)
             ->orderBy('date','DESC');
         $media_b = FbPagePostCommentNotFilteredVw::when($page, function($query) use ($page){
                 $query->where('page_monitor_id', $page);
             })
             ->when($term, function($query) use ($term){
                 $query->whereRaw(" lower(text) SIMILAR TO '%({$term} | {$term}| {$term} )%' ");
-            })->take(100000)
+            })->take(10000)
             ->orderBy('date','DESC');
 
         $medias_temp = $media_b->unionAll($media_a)->orderBy('date', 'DESC')->simplePaginate(20);
