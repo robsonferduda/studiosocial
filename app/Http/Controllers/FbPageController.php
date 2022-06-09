@@ -246,10 +246,8 @@ class FbPageController extends Controller
             ->orderBy('date','DESC');
 
         $medias_temp = $media_b->unionAll($media_a)->orderBy('date', 'DESC')->simplePaginate(20);
-
-        //dd($medias_temp);
-
-        //dd($request->page);
+        
+        $medias = [];
 
         foreach ($medias_temp as $key => $media) {
 
