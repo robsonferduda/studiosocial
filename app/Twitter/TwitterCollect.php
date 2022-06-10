@@ -45,7 +45,7 @@ class TwitterCollect{
                 "lang" => 'pt',
                 "result_type" => "recent",
                 "exclude_replies" => true,
-                "retweeted" => false,
+                "retweeted" => true,
                 "tweet_mode" => "extended"
             );
 
@@ -55,6 +55,8 @@ class TwitterCollect{
             $tweets = $this->conn->get('search/tweets', $query);
     
             foreach ($tweets->statuses as $tweet) {
+
+                if($tweet->retweeted) dd($tweet);
               
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
@@ -101,7 +103,7 @@ class TwitterCollect{
                 "lang" => 'pt',
                 "result_type" => "recent",
                 "exclude_replies" => true,
-                "retweeted" => false,
+                "retweeted" => true,
                 "tweet_mode" => "extended"
             );
     
@@ -109,6 +111,8 @@ class TwitterCollect{
 
             $total = 0;    
             foreach ($tweets->statuses as $tweet) {
+
+                if($tweet->retweeted) dd($tweet);
     
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
