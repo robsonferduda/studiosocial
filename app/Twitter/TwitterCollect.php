@@ -55,8 +55,6 @@ class TwitterCollect{
             $tweets = $this->conn->get('search/tweets', $query);
     
             foreach ($tweets->statuses as $tweet) {
-
-                if($tweet->retweeted) dd($tweet);
               
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
@@ -111,8 +109,6 @@ class TwitterCollect{
 
             $total = 0;    
             foreach ($tweets->statuses as $tweet) {
-
-                if($tweet->retweeted) dd($tweet);
     
                 $chave = array('twitter_id' => $tweet->id);
                 $dados = array('full_text' => $tweet->full_text,
