@@ -108,6 +108,7 @@ Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback
 
 Route::get('media/{media_id}/tipo/{tipo}/sentimento/{sentimento}/atualizar','MediaController@atualizaSentimento');
 Route::get('media/{media_id}/tipo/{tipo}/excluir','MediaController@excluir');
+Route::get('media/relatorio/todos','MediaController@relatorio');
 
 Route::get('monitoramento','MonitoramentoController@index');
 Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');

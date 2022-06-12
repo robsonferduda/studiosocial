@@ -4,14 +4,14 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-12 col-sm-12">
+                <div class="col-md-8 col-sm-8">
                     <h4 class="card-title ml-2">
                         <i class="nc-icon nc-zoom-split"></i> Social Search 
                         <i class="fa fa-angle-double-right" aria-hidden="true"></i> Buscar Mídias 
                     </h4>
                 </div>
-                <div class="col-md-6">
-                    
+                <div class="col-md-4">
+                    <a href="{{ url('media/relatorio/todos') }}" class="btn btn-danger mb-3 pull-right"><i class="fa fa-file-pdf-o"></i> Baixar Relatório</a>
                 </div>
             </div>
         </div>
