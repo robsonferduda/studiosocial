@@ -167,7 +167,7 @@ class MediaController extends Controller
         }
         
         $pdf = DOMPDF::loadView('medias/relatorio', compact('nome','dt_inicial','dt_final','medias'));
-        return $pdf->download("Teste.pdf");
+        return $pdf->download("Relatório de Coletas.pdf");
     }
 
     function getMediasInstagram()
