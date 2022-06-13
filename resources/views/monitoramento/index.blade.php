@@ -4,12 +4,15 @@
     <div class="card">
         <div class="card-header">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <h4 class="card-title">
                         <i class="nc-icon nc-sound-wave"></i> Monitoramento 
                         <i class="fa fa-angle-double-right" aria-hidden="true"></i> Cliente 
                         <i class="fa fa-angle-double-right" aria-hidden="true"></i> {{ session('cliente')['nome'] }}
                     </h4>
+                </div>
+                <div class="col-md-4">
+                    <a href="{{ url('media/relatorio/todos') }}" class="btn btn-danger pull-right"><i class="fa fa-file-pdf-o"></i> Baixar Relatório</a>
                 </div>
             </div>
         </div>

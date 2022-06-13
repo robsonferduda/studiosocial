@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use DOMPDF;
+use Carbon\Carbon;
 use App\FbPost;
 use App\Media;
 use App\MediaTwitter;
@@ -11,6 +12,7 @@ use App\FbPagePost;
 use App\FbPagePostComment;
 use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
+use App\Configs;
 use App\Enums\TypeMessage;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
@@ -18,9 +20,24 @@ use Illuminate\Support\Facades\Session;
 
 class MediaController extends Controller
 {
+    private $client_id;
+    private $periodo_padrao;
+    private $flag_regras;
+    private $mediaModel;
+
     public function __construct()
     {
         $this->middleware('auth');
+        $this->client_id = session('cliente')['id'];
+        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
+        Session::put('url','monitoramento');
+        $this->flag_regras = Session::get('flag_regras');
+
+        if($this->flag_regras) {
+            $this->mediaModel = new MediaRuleFilteredVw();
+        } else {
+            $this->mediaModel = new MediaFilteredVw();
+        }
     }
 
     public function index()
@@ -117,66 +134,153 @@ class MediaController extends Controller
 
     }
 
-    public function relatorio()
+    public function relatorio($rede)
     {
         $nome = "Relatório de Redes Sociais";
         $dt_inicial = '10/10/2022';
         $dt_final = '20/10/2022';
 
-        $temp_a = DB::table('fb_posts')  
-                    ->select('id')          
-                    ->addSelect(DB::raw("created_at as date"))  
-                    ->addSelect(DB::raw("message as text")) 
-                    ->addSelect(DB::raw("'facebook' as tipo"))  
-                    ->addSelect(DB::raw("'facebook' as rede")) 
-                    ->addSelect(DB::raw("'username' as user")) 
-                    ->addSelect(DB::raw("sentiment"));
+        $client_id = Session::get('cliente')['id'];
+        $medias = array();
 
-        $temp_b = DB::table('fb_page_posts')  
-                    ->select('id')          
-                    ->addSelect(DB::raw("created_at as date"))  
-                    ->addSelect(DB::raw("message as text")) 
-                    ->addSelect(DB::raw("'facebook-page' as tipo"))  
-                    ->addSelect(DB::raw("'facebook' as rede")) 
-                    ->addSelect(DB::raw("'username' as user")) 
-                    ->addSelect(DB::raw("sentiment"));
+        switch ($rede) {
 
-        $temp_c = DB::table('fb_page_posts_comments')  
-                    ->select('id')          
-                    ->addSelect(DB::raw("created_at as date"))  
-                    ->addSelect(DB::raw("text as text")) 
-                    ->addSelect(DB::raw("'facebook-page-comment' as tipo"))  
-                    ->addSelect(DB::raw("'facebook' as rede")) 
-                    ->addSelect(DB::raw("'username' as user")) 
-                    ->addSelect(DB::raw("sentiment"));
+            case 'instagram':
+                $medias = $this->getMediasInstagram();
+                break;
 
-        //* Dados do Instagram
-        $medias_insta = DB::table('medias')  
-                    ->select('id')          
-                    ->addSelect(DB::raw("timestamp as date"))  
-                    ->addSelect(DB::raw("caption as text")) 
-                    ->addSelect(DB::raw("'instagram' as tipo"))  
-                    ->addSelect(DB::raw("'instagram' as rede")) 
-                    ->addSelect(DB::raw("username as user")) 
-                    ->addSelect(DB::raw("sentiment"))
-                    ->where('client_id', 19);
-                    
-        // Dados do Twitter
-        $media_twitter = DB::table('media_twitter')  
-                    ->select('id')          
-                    ->addSelect(DB::raw("created_tweet_at as date"))  
-                    ->addSelect(DB::raw("full_text as text")) 
-                    ->addSelect(DB::raw("'twitter' as tipo"))  
-                    ->addSelect(DB::raw("'twitter' as rede")) 
-                    ->addSelect(DB::raw("user_name as user")) 
-                    ->addSelect(DB::raw("sentiment"))
-                    ->where('client_id', 19);
+            case 'facebook':
+                $medias = $this->getMediasFacebook();
+                break;
+            
+            case 'twitter':
+                $medias = $this->getMediasTwitter();
+                
+            break;
 
-        $fb_posts = $temp_a->union($temp_b)->union($temp_c);
-        $medias = $fb_posts->union($media_twitter)->union($medias_insta)->orderBy('date','DESC')->paginate(10);
+            case 'todos':
+                $medias_i = $this->getMediasInstagram();
+                $medias_t = $this->getMediasTwitter();
+                $medias_f = $this->getMediasFacebook();                
 
+                $medias = array_merge($medias_i, $medias_t, $medias_f);
+        }
         
         $pdf = DOMPDF::loadView('medias/relatorio', compact('nome','dt_inicial','dt_final','medias'));
         return $pdf->download("Teste.pdf");
+    }
+
+    function getMediasInstagram()
+    {
+        $medias = array();
+        $client_id = Session::get('cliente')['id'];
+        $medias_temp =  $this->mediaModel::where('tipo', 'IG_POSTS');
+
+        $medias_temp = $medias_temp->where('client_id', $this->client_id)
+        ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
+        ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
+        ->orderBy('date', 'DESC')->get();
+
+        foreach($medias_temp as $media) {
+
+            $medias[] = array(  'id' => $media->id,                                       
+                                'text' => $media->text,
+                                'username' => $media->name,
+                                'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
+                                'sentiment' => $media->sentiment,
+                                'type_message' => 'instagram',
+                                'like_count' => $media->like_count,
+                                'share_count' => $media->share_count,
+                                'comments_count' => $media->comments_count,                                
+                                'tipo' => 'instagram',
+                                'comments' => [],
+                                'link' => $media->link,
+                                'user_profile_image_url' => $media->img_link                          
+                            );
+        }
+
+        return $medias;
+    }
+
+    function getMediasFacebook()
+    {
+        $medias_temp = $this->mediaModel::where(function($query) {
+            $query->Orwhere('tipo', 'FB_COMMENT')
+            ->Orwhere('tipo', 'FB_PAGE_POST')
+            ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
+            ->Orwhere('tipo', 'FB_POSTS');
+        });
+       
+        $medias_temp = $medias_temp->where('client_id', $this->client_id)
+        ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
+        ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
+        ->orderBy('date', 'DESC')->get();
+        
+        foreach($medias_temp as $media) {
+            
+            switch ($media->tipo) {
+                case 'FB_COMMENT':
+                        $tipo = '';
+                    break;
+                case 'FB_PAGE_POST':
+                        $tipo = 'facebook-page';
+                    break;
+                case 'FB_PAGE_POST_COMMENT':
+                        $tipo = 'facebook-page-comment';
+                    break;
+                case 'FB_POSTS':
+                        $tipo = 'facebook';
+                    break;
+
+            }
+
+            $medias[] = array(  'id' => $media->id,                                       
+                                'text' => $media->text,
+                                'username' => $media->name,
+                                'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
+                                'sentiment' => $media->sentiment,
+                                'type_message' => $tipo,
+                                'like_count' => $media->like_count,
+                                'share_count' => $media->share_count,
+                                'comments_count' => $media->comments_count,                                
+                                'tipo' => $tipo,
+                                'comments' => [],
+                                'link' => $media->link,
+                                'user_profile_image_url' => $media->img_link                          
+                            );
+        }
+
+        return $medias;
+    }
+
+    function getMediasTwitter()
+    {
+        $medias_temp =  $this->mediaModel::where('tipo', 'TWEETS');
+               
+        $medias_temp = $medias_temp->where('client_id', $this->client_id)
+        ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
+        ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
+        ->orderBy('date', 'DESC')->get();
+
+        foreach($medias_temp as $media) {
+
+            $medias[] = array(  'id' => $media->id,                                       
+                                'text' => $media->text,
+                                'username' => $media->name,
+                                'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
+                                'sentiment' => $media->sentiment,
+                                'type_message' => 'twitter',
+                                'like_count' => $media->like_count,
+                                'share_count' => $media->share_count,
+                                'comments_count' => $media->comments_count,                                
+                                'tipo' => 'twitter',
+                                'retweet_count' => $media->retweet_count,
+                                'comments' => [],
+                                'link' => $media->link,
+                                'user_profile_image_url' => $media->img_link                          
+                            );
+        }
+
+        return $medias;
     }
 }
