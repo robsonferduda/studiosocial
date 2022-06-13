@@ -24,6 +24,9 @@ class MediaController extends Controller
     private $periodo_padrao;
     private $flag_regras;
     private $mediaModel;
+    private $periodo;
+    private $data_inicial;
+    private $data_final;
 
     public function __construct()
     {
@@ -134,11 +137,13 @@ class MediaController extends Controller
 
     }
 
-    public function relatorio($rede)
+    public function relatorio(Request $request)
     {
         $nome = "Relatório de Redes Sociais";
-        $dt_inicial = '10/10/2022';
-        $dt_final = '20/10/2022';
+        $dt_inicial = $request->data_inicial;
+        $dt_final = $request->data_final;
+        $rede = 'todos';
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
 
         $client_id = Session::get('cliente')['id'];
         $medias = array();
@@ -167,14 +172,37 @@ class MediaController extends Controller
         }
         
         $pdf = DOMPDF::loadView('medias/relatorio', compact('nome','dt_inicial','dt_final','medias'));
-        return $pdf->download("Relatório de Coletas.pdf");
+        return $pdf->download("relatorio_de_coletas.pdf");
     }
+
+    public function geraDataPeriodo($periodo, $data_inicial, $data_final)
+    {
+        $carbon = new Carbon();
+
+        if($periodo == 0){
+
+          $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
+          $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
+          
+          $periodo = $data_final->diffInDays($data_inicial) + 1;
+          $data_inicial = $data_inicial->subDays(1);
+
+        }else{
+          $data_inicial = Carbon::now()->subDays($periodo);
+          $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
+        }
+
+        $this->periodo = $periodo;
+        $this->data_inicial = $data_inicial;
+        $this->data_final = $data_final;
+    } 
 
     function getMediasInstagram()
     {
         $medias = array();
+        $medias = array();
         $client_id = Session::get('cliente')['id'];
-        $medias_temp =  $this->mediaModel::where('tipo', 'IG_POSTS');
+        $medias_temp =  $this->mediaModel::where('tipo', 'IG_POSTS')->whereBetween('date', [$this->data_inicial, $this->data_final]);
 
         $medias_temp = $medias_temp->where('client_id', $this->client_id)
         ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id')
@@ -204,12 +232,13 @@ class MediaController extends Controller
 
     function getMediasFacebook()
     {
+        $medias = array();
         $medias_temp = $this->mediaModel::where(function($query) {
             $query->Orwhere('tipo', 'FB_COMMENT')
             ->Orwhere('tipo', 'FB_PAGE_POST')
             ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
             ->Orwhere('tipo', 'FB_POSTS');
-        });
+        })->whereBetween('date', [$this->data_inicial, $this->data_final]);
        
         $medias_temp = $medias_temp->where('client_id', $this->client_id)
         ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
@@ -255,7 +284,8 @@ class MediaController extends Controller
 
     function getMediasTwitter()
     {
-        $medias_temp =  $this->mediaModel::where('tipo', 'TWEETS');
+        $medias = array();
+        $medias_temp =  $this->mediaModel::where('tipo', 'TWEETS')->whereBetween('date', [$this->data_inicial, $this->data_final]);
                
         $medias_temp = $medias_temp->where('client_id', $this->client_id)
         ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')

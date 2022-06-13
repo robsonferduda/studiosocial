@@ -92,7 +92,7 @@
                     </span> 
                 @endif
                 <span class="badge badge-pill badge-warning">
-                    <i class="fa fa-link text-white"></i> <a href="{{ $media['link'] }}" target="_blank" >Mídia</a>  
+                    <i class="fa fa-link text-white"></i> <a href="{{ $media['link'] }}" target="_blank" >Post</a>  
                 </span>
                 <span class="float-right" style="font-size: 12px;">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
             
