@@ -243,7 +243,7 @@ class MediaController extends Controller
                                 'like_count' => $media->like_count,
                                 'share_count' => $media->share_count,
                                 'comments_count' => $media->comments_count,                                
-                                'tipo' => $tipo,
+                                'tipo' => 'facebook',
                                 'comments' => [],
                                 'link' => $media->link,
                                 'user_profile_image_url' => $media->img_link                          
