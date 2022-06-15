@@ -31,40 +31,35 @@
         </div>
     </div> 
     <div style="clear:both; margin-top: 150px; ">
-        @foreach($medias as $key => $media)
-        
+        @for($i = 0; $i < count($dados); $i++)
+
             <div class="mb-2">  
-                
-                <div style="position: relative;">
-                   
-
-                    <span style="position: absolute; top: -5px; font-size: 12px;">{{ $media['username'] }}</span>
-
+                    
+                <div style="position: relative;">                
+                    {!! $dados[$i]['tipo'] !!}
+                    <span style="position: absolute; top: -5px; font-size: 12px;">{{ $dados[$i]['username'] }}</span>
                     <span class="pull-right" style="font-size: 16px;">
-                        
-                                    <i class="fa fa-frown-o text-danger"></i>
-                                    <i class="fa fa-ban op-2"></i>
-                                    <i class="fa fa-smile-o op-2"></i>
-                               
+                        {!! $dados[$i]['sentimento'] !!}
                     </span>
                 </div>
 
-                <p style="font-size: 12px;">{!! $media['text'] !!}</p>
+                <p style="font-size: 12px;">{!! $dados[$i]['text'] !!}</p>
 
                 <span class="badge badge-pill badge-primary">
-                    <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
+                    <i class="fa fa-thumbs-up"></i> {{ $dados[$i]['like_count'] }}
                 </span>
-                
+
                 <span class="badge badge-pill badge-warning">
-                    <i class="fa fa-link text-white"></i> <a href="{{ $media['link'] }}" target="_blank" >Post</a>  
+                    <i class="fa fa-link text-white"></i> <a href="{{ $dados[$i]['link'] }}" target="_blank" >Post</a>  
                 </span>
-                <span class="float-right" style="font-size: 12px;">{{ Carbon\Carbon::parse($media['created_at'])->format('d/m/Y H:i') }}</span>
+                <span class="float-right" style="font-size: 12px;">{{ Carbon\Carbon::parse($dados[$i]['created_at'])->format('d/m/Y H:i') }}</span>
+                
             
             </div>           
 
             <hr/>
-
-        @endforeach
+            
+        @endfor
     </div>
     <footer>
         Relatório gerado em {{ date("d/m/Y") }} às {{ date("H:i:s") }} 

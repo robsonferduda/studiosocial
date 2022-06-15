@@ -148,6 +148,7 @@ class MediaController extends Controller
 
         $client_id = Session::get('cliente')['id'];
         $medias = array();
+        $dados = array();
 
         switch ($rede) {
 
@@ -169,12 +170,62 @@ class MediaController extends Controller
                 $medias_t = $this->getMediasTwitter();
                 $medias_f = $this->getMediasFacebook();                
 
-                $medias = array_merge($medias_i, $medias_t, $medias_f);
+                //$medias = array_merge($medias_i, $medias_t, $medias_f);
         }
 
         $medias = $this->getMediasInstagram();
+
+        foreach ($medias as $key => $media) {
+
+            switch ($media['sentiment']) {
+                case -1:
+                    $sentimento = '<i class="fa fa-frown-o text-danger"></i>
+                                   <i class="fa fa-ban op-2"></i>
+                                   <i class="fa fa-smile-o op-2"></i>';
+                break;
+                case 0:
+                    $sentimento = '<i class="fa fa-frown-o op-2"></i>
+                                    <i class="fa fa-ban text-primary"></i>
+                                    <i class="fa fa-smile-o op-2"></i>';
+                    break;
+
+                case 1:
+                    $sentimento = ' <i class="fa fa-frown-o op-2"></i>
+                                    <i class="fa fa-ban op-2"></i>
+                                    <i class="fa fa-smile-o text-success"></i>';
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+            switch ($media['tipo']) {
+                case 'instagram':
+                    $tipo = '<span><i class="fa fa-instagram text-pink fa-2x"></i> </span>';
+                    break;
+
+                case 'facebook':
+                    $tipo = '<span><i class="fa fa-facebook text-facebook fa-2x"></i></span>';
+                    break;
+
+                case 'twitter':
+                    $tipo = '<span><i class="fa fa-twitter text-info fa-2x"></i></span>';
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+            $dados[] = array('text' => $media['text'],
+                             'sentimento' => $sentimento,
+                             'tipo' => $tipo,
+                             'username' => $media['username'],
+                             'like_count' => $media['like_count'],
+                             'link' => $media['link'],
+                             'created_at' => $media['created_at']);
+        }
         
-        $pdf = DOMPDF::loadView('medias/relatorio', compact('nome','dt_inicial','dt_final','medias'));
+        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
 
         Storage::disk('public')->put('relatorio_de_coletas.pdf', $pdf->output());
 
