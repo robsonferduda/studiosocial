@@ -171,6 +171,8 @@ class MediaController extends Controller
 
                 $medias = array_merge($medias_i, $medias_t, $medias_f);
         }
+
+        $medias = $this->getMediasInstagram();
         
         $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','medias'));
 
