@@ -19,7 +19,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                            Arquivos
-                           
+                           <a href="{{ url('files/relatorio_de_coletas.pdf') }}">Baixar</a>
                         </div>
                         <div class="col-lg-6 col-md-6">
                            
