@@ -174,7 +174,7 @@ class MediaController extends Controller
 
         $medias = $this->getMediasInstagram();
         
-        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','medias'));
+        $pdf = DOMPDF::loadView('medias/relatorio', compact('nome','dt_inicial','dt_final','medias'));
 
         Storage::disk('public')->put('relatorio_de_coletas.pdf', $pdf->output());
 
