@@ -18,6 +18,7 @@
                     @include('layouts/regra')
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
+                           Arquivos
                            
                         </div>
                         <div class="col-lg-6 col-md-6">

@@ -60,7 +60,9 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Listagem de postagens em todas as redes socias";
 
-      return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
+      $arquivos = Storage::disk('public')->allFiles();
+
+      return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem','arquivos'));
     }
 
     
