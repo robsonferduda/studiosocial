@@ -36,38 +36,16 @@
             <div class="mb-2">  
                 
                 <div style="position: relative;">
-                    @switch($media['tipo'])
-                        @case('instagram')
-                            <span><i class="fa fa-instagram text-pink fa-2x"></i> </span>
-                        @break
-                        @case('facebook')
-                            <span><i class="fa fa-facebook text-facebook fa-2x"></i></span>
-                        @break
-                        @case('twitter')
-                            <span><i class="fa fa-twitter text-info fa-2x"></i></span>
-                        @break                                       
-                    @endswitch
+                   
 
                     <span style="position: absolute; top: -5px; font-size: 12px;">{{ $media['username'] }}</span>
 
                     <span class="pull-right" style="font-size: 16px;">
-                        @switch($media['sentiment'])
-                            @case(-1)
+                        
                                     <i class="fa fa-frown-o text-danger"></i>
                                     <i class="fa fa-ban op-2"></i>
                                     <i class="fa fa-smile-o op-2"></i>
-                                @break
-                            @case(0)
-                                    <i class="fa fa-frown-o op-2"></i>
-                                    <i class="fa fa-ban text-primary"></i>
-                                    <i class="fa fa-smile-o op-2"></i>                                              
-                                @break
-                            @case(1)
-                                    <i class="fa fa-frown-o op-2"></i>
-                                    <i class="fa fa-ban op-2"></i>
-                                    <i class="fa fa-smile-o text-success"></i>
-                                @break                                            
-                        @endswitch
+                               
                     </span>
                 </div>
 
@@ -76,21 +54,7 @@
                 <span class="badge badge-pill badge-primary">
                     <i class="fa fa-thumbs-up"></i> {{ $media['like_count'] }}
                 </span>
-                @if($media['tipo'] == 'instagram' || $media['tipo'] == 'facebook' )
-                    <span class="badge badge-pill badge-danger">
-                        <i class="fa fa-comments"></i> {{ $media['comments_count'] }}
-                    </span>   
-                @endif
-                @if($media['tipo'] == 'twitter')
-                    <span class="badge badge-pill badge-success">
-                        <i class="fa fa-share"></i> {{ $media['retweet_count'] }}
-                    </span> 
-                @endif
-                @if($media['tipo'] == 'facebook')
-                    <span class="badge badge-pill badge-info">
-                        <i class="fa fa-users"></i> {{ $media['share_count'] }}
-                    </span> 
-                @endif
+                
                 <span class="badge badge-pill badge-warning">
                     <i class="fa fa-link text-white"></i> <a href="{{ $media['link'] }}" target="_blank" >Post</a>  
                 </span>

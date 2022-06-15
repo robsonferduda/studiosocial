@@ -11,7 +11,7 @@
                     </h4>
                 </div>
                 <div class="col-md-4">
-                    <a href="{{ url('media/relatorio/todos') }}" class="btn btn-danger mb-3 pull-right"><i class="fa fa-file-pdf-o"></i> Baixar Relatório</a>
+                    
                 </div>
             </div>
         </div>
