@@ -224,11 +224,23 @@ class MediaController extends Controller
                              'like_count' => $media['like_count'],
                              'link' => $media['link'],
                              'created_at' => $media['created_at']);
-        }
-        
-        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
 
-        Storage::disk('public')->put('relatorio_de_coletas.pdf', $pdf->output());
+            if($key % 50 == 1 and $key >= 99){
+
+                $lote[] = $dados;
+                $dados = array();
+            }
+        }
+
+        $lote[] = $dados;
+
+        for ($i=0; $i < count($lote); $i++) { 
+            
+            $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+            Storage::disk('public')->put('relatorio_de_coletas_'.$i.'.pdf', $pdf->output());
+
+        }    
+        
 
         dd("Gerou");
         //return $pdf->download("relatorio_de_coletas.pdf");
