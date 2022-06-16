@@ -173,7 +173,8 @@ class MediaController extends Controller
                 //$medias = array_merge($medias_i, $medias_t, $medias_f);
         }
 
-        $medias = $this->getMediasInstagram();
+        //$medias = $this->getMediasInstagram();
+        $medias = $this->getMediasFacebook();
 
         foreach ($medias as $key => $media) {
 
