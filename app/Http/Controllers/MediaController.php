@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use DOMPDF;
 use Storage;
+use Notification;
 use Carbon\Carbon;
 use App\FbPost;
 use App\Media;
@@ -15,6 +16,7 @@ use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
 use App\Configs;
 use App\Enums\TypeMessage;
+use App\Jobs\Medias as JobsMedia;
 use Laracasts\Flash\Flash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -28,6 +30,14 @@ class MediaController extends Controller
     private $periodo;
     private $data_inicial;
     private $data_final;
+
+    const FB_POSTS = 1;
+    const FB_COMMENT = 2;
+    const TWEETS = 3;
+    const IG_POSTS = 4;
+    const IG_COMMENT = 5;
+    const FB_PAGE_POST = 7;
+    const FB_PAGE_POST_COMMENT = 8;
 
     public function __construct()
     {
@@ -48,14 +58,6 @@ class MediaController extends Controller
     {
         
     }
-
-    const FB_POSTS = 1;
-    const FB_COMMENT = 2;
-    const TWEETS = 3;
-    const IG_POSTS = 4;
-    const IG_COMMENT = 5;
-    const FB_PAGE_POST = 7;
-    const FB_PAGE_POST_COMMENT = 8;
 
     public function atualizaSentimento($id, $tipo, $sentimento)
     {
@@ -145,7 +147,7 @@ class MediaController extends Controller
         $dt_final = $request->data_final;
         $rede = 'todos';
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
-
+        
         $client_id = Session::get('cliente')['id'];
         $medias = array();
         $dados = array();
@@ -174,7 +176,7 @@ class MediaController extends Controller
         }
 
         //$medias = $this->getMediasInstagram();
-        $medias = $this->getMediasFacebook();
+        $medias = $this->getMediasTwitter();
 
         foreach ($medias as $key => $media) {
 
@@ -234,12 +236,16 @@ class MediaController extends Controller
 
         $lote[] = $dados;
 
+        /*
         for ($i=0; $i < count($lote); $i++) { 
             
             $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
             Storage::disk('public')->put('relatorio_de_coletas_'.$i.'.pdf', $pdf->output());
 
         }    
+        */
+
+        JobsMedia::dispatch($lote);
         
 
         dd("Gerou");
