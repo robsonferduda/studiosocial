@@ -45,6 +45,10 @@ class FBMention{
                         ];
         
                         $posts = $fb_mention->getMentions($params);
+
+                        if(!isset($posts['data'])) {
+                            continue;
+                        }
                         
                         foreach ($posts['data'] as $post) {
 
