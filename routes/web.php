@@ -1,5 +1,6 @@
 <?php
 
+use App\Classes\FBFeed;
 use App\Classes\FbHashtag;
 use App\Classes\FbTerm;
 use App\Classes\Rule as ClassesRule;
@@ -163,6 +164,10 @@ Route::get('fb-terms', function(){
 
 Route::get('fb-hashtags', function(){
     (new FbHashtag)->runJob();
+});
+
+Route::get('fb-get-page-posts', function(){
+    (new FBFeed)->pullMedias();
 });
 
 Route::get('run-rules', function(){
