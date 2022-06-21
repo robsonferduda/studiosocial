@@ -4,11 +4,13 @@ namespace App;
 
 use App\Enums\TypeRule;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 
 class Rule extends Model
 {
     use Notifiable;
+    use SoftDeletes;
     
     protected $table = 'rules';
     protected $fillable = [
