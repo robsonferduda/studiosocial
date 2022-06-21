@@ -27,6 +27,10 @@ class Medias implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected $lote;
+    protected $nome;
+    protected $dt_inicial;
+    protected $dt_final;
+    protected $dados;
     public $timeout = 240;
 
     /**
@@ -34,9 +38,13 @@ class Medias implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($lote)
+    public function __construct($lote, $nome, $dt_inicial, $dt_final, $dados)
     {
        $this->lote = $lote;
+       $this->nome = $nome;
+       $this->dt_inicial = $dt_inicial;
+       $this->dt_final = $dt_final;
+       $this->dados = $dados;
     }
 
     /**
@@ -46,6 +54,10 @@ class Medias implements ShouldQueue
      */
     public function handle()
     { 
+        $nome = $this->nome;
+        $dt_inicial = $this->dt_inicial;
+        $dt_final = $this->dt_final;
+        $dados = $this->dados;
 
         for ($i=0; $i < count($this->lote); $i++) { 
             
