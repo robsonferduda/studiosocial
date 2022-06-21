@@ -26,21 +26,19 @@ class Medias implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $lote;
     protected $nome;
     protected $dt_inicial;
     protected $dt_final;
     protected $dados;
-    public $timeout = 480;
+    public $timeout = 600;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($lote, $nome, $dt_inicial, $dt_final, $dados)
+    public function __construct($nome, $dt_inicial, $dt_final, $dados)
     {
-       $this->lote = $lote;
        $this->nome = $nome;
        $this->dt_inicial = $dt_inicial;
        $this->dt_final = $dt_final;
@@ -59,12 +57,10 @@ class Medias implements ShouldQueue
         $dt_final = $this->dt_final;
         $dados = $this->dados;
 
-        for ($i=0; $i < count($this->lote); $i++) { 
-            
-            $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
-            Storage::disk('public')->put('relatorio_de_coletas_'.$i.'.pdf', $pdf->output());
+        $nome_arquivo = 'relatorio_de_coletas_'.date('YmdHis').".pdf";
 
-        }
+        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+        Storage::disk('public')->put($nome_arquivo, $pdf->output());
 
         $media = new Media();
         $media->notify(new MediaRelatorioNotification()); 

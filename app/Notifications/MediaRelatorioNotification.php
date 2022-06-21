@@ -47,7 +47,7 @@ class MediaRelatorioNotification extends Notification
                     ->from('boletins@clipagens.com.br')
                     ->line('Relatório gerado com sucesso.')
                     ->line('Utilize o endereço abaixo para baixar o arquivo.')
-                    ->line('Uma cṕopia do arquivo ficará disponível para download no sistema.');
+                    ->line('Uma cópia do arquivo ficará disponível para download no sistema.');
     }
 
     /**

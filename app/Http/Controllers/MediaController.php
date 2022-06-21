@@ -224,16 +224,9 @@ class MediaController extends Controller
                              'link' => $media['link'],
                              'created_at' => $media['created_at']);
 
-            if($key % 50 == 1 and $key >= 99){
-
-                $lote[] = $dados;
-                $dados = array();
-            }
         }
 
-        $lote[] = $dados;
-
-        JobsMedia::dispatch($lote, $nome, $dt_inicial, $dt_final, $dados);
+        JobsMedia::dispatch($nome, $dt_inicial, $dt_final, $dados);
         
         dd("Gerou");
     }
