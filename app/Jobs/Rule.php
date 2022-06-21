@@ -17,6 +17,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use App\Notifications\RuleProcessNotification;
+use Carbon\Carbon;
 
 class Rule implements ShouldQueue
 {
@@ -45,13 +46,15 @@ class Rule implements ShouldQueue
     {
         $rules = AppRule::with('expressions')->where('client_id', $this->client_id)->get();
         
+        $week_ago = Carbon::now()->subWeek()->toDateTimeString();
+
         foreach($rules as $rule) {
             $todas = $rule->expressions()->wherePivot('type_rule_id', TypeRule::TODAS)->pluck('expression')->toArray();
             $algumas = $rule->expressions()->wherePivot('type_rule_id', TypeRule::ALGUMAS)->pluck('expression')->toArray();
             $nenhuma = $rule->expressions()->wherePivot('type_rule_id', TypeRule::NENHUMA)->pluck('expression')->toArray();
 
             // INSTAGRAM POSTS
-            $medias = Media::where('client_id', $this->client_id);
+            $medias = Media::where('client_id', $this->client_id)->where('timestamp', '>=', $week_ago);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
@@ -92,7 +95,7 @@ class Rule implements ShouldQueue
             // INSTAGRAM COMMENTS
             $medias = IgComment::whereHas('media', function($query){
                             $query->where('client_id', $this->client_id);
-                        });
+                        })->where('timestamp', '>=', $week_ago);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
@@ -131,7 +134,7 @@ class Rule implements ShouldQueue
             $rule->igComments()->sync($ids);
 
             //FACEBOOK POSTS
-            $medias = FbPost::where('client_id', $this->client_id);
+            $medias = FbPost::where('client_id', $this->client_id)->where('updated_time', '>=', $week_ago);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
@@ -172,7 +175,7 @@ class Rule implements ShouldQueue
             //FACEBOOK COMMENTS
             $medias = FbComment::whereHas('fbPost', function($query){
                 $query->where('client_id', $this->client_id);
-            });
+            })->where('created_time', '>=', $week_ago);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
@@ -219,7 +222,7 @@ class Rule implements ShouldQueue
                 ->orWhereHas('hashtags', function ($query) use ($client_id){
                     $query->where('client_id', $client_id);
                 });
-            });
+            })->where('updated_time', '>=', $week_ago);
             
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
@@ -266,7 +269,7 @@ class Rule implements ShouldQueue
                 ->orWhereHas('hashtags', function ($query) use ($client_id){
                     $query->where('client_id', $client_id);
                 });
-            });
+            })->where('created_time', '>=', $week_ago);
             
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
@@ -306,7 +309,7 @@ class Rule implements ShouldQueue
             $rule->fbPagePostsComments()->sync($ids);
 
              //TWITTER POSTS
-            $medias = MediaTwitter::where('client_id', $this->client_id);
+            $medias = MediaTwitter::where('client_id', $this->client_id)->where('created_tweet_at', '>=', $week_ago);
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
