@@ -25,7 +25,7 @@
             <h6 style="margin-bottom: 0px; padding-bottom: 5px; margin-top: 26px; font-size: 17px; border-bottom: 3px solid #b5b4b4;">{{ $nome }}</h6>
             <p style="color: #eb8e06; margin: 0;"><strong>Período: {{ $dt_inicial }} à {{ $dt_final }}</strong></p>
             <p style="color: #eb8e06; margin: 0; margin-top: -3px;">{{ session('cliente')['nome'] }}</p>   
-            <p style="color: #eb8e06; margin: 0; margin-top: -3px;">FORAM COLETADOS {{ count($dados) }} POSTS</p>     
+            <p style="color: #eb8e06; margin: 0; margin-top: -3px;">FORAM COLETADOS  POSTS</p>     
         </div>
         <div style="width: 15%; float: right; text-align: right;">
             <img style="width: 90%" src="{{ url('img/studio_social.png') }}"/>
