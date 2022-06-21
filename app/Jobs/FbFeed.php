@@ -17,6 +17,8 @@ class FbFeed implements ShouldQueue
 
     public $timeout = 3000;
     protected $page;
+    protected $token;
+    protected $limit;
 
     /**
      * Create a new job instance.
