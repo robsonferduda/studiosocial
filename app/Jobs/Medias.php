@@ -2,7 +2,9 @@
 
 namespace App\Jobs;
 
+use DOMPDF;
 use Notification;
+use Storage;
 use App\Enums\TypeRule;
 use App\FbComment;
 use App\FbPagePost;
