@@ -24,8 +24,7 @@ class Medias implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-
-    protected $client_id;
+    protected $lote;
     public $timeout = 240;
 
     /**
@@ -33,9 +32,9 @@ class Medias implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($lote)
     {
-       
+       $this->lote = $lote;
     }
 
     /**
@@ -43,10 +42,10 @@ class Medias implements ShouldQueue
      *
      * @return void
      */
-    public function handle($lote)
+    public function handle()
     { 
 
-        for ($i=0; $i < count($lote); $i++) { 
+        for ($i=0; $i < count($this->lote); $i++) { 
             
             $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
             Storage::disk('public')->put('relatorio_de_coletas_'.$i.'.pdf', $pdf->output());
