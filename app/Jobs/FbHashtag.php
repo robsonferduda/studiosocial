@@ -16,7 +16,7 @@ class FbHashtag implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 2000;
+    public $timeout = 3000;
 
     /**
      * Create a new job instance.

@@ -24,7 +24,7 @@ class Rule implements ShouldQueue
 
 
     protected $client_id;
-    public $timeout = 240;
+    public $timeout = 2000;
 
     /**
      * Create a new job instance.
