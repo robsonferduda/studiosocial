@@ -59,6 +59,7 @@ Route::get('relatorios/hashtags','RelatorioController@hashtags');
 Route::get('relatorios/influenciadores','RelatorioController@influenciadores');
 Route::get('relatorios/wordcloud','RelatorioController@wordcloud');
 Route::get('relatorios/localizacao','RelatorioController@localizacao');
+Route::get('relatorios/postagens','RelatorioController@postagens');
 
 Route::post('relatorios/dados/medias/evolucao-diaria','RelatorioController@getEvolucaoDiaria');
 Route::post('relatorios/dados/medias/evolucao-redes','RelatorioController@getEvolucaoRedeSocial');
@@ -108,6 +109,7 @@ Route::get('login/facebook/callback', 'FacebookController@handleProviderCallback
 
 Route::get('media/{media_id}/tipo/{tipo}/sentimento/{sentimento}/atualizar','MediaController@atualizaSentimento');
 Route::get('media/{media_id}/tipo/{tipo}/excluir','MediaController@excluir');
+Route::post('media/relatorio','MediaController@relatorio');
 
 Route::get('monitoramento','MonitoramentoController@index');
 Route::get('monitoramento/medias/historico/{dias}','MonitoramentoController@getHistorico');
@@ -182,4 +184,12 @@ Route::get('delete-media-language', function(){
            $media->delete();
         } 
     }    
+});
+
+Route::get('files/{file_name}', function($file_name = null)
+{
+    $path = storage_path().'/'.'app'.'/public/'.$file_name;
+    if (file_exists($path)) {
+        return Response::download($path);
+    }
 });

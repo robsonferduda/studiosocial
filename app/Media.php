@@ -6,10 +6,12 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
+use Illuminate\Notifications\Notifiable;
 
 class Media extends Model implements Auditable
 {
     use SoftDeletes;
+    use Notifiable;
     use \OwenIt\Auditing\Auditable;
 
     protected $table = 'medias';

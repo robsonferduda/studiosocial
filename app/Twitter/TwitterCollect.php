@@ -45,7 +45,7 @@ class TwitterCollect{
                 "lang" => 'pt',
                 "result_type" => "recent",
                 "exclude_replies" => true,
-                "retweeted" => false,
+                "retweeted" => true,
                 "tweet_mode" => "extended"
             );
 
@@ -101,7 +101,7 @@ class TwitterCollect{
                 "lang" => 'pt',
                 "result_type" => "recent",
                 "exclude_replies" => true,
-                "retweeted" => false,
+                "retweeted" => true,
                 "tweet_mode" => "extended"
             );
     

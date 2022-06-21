@@ -146,6 +146,11 @@ class SocialSearchController extends Controller
         return view('social-search/index', compact('medias','term','term','dt_inicial','dt_final'));
     }
 
+    public function getRelatorio()
+    {
+        
+    }
+
     public function buscar()
     {
         

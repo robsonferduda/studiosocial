@@ -53,6 +53,20 @@ class RelatorioController extends Controller
       return view('relatorios/index');
     }
 
+    public function postagens()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Listagem de postagens em todas as redes socias";
+
+      $arquivos = Storage::disk('public')->allFiles();
+
+      return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem','arquivos'));
+    }
+
+    
+
     //INÍCIO Métodos do Relatório de Evolução Diária 
 
     public function evolucaoDiaria()
