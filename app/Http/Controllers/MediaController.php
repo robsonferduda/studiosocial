@@ -245,7 +245,7 @@ class MediaController extends Controller
         }    
         */
 
-        JobsMedia::dispatch($lote);
+        JobsMedia::dispatch($lote, $nome, $dt_inicial, $dt_final, $dados);
         
 
         dd("Gerou");

@@ -28,8 +28,10 @@ class HomeController extends Controller
         $this->middleware('auth');
 
         $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
-
-        $clienteSession = ['id' => $cliente->id, 'nome' => $cliente->name];
+        if($cliente)
+            $clienteSession = ['id' => $cliente->id, 'nome' => $cliente->name];
+        else
+            $clienteSession = ['id' => 0, 'nome' => "Cliente não selecionado"];
 
         Session::put('cliente', session('cliente') ? session('cliente') : $clienteSession);
 
