@@ -42,11 +42,12 @@ class MediaRelatorioNotification extends Notification
     {
         $notifiable->email = 'robsonferduda@gmail.com';
         return (new MailMessage)
-                    ->subject('Regra Processada')
+                    ->subject('Relatório de Mídias')
                     ->markdown('email.regra_processada')
                     ->from('boletins@clipagens.com.br')
                     ->line('Relatório gerado com sucesso.')
-                    ->line('Para mais detalhes, acesse o sistem e verifique a regra criada.');
+                    ->line('Utilize o endereço abaixo para baixar o arquivo.')
+                    ->line('Uma cṕopia do arquivo ficará disponível para download no sistema.');
     }
 
     /**

@@ -31,7 +31,7 @@ class Medias implements ShouldQueue
     protected $dt_inicial;
     protected $dt_final;
     protected $dados;
-    public $timeout = 240;
+    public $timeout = 480;
 
     /**
      * Create a new job instance.

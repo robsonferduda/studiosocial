@@ -172,11 +172,8 @@ class MediaController extends Controller
                 $medias_t = $this->getMediasTwitter();
                 $medias_f = $this->getMediasFacebook();                
 
-                //$medias = array_merge($medias_i, $medias_t, $medias_f);
+                $medias = array_merge($medias_i, $medias_t, $medias_f);
         }
-
-        //$medias = $this->getMediasInstagram();
-        $medias = $this->getMediasTwitter();
 
         foreach ($medias as $key => $media) {
 
@@ -236,20 +233,9 @@ class MediaController extends Controller
 
         $lote[] = $dados;
 
-        /*
-        for ($i=0; $i < count($lote); $i++) { 
-            
-            $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
-            Storage::disk('public')->put('relatorio_de_coletas_'.$i.'.pdf', $pdf->output());
-
-        }    
-        */
-
         JobsMedia::dispatch($lote, $nome, $dt_inicial, $dt_final, $dados);
         
-
         dd("Gerou");
-        //return $pdf->download("relatorio_de_coletas.pdf");
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)
