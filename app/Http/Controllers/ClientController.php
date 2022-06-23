@@ -31,6 +31,7 @@ class ClientController extends Controller
 
     public function contas()
     {
+        Session::put('url','contas');
         $cliente = Client::find(session('cliente')['id']);
         return view('clientes/contas', compact('cliente'));
     }
