@@ -55,6 +55,14 @@
                     </a>
                   </li>
                 @endrole
+                @role('cliente')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'contas') ? 'active' : '' }}">
+                    <a href="{{ url('cliente/contas') }}">
+                    <i class="fa fa-comments"></i>
+                    <p>CONTAS</p>
+                    </a>
+                  </li>
+                @endrole
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'monitoramento') ? 'active' : '' }}">
                     <a href="{{ url('monitoramento') }}">

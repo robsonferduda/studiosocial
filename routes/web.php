@@ -30,6 +30,7 @@ Route::get('coletas/twitter','ColetaController@twitter');
 Route::get('coletas/instagram','ColetaController@instagram');
 
 Route::get('clientes','ClientController@index');
+Route::get('cliente/contas','ClientController@contas');
 Route::get('cliente/get/json','ClientController@json');
 Route::get('clientes','ClientController@index')->name('clientes.index');
 Route::get('client/accounts/facebook/{cliente}','ClientController@getFacebookAccounts');

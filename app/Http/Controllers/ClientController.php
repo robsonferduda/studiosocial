@@ -29,6 +29,12 @@ class ClientController extends Controller
         return view('clientes/index', compact('clientes'));
     }
 
+    public function contas()
+    {
+        $cliente = Client::find(session('cliente')['id']);
+        return view('clientes/contas', compact('cliente'));
+    }
+
     public function show(Client $client)
     {
         return view('clientes/detalhes', compact('client'));
