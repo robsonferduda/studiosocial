@@ -207,6 +207,40 @@ class RelatorioController extends Controller
 
     public function getDadosEvolucaoRedeSocial()
     {
+      if($this->rule_id){
+
+        $rules = Rule::when($this->rule_id > 0, function($query){
+          return $query->where('id', $this->rule_id);  
+        })->where('client_id', $this->client_id)->get();
+
+        foreach($rules as $rule) {
+
+          for ($i=0; $i < $this->periodo; $i++) { 
+
+            $data = $this->data_inicial->addDay()->format('Y-m-d');
+            $data_formatada = $this->data_inicial->format('d/m/Y');
+                
+            //Total de sentimentos do Twitter
+            $total_twitter = $rule->twPosts()->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+        
+            //Total de sentimentos do facebook
+            $total_facebook_posts = $rule->fbPosts()->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            $total_facebook_comments = $rule->fbComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+      
+            //Total de sentimentos do Instagram
+            $total_instagram_posts = $rule->igPosts()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            $total_instagram_comments = $rule->igComments()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            
+            $datas[] = $data;
+            $datas_formatadas[] = $data_formatada;
+            $dados_twitter[] = $total_twitter;
+            $dados_facebook[] = $total_facebook_posts + $total_facebook_comments;
+            $dados_instagram[] = $total_instagram_posts + $total_instagram_comments;
+          }
+        }        
+
+      }else{
+
         for ($i=0; $i < $this->periodo; $i++) { 
 
           $data = $this->data_inicial->addDay()->format('Y-m-d');
@@ -230,6 +264,8 @@ class RelatorioController extends Controller
           $dados_twitter[] = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
           $dados_facebook[] = FbPost::where('client_id',$this->client_id)->whereBetween('tagged_time',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $fb_comments_total;
           $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
+        }
+
       }
 
       $dados = array('data' => $datas,

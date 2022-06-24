@@ -58,6 +58,7 @@
         });
 
         $("#regra").change(function(){
+            regra = $(this).val();
             loadDados(periodo, regra);
         });
 
