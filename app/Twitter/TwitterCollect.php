@@ -52,7 +52,7 @@ class TwitterCollect{
     
             $tweets = $this->conn->get('search/tweets', $query);
             
-            if($tweets->statuses){
+            if(isset($tweets->statuses)){
                 foreach ($tweets->statuses as $tweet) {
                 
                     $chave = array('twitter_id' => $tweet->id);
@@ -110,7 +110,7 @@ class TwitterCollect{
             $tweets = $this->conn->get('search/tweets', $query);
 
             $total = 0;    
-            if($tweets->statuses){
+            if(isset($tweets->statuses)){
                 foreach ($tweets->statuses as $tweet) {
         
                     $chave = array('twitter_id' => $tweet->id);
