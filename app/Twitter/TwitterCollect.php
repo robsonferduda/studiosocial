@@ -2,6 +2,7 @@
 
 namespace App\Twitter;
 
+use Log;
 use App\Term;
 use App\Hashtag;
 use App\Collect;
@@ -84,6 +85,8 @@ class TwitterCollect{
                                     'client_id' =>$hashtag->client_id );            
 
                 Collect::create($dados_coleta);
+            }else{
+                Log::channel('twitter')->info('A coleta do Twitter excedeu a cota disponível da API');
             }
         }
     }
@@ -140,6 +143,8 @@ class TwitterCollect{
                                     'client_id' =>$term->client_id );
 
                 Collect::create($dados_coleta);
+            }else{
+                Log::channel('twitter')->info('A coleta do Twitter excedeu a cota disponível da API');
             }
         }
     }
