@@ -39,13 +39,13 @@ class FbHashtag implements ShouldQueue
         set_time_limit(0);
 
         $hashtag = $this->hashtag;
-      
+
         $last = $hashtag->pagePosts()->latest('created_at')->first();
         $last_comment = $hashtag->pagePostsComments()->latest('created_at')->first();
         $posts = FbPagePost::select('id')->where(function ($query) use ($hashtag) {
-                $query->where('message', 'ilike', '% #'.strtolower($hashtag->hashtag).' %')
-                    ->orWhere('message', 'ilike', '%#'.strtolower($hashtag->hashtag).' %')
-                    ->orWhere('message', 'ilike', '% #'.strtolower($hashtag->hashtag).'%');
+                $query->where('message', 'ilike', '% #'.strtolower($hashtag).' %')
+                    ->orWhere('message', 'ilike', '%#'.strtolower($hashtag).' %')
+                    ->orWhere('message', 'ilike', '% #'.strtolower($hashtag).'%');
                 })
                 ->when($last, function ($q) use ($last){
                     return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
@@ -54,9 +54,9 @@ class FbHashtag implements ShouldQueue
         $hashtag->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
 
         $comments = FbPagePostComment::select('id')->where(function ($query) use ($hashtag) {
-                $query->where('text', 'ilike', '% #'.strtolower($hashtag->hashtag).' %')
-                    ->orWhere('text', 'ilike', '%#'.strtolower($hashtag->hashtag).' %')
-                    ->orWhere('text', 'ilike', '% #'.strtolower($hashtag->hashtag).'%');
+                $query->where('text', 'ilike', '% #'.strtolower($hashtag).' %')
+                    ->orWhere('text', 'ilike', '%#'.strtolower($hashtag).' %')
+                    ->orWhere('text', 'ilike', '% #'.strtolower($hashtag).'%');
                 })
                 ->when($last_comment, function ($q) use ($last_comment){
                     return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
