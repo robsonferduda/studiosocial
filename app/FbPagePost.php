@@ -66,7 +66,7 @@ class FbPagePost extends Model implements Auditable
                             AND t2.reaction_id = t3.id
                             AND t1.fb_page_monitor_id = t4.fb_page_monitor_id
                             AND t1.updated_time BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_PAGE_POST." and rule_id {$rule})
+                            and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_PAGE_POST." and rule_id = {$rule})
                             AND t4.client_id = $client_id
                             GROUP BY t3.name, t3.color, t3.icon";
         } else {

@@ -63,7 +63,7 @@ class FbPost extends Model implements Auditable
                               AND t2.reaction_id = t3.id
                               AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                               AND t1.client_id = $client_id
-                              and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_POSTS." and rule_id {$rule})
+                              and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_POSTS." and rule_id = {$rule})
                               GROUP BY t3.name, t3.color, t3.icon
                               ORDER BY t3.name";
         } else {

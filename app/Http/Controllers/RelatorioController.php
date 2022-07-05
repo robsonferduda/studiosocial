@@ -67,9 +67,9 @@ class RelatorioController extends Controller
       return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem','arquivos'));
     }
 
-    
 
-    //INÍCIO Métodos do Relatório de Evolução Diária 
+
+    //INÍCIO Métodos do Relatório de Evolução Diária
 
     public function evolucaoDiaria()
     {
@@ -85,27 +85,27 @@ class RelatorioController extends Controller
     {
         $dados = array();
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-        $this->rule_id = $request->regra; 
-        $dados = $this->getDadosEvolucaoDiaria();      
+        $this->rule_id = $request->regra;
+        $dados = $this->getDadosEvolucaoDiaria();
 
         return response()->json($dados);
     }
 
     public function getDadosEvolucaoDiaria()
-    {    
+    {
         if($this->rule_id){
 
           $rules = Rule::when($this->rule_id > 0, function($query){
-            return $query->where('id', $this->rule_id);  
+            return $query->where('id', $this->rule_id);
           })->where('client_id', $this->client_id)->get();
 
           foreach($rules as $rule) {
 
-            for ($i=0; $i < $this->periodo; $i++) { 
+            for ($i=0; $i < $this->periodo; $i++) {
 
               $data = $this->data_inicial->addDay()->format('Y-m-d');
               $data_formatada = $this->data_inicial->format('d/m/Y');
-                  
+
               //Total de sentimentos do Twitter
               $total_positivos = $rule->twPosts()->where('sentiment',1)->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
               $total_negativos = $rule->twPosts()->where('sentiment',-1)->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
@@ -128,7 +128,7 @@ class RelatorioController extends Controller
               $total_positivos += $rule->igComments()->where('sentiment',1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
               $total_negativos += $rule->igComments()->where('sentiment',-1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
               $total_neutros += $rule->igComments()->where('sentiment',0)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              
+
               $datas[] = $data;
               $datas_formatadas[] = $data_formatada;
               $dados_positivos[] = $total_positivos;
@@ -139,16 +139,16 @@ class RelatorioController extends Controller
 
         }else{
 
-          for ($i=0; $i < $this->periodo; $i++) { 
+          for ($i=0; $i < $this->periodo; $i++) {
 
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
-  
+
             //Total de sentimentos do Twitter
             $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
             $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
             $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-      
+
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
             $dados_positivos[] = $total_positivos;
@@ -157,7 +157,7 @@ class RelatorioController extends Controller
           }
 
         }
-      
+
         $dados = array('data' => $datas,
                       'data_formatada' => $datas_formatadas,
                       'dados_positivos' => $dados_positivos,
@@ -169,7 +169,7 @@ class RelatorioController extends Controller
 
     public function evolucaoDiariaPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = $this->getDadosEvolucaoDiaria();
         $chart = $this->getGraficoEvolucaoDiaria($dados);
         $rule = Rule::find($request->regra);
@@ -201,8 +201,8 @@ class RelatorioController extends Controller
     {
         $dados = array();
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-        $this->rule_id = $request->regra; 
-        $dados = $this->getDadosEvolucaoRedeSocial();        
+        $this->rule_id = $request->regra;
+        $dados = $this->getDadosEvolucaoRedeSocial();
 
         return response()->json($dados);
     }
@@ -212,38 +212,38 @@ class RelatorioController extends Controller
       if($this->rule_id){
 
         $rules = Rule::when($this->rule_id > 0, function($query){
-          return $query->where('id', $this->rule_id);  
+          return $query->where('id', $this->rule_id);
         })->where('client_id', $this->client_id)->get();
 
         foreach($rules as $rule) {
 
-          for ($i=0; $i < $this->periodo; $i++) { 
+          for ($i=0; $i < $this->periodo; $i++) {
 
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
-                
+
             //Total de sentimentos do Twitter
             $total_twitter = $rule->twPosts()->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-        
+
             //Total de sentimentos do facebook
             $total_facebook_posts = $rule->fbPosts()->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
             $total_facebook_comments = $rule->fbComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-      
+
             //Total de sentimentos do Instagram
             $total_instagram_posts = $rule->igPosts()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
             $total_instagram_comments = $rule->igComments()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-            
+
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
             $dados_twitter[] = $total_twitter;
             $dados_facebook[] = $total_facebook_posts + $total_facebook_comments;
             $dados_instagram[] = $total_instagram_posts + $total_instagram_comments;
           }
-        }        
+        }
 
       }else{
 
-        for ($i=0; $i < $this->periodo; $i++) { 
+        for ($i=0; $i < $this->periodo; $i++) {
 
           $data = $this->data_inicial->addDay()->format('Y-m-d');
           $data_formatada = $this->data_inicial->format('d/m/Y');
@@ -281,7 +281,7 @@ class RelatorioController extends Controller
 
     public function evolucaoRedeSocialPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = $this->getDadosEvolucaoRedeSocial();
         $chart = $this->getGraficoEvolucaoRedeSocial($dados);
         $rule = Rule::find($request->regra);
@@ -331,15 +331,15 @@ class RelatorioController extends Controller
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Volume diário de mensagens dividido por sentimentos";
-      
+
       return view('relatorios/sentimentos', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
     }
 
     public function getSentimentosRede(Request $request)
     {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-      $this->rule_id = $request->regra; 
-      $sentimentos = $this->getSentimentos();   
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      $this->rule_id = $request->regra;
+      $sentimentos = $this->getSentimentos();
 
       return response()->json($sentimentos);
     }
@@ -348,18 +348,18 @@ class RelatorioController extends Controller
     {
       $facebook_positivo = 0;
       $facebook_negativo = 0;
-      $facebook_neutro = 0; 
+      $facebook_neutro = 0;
 
       $insta_positivo = 0;
       $insta_negativo = 0;
-      $insta_neutro = 0; 
+      $insta_neutro = 0;
 
       $twitter_positivo = 0;
       $twitter_negativo = 0;
-      $twitter_neutro = 0; 
+      $twitter_neutro = 0;
 
       $rule = $this->rule_id;
-      
+
       if($rule) {
         $tabela = 'medias_materialized_rule_filtered_vw';
       }else{
@@ -374,7 +374,7 @@ class RelatorioController extends Controller
                 return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
               })
               ->get();
-        
+
 
         $media_instagram = DB::table($tabela)
                             ->whereIn('tipo', ['IG_POSTS','IG_COMMENT'])
@@ -436,7 +436,7 @@ class RelatorioController extends Controller
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Nuvem baseada no volume de palavras";
-      
+
       return view('relatorios/wordcloud', compact('rules','periodo_relatorio','periodo_padrao', 'mensagem'));
     }
 
@@ -454,14 +454,14 @@ class RelatorioController extends Controller
     public function getNuvemHashtags(Request $request)
     {
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-      
+
       $lista_hashtags = Utils::contaOrdenaLista($this->getAllMedias());
       echo json_encode($lista_hashtags);
-    } 
+    }
 
     public function hashtagsPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = array();
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
@@ -469,10 +469,10 @@ class RelatorioController extends Controller
         $nome = "Relatório de Hashtags";
 
         $chart = $this->getDadosHashtag();
-    
+
         $nome_arquivo = date('YmdHis').".pdf";
         $pdf = DOMPDF::loadView('relatorios/pdf/hashtags', compact('chart', 'dados','rule','dt_inicial','dt_final','nome'));
-        
+
         return $pdf->download($nome_arquivo);
     }
 
@@ -488,12 +488,12 @@ class RelatorioController extends Controller
         $process->run(function ($type, $buffer) use ($file_name, &$chart){
             if (Process::ERR === $type) {
               //echo 'ERR > '.$buffer.'<br />';
-              //$chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");  
+              //$chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix()."erro.png");
               //$chart =  'data:image/png;base64, '.base64_encode($chartData);
-            } else {   
-              
-                if(trim($buffer) == 'END') {                            
-                    $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");  
+            } else {
+
+                if(trim($buffer) == 'END') {
+                    $chartData = file_get_contents(Storage::disk('hashtag-img')->getAdapter()->getPathPrefix().'cliente_'.$this->client_id."_hashtag.png");
                     $chart =  'data:image/png;base64, '.base64_encode($chartData);
                 }
             }
@@ -509,7 +509,7 @@ class RelatorioController extends Controller
 
       $dt_inicial = $this->data_inicial->format('Y-m-d');
       $dt_final = $this->data_final->format('Y-m-d');
-      
+
       $medias_instagram = Media::where('client_id', $this->client_id)->whereBetween('timestamp',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
       $medias_facebook  = FbPost::where('client_id', $this->client_id)->whereBetween('tagged_time',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
       $medias_twitter = MediaTwitter::where('client_id',$this->client_id)->whereBetween('created_tweet_at',[$dt_inicial.' 00:00:00',$dt_final.' 23:23:59'])->get();
@@ -537,7 +537,7 @@ class RelatorioController extends Controller
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Influenciadores positivos e negativos do Twitter";
-      
+
       return view('relatorios/influenciadores', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
@@ -550,7 +550,7 @@ class RelatorioController extends Controller
 
     public function getDadosInfluenciadores()
     {
-      
+
       $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
       $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
 
@@ -577,7 +577,7 @@ class RelatorioController extends Controller
 
     public function influenciadoresPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = $this->getDadosInfluenciadores();
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
@@ -596,7 +596,7 @@ class RelatorioController extends Controller
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Localização das postagens e dos usuários do Twitter";
-      
+
       return view('relatorios/localizacao', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
@@ -606,7 +606,7 @@ class RelatorioController extends Controller
       $periodo_padrao = $this->periodo_padrao;
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Geração de relatórios em lote";
-      
+
       return view('relatorios/gerenciador', compact('rules','periodo_padrao', 'mensagem','periodo_relatorio'));
     }
 
@@ -624,7 +624,7 @@ class RelatorioController extends Controller
 
           $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
           $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
-          
+
           $periodo = $data_final->diffInDays($data_inicial) + 1;
           $data_inicial = $data_inicial->subDays(1);
 
@@ -636,14 +636,14 @@ class RelatorioController extends Controller
         $this->periodo = $periodo;
         $this->data_inicial = $data_inicial;
         $this->data_final = $data_final;
-    } 
+    }
 
     public function getLocalizacao(Request $request)
     {
         $dados = array();
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-        $this->rule_id = $request->regra; 
-        $dados = $this->getDadosLocalizacao();      
+        $this->rule_id = $request->regra;
+        $dados = $this->getDadosLocalizacao();
 
         return response()->json($dados);
     }
@@ -663,11 +663,11 @@ class RelatorioController extends Controller
 
     public function wordcloudPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
-        $this->rule_id = $request->regra;       
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra;
         $nome = "Nuvem de Palavras";
 
-              
+
         $nome_arquivo = date('YmdHis').".pdf";
 
         $rule = Rule::find($request->regra);
@@ -682,12 +682,12 @@ class RelatorioController extends Controller
 
     public function getGraficoWordCloud()
     {
-      $rule = $this->rule_id; 
+      $rule = $this->rule_id;
 
       $rules = Rule::when(!empty($rule), function($query) use ($rule){
-          return $query->where('id', $rule);  
+          return $query->where('id', $rule);
       })->where('client_id', $this->client_id)->get();
-      
+
       $text = '';
 
       foreach($rules as $rule) {
@@ -722,34 +722,34 @@ class RelatorioController extends Controller
       $chart = null;
 
       if(isset($wordcloud_text->id)) {
-          
+
           $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name, 'imagem', $this->client_id]);
 
           $process->run(function ($type, $buffer) use ($file_name, &$chart){
               if (Process::ERR === $type) {
                   //echo 'ERR > '.$buffer.'<br />';
               } else {
-                  
+
                   if(trim($buffer) == 'END') {
                       //echo 'OUT > '.$buffer.'<br />';
-                              
-                      $chartData = file_get_contents(Storage::disk('wordcloud')->getAdapter()->getPathPrefix().$file_name.".png"); 
+
+                      $chartData = file_get_contents(Storage::disk('wordcloud')->getAdapter()->getPathPrefix().$file_name.".png");
                       $chart =  'data:image/png;base64, '.base64_encode($chartData);
-                      
+
                       Storage::disk('wordcloud')->delete($file_name.".png");
                       Storage::disk('wordcloud')->delete($file_name.".json");
                   }
 
               }
           });
-      
-      } 
+
+      }
       return $chart;
     }
-    
+
     public function pdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $sentimentos = $this->getSentimentos();
         $chart = $this->getGraficoSentimentos($sentimentos);
         $rule = Rule::find($request->regra);
@@ -765,7 +765,7 @@ class RelatorioController extends Controller
 
     public function reactionsPdf(Request $request)
     {
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = $this->getDadosReactions();
         $chart = $this->getGraficoReactions($dados);
         $rule = Rule::find($request->regra);
@@ -781,8 +781,8 @@ class RelatorioController extends Controller
 
     public function localizacaoPdf(Request $request)
     {
-      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
-      $this->rule_id = $request->regra;  
+      $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+      $this->rule_id = $request->regra;
       $dados = $this->getDadosLocalizacao();
       $rule = Rule::find($request->regra);
       $dt_inicial = $request->data_inicial;
@@ -879,7 +879,7 @@ class RelatorioController extends Controller
 
       $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
 
-      $chartData = file_get_contents($chartURL); 
+      $chartData = file_get_contents($chartURL);
       return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
@@ -965,7 +965,7 @@ class RelatorioController extends Controller
 
       $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
 
-      $chartData = file_get_contents($chartURL); 
+      $chartData = file_get_contents($chartURL);
       return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
@@ -1029,7 +1029,7 @@ class RelatorioController extends Controller
 
       $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
 
-      $chartData = file_get_contents($chartURL); 
+      $chartData = file_get_contents($chartURL);
       return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
@@ -1076,19 +1076,19 @@ class RelatorioController extends Controller
                         precision: 2
                       },
                       scales: {
-                       
+
                       },
                     }
                   }";
 
       $chartURL = "https://quickchart.io/chart?&c=".urlencode($chartData);
 
-      $chartData = file_get_contents($chartURL); 
+      $chartData = file_get_contents($chartURL);
       return 'data:image/png;base64, '.base64_encode($chartData);
     }
 
-    public function getWordCloudPeriodo(Request $request) 
-    {   
+    public function getWordCloudPeriodo(Request $request)
+    {
         $rule =   $request->regra;
 
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
@@ -1096,9 +1096,9 @@ class RelatorioController extends Controller
         if(isset($this->client_id)) {
 
             $rules = Rule::when(!empty($rule), function($query) use ($rule){
-                return $query->where('id', $rule);  
+                return $query->where('id', $rule);
             })->where('client_id', $this->client_id)->get();
-            
+
             $text = '';
 
             foreach($rules as $rule) {
@@ -1113,7 +1113,7 @@ class RelatorioController extends Controller
                 $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
                 $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
                 $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-    
+
                 $textig = $this->concatenateSanitizeText($igPosts);
                 $textigc = $this->concatenateSanitizeText($igComments);
                 $textfb = $this->concatenateSanitizeText($fbPosts);
@@ -1121,7 +1121,7 @@ class RelatorioController extends Controller
                 $texttw = $this->concatenateSanitizeText($twPosts);
                 $textfpp = $this->concatenateSanitizeText($fbPagePost);
                 $textfppc = $this->concatenateSanitizeText($fbPagePostComments);
-    
+
                 $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp.' '.$textfppc;
             }
 
@@ -1132,7 +1132,7 @@ class RelatorioController extends Controller
             $file_name = 'wordcloud-'.strtotime(now());
 
             if(isset($wordcloud_text->id)) {
-                
+
                 $word_cloud = [];
 
                 $process = new Process(['python3', base_path().'/studio-social-wordcloud-rules.py', $wordcloud_text->id, $file_name, 'tela', $this->client_id]);
@@ -1141,40 +1141,40 @@ class RelatorioController extends Controller
                     if (Process::ERR === $type) {
                        // echo 'ERR > '.$buffer.'<br />';
                     } else {
-                        
+
                         if(trim($buffer) == 'END') {
                             //echo 'OUT > '.$buffer.'<br />';
 
                             $file = Storage::disk('wordcloud')->get($file_name.".json");
                             //dd($words_execption);
-                
-                            $words = json_decode($file);                                                 
+
+                            $words = json_decode($file);
 
                             $words = (Array) $words;
                             arsort($words);
-                
+
                             $words = array_slice($words, 0, 200);
 
                             $words_execption = WordsExecption::where('client_id', $this->client_id)->pluck('word')->toArray();
-                                            
+
                             foreach($words as $word => $qtd_times) {
 
                                 if(in_array($word, $words_execption))
                                     continue;
 
-                                $word_cloud[$word] = $qtd_times;  
+                                $word_cloud[$word] = $qtd_times;
                             }
 
                             Storage::disk('wordcloud')->delete($file_name.".json");
                         }
-    
+
                     }
                 });
-            
-            }            
+
+            }
 
         } else {
-                $word_cloud = ['Cliente' => 3, 'Não' => 2, 'Selecionado' => 2];               
+                $word_cloud = ['Cliente' => 3, 'Não' => 2, 'Selecionado' => 2];
         }
       echo json_encode($word_cloud);
     }
@@ -1183,7 +1183,7 @@ class RelatorioController extends Controller
     {
         $concatenateText = '';
 
-        foreach($textArray as $text) {          
+        foreach($textArray as $text) {
           $concatenateText .= ' '.$text;
         }
 
@@ -1192,8 +1192,8 @@ class RelatorioController extends Controller
 
     public function geradorPdf(Request $request)
     {
-        $this->rule_id = $request->regra;  
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);   
+        $this->rule_id = $request->regra;
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $rule = Rule::find($request->regra);
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
@@ -1205,55 +1205,55 @@ class RelatorioController extends Controller
         $charts = [];
 
         if(in_array('evolucao_diaria', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['evolucao_diaria'] = $this->getDadosEvolucaoDiaria(); 
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+          $dados['evolucao_diaria'] = $this->getDadosEvolucaoDiaria();
           $charts['evolucao_diaria'] = $this->getGraficoEvolucaoDiaria($dados['evolucao_diaria']);
           $page_break++;
         }
 
         if(in_array('evolucao_rede', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['evolucao_rede'] = $this->getDadosEvolucaoRedeSocial(); 
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+          $dados['evolucao_rede'] = $this->getDadosEvolucaoRedeSocial();
           $charts['evolucao_rede'] = $this->getGraficoEvolucaoRedeSocial($dados['evolucao_rede']);
           $page_break++;
         }
 
         if(in_array('sentimentos', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['sentimentos'] = $this->getSentimentos(); 
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+          $dados['sentimentos'] = $this->getSentimentos();
           $charts['sentimentos'] = $this->getGraficoSentimentos($dados['sentimentos']);
           $page_break++;
         }
 
         if(in_array('nuvem', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
           $charts['nuvem'] = $this->getGraficoWordCloud();
           $page_break++;
         }
 
         if(in_array('reactions', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
           $dados['reactions'] = $this->getDadosReactions();
           $charts['reactions'] = $this->getGraficoReactions($dados['reactions']);
           $page_break++;
         }
 
         if(in_array('hashtags', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
           $charts['hashtags'] = $this->getDadosHashtag();
           $page_break++;
         }
 
         if(in_array('influenciadores', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
           $dados['influenciadores'] = $this->getDadosInfluenciadores();
           $page_break++;
         }
 
         if(in_array('localizacao', $relatorios)){
-          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);  
-          $dados['localizacao'] = $this->getDadosLocalizacao(); 
-          
+          $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+          $dados['localizacao'] = $this->getDadosLocalizacao();
+
           $page_break++;
         }
 
