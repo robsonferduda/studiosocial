@@ -17,7 +17,7 @@ class FbPagePost extends Model implements Auditable
     protected $fillable = [ 'message',
                             'fb_page_monitor_id',
                             'permalink_url',
-                            'updated_time',                            
+                            'updated_time',
                             'post_id',
                             'mentioned',
                             'hooked',
@@ -31,8 +31,8 @@ class FbPagePost extends Model implements Auditable
     }
 
     public function page()
-    { 
-        return $this->hasOne('App\FbPageMonitor', 'id', 'fb_page_monitor_id'); 
+    {
+        return $this->hasOne('App\FbPageMonitor', 'id', 'fb_page_monitor_id');
     }
 
     public function terms()
@@ -56,16 +56,33 @@ class FbPagePost extends Model implements Auditable
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
 
-        return DB::select(" SELECT t3.name, t3.color, t3.icon, count(*)
-                            FROM fb_page_posts t1, 
-                                fb_page_post_reaction t2, 
+        if(!empty($rule)) {
+            $sql = " SELECT t3.name, t3.color, t3.icon, count(*)
+                            FROM fb_page_posts t1,
+                                fb_page_post_reaction t2,
                                 fb_reactions t3,
                                 client_page_monitor t4
-                            WHERE t1.id = t2.page_post_id 
-                            AND t2.reaction_id = t3.id 
-                            AND t1.fb_page_monitor_id = t4.fb_page_monitor_id 
+                            WHERE t1.id = t2.page_post_id
+                            AND t2.reaction_id = t3.id
+                            AND t1.fb_page_monitor_id = t4.fb_page_monitor_id
+                            AND t1.updated_time BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_PAGE_POST." and rule_id {$rule})
+                            AND t4.client_id = $client_id
+                            GROUP BY t3.name, t3.color, t3.icon";
+        } else {
+            $sql = " SELECT t3.name, t3.color, t3.icon, count(*)
+                            FROM fb_page_posts t1,
+                                fb_page_post_reaction t2,
+                                fb_reactions t3,
+                                client_page_monitor t4
+                            WHERE t1.id = t2.page_post_id
+                            AND t2.reaction_id = t3.id
+                            AND t1.fb_page_monitor_id = t4.fb_page_monitor_id
                             AND t1.updated_time BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                             AND t4.client_id = $client_id
-                            GROUP BY t3.name, t3.color, t3.icon");
+                            GROUP BY t3.name, t3.color, t3.icon";
+        }
+
+        return DB::select($sql);
     }
 }
