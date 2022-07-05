@@ -36,14 +36,16 @@ class FbTerm implements ShouldQueue
     {
         set_time_limit(0);
 
-        $termo = str_replace('"','',$this->termo);
+        $termo = $this->termo;
+
+        $termo_text = str_replace('"','',$termo->termo);
 
         $last = $termo->pagePosts()->latest('created_at')->first();
         $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
-        $posts = FbPagePost::select('id')->where(function ($query) use ($termo) {
-                $query->where('message', 'ilike', '% '.strtolower($termo).' %')
-                    ->orWhere('message', 'ilike', '%'.strtolower($termo).' %')
-                    ->orWhere('message', 'ilike', '% '.strtolower($termo).'%');
+        $posts = FbPagePost::select('id')->where(function ($query) use ($termo_text) {
+                $query->where('message', 'ilike', '% '.strtolower($termo_text).' %')
+                    ->orWhere('message', 'ilike', '%'.strtolower($termo_text).' %')
+                    ->orWhere('message', 'ilike', '% '.strtolower($termo_text).'%');
                 })
                 ->when($last, function ($q) use ($last){
                     return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
@@ -51,10 +53,10 @@ class FbTerm implements ShouldQueue
                 ->get();
         $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
 
-        $comments = FbPagePostComment::select('id')->where(function ($query) use ($termo) {
-                $query->where('text', 'ilike', '% '.strtolower($termo).' %')
-                    ->orWhere('text', 'ilike', '%'.strtolower($termo).' %')
-                    ->orWhere('text', 'ilike', '% '.strtolower($termo).'%');
+        $comments = FbPagePostComment::select('id')->where(function ($query) use ($termo_text) {
+                $query->where('text', 'ilike', '% '.strtolower($termo_text).' %')
+                    ->orWhere('text', 'ilike', '%'.strtolower($termo_text).' %')
+                    ->orWhere('text', 'ilike', '% '.strtolower($termo_text).'%');
                 })
                 ->when($last_comment, function ($q) use ($last_comment){
                     return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
