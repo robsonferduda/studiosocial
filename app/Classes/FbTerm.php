@@ -9,7 +9,7 @@ use App\Term;
 class FbTerm{
 
     function __construct() {
-        
+
     }
 
     public function runJob()
@@ -17,9 +17,9 @@ class FbTerm{
         $termos_ativos = Term::where('social_media_id', SocialMedia::FACEBOOK)
         ->where('is_active',true)->get();
 
-        foreach ($termos_ativos as $termo) {     
-            JobsFbTerm::dispatch($termo);              
-        }  
+        foreach ($termos_ativos as $termo) {
+            JobsFbTerm::dispatchNow($termo);
+        }
     }
 
 }

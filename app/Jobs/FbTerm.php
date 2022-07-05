@@ -40,6 +40,8 @@ class FbTerm implements ShouldQueue
 
         $termo_text = str_replace('"','',$termo->termo);
 
+        dd($termo_text);
+
         $last = $termo->pagePosts()->latest('created_at')->first();
         $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
         $posts = FbPagePost::select('id')->where(function ($query) use ($termo_text) {
