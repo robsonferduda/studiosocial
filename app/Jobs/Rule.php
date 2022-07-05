@@ -46,7 +46,7 @@ class Rule implements ShouldQueue
     {
         $rules = AppRule::with('expressions')->where('client_id', $this->client_id)->get();
 
-        $week_ago = Carbon::now()->subYears(5)->toDateTimeString();
+        $week_ago = Carbon::now()->subWeek()->toDateTimeString();
 
         foreach($rules as $rule) {
             $todas = $rule->expressions()->wherePivot('type_rule_id', TypeRule::TODAS)->pluck('expression')->toArray();
