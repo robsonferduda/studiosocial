@@ -19,7 +19,11 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                            Arquivos
-                           <a href="{{ url('files/relatorio_de_coletas.pdf') }}">Baixar</a>
+                           @forelse($arquivos as $key => $arquivo)
+                                <a href="{{ url('files/relatorio_de_coletas.pdf') }}">Baixar</a>
+                           @empty
+                                <p>Nenhum arquivo disponível</p>
+                           @endforelse
                         </div>
                         <div class="col-lg-6 col-md-6">
                            

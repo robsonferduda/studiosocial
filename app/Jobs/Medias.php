@@ -58,9 +58,10 @@ class Medias implements ShouldQueue
         $dt_inicial = $this->dt_inicial;
         $dt_final = $this->dt_final;
         $dados = $this->dados;
+        $filename  = date('dmYHi').'_relatorio_de_coletas.pdf';
 
         $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
-        Storage::disk('public/'.$client_id.'/')->put('relatorio_de_coletas.pdf', $pdf->output());
+        Storage::disk('public')->path($this->client_id)->put($filename, $pdf->output());
 
         $media = new Media();
         $media->notify(new MediaRelatorioNotification()); 
