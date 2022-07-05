@@ -18,7 +18,7 @@ class FbTerm{
         ->where('is_active',true)->get();
 
         foreach ($termos_ativos as $termo) {
-            JobsFbTerm::dispatchNow($termo);
+            JobsFbTerm::dispatch($termo);
         }
     }
 
