@@ -38,9 +38,9 @@ class FbTerm implements ShouldQueue
 
         $termo = $this->termo;
 
-        $termo_text = str_replace('"','',$termo->termo);
+        $termo_text = str_replace('"','',$termo->term);
 
-        dd($termo->termo);
+        dd($termo_text);
 
         $last = $termo->pagePosts()->latest('created_at')->first();
         $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
