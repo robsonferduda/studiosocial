@@ -37,8 +37,9 @@ class Medias implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($nome, $dt_inicial, $dt_final, $dados)
+    public function __construct($client_id,$nome, $dt_inicial, $dt_final, $dados)
     {
+        $this->$client_id = $client_id;
        $this->nome = $nome;
        $this->dt_inicial = $dt_inicial;
        $this->dt_final = $dt_final;
@@ -52,13 +53,14 @@ class Medias implements ShouldQueue
      */
     public function handle()
     { 
+        $client_id = $this->client_id;
         $nome = $this->nome;
         $dt_inicial = $this->dt_inicial;
         $dt_final = $this->dt_final;
         $dados = $this->dados;
 
-        //$pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
-        //Storage::disk('public')->put('relatorio_de_coletas.pdf', $pdf->output());
+        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+        Storage::disk('public/'.$client_id.'/')->put('relatorio_de_coletas.pdf', $pdf->output());
 
         $media = new Media();
         $media->notify(new MediaRelatorioNotification()); 
