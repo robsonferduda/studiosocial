@@ -226,9 +226,11 @@ class MediaController extends Controller
 
         }
 
-        JobsMedia::dispatch($nome, $dt_inicial, $dt_final, $dados);
+        JobsMedia::dispatch($client_id, $nome, $dt_inicial, $dt_final, $dados);
+
+        Flash::success('<i class="fa fa-exclamation"></i> O pedido de relatório foi encaminhado para processamento. Aguarde um email confirmando a geração do mesmo');        
+        return redirect()->back()->withInput();
         
-        dd("Gerou");
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)

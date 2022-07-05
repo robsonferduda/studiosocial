@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use File;
 use DOMPDF;
 use App\Configs;
 use App\Rule;
@@ -60,7 +61,8 @@ class RelatorioController extends Controller
       $periodo_relatorio = $this->retornaDataPeriodo();
       $mensagem = "Listagem de postagens em todas as redes socias";
 
-      $arquivos = Storage::disk('public')->allFiles();
+      $caminho = Storage::disk('public')->path($this->client_id);
+      $arquivos = File::files($caminho);
 
       return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem','arquivos'));
     }
