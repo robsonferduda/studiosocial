@@ -34,7 +34,7 @@
                     @foreach($dados as $reaction)
                         <tr>
                             <td>{{ $reaction->name }}</td>
-                            <td class="center">{!! $reaction->icon !!}</td>
+                            <td class="center">{!! $reaction->icon_html !!}</td>
                             <td class="center">{{ $reaction->count }}</td>
                         </tr>
                     @endforeach
