@@ -61,7 +61,7 @@ class FBPost{
 
     public function getReactionsPost($post, $fb_feed, $params)
     {
-        $post_reactions = $this->getFBPostReactions($post->post_id, $params);
+        $post_reactions = $fb_feed->getFBPostReactions($post->post_id, $params);
 
         $reactions = $this->getReactions($post_reactions);
 
