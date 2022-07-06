@@ -167,6 +167,10 @@ Route::get('fb-hashtags', function(){
     (new FbHashtag)->runJob();
 });
 
+Route::get('fb-post-reactions', function(){
+    (new \App\Classes\FBPost())->pullReactions();
+});
+
 Route::get('fb-get-page-posts', function(){
     (new FBFeed)->pullMedias();
 });
@@ -184,12 +188,12 @@ Route::get('processamento','ProcessamentoController@index');
 
 Route::get('delete-media-language', function(){
     set_time_limit(0);
-    $medias = FbPagePost::withTrashed()->take(1000)->WhereNotNull('message')->get();  
+    $medias = FbPagePost::withTrashed()->take(1000)->WhereNotNull('message')->get();
     foreach($medias as $media) {
         if(isLanguagePortuguese($media['message']) == false) {
            $media->delete();
-        } 
-    }    
+        }
+    }
 });
 
 Route::get('files/{file_name}', function($file_name = null)
