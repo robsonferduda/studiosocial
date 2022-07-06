@@ -819,6 +819,7 @@ class RelatorioController extends Controller
     public function reactionsPdf(Request $request)
     {
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra;
         $dados = $this->getDadosReactions();
         $chart = $this->getGraficoReactions($dados);
         $rule = Rule::find($request->regra);

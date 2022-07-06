@@ -189,7 +189,7 @@
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
             $('.card-main').loader('show');
-
+    
             $.ajax({
                 url: host+'/relatorios/pdf/reactions',
                 type: 'POST',
