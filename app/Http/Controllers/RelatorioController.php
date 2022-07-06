@@ -1319,8 +1319,6 @@ class RelatorioController extends Controller
           $page_break++;
         }
 
-        dd($dados);
-
         $nome_arquivo = date('YmdHis').".pdf";
 
         $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios','page_break'));
