@@ -241,6 +241,8 @@ class RelatorioController extends Controller
             //Total de sentimentos do facebook
             $total_facebook_posts = $rule->fbPosts()->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
             $total_facebook_comments = $rule->fbComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            $total_facebook_page_posts = $rule->fbPagePosts()->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            $total_facebook_page_posts_comments = $rule->fbPagePostsComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
 
             //Total de sentimentos do Instagram
             $total_instagram_posts = $rule->igPosts()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
@@ -249,8 +251,8 @@ class RelatorioController extends Controller
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
             $dados_twitter[] = $total_twitter;
-            $dados_facebook[] = $total_facebook_posts + $total_facebook_comments;
-            $dados_instagram[] = $total_instagram_posts + $total_instagram_comments;
+            $dados_facebook[] = $total_facebook_posts + $total_facebook_comments + $total_facebook_page_posts;
+            $dados_instagram[] = $total_instagram_posts + $total_instagram_comments + $total_facebook_page_posts_comments;
           }
         }
 
