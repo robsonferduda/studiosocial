@@ -115,7 +115,7 @@ for media in medias:
     cur.execute(sql)
     con.commit() 
 
-sql = 'select * from fb_comments where sentiment isnull'
+sql = 'select * from fb_comments where sentiment is null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -134,7 +134,7 @@ for media in medias:
     cur.execute(sql)
     con.commit()
 
-sql = 'select * from fb_page_posts where sentiment isnull and message notnull'
+sql = 'select * from fb_page_posts where sentiment isnull and message not null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -153,7 +153,7 @@ for media in medias:
     cur.execute(sql)
     con.commit()  
 
-sql = 'select * from fb_page_posts_comments where sentiment isnull and text notnull'
+sql = 'select * from fb_page_posts_comments where sentiment isnull and text not null'
 
 cur.execute(sql)
 medias = cur.fetchall()
