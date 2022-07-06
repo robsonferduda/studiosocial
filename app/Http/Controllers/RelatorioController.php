@@ -121,13 +121,13 @@ class RelatorioController extends Controller
               $total_negativos += $rule->fbPosts()->where('sentiment',-1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
               $total_neutros += $rule->fbPosts()->where('sentiment',0)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
 
-              $total_positivos += $rule->fbPagePosts()->where('sentiment',1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbPagePosts()->where('sentiment',-1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbPagePosts()->where('sentiment',0)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_positivos += $rule->fbPagePosts()->where('sentiment',1)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_negativos += $rule->fbPagePosts()->where('sentiment',-1)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_neutros += $rule->fbPagePosts()->where('sentiment',0)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
 
-              $total_positivos += $rule->fbPagePostsComments()->where('sentiment',1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbPagePostsComments()->where('sentiment',-1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbPagePostsComments()->where('sentiment',0)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_positivos += $rule->fbPagePostsComments()->where('sentiment',1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_negativos += $rule->fbPagePostsComments()->where('sentiment',-1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+              $total_neutros += $rule->fbPagePostsComments()->where('sentiment',0)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
 
               $total_positivos += $rule->fbComments()->where('sentiment',1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
               $total_negativos += $rule->fbComments()->where('sentiment',-1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
