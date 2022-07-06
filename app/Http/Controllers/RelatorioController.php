@@ -1251,6 +1251,9 @@ class RelatorioController extends Controller
 
     public function geradorPdf(Request $request)
     {
+
+        ini_set("memory_limit","2048M");
+
         $this->rule_id = $request->regra;
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $rule = Rule::find($request->regra);
