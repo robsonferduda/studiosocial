@@ -596,6 +596,9 @@ class RelatorioController extends Controller
 
     public function getInfluenciadores(Request $request)
     {
+
+      $this->rule_id = $request->regra;      
+
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
       $dados = $this->getDadosInfluenciadores();
       return response()->json($dados);
@@ -604,8 +607,10 @@ class RelatorioController extends Controller
     public function getDadosInfluenciadores()
     {
 
-      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final);
-      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final);
+      $rule = $this->rule_id;
+
+      $dados['positivos'] = (new MediaTwitter())->getInfluenciadoresPositivos($this->client_id, $this->data_inicial, $this->data_final, $rule);
+      $dados['negativos'] = (new MediaTwitter())->getInfluenciadoresNegativos($this->client_id, $this->data_inicial, $this->data_final, $rule);
 
       foreach($dados['negativos'] as $key => $user){
         if($user->user_profile_image_url){
