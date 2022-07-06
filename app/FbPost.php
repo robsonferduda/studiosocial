@@ -55,7 +55,7 @@ class FbPost extends Model implements Auditable
         $dt_final = $data_final->format('Y-m-d');
 
         if(!empty($rule)) {
-            $sql = "SELECT t3.name, t3.color, t3.icon, count(*)
+            $sql = "SELECT t3.name, t3.color, t3.icon, t3.icon_html, count(*)
                               FROM fb_posts t1,
                                    fb_post_reaction t2,
                                    fb_reactions t3
@@ -64,7 +64,7 @@ class FbPost extends Model implements Auditable
                               AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                               AND t1.client_id = $client_id
                               and t1.id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::FB_POSTS." and rule_id = {$rule})
-                              GROUP BY t3.name, t3.color, t3.icon
+                              GROUP BY t3.name, t3.color, t3.icon, t3.icon_html
                               ORDER BY t3.name";
         } else {
             $sql = "SELECT t3.name, t3.color, t3.icon, count(*)
@@ -75,7 +75,7 @@ class FbPost extends Model implements Auditable
                               AND t2.reaction_id = t3.id
                               AND t2.updated_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
                               AND t1.client_id = $client_id
-                              GROUP BY t3.name, t3.color, t3.icon
+                              GROUP BY t3.name, t3.color, t3.icon, t3.icon_html
                               ORDER BY t3.name";
         }
 
