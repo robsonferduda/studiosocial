@@ -25,12 +25,14 @@ class FBPost{
         ];
 
         foreach ($posts as $post) {
+            sleep(1);
             $this->getReactionsPost($post, $fb_feed, $params);
         }
 
         $posts = FbPagePost::has('hashtags')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
 
         foreach ($posts as $post) {
+            sleep(1);
             $this->getReactionsPost($post, $fb_feed, $params);
         }
 
