@@ -124,7 +124,7 @@ class MediaTwitter extends Model implements Auditable
                 ORDER BY total DESC
                 LIMIT 10";
         } else {
-            "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+            $sql = "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                 FROM media_twitter
                 WHERE sentiment IN(-1)
                 AND client_id = $client_id
