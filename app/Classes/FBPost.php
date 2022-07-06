@@ -15,12 +15,12 @@ class FBPost{
 
         $posts = FbPagePost::has('terms')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
 
-        $token = env('COLETA1');
+        $token = env('COLETA2');
 
         $fb_feed = new FBFeedApi(0);
 
         $params = [
-            'fields' => $fb_feed->getFBReactionsFields(),
+            'fields' => $this->getFBReactionsFields(),
             'access_token' => $token
         ];
 
@@ -44,12 +44,12 @@ class FBPost{
 
         $posts = FbPagePost::where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
 
-        $token = env('COLETA1');
+        $token = env('COLETA2');
 
         $fb_feed = new FBFeedApi(0);
 
         $params = [
-            'fields' => $fb_feed->getFBReactionsFields(),
+            'fields' => $this->getFBReactionsFields(),
             'access_token' => $token
         ];
 
@@ -61,7 +61,7 @@ class FBPost{
 
     public function getReactionsPost($post, $fb_feed, $params)
     {
-        $post_reactions = $fb_feed->getFBPostReactions($post->post_id, $params);
+        $post_reactions = $this->getFBPostReactions($post->post_id, $params);
 
         $reactions = $this->getReactions($post_reactions);
 
@@ -85,8 +85,6 @@ class FBPost{
 
         $reactions = [
             'id' => isset($post_reactions['id']) ? isset($post_reactions['id']) : null,
-            'qtd_shares' => isset($post_reactions['shares']['count']) ? $post_reactions['shares']['count'] : null,
-            'qtd_comments' => isset($post_reactions['comments']['summary']['total_count']) ? $post_reactions['comments']['summary']['total_count'] : null,
             'types' => [
                 'LIKE' => isset($post_reactions['LIKE']['summary']['total_count']) ? $post_reactions['LIKE']['summary']['total_count'] : null,
                 'LOVE' => isset($post_reactions['LOVE']['summary']['total_count']) ? $post_reactions['LOVE']['summary']['total_count'] : null,
@@ -99,6 +97,20 @@ class FBPost{
         ];
 
         return $reactions;
+    }
 
+    public function getFBReactionsFields()
+    {
+        $fields = [
+            'reactions.type(LIKE).limit(0).summary(true).as(LIKE)',
+            'reactions.type(LOVE).limit(0).summary(true).as(LOVE)',
+            'reactions.type(WOW).limit(0).summary(true).as(WOW)',
+            'reactions.type(HAHA).limit(0).summary(true).as(HAHA)',
+            'reactions.type(SAD).limit(0).summary(true).as(SAD)',
+            'reactions.type(ANGRY).limit(0).summary(true).as(ANGRY)',
+            'reactions.type(THANKFUL).limit(0).summary(true).as(THANKFUL)'
+        ];
+
+        return implode(',',$fields);
     }
 }
