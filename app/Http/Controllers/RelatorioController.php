@@ -551,27 +551,27 @@ class RelatorioController extends Controller
           }
   
           foreach ($igComments as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
   
           foreach ($fbPosts as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
   
           foreach ($fbComments as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
   
           foreach ($twPosts as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
   
           foreach ($fbPagePost as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
   
           foreach ($fbPagePostComments as $media) {
-            $lista_hastags = array_merge(Utils::getHashtags($media, $lista_hastags), $lista_hastags);
+            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
          
         }
