@@ -167,6 +167,10 @@ Route::get('fb-hashtags', function(){
     (new FbHashtag)->runJob();
 });
 
+Route::get('fb-post-reactions-filtered', function(){
+    (new \App\Classes\FBPost())->pullReactionsFiltered();
+});
+
 Route::get('fb-post-reactions', function(){
     (new \App\Classes\FBPost())->pullReactions();
 });

@@ -7,6 +7,35 @@ use Illuminate\Support\Carbon;
 
 class FBPost{
 
+    public function pullReactionsFiltered()
+    {
+        set_time_limit(0);
+
+        ini_set("memory_limit","2048M");
+
+        $posts = FbPagePost::has('terms')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
+
+        $token = env('COLETA1');
+
+        $fb_feed = new FBFeedApi(0);
+
+        $params = [
+            'fields' => $fb_feed->getFBReactionsFields(),
+            'access_token' => $token
+        ];
+
+        foreach ($posts as $post) {
+            $this->getReactionsPost($post, $fb_feed, $params);
+        }
+
+        $posts = FbPagePost::has('hashtags')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
+
+        foreach ($posts as $post) {
+            $this->getReactionsPost($post, $fb_feed, $params);
+        }
+
+    }
+
     public function pullReactions()
     {
         set_time_limit(0);
@@ -25,26 +54,31 @@ class FBPost{
         ];
 
         foreach ($posts as $post) {
-
-            $post_reactions = $fb_feed->getFBPostReactions($post->post_id, $params);
-
-            $reactions = $this->getReactions($post_reactions);
-
-            $reaction_buffer = [];
-            foreach ($reactions['types'] as $type => $qtd) {
-                if($qtd > 0) {
-
-                    $reaction = constant('App\Enums\FbReaction::'. $type);
-                    $reaction_buffer[$reaction] = ['count' => $qtd];
-
-                }
-            }
-
-            if (!empty($reaction_buffer)) {
-                $post->reactions()->sync($reaction_buffer);
-            }
-
+            $this->getReactionsPost($post, $fb_feed, $params);
         }
+
+    }
+
+    public function getReactionsPost($post, $fb_feed, $params)
+    {
+        $post_reactions = $fb_feed->getFBPostReactions($post->post_id, $params);
+
+        $reactions = $this->getReactions($post_reactions);
+
+        $reaction_buffer = [];
+        foreach ($reactions['types'] as $type => $qtd) {
+            if($qtd > 0) {
+
+                $reaction = constant('App\Enums\FbReaction::'. $type);
+                $reaction_buffer[$reaction] = ['count' => $qtd];
+
+            }
+        }
+
+        if (!empty($reaction_buffer)) {
+            $post->reactions()->sync($reaction_buffer);
+        }
+
     }
 
     public function getReactions($post_reactions) {
