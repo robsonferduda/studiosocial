@@ -62,6 +62,11 @@ class RelatorioController extends Controller
       $mensagem = "Listagem de postagens em todas as redes socias";
 
       $caminho = Storage::disk('public')->path($this->client_id);
+
+      if(!File::exists($caminho)){
+        File::makeDirectory($caminho, $mode = 0777, true, true);
+      }
+
       $arquivos = File::files($caminho);
 
       return view('relatorios/postagens', compact('rules','periodo_relatorio','periodo_padrao','mensagem','arquivos'));
