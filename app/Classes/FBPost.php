@@ -13,7 +13,7 @@ class FBPost{
 
         ini_set("memory_limit","2048M");
 
-        $posts = FbPagePost::has('terms')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
+        $posts = FbPagePost::has('terms')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->orderBy('id', 'DESC')->get();
 
         $token = env('COLETA2');
 
@@ -25,14 +25,14 @@ class FBPost{
         ];
 
         foreach ($posts as $post) {
-            sleep(1);
+            sleep(2);
             $this->getReactionsPost($post, $fb_feed, $params);
         }
 
         $posts = FbPagePost::has('hashtags')->where('created_at', '>=', Carbon::now()->subMonths(1)->toDateString())->select('id', 'post_id')->get();
 
         foreach ($posts as $post) {
-            sleep(1);
+            sleep(2);
             $this->getReactionsPost($post, $fb_feed, $params);
         }
 
