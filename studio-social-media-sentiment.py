@@ -37,7 +37,7 @@ con = psycopg2.connect(host='162.241.40.125', database='studiosocial',user='post
 cur = con.cursor(cursor_factory = psycopg2.extras.RealDictCursor)
 
 #Atualiza mensagens do Twitter
-sql = 'select * from media_twitter where sentiment isnull'
+sql = 'select * from media_twitter where sentiment is null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -57,7 +57,7 @@ for media in medias:
     con.commit() 
 
 #Atualiza mensagens do Instagram
-sql = 'select * from ig_comments where sentiment isnull'
+sql = 'select * from ig_comments where sentiment is null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -76,7 +76,7 @@ for media in medias:
     cur.execute(sql)
     con.commit() 
 
-sql = 'select * from medias where sentiment isnull and caption notnull'
+sql = 'select * from medias where sentiment is null and caption is not null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -96,7 +96,7 @@ for media in medias:
     con.commit() 
 
 #Atualiza mensagens do Facebook
-sql = 'select * from fb_posts where sentiment isnull'
+sql = 'select * from fb_posts where sentiment is null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -134,7 +134,7 @@ for media in medias:
     cur.execute(sql)
     con.commit()
 
-sql = 'select * from fb_page_posts where sentiment isnull and message not null'
+sql = 'select * from fb_page_posts where sentiment is null and message is not null'
 
 cur.execute(sql)
 medias = cur.fetchall()
@@ -153,7 +153,7 @@ for media in medias:
     cur.execute(sql)
     con.commit()  
 
-sql = 'select * from fb_page_posts_comments where sentiment isnull and text not null'
+sql = 'select * from fb_page_posts_comments where sentiment is null and text is not null'
 
 cur.execute(sql)
 medias = cur.fetchall()
