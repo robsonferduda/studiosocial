@@ -44,24 +44,24 @@ class FbFeed implements ShouldQueue
 
         $fb_feed = new FBFeedApi($id_page_id);
         $after = '';
-         
+
         do {
-                        
+
             $params = [
                 'fields' => $fb_feed->getFbPostFields().','.$fb_feed->getFBReactionsFields(),
                 'access_token' => $this->token,
                 'after' => $after,
-                'since' => \Carbon\Carbon::now()->subDay()->toDateString(),
+                'since' => \Carbon\Carbon::now()->subDays(5)->toDateString(),
                 'limit' => $this->limit
             ];
-    
+
             $posts = $fb_feed->getFeed($params);
-            
+
             if(empty($posts['data'])) {
                 continue;
             }
 
-            foreach ($posts['data'] as $post) {                    
+            foreach ($posts['data'] as $post) {
                 $reactions = $this->getReactions($post);
                 $comments = [];
 
@@ -73,19 +73,19 @@ class FbFeed implements ShouldQueue
                 if(isset($post['comments']['data'])) {
                     $comments = $post['comments'];
                 }
-                            
+
                 $post = FbPagePost::updateOrCreate(
                         [
-                            'post_id' => $post['id'],                                
+                            'post_id' => $post['id'],
                             'fb_page_monitor_id' => $this->page->id,
-                        ],    
+                        ],
                         [
                             'message' => isset($post['message']) ? $post['message']: null,
                             'permalink_url' => isset($post['permalink_url']) ? $post['permalink_url']: null,
-                            'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,                                                                                                            
+                            'updated_time' => isset($post['updated_time']) ? $post['updated_time']: null,
                             'comment_count' => $reactions['qtd_comments'],
                             'share_count' => $reactions['qtd_shares'],
-                        ]);    
+                        ]);
 
                 foreach($comments['data'] as $comment) {
 
@@ -95,11 +95,11 @@ class FbFeed implements ShouldQueue
                     [
                         'page_post_id' => $post['id'],
                         'created_time' => \Carbon\Carbon::parse($comment['created_time'])->toDateTimeString()
-                    ],    
+                    ],
                     [
                         'text' => $comment['message'],
-                       
-                    ]); 
+
+                    ]);
 
                     $reaction_comment_buffer = [];
                     foreach ($reactions_comment['types'] as $type => $qtd) {
@@ -107,17 +107,17 @@ class FbFeed implements ShouldQueue
 
                             $reaction = constant('App\Enums\FbReaction::'. $type);
                             $reaction_comment_buffer[$reaction] = ['count' => $qtd];
-                                       
-                        }                                    
+
+                        }
                     }
 
                     if (!empty($reaction_comment_buffer)) {
                         $comment_bd->reactions()->sync($reaction_comment_buffer);
                     }
 
-                    if(isset($comment['comments']['data'])) {                            
+                    if(isset($comment['comments']['data'])) {
                         foreach($comment['comments']['data'] as $relatedComment) {
-                            
+
                             $reactions_comment_related = $this->getReactions($relatedComment);
 
                             $comment_bd_related = FbPagePostComment::updateOrCreate(
@@ -125,26 +125,26 @@ class FbFeed implements ShouldQueue
                                     'page_post_id' => $post['id'],
                                     'related_to' => $comment_bd['id'],
                                     'created_time' => \Carbon\Carbon::parse($relatedComment['created_time'])->toDateTimeString()
-                                ],    
+                                ],
                                 [
-                                    'text' => $relatedComment['message'],                                       
-                                ]); 
+                                    'text' => $relatedComment['message'],
+                                ]);
 
 
                             $reaction_comment_related_buffer = [];
                             foreach ($reactions_comment_related['types'] as $type => $qtd) {
                                 if($qtd > 0) {
-            
+
                                     $reaction = constant('App\Enums\FbReaction::'. $type);
                                     $reaction_comment_related_buffer[$reaction] = ['count' => $qtd];
-                                                   
-                                }                                    
+
+                                }
                             }
-            
+
                             if (!empty($reaction_comment_related_buffer)) {
                                 $comment_bd_related->reactions()->sync($reaction_comment_related_buffer);
                             }
-                        }                            
+                        }
                     }
 
                 }
@@ -155,17 +155,17 @@ class FbFeed implements ShouldQueue
 
                         $reaction = constant('App\Enums\FbReaction::'. $type);
                         $reaction_buffer[$reaction] = ['count' => $qtd];
-                                   
-                    }                                    
+
+                    }
                 }
 
                 if (!empty($reaction_buffer)) {
                     $post->reactions()->sync($reaction_buffer);
                 }
-            }            
-                          
+            }
+
             $after = $fb_feed->getAfter($posts);
-    
+
         } while($fb_feed->hasAfter($posts) && count($posts['data']) >= 50);
 
     }
@@ -188,6 +188,6 @@ class FbFeed implements ShouldQueue
         ];
 
         return $reactions;
-        
+
     }
 }
