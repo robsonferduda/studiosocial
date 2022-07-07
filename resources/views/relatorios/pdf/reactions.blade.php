@@ -34,7 +34,7 @@
                     @foreach($dados as $reaction)
                         <tr>
                             <td>{{ $reaction->name }}</td>
-                            <td class="center"><img src="{{ url("img/icon/$reaction->name.svg") }}"></td>
+                            <td class="center"><img src="{{ url("img/icon/$reaction->name.png") }}"></td>
                             <td class="center">{{ $reaction->count }}</td>
                         </tr>
                     @endforeach
