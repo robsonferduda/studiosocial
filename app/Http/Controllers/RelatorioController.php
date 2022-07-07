@@ -388,7 +388,7 @@ class RelatorioController extends Controller
               ->when($rule, function ($q) use($rule){
                 return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
               })
-              ->get();
+             ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
 
 
         $media_instagram = DB::table($tabela)
@@ -398,7 +398,7 @@ class RelatorioController extends Controller
                             ->when($rule, function ($q) use($rule){
                               return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
                             })
-                            ->get();
+                            ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
 
         $media_twitter = DB::table($tabela)
                           ->where('tipo', 'TWEETS')
@@ -407,7 +407,7 @@ class RelatorioController extends Controller
                           ->when($rule, function ($q) use($rule){
                             return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
                           })
-                          ->get();
+                         ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
 
         foreach($media_facebook as $facebook){
           $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
@@ -524,7 +524,7 @@ class RelatorioController extends Controller
 
       $dt_inicial = $this->data_inicial->format('Y-m-d');
       $dt_final = $this->data_final->format('Y-m-d');
-  
+
       $lista_hastags = array();
 
       if(!empty($rule)) {
@@ -537,7 +537,7 @@ class RelatorioController extends Controller
         foreach($rules as $rule) {
 
           $medias = array();
-      
+
           $igPosts = $rule->igPosts()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('caption')->toArray();
           $igComments = $rule->igComments()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
           $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
@@ -545,40 +545,40 @@ class RelatorioController extends Controller
           $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
           $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
           $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-  
+
           foreach ($igPosts as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($igComments as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($fbPosts as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($fbComments as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($twPosts as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($fbPagePost as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-  
+
           foreach ($fbPagePostComments as $media) {
             $lista_hastags = Utils::getHashtags($media, $lista_hastags);
           }
-         
+
         }
-  
+
       }
 
-     
+
       return $lista_hastags;
     }
 
@@ -597,7 +597,7 @@ class RelatorioController extends Controller
     public function getInfluenciadores(Request $request)
     {
 
-      $this->rule_id = $request->regra;      
+      $this->rule_id = $request->regra;
 
       $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
       $dados = $this->getDadosInfluenciadores();
