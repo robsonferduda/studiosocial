@@ -6,9 +6,9 @@
         }
 
         footer {
-            position: fixed; 
-            bottom: 0cm; 
-            left: 0cm; 
+            position: fixed;
+            bottom: 0cm;
+            left: 0cm;
             right: 0cm;
             height: 1cm;
             font-size: 12px;
@@ -34,17 +34,17 @@
                     @foreach($dados as $reaction)
                         <tr>
                             <td>{{ $reaction->name }}</td>
-                            <td class="center">{!! $reaction->icon_html !!}</td>
+                            <td class="center"><img src="{{ url("img/icon/$reaction->name.svg") }}"></td>
                             <td class="center">{{ $reaction->count }}</td>
                         </tr>
                     @endforeach
                 </tbody>
-            </table> 
+            </table>
         </div>
     @else
         <p style="text-align: center;">Não existem dados para os parâmetros selecionados</p>
     @endif
     <footer>
-        Relatório gerado em {{ date("d/m/Y") }} às {{ date("H:i:s") }} 
+        Relatório gerado em {{ date("d/m/Y") }} às {{ date("H:i:s") }}
     </footer>
 @endsection
