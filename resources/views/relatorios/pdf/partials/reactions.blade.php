@@ -14,12 +14,12 @@
                     @foreach($dados['reactions'] as $reaction)
                         <tr>
                             <td>{{ $reaction->name }}</td>
-                            <td class="center">{!! $reaction->icon !!}</td>
+                            <td class="center"><img src="{{ url("img/icon/$reaction->name.png") }}"></td>
                             <td class="center">{{ $reaction->count }}</td>
                         </tr>
                     @endforeach
                 </tbody>
-            </table> 
+            </table>
         </div>
     @else
         <p style="text-align: center;">Não existem dados para os parâmetros selecionados</p>
