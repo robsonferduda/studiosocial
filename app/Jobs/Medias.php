@@ -30,7 +30,7 @@ class Medias implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($client_id,$nome, $dt_inicial, $dt_final, $dados)
+    public function __construct($client_id, $nome, $dt_inicial, $dt_final, $dados)
     {
        $this->client_id = $client_id;
        $this->nome = $nome;
@@ -46,7 +46,7 @@ class Medias implements ShouldQueue
      */
     public function handle()
     {
-        set_time_limit(120);
+        set_time_limit(-1);
 
         $client_id = $this->client_id;
         $nome = $this->nome;
