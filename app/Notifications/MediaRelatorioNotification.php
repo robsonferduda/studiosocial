@@ -40,7 +40,7 @@ class MediaRelatorioNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $notifiable->email = 'robsonferduda@gmail.com';
+        $notifiable->email = 'rafael01costa@gmail.com';
         return (new MailMessage)
                     ->subject('Relatório de Mídias')
                     ->markdown('email.regra_processada')
