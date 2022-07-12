@@ -200,9 +200,10 @@ Route::get('delete-media-language', function(){
     }
 });
 
-Route::get('files/{file_name}', function($file_name = null)
+Route::get('file/{client}/{file_name}', function($client = null, $file_name = null)
 {
-    $path = storage_path().'/'.'app'.'/public/'.$file_name;
+    $path = storage_path().'/'.'app'.'/public/'."$client/$file_name";
+    
     if (file_exists($path)) {
         return Response::download($path);
     }
