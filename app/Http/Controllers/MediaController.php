@@ -56,7 +56,7 @@ class MediaController extends Controller
 
     public function index()
     {
-        
+
     }
 
     public function atualizaSentimento($id, $tipo, $sentimento)
@@ -67,7 +67,7 @@ class MediaController extends Controller
             case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
                 break;
-            
+
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
                 break;
@@ -75,11 +75,11 @@ class MediaController extends Controller
             case 'facebook-page':
                 $media = FbPagePost::where('id',$id)->first();
                 break;
-                
+
             case 'instagram':
                 $media = Media::where('id',$id)->first();
                 break;
-            
+
             case 'facebook-page-comment':
                 $media = FbPagePostComment::where('id',$id)->first();
                 break;
@@ -87,7 +87,7 @@ class MediaController extends Controller
 
         if($media){
             $media->sentiment = $sentimento;
-    
+
             if($media->update()){
                 Flash::success('<i class="fa fa-check"></i> Sentimento da mídia atualizado com sucesso');
             }else{
@@ -97,7 +97,7 @@ class MediaController extends Controller
         }else{
             Flash::warning('<i class="fa fa-exclamation"></i> Mídia não encontrada');
         }
-        
+
         return redirect()->back()->withInput();
     }
 
@@ -109,7 +109,7 @@ class MediaController extends Controller
             case 'twitter':
                 $media = MediaTwitter::where('id',$id)->first();
                 break;
-            
+
             case 'facebook':
                 $media = FbPost::where('id',$id)->first();
                 break;
@@ -135,7 +135,7 @@ class MediaController extends Controller
         }else{
             Flash::warning('<i class="fa fa-exclamation"></i> Mídia não encontrada');
         }
-        
+
         return redirect()->back()->withInput();
 
     }
@@ -146,8 +146,8 @@ class MediaController extends Controller
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
         $rede = 'todos';
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final); 
-        
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+
         $client_id = Session::get('cliente')['id'];
         $medias = array();
         $dados = array();
@@ -161,16 +161,16 @@ class MediaController extends Controller
             case 'facebook':
                 $medias = $this->getMediasFacebook();
                 break;
-            
+
             case 'twitter':
                 $medias = $this->getMediasTwitter();
-                
+
             break;
 
             case 'todos':
                 $medias_i = $this->getMediasInstagram();
                 $medias_t = $this->getMediasTwitter();
-                $medias_f = $this->getMediasFacebook();                
+                $medias_f = $this->getMediasFacebook();
 
                 $medias = array_merge($medias_i, $medias_t, $medias_f);
         }
@@ -216,7 +216,7 @@ class MediaController extends Controller
                     break;
             }
 
-            $dados[] = array('text' => $media['text'],
+            $dados[] = array('text' => emoji_unified_to_html($media['text']),
                              'sentimento' => $sentimento,
                              'tipo' => $tipo,
                              'username' => $media['username'],
@@ -226,11 +226,11 @@ class MediaController extends Controller
 
         }
 
-        JobsMedia::dispatch($client_id, $nome, $dt_inicial, $dt_final, $dados);
+        JobsMedia::dispatchNow($client_id, $nome, $dt_inicial, $dt_final, $dados);
 
-        Flash::success('<i class="fa fa-exclamation"></i> O pedido de relatório foi encaminhado para processamento. Aguarde um email confirmando a geração do mesmo');        
+        Flash::success('<i class="fa fa-exclamation"></i> O pedido de relatório foi encaminhado para processamento. Aguarde um email confirmando a geração do mesmo');
         return redirect()->back()->withInput();
-        
+
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)
@@ -241,7 +241,7 @@ class MediaController extends Controller
 
           $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
           $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
-          
+
           $periodo = $data_final->diffInDays($data_inicial) + 1;
           $data_inicial = $data_inicial->subDays(1);
 
@@ -253,7 +253,7 @@ class MediaController extends Controller
         $this->periodo = $periodo;
         $this->data_inicial = $data_inicial;
         $this->data_final = $data_final;
-    } 
+    }
 
     function getMediasInstagram()
     {
@@ -269,7 +269,7 @@ class MediaController extends Controller
 
         foreach($medias_temp as $media) {
 
-            $medias[] = array(  'id' => $media->id,                                       
+            $medias[] = array(  'id' => $media->id,
                                 'text' => $media->text,
                                 'username' => $media->name,
                                 'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
@@ -277,11 +277,11 @@ class MediaController extends Controller
                                 'type_message' => 'instagram',
                                 'like_count' => $media->like_count,
                                 'share_count' => $media->share_count,
-                                'comments_count' => $media->comments_count,                                
+                                'comments_count' => $media->comments_count,
                                 'tipo' => 'instagram',
                                 'comments' => [],
                                 'link' => $media->link,
-                                'user_profile_image_url' => $media->img_link                          
+                                'user_profile_image_url' => $media->img_link
                             );
         }
 
@@ -297,14 +297,14 @@ class MediaController extends Controller
             ->Orwhere('tipo', 'FB_PAGE_POST_COMMENT')
             ->Orwhere('tipo', 'FB_POSTS');
         })->whereBetween('date', [$this->data_inicial, $this->data_final]);
-       
+
         $medias_temp = $medias_temp->where('client_id', $this->client_id)
         ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
         ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'tipo')
         ->orderBy('date', 'DESC')->get();
-        
+
         foreach($medias_temp as $media) {
-            
+
             switch ($media->tipo) {
                 case 'FB_COMMENT':
                         $tipo = '';
@@ -321,7 +321,7 @@ class MediaController extends Controller
 
             }
 
-            $medias[] = array(  'id' => $media->id,                                       
+            $medias[] = array(  'id' => $media->id,
                                 'text' => $media->text,
                                 'username' => $media->name,
                                 'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
@@ -329,11 +329,11 @@ class MediaController extends Controller
                                 'type_message' => $tipo,
                                 'like_count' => $media->like_count,
                                 'share_count' => $media->share_count,
-                                'comments_count' => $media->comments_count,                                
+                                'comments_count' => $media->comments_count,
                                 'tipo' => 'facebook',
                                 'comments' => [],
                                 'link' => $media->link,
-                                'user_profile_image_url' => $media->img_link                          
+                                'user_profile_image_url' => $media->img_link
                             );
         }
 
@@ -344,7 +344,7 @@ class MediaController extends Controller
     {
         $medias = array();
         $medias_temp =  $this->mediaModel::where('tipo', 'TWEETS')->whereBetween('date', [$this->data_inicial, $this->data_final]);
-               
+
         $medias_temp = $medias_temp->where('client_id', $this->client_id)
         ->select('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
         ->groupBy('id', 'text', 'date', 'sentiment', 'name', 'link', 'img_link', 'comment_count', 'share_count', 'like_count', 'client_id', 'retweet_count')
@@ -352,7 +352,7 @@ class MediaController extends Controller
 
         foreach($medias_temp as $media) {
 
-            $medias[] = array(  'id' => $media->id,                                       
+            $medias[] = array(  'id' => $media->id,
                                 'text' => $media->text,
                                 'username' => $media->name,
                                 'created_at' => ($media->date) ? dateTimeUtcToLocal($media->date) : null,
@@ -360,12 +360,12 @@ class MediaController extends Controller
                                 'type_message' => 'twitter',
                                 'like_count' => $media->like_count,
                                 'share_count' => $media->share_count,
-                                'comments_count' => $media->comments_count,                                
+                                'comments_count' => $media->comments_count,
                                 'tipo' => 'twitter',
                                 'retweet_count' => $media->retweet_count,
                                 'comments' => [],
                                 'link' => $media->link,
-                                'user_profile_image_url' => $media->img_link                          
+                                'user_profile_image_url' => $media->img_link
                             );
         }
 

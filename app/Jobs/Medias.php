@@ -5,15 +5,7 @@ namespace App\Jobs;
 use DOMPDF;
 use Notification;
 use Storage;
-use App\Enums\TypeRule;
-use App\FbComment;
-use App\FbPagePost;
-use App\FbPagePostComment;
-use App\FbPost;
-use App\IgComment;
 use App\Media;
-use App\MediaTwitter;
-use App\Rule as AppRule;
 use Illuminate\Bus\Queueable;
 use App\Notifications\MediaRelatorioNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,6 +22,7 @@ class Medias implements ShouldQueue
     protected $dt_inicial;
     protected $dt_final;
     protected $dados;
+    protected $client_id;
     public $timeout = 600;
 
     /**
@@ -39,7 +32,7 @@ class Medias implements ShouldQueue
      */
     public function __construct($client_id,$nome, $dt_inicial, $dt_final, $dados)
     {
-        $this->$client_id = $client_id;
+       $this->client_id = $client_id;
        $this->nome = $nome;
        $this->dt_inicial = $dt_inicial;
        $this->dt_final = $dt_final;
@@ -52,7 +45,9 @@ class Medias implements ShouldQueue
      * @return void
      */
     public function handle()
-    { 
+    {
+        set_time_limit(120);
+
         $client_id = $this->client_id;
         $nome = $this->nome;
         $dt_inicial = $this->dt_inicial;
@@ -61,9 +56,9 @@ class Medias implements ShouldQueue
         $filename  = date('dmYHi').'_relatorio_de_coletas.pdf';
 
         $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
-        Storage::disk('public')->path($this->client_id)->put($filename, $pdf->output());
+        Storage::disk('public')->put("$client_id/$filename", $pdf->output());
 
         $media = new Media();
-        $media->notify(new MediaRelatorioNotification()); 
+        $media->notify(new MediaRelatorioNotification());
     }
 }

@@ -17,6 +17,7 @@
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
+        "iamcal/php-emoji": "^1.4",
         "laracasts/flash": "^3.2",
         "laravel/framework": "^7.24",
         "laravel/socialite": "^5.2",
