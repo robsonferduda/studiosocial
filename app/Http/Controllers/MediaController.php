@@ -209,14 +209,14 @@ class MediaController extends Controller
                     break;
 
                 case 'twitter':
-                    $tipo = '<span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVQ4jc3SsUqCYRTG8d8QEtQgRRBGQ0PSmK1B5GLYTdTQDbQ3eAFdQVPQmIvUHTQ7iOAYQiQUQlNDRNnQ+8HXx/uZgoMHnuU9/J/znJfDvNTGmN4iLvGMV1xjHUeowB762MoxuMEoogdUoRYehjjJwGv4yjF4wz6s4D3V6OIcuyFdDB7hLJmyicaYSXmqJwaVKcFE5fSu91PC/exPL+MKHxMaXGQNCnicEH5BMWsAO2j/A3/jOAYntYpWDvyJ0xh0EHZq+nsPafVwGIMX/J7kErYxQClEfUIHt7gLCWZfP88SfKMzLCxaAAAAAElFTkSuQmCC" />"</span>';
+                    $tipo = '<span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVQ4jc3SsUqCYRTG8d8QEtQgRRBGQ0PSmK1B5GLYTdTQDbQ3eAFdQVPQmIvUHTQ7iOAYQiQUQlNDRNnQ+8HXx/uZgoMHnuU9/J/znJfDvNTGmN4iLvGMV1xjHUeowB762MoxuMEoogdUoRYehjjJwGv4yjF4wz6s4D3V6OIcuyFdDB7hLJmyicaYSXmqJwaVKcFE5fSu91PC/exPL+MKHxMaXGQNCnicEH5BMWsAO2j/A3/jOAYntYpWDvyJ0xh0EHZq+nsPafVwGIMX/J7kErYxQClEfUIHt7gLCWZfP88SfKMzLCxaAAAAAElFTkSuQmCC" /></span>';
                     break;
                 default:
                     # code...
                     break;
             }
 
-            $dados[] = array('text' => emoji_unified_to_html($media['text']),
+            $dados[] = array('text' => $media['text'],
                              'sentimento' => $sentimento,
                              'tipo' => $tipo,
                              'username' => $media['username'],
