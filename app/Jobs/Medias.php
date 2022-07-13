@@ -55,24 +55,24 @@ class Medias implements ShouldQueue
         $dados = $this->dados;
         $filename  = date('dmYHi').'_relatorio_de_coletas.pdf';
 
-        $time_start = microtime(true);
+       // $time_start = microtime(true);
 
         $options = [
-            'debugLayoutBlocks' => true,
-            'debugLayoutLines' => true,
-            'debugLayoutInline' => true,
-            'debugLayoutPaddingBox' => true,
-            'debugCss' => true
+            'debugLayoutBlocks' => false,
+            'debugLayoutLines' => false,
+            'debugLayoutInline' => false,
+            'debugLayoutPaddingBox' => false,
+            'debugCss' => false
         ];
 
         $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        // $pdf->setOption();
         Storage::disk('public')->put("$client_id/$filename", $pdf->output());
-        $time_end = microtime(true);
-        $execution_time = ($time_end - $time_start)/60;
+        // $time_end = microtime(true);
+        // $execution_time = ($time_end - $time_start)/60;
 
         //execution time of the script
-        echo '<b>Total Execution Time:</b> '.$execution_time.' Mins';
+       // echo '<b>Total Execution Time:</b> '.$execution_time.' Mins';
 
         $media = new Media();
         $media->notify(new MediaRelatorioNotification());

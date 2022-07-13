@@ -201,15 +201,15 @@ class MediaController extends Controller
 
             switch ($media['tipo']) {
                 case 'instagram':
-                    $tipo = '<span><i class="fa fa-instagram text-pink fa-2x"></i> </span>';
+                    $tipo = '<span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAABUklEQVQ4jaXTvUpcURQF4G+uEnRwmD6lRAOWFrYBxd862FkK6fwpfAPzAGkT30I0Ioo2OiD+Nz6ACBEVIooi0Ulxtnq5zNi4YHPvOXetffbZd20SPmAGNZzjBvVC3MS3GqZDoxQvS+jHb+wGuREq6MUI1jEmTn7C1yaiPMroCu5TVKIWFTQ7sZJb/8BjJFnCVoZP2C8Ih3CI64gt9GERP3GKA3RnUdZtTjyKZak/UxEVbOAS33An9akMD5gLcQknOEJbLmkbjrGa25vDQ4YW/IvNj/iMBdznyPf4hS/BF5qWzDuRSV1tjfVZXGGycIX22NsIvtA8tkYpzwnqmJW6vRNlC3EnJnJJn7UuMF+obFD6tXXJMJvoKXC+46IkGelK2LKAjng2svYyqrxaebwBqRnGQzOdH6YBrGAPf5sIq9IwDWNNMh1ex3nb2+P8Jzgv4/wfeJdc0ccb3qAAAAAASUVORK5CYII=" /></span>';
                     break;
 
                 case 'facebook':
-                    $tipo = '<span><i class="fa fa-facebook text-facebook fa-2x"></i></span>';
+                    $tipo = '<span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAAmJLR0QA/4ePzL8AAADcSURBVCjPddG9SkNBEIbhp9EukdyFECyCYGUhejdWorchHBF/iFXEQjBaWYgSjHaCnRwQLSxsrYIHG2PWwj1xD9GZ5tt3vtkZdiljzpZcoZDLNFVi2q4vIcmhbVO/5V6lWOZladlJ4JtVLQv2BEEGTcNxeWQx3romCD7NkiX9L2DFuadINskTwy24SsgD78mxD/oJGfARZU9DDdQ0HEZa8BzlReVlbiJ95CDKV23rYEPbINJ9WkbjidcTO8zD0b+Gzs+8uvs/DXdxaczoThiO1as/uqzrFJw5sVTib+Mhm63DFI1nAAAAAElFTkSuQmCC" /></span>';
                     break;
 
                 case 'twitter':
-                    $tipo = '<span><i class="fa fa-twitter text-info fa-2x"></i></span>';
+                    $tipo = '<span><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVQ4jc3SsUqCYRTG8d8QEtQgRRBGQ0PSmK1B5GLYTdTQDbQ3eAFdQVPQmIvUHTQ7iOAYQiQUQlNDRNnQ+8HXx/uZgoMHnuU9/J/znJfDvNTGmN4iLvGMV1xjHUeowB762MoxuMEoogdUoRYehjjJwGv4yjF4wz6s4D3V6OIcuyFdDB7hLJmyicaYSXmqJwaVKcFE5fSu91PC/exPL+MKHxMaXGQNCnicEH5BMWsAO2j/A3/jOAYntYpWDvyJ0xh0EHZq+nsPafVwGIMX/J7kErYxQClEfUIHt7gLCWZfP88SfKMzLCxaAAAAAElFTkSuQmCC" />"</span>';
                     break;
                 default:
                     # code...
