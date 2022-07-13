@@ -65,7 +65,7 @@
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
             var regra = $("#regra").val();
-            $('.card').loader('show');
+           // $('.card').loader('show');
 
             $.ajax({
                 url: host+'/media/relatorio',

@@ -1,6 +1,41 @@
 @extends('layouts.relatorio-postagens')
 @section('content')
     <style>
+
+        body {
+            color: #66615b;
+            font-family: Montserrat, "Helvetica Neue", Arial, sans-serif;            
+        }
+
+        a {          
+            text-decoration: none;
+            background-color: transparent;
+        }
+
+        a, a:focus, a:hover {
+            color: #51cbce;
+        }
+
+        .op-2{
+            opacity: 0.3;
+        }
+
+        .text-danger, a.text-danger:focus, a.text-danger:hover {
+            color: #ef8157!important;
+        }
+
+        .text-info, a.text-info:focus, a.text-info:hover {
+            color: #51bcda!important;
+        }
+
+        .text-facebook {
+            color: #3f51b5;
+        }
+
+        .text-pink {
+            color: #e91ea1;
+        }
+
         .mb-2 {
             margin-bottom: .5rem!important;
         }
@@ -10,8 +45,17 @@
         }
 
         .badge-primary {
+            border-color: #51cbce;
+            background-color: #51cbce;
+        }
+
+        .badge-primary {
             color: #fff;
             background-color: #007bff;
+        }
+
+        .text-primary, a.text-primary:focus, a.text-primary:hover {
+            color: #51cbce!important;
         }
 
         .text-white {
