@@ -58,10 +58,11 @@ class Medias implements ShouldQueue
         $time_start = microtime(true);
 
         $options = [
-            'debugLayoutBlocks' => false,
-            'debugLayoutLines' => false,
-            'debugLayoutInline' => false,
-            'debugLayoutPaddingBox' => false
+            'debugLayoutBlocks' => true,
+            'debugLayoutLines' => true,
+            'debugLayoutInline' => true,
+            'debugLayoutPaddingBox' => true,
+            'debugCss' => true
         ];
 
         $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));

@@ -1,6 +1,7 @@
 @extends('layouts.relatorio-postagens')
 @section('content')
     <style>
+        
 
         body {
             color: #66615b;
@@ -44,45 +45,12 @@
             float: right!important;
         }
 
-        .badge-primary {
-            border-color: #51cbce;
-            background-color: #51cbce;
-        }
-
-        .badge-primary {
-            color: #fff;
-            background-color: #007bff;
-        }
-
         .text-primary, a.text-primary:focus, a.text-primary:hover {
             color: #51cbce!important;
         }
 
         .text-white {
             color: #fff!important;
-        }
-        .badge-warning {
-            color: #212529;
-            background-color: #ffc107;
-        }
-
-        .badge-pill {
-            padding-right: .6em;
-            padding-left: .6em;
-            border-radius: 10rem;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: .25em .4em;
-            font-size: 75%;
-            font-weight: 700;
-            line-height: 1;
-            text-align: center;
-            white-space: nowrap;
-            vertical-align: baseline;
-            border-radius: .25rem;
-            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
         }
 
         span.emoji-sizer {
@@ -1456,12 +1424,12 @@
 
                 <p style="font-size: 12px;">{!! $dados[$i]['text'] !!}</p>
 
-                <span class="badge badge-pill badge-primary">
-                    <i class="fa fa-thumbs-up"></i> {{ $dados[$i]['like_count'] }}
+                <span>
+                    <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAAAmJLR0QA/4ePzL8AAADCSURBVBgZdcG/K0RxAADwD5HhFaMk+2ORv8DyjH4MBgYpdeWmq6vrJoNBrGKwKNJdFpPc8iabP+BkF+UyiF0P9U3nee/zkbPvTdugEpEPk7rmlJjxgHOrSqy5wpGqEtcqaFlRaEvXCO4da9o0rk9kx6PYjxOHDlx4NiHY0NM25a9T24J3s/IiT+YFmSIdy4JMkdSiIPNfpCcWfBqSF3s1Jui4s2tav6ZLv4Yt2PPizLpEIrHkVk3OqLqWVCp1o2HAty+jty0eH7w57wAAAABJRU5ErkJggg=='/> {{ $dados[$i]['like_count'] }}
                 </span>
 
-                <span class="badge badge-pill badge-warning">
-                    <i class="fa fa-link text-white"></i> <a href="{{ $dados[$i]['link'] }}" target="_blank" >Post</a>
+                <span>
+                    <a href="{{ $dados[$i]['link'] }}" target="_blank" >Post Link</a>
                 </span>
                 <span class="float-right" style="font-size: 12px;">{{ Carbon\Carbon::parse($dados[$i]['created_at'])->format('d/m/Y H:i') }}</span>
             </div>
