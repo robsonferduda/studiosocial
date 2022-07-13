@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use DOMPDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Notification;
 use Storage;
 use App\Media;
@@ -55,10 +55,23 @@ class Medias implements ShouldQueue
         $dados = $this->dados;
         $filename  = date('dmYHi').'_relatorio_de_coletas.pdf';
 
-        $pdf = DOMPDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+        $time_start = microtime(true);
 
+        $options = [
+            'debugLayoutBlocks' => false,
+            'debugLayoutLines' => false,
+            'debugLayoutInline' => false,
+            'debugLayoutPaddingBox' => false
+        ];
+
+        $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        // $pdf->setOption();
         Storage::disk('public')->put("$client_id/$filename", $pdf->output());
+        $time_end = microtime(true);
+        $execution_time = ($time_end - $time_start)/60;
+
+        //execution time of the script
+        echo '<b>Total Execution Time:</b> '.$execution_time.' Mins';
 
         $media = new Media();
         $media->notify(new MediaRelatorioNotification());
