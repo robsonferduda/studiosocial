@@ -66,6 +66,7 @@ class Medias implements ShouldQueue
             'debugCss' => false
         ];
 
+       ini_set("pcre.backtrack_limit", "5000000");
        // $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        $pdf = PDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        // $pdf->setOption();
