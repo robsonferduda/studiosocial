@@ -228,7 +228,7 @@ class MediaController extends Controller
                     break;
             }
 
-            $dados[] = array('text' => $media['text'],
+            $dados[] = array('text' => $this->emoji_unified_to_html($media['text']),
                              'sentimento' => $sentimento,
                              'tipo' => $tipo,
                              'username' => $media['username'],
@@ -243,6 +243,14 @@ class MediaController extends Controller
         Flash::success('<i class="fa fa-exclamation"></i> O pedido de relatório foi encaminhado para processamento. Aguarde um email confirmando a geração do mesmo');
         return redirect()->back()->withInput();
 
+    }
+
+    private function emoji_unified_to_html($text){
+        return preg_replace_callback($GLOBALS['emoji_maps']['unified_rx'], function($m){
+            if (isset($m[2]) && $m[2] == "\xEF\xB8\x8E") return $m[0];
+            $cp = $GLOBALS['emoji_maps']['unified_to_html'][$m[1]];
+            return "<span class=\"emoji-outer emoji-sizer\"><span class=\"emoji-inner emoji{$cp}\">$m[1]</span></span>";
+        }, $text);
     }
 
     public function geraDataPeriodo($periodo, $data_inicial, $data_final)

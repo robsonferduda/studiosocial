@@ -1,11 +1,13 @@
 @extends('layouts.relatorio-postagens')
 @section('content')
     <style>
-
-
         body {
             color: #66615b;
-            font-family: Montserrat, "Helvetica Neue", Arial, sans-serif;
+            font-family: Montserrat, sans-serif;
+        }
+
+        span.emoji-inner {
+            font-family: emoji !important;
         }
 
         a {
