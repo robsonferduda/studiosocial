@@ -67,7 +67,8 @@ class Medias implements ShouldQueue
 
         $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        // $pdf->setOption();
-        Storage::disk('public')->put("$client_id/$filename", $pdf->output());
+        $pdf->save(storage_path().'/app/public/'.$client_id.'/'.$filename)->stream($filename);
+        //Storage::disk('public')->put("$/", $pdf->output());
         // $time_end = microtime(true);
         // $execution_time = ($time_end - $time_start)/60;
 
