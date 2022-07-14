@@ -2,7 +2,8 @@
 
 namespace App\Jobs;
 
-use Barryvdh\DomPDF\Facade\Pdf;
+use PDF;
+// use Barryvdh\DomPDF\Facade\Pdf;
 use Notification;
 use Storage;
 use App\Media;
@@ -65,10 +66,11 @@ class Medias implements ShouldQueue
             'debugCss' => false
         ];
 
-        $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+       // $pdf = Pdf::setOption($options)->loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
+       $pdf = PDF::loadView('medias/relatorio-light', compact('nome','dt_inicial','dt_final','dados'));
        // $pdf->setOption();
-        $pdf->save(storage_path().'/app/public/'.$client_id.'/'.$filename)->stream($filename);
-        //Storage::disk('public')->put("$/", $pdf->output());
+        //$pdf->save(storage_path().'/app/public/'.$client_id.'/'.$filename)->stream($filename);
+        Storage::disk('public')->put("$client_id/$filename", $pdf->output());
         // $time_end = microtime(true);
         // $execution_time = ($time_end - $time_start)/60;
 
