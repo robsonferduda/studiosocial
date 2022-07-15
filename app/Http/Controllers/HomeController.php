@@ -25,7 +25,9 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth', ['except' => [
+            'site'
+        ]]);
 
         $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
         if($cliente)
@@ -40,6 +42,12 @@ class HomeController extends Controller
         Session::put('url','home');
 
         $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
+    }
+
+
+    public function site()
+    {
+        return view('site');
     }
 
     public function index()
