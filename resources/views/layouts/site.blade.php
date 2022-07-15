@@ -53,7 +53,7 @@
           <li><a class="nav-link scrollto" href="#about">Monitoramento</a></li>
           <li><a class="nav-link scrollto" href="#services">Serviços</a></li>
           <li><a class="nav-link scrollto" href="#contact">Contato</a></li>
-          <li><a class="getstarted scrollto" href="#about">Acessar</a></li>
+          <li><a class="getstarted" href="{{ url('login') }}">Acessar</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
