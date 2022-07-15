@@ -35,32 +35,34 @@ class FbTerm implements ShouldQueue
     public function handle()
     {
         set_time_limit(0);
-                      
+
         $termo = $this->termo;
+
+        $termo_text = str_replace('"','',$termo->term);
 
         $last = $termo->pagePosts()->latest('created_at')->first();
         $last_comment = $termo->pagePostsComments()->latest('created_at')->first();
-        $posts = FbPagePost::select('id')->where(function ($query) use ($termo) {
-                $query->where('message', 'ilike', '% '.strtolower($termo->term).' %')
-                    ->orWhere('message', 'ilike', '%'.strtolower($termo->term).' %')
-                    ->orWhere('message', 'ilike', '% '.strtolower($termo->term).'%');
+        $posts = FbPagePost::select('id')->where(function ($query) use ($termo_text) {
+                $query->where('message', 'ilike', '% '.strtolower($termo_text).' %')
+                    ->orWhere('message', 'ilike', '%'.strtolower($termo_text).' %')
+                    ->orWhere('message', 'ilike', '% '.strtolower($termo_text).'%');
                 })
                 ->when($last, function ($q) use ($last){
                     return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
-                })                                    
+                })
                 ->get();
         $termo->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
-           
-        $comments = FbPagePostComment::select('id')->where(function ($query) use ($termo) {
-                $query->where('text', 'ilike', '% '.strtolower($termo->term).' %')
-                    ->orWhere('text', 'ilike', '%'.strtolower($termo->term).' %')
-                    ->orWhere('text', 'ilike', '% '.strtolower($termo->term).'%');
+
+        $comments = FbPagePostComment::select('id')->where(function ($query) use ($termo_text) {
+                $query->where('text', 'ilike', '% '.strtolower($termo_text).' %')
+                    ->orWhere('text', 'ilike', '%'.strtolower($termo_text).' %')
+                    ->orWhere('text', 'ilike', '% '.strtolower($termo_text).'%');
                 })
                 ->when($last_comment, function ($q) use ($last_comment){
                     return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
-                })                                    
+                })
                 ->get();
         $termo->pagePostsComments()->syncWithoutDetaching($comments->pluck('id')->toArray());
-   
+
     }
 }

@@ -19,13 +19,17 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                            Arquivos
-                           <a href="{{ url('files/relatorio_de_coletas.pdf') }}">Baixar</a>
+                           @forelse($arquivos as $key => $arquivo)
+                                <a href="{{ url('file/'.$client_id.'/'.$arquivo->getFilename()) }}">Baixar</a>
+                           @empty
+                                <p>Nenhum arquivo disponível</p>
+                           @endforelse
                         </div>
                         <div class="col-lg-6 col-md-6">
-                           
+
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
     </div>
@@ -43,7 +47,7 @@
         var dados = null;
 
         $("#periodo").change(function(){
-            periodo = $(this).val();        
+            periodo = $(this).val();
         });
 
         $(document).on('keypress',function(e) {
@@ -75,7 +79,7 @@
                     responseType: 'blob' // to avoid binary data being mangled on charset conversion
                 },
                 success: function(blob, status, xhr) {
-                    
+
                     var filename = "";
                     var disposition = xhr.getResponseHeader('Content-Disposition');
                     if (disposition && disposition.indexOf('attachment') !== -1) {
@@ -124,11 +128,11 @@
                         confirmButtonColor: "#3085d6",
                         confirmButtonText: '<i class="fa fa-check"></i> Ok'
                     });
-                } 
-            }); 
+                }
+            });
 
         });
-        
+
 });
 </script>
-@endsection    
+@endsection

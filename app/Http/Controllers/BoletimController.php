@@ -65,7 +65,8 @@ class BoletimController extends Controller
                 array('nome' => 'Kleyton Mendes', 'email' => 'kleyton.mendes@zurichairportbrasil.com'),
                 array('nome' => 'Natalia Santos Pereira', 'email' => 'natalia.pereira@zurichairportbrasil.com'),
                 array('nome' => 'Ricardo Gesse', 'email' => 'ricardo.gesse@zurichairportbrasil.com '),
-                array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com')
+                array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com'),
+                array('nome' => 'Danilo Sesiki' , 'email' => 'danilo.sesiki@zurichairportbrasil.com')
             );
 
         }else{
@@ -106,7 +107,8 @@ class BoletimController extends Controller
                             array('nome' => 'Tobias Markert', 'email' => 'tobias.markert@zurich-airport.lat'),
                             array('nome' => 'Tobias Markert', 'email' => 'tobias.markert@zurichairportbrasil.com'),
                             array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com'),
-                            array('nome' => 'Wilson', 'email' => 'wilson.victer@zurichairportbrasil.com')
+                            array('nome' => 'Wilson', 'email' => 'wilson.victer@zurichairportbrasil.com'),
+                            array('nome' => 'Danilo Sesiki' , 'email' => 'danilo.sesiki@zurichairportbrasil.com')
                         );
         }
 

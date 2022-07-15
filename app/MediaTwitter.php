@@ -78,34 +78,63 @@ class MediaTwitter extends Model implements Auditable
         return DB::select($sql);
     }
 
-    public function getInfluenciadoresPositivos($client_id, $data_inicial, $data_final)
+    public function getInfluenciadoresPositivos($client_id, $data_inicial, $data_final, $rule)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
 
-        return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+        if(!empty($rule)) {
+            $sql = "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
                             FROM media_twitter
                             WHERE sentiment IN(1)
                             AND client_id = $client_id
                             AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                            and id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::TWEETS." and rule_id = {$rule})
                             GROUP BY sentiment, user_profile_image_url, user_name
                             ORDER BY total DESC
-                            LIMIT 10");
+                            LIMIT 10";
+        } else {
+            $sql = "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+                FROM media_twitter
+                WHERE sentiment IN(1)
+                AND client_id = $client_id
+                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'            
+                GROUP BY sentiment, user_profile_image_url, user_name
+                ORDER BY total DESC
+                LIMIT 10";
+        }
+
+
+        return DB::select($sql);
     }
 
-    public function getInfluenciadoresNegativos($client_id, $data_inicial, $data_final)
+    public function getInfluenciadoresNegativos($client_id, $data_inicial, $data_final, $rule)
     {
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
 
-        return DB::select("SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
-                            FROM media_twitter
-                            WHERE sentiment IN(-1)
-                            AND client_id = $client_id
-                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            GROUP BY sentiment, user_profile_image_url, user_name
-                            ORDER BY total DESC
-                            LIMIT 10");
+        if(!empty($rule)) {
+            $sql = "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+                FROM media_twitter
+                WHERE sentiment IN(-1)
+                AND client_id = $client_id
+                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                and id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::TWEETS." and rule_id = {$rule})
+                GROUP BY sentiment, user_profile_image_url, user_name
+                ORDER BY total DESC
+                LIMIT 10";
+        } else {
+            $sql = "SELECT user_name, sentiment, user_profile_image_url, count(*) as total 
+                FROM media_twitter
+                WHERE sentiment IN(-1)
+                AND client_id = $client_id
+                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'          
+                GROUP BY sentiment, user_profile_image_url, user_name
+                ORDER BY total DESC
+                LIMIT 10";
+        }
+
+        return DB::select($sql);
     }
 
     public function getTweetLocation($client_id, $data_inicial, $data_final, $rule)
@@ -113,15 +142,30 @@ class MediaTwitter extends Model implements Auditable
         $dt_inicial = $data_inicial->format('Y-m-d');
         $dt_final = $data_final->format('Y-m-d');
 
-        return DB::select("SELECT place_name, count(*) as total
-                            FROM media_twitter 
-                            WHERE place_name notnull 
-                            AND place_name != '' 
-                            AND client_id = $client_id
-                            AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
-                            GROUP BY place_name
-                            ORDER BY total DESC
-                            LIMIT 20");
+        if(!empty($rule)) {
+            $sql = "SELECT place_name, count(*) as total
+                FROM media_twitter 
+                WHERE place_name notnull 
+                AND place_name != '' 
+                AND client_id = $client_id
+                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'
+                and id in (select message_id from rule_message where rules_type= ".\App\Enums\TypeMessage::TWEETS." and rule_id = {$rule})
+                GROUP BY place_name
+                ORDER BY total DESC
+                LIMIT 20";
+        } else {
+            $sql = "SELECT place_name, count(*) as total
+                FROM media_twitter 
+                WHERE place_name notnull 
+                AND place_name != '' 
+                AND client_id = $client_id
+                AND created_tweet_at BETWEEN '$dt_inicial 00:00:00' AND '$dt_final 23:59:59'             
+                GROUP BY place_name
+                ORDER BY total DESC
+                LIMIT 20";
+        }
+
+        return DB::select($sql);
 
     }
 

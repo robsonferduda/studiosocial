@@ -8,5 +8,14 @@ return [
 	'keywords'              => '',
 	'creator'               => 'Laravel Pdf',
 	'display_mode'          => 'fullpage',
-	'tempDir'               => base_path('../temp/')
+	'tempDir'               => base_path('storage/temp_pdf/'),
+    'font_path' => base_path('public/fonts/'),
+    'font_data' => [
+        'emoji' => [
+            'R'  => 'NotoEmoji-Regular.ttf',    // regular font
+        ],
+
+    ]
+
+
 ];

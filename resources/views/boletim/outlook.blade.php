@@ -31,7 +31,7 @@
             <span>Foram encontradas {{ count($dados) }} notícias</span>
         </div>  
         <div style="text-align: right; margin-top: 5px;">
-            <span><a href="{{ url('boletim/'.$boletim->id.'/visualizar') }}">Clique aqui</a> para ver o boletim no navagador</span>
+            <span><a href="{{ url('boletim/'.$boletim->id.'/visualizar') }}">Clique aqui</a> para ver o boletim no navegador</span>
         </div>      
 
             @php

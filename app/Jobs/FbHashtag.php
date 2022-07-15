@@ -39,7 +39,7 @@ class FbHashtag implements ShouldQueue
         set_time_limit(0);
 
         $hashtag = $this->hashtag;
-      
+
         $last = $hashtag->pagePosts()->latest('created_at')->first();
         $last_comment = $hashtag->pagePostsComments()->latest('created_at')->first();
         $posts = FbPagePost::select('id')->where(function ($query) use ($hashtag) {

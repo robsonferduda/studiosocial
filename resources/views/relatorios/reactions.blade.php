@@ -30,13 +30,13 @@
                                 <tbody>
 
                                 </tbody>
-                            </table> 
+                            </table>
                         </div>
                         <div class="col-lg-6 col-md-6">
                             <canvas id="chart_reaction"></canvas>
                         </div>
                     </div>
-                </div>            
+                </div>
             </div>
         </div>
     </div>
@@ -60,7 +60,7 @@
 
         $("#periodo").change(function(){
             periodo = $(this).val();
-            loadDados(periodo, regra);          
+            loadDados(periodo, regra);
         });
 
         $(document).on('keypress',function(e) {
@@ -71,6 +71,7 @@
         });
 
         $("#regra").change(function(){
+            regra = $(this).val();
             loadDados(periodo, regra);
         });
 
@@ -102,10 +103,10 @@
                             valores.push(value.count);
                             legendas.push(value.icon);
                             colors.push(value.color);
-                                
+
                             $(".table_reactions tbody").append('<tr><td>'+value.name+'</td><td class="center">'+value.icon+'</td><td class="center">'+value.count+'</td></tr>');
-                        });  
-                            
+                        });
+
                         $(".table_reactions").removeClass("d-none");
                         geraGrafico();
 
@@ -115,7 +116,7 @@
                         $(".msg").html('<p class="ml-1 msg"><i class="fa fa-exclamation-circle mr-1"></i>Não existem dados para os parâmetros selecionados. Altere o período ou as regras e tente novamente.</p>');
                     }
                 }
-            });             
+            });
         }
 
         function geraGrafico(){
@@ -188,7 +189,7 @@
             var data_inicial = $(".dt_inicial_relatorio").val();
             var data_final = $(".dt_final_relatorio").val();
             $('.card-main').loader('show');
-
+    
             $.ajax({
                 url: host+'/relatorios/pdf/reactions',
                 type: 'POST',
@@ -201,7 +202,7 @@
                     responseType: 'blob' // to avoid binary data being mangled on charset conversion
                 },
                 success: function(blob, status, xhr) {
-                    
+
                     var filename = "";
                     var disposition = xhr.getResponseHeader('Content-Disposition');
                     if (disposition && disposition.indexOf('attachment') !== -1) {
@@ -238,9 +239,9 @@
 
                     $('.card-main').loader('hide');
                 }
-            }); 
+            });
 
         });
     });
 </script>
-@endsection    
+@endsection

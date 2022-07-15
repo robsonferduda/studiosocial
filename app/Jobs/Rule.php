@@ -45,7 +45,7 @@ class Rule implements ShouldQueue
     public function handle()
     {
         $rules = AppRule::with('expressions')->where('client_id', $this->client_id)->get();
-        
+
         $week_ago = Carbon::now()->subWeek()->toDateTimeString();
 
         foreach($rules as $rule) {
@@ -60,23 +60,23 @@ class Rule implements ShouldQueue
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                          });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(caption) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -84,13 +84,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(caption) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
             //dd($medias->toSql());
             $ids = $medias->pluck('id')->toArray();
 
-            $rule->igPosts()->sync($ids);
+            $rule->igPosts()->syncWithoutDetaching($ids);
 
             // INSTAGRAM COMMENTS
             $medias = IgComment::whereHas('media', function($query){
@@ -101,23 +101,23 @@ class Rule implements ShouldQueue
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
-                         });                       
+                            }
+                         });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -125,13 +125,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                        $query->whereRaw(" lower(text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
 
-            $rule->igComments()->sync($ids);
+            $rule->igComments()->syncWithoutDetaching($ids);
 
             //FACEBOOK POSTS
             $medias = FbPost::where('client_id', $this->client_id)->where('updated_time', '>=', $week_ago);
@@ -140,23 +140,23 @@ class Rule implements ShouldQueue
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                          });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -164,13 +164,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(message) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
 
-            $rule->fbPosts()->sync($ids);
+            $rule->fbPosts()->syncWithoutDetaching($ids);
 
             //FACEBOOK COMMENTS
             $medias = FbComment::whereHas('fbPost', function($query){
@@ -181,23 +181,23 @@ class Rule implements ShouldQueue
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                          });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -205,13 +205,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
 
-            $rule->fbComments()->sync($ids);
+            $rule->fbComments()->syncWithoutDetaching($ids);
 
             //FACEBOOK PAGE POSTS
             $client_id = $this->client_id;
@@ -223,29 +223,29 @@ class Rule implements ShouldQueue
                     $query->where('client_id', $client_id);
                 });
             })->where('updated_time', '>=', $week_ago);
-            
+
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                          });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(message) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -253,13 +253,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(message) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
-    
-            $rule->fbPagePosts()->sync($ids);
+
+            $rule->fbPagePosts()->syncWithoutDetaching($ids);
 
              //FACEBOOK PAGE POSTS COMMENTS
              $medias = FbPagePostComment::where(function($query) use ($client_id){
@@ -270,29 +270,29 @@ class Rule implements ShouldQueue
                     $query->where('client_id', $client_id);
                 });
             })->where('created_time', '>=', $week_ago);
-            
+
             if(count($todas) > 0) {
                 $medias = $medias->where(function ($query) use ($todas, $algumas) {
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                          });
                      }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
 
@@ -300,13 +300,13 @@ class Rule implements ShouldQueue
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
-    
-            $rule->fbPagePostsComments()->sync($ids);
+
+            $rule->fbPagePostsComments()->syncWithoutDetaching($ids);
 
              //TWITTER POSTS
             $medias = MediaTwitter::where('client_id', $this->client_id)->where('created_tweet_at', '>=', $week_ago);
@@ -315,45 +315,45 @@ class Rule implements ShouldQueue
                     $query->where(function ($query) use ($todas) {
                         foreach($todas as $expression) {
                             $query->whereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                        }        
-                    });      
+                        }
+                    });
                     if(count($algumas) > 0) {
                         $query->orWhere(function ($query) use ($algumas) {
                             foreach($algumas as $expression) {
                                 $query->orWhereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                            }               
+                            }
                         });
                     }
-                });    
+                });
             }
 
             if(count($algumas) > 0 AND  count($todas) <= 0){
                 $medias = $medias->where(function ($query) use ($algumas) {
                     foreach($algumas as $expression) {
                         $query->orWhereRaw(" lower(full_text) SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }               
+                    }
                 });
             }
- 
+
             if(count($nenhuma) > 0) {
                 $medias =  $medias->where(function ($query) use ($nenhuma) {
                     foreach($nenhuma as $expression) {
                         $query->whereRaw(" lower(full_text) NOT SIMILAR TO '%({$expression} | {$expression}| {$expression} )%' ");
-                    }                             
+                    }
                 });
             }
 
             $ids = $medias->pluck('id')->toArray();
 
-            $rule->twPosts()->sync($ids);
+            $rule->twPosts()->syncWithoutDetaching($ids);
             $rule->updated_at = date('Y-m-d H:i:s');
 
             //Bloco de atualização de rule, caso ainda não tenha sido atualizada e processada
             if(!$rule->fl_process){
                 $rule->fl_process = true;
                 $rule->save();
-                $rule->notify(new RuleProcessNotification());   
-            } 
+                $rule->notify(new RuleProcessNotification());
+            }
         }
     }
 }
