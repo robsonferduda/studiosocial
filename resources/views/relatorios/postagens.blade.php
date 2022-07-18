@@ -17,16 +17,28 @@
                 <div class="card-body">
                     @include('layouts/regra')
                     <div class="row">
-                        <div class="col-lg-6 col-md-6">
-                           Arquivos
-                           @forelse($arquivos as $key => $arquivo)
-                                <a href="{{ url('file/'.$client_id.'/'.$arquivo->getFilename()) }}">Baixar</a>
-                           @empty
-                                <p>Nenhum arquivo disponível</p>
-                           @endforelse
-                        </div>
-                        <div class="col-lg-6 col-md-6">
-
+                        <div class="col-lg-12 col-md-12">
+                            <h6>Relatórios Gerados</h6>
+                            <table id="" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Nome</th>
+                                        <th>Tamanho</th>
+                                        <th class="text-center">Baixar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($arquivos as $key => $arquivo)
+                                        <tr>
+                                            <td>{{ date("d/m/Y H:i", filemtime($arquivo)) }}</td>
+                                            <td>{{ $arquivo->getFilename() }}</td>
+                                            <td>{{ number_format($arquivo->getSize() / 1048576, 2) }} MB</td>
+                                            <td class="text-center"><a href="{{ url('file/'.$client_id.'/'.$arquivo->getFilename()) }}">Baixar</a></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
