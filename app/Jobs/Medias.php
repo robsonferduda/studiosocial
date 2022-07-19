@@ -79,6 +79,9 @@ class Medias implements ShouldQueue
        // echo '<b>Total Execution Time:</b> '.$execution_time.' Mins';
 
         $media = new Media();
-        $media->notify(new MediaRelatorioNotification());
+        $dados = array('client_id' => $client_id,
+                        'file' => $filename);
+
+        $media->notify(new MediaRelatorioNotification($dados));
     }
 }

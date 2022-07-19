@@ -238,10 +238,8 @@ class MediaController extends Controller
 
         }
 
+        //Relatório enviado para processamento em segundo plano
         JobsMedia::dispatchNow($client_id, $nome, $dt_inicial, $dt_final, $dados);
-
-        Flash::success('<i class="fa fa-exclamation"></i> O pedido de relatório foi encaminhado para processamento. Aguarde um email confirmando a geração do mesmo');
-        return redirect()->back()->withInput();
 
     }
 
