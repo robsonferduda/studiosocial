@@ -11,14 +11,18 @@ class MediaRelatorioNotification extends Notification
 {
     use Queueable;
 
+    protected $cliente_id;
+    protected $file;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->client_id = $data['client_id'];
+        $this->file = $data['file'];
     }
 
     /**
@@ -40,14 +44,18 @@ class MediaRelatorioNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $notifiable->email = 'rafael01costa@gmail.com';
+        $notifiable->email = 'robsonferduda@gmail.com';
+        $url = url('file/'.$this->client_id.'/'.$this->file);
+
         return (new MailMessage)
-                    ->subject('Relatório de Mídias')
-                    ->markdown('email.regra_processada')
                     ->from('boletins@clipagens.com.br')
+                    ->subject('Relatório de Mídias')
+                    ->markdown('email.regra_processada',['url' => $url])
                     ->line('Relatório gerado com sucesso.')
                     ->line('Utilize o endereço abaixo para baixar o arquivo.')
-                    ->line('Uma cópia do arquivo ficará disponível para download no sistema.');
+                    ->line($url)
+                    ->line('Uma cópia do arquivo ficará disponível para download no sistema.')
+                    ->line('Acesse https://studiosocial.app/relatorios/postagens e selecione o cliente desejado.');
     }
 
     /**

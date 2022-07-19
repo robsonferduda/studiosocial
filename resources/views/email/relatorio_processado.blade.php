@@ -8,9 +8,15 @@
 </head>
 <body>
     @component('mail::message')
+
         @foreach ($introLines as $line)
             <p>{!! $line !!}</p>
         @endforeach
+
+        @component('mail::button', ['url' => $url, 'color' => 'green'])
+        Button 1 Text
+        @endcomponent
+
     @endcomponent
 </body>
 </html>
