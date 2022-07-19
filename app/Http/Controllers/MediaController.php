@@ -239,7 +239,7 @@ class MediaController extends Controller
         }
 
         //Relatório enviado para processamento em segundo plano
-        JobsMedia::dispatch($client_id, $nome, $dt_inicial, $dt_final, $dados);
+        JobsMedia::dispatch($client_id, $nome, $dt_inicial, $dt_final, $dados)->onQueue('high');
 
     }
 
