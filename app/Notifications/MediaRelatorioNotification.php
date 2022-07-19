@@ -44,7 +44,7 @@ class MediaRelatorioNotification extends Notification
      */
     public function toMail($notifiable)
     {
-        $notifiable->email = 'robsonferduda@gmail.com';
+        $notifiable->email = ['robsonferduda@gmail.com','rafael01costa@gmail.com','alvaro@studioclipagem.com.br'];
         $url = url('file/'.$this->client_id.'/'.$this->file);
 
         return (new MailMessage)
