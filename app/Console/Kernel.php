@@ -35,13 +35,13 @@ class Kernel extends ConsoleKernel
             (new IGMention())->pullMedias();
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
-            (new FBFeed())->pullMedias();   
+            (new FBFeed())->pullMedias();
             (new FbTerm())->runJob();
             (new FbHashtag())->runJob();
-            (new Rule())->runJob();       
+            (new Rule())->runJob();
             (new FBFeed())->fetchPostCount();
-               
-        })->hourly()->between('2:00', '23:00');
+
+        })->hourly()->between('4:00', '23:00');
 
     }
 
