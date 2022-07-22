@@ -165,7 +165,7 @@ class FbFeed implements ShouldQueue
             }
 
             $after = $fb_feed->getAfter($posts);
-
+            
         } while($fb_feed->hasAfter($posts) && count($posts['data']) >= 20);
 
     }
