@@ -150,7 +150,7 @@
 <script>
     $(document).ready(function() {
 
-        $('body').loader('show');
+        $('#cloud').loader('show');
 
         var APP_URL = {!! json_encode(url('/')) !!};
         var tamanho = 0.02;
@@ -167,7 +167,7 @@
             
             let words = [];
 
-            $('body').loader('hide');
+            $('#cloud').loader('hide');
             const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {
