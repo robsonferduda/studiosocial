@@ -66,9 +66,9 @@ class WordCloudController extends Controller
 
                 $text_concatenate .= ' '.$text;
             }
-            
+
             $wordcloud_text = WordCloudText::create([
-                'text' => $text
+                'text' => $text_concatenate
             ]);
 
             $file_name = 'wordcloud-'.strtotime(now());
