@@ -74,6 +74,12 @@ class FbFeed implements ShouldQueue
                     $comments = $post['comments'];
                 }
 
+                if(isset($post['permalink_url']) ) {
+                    if(strpos($post['permalink_url'], 'photo.php') !== false) {
+                        continue;
+                    }
+                }
+
                 $post = FbPagePost::updateOrCreate(
                         [
                             'post_id' => $post['id'],
@@ -165,7 +171,7 @@ class FbFeed implements ShouldQueue
             }
 
             $after = $fb_feed->getAfter($posts);
-            
+
         } while($fb_feed->hasAfter($posts) && count($posts['data']) >= 20);
 
     }
