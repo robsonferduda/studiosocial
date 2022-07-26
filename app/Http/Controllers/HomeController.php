@@ -151,7 +151,7 @@ class HomeController extends Controller
                             'total_face' => $fb_comments_total + $fb_post_total + $fb_page_post_total + $fb_page_post_comment_total,
                             'total_twitter' => $twitter_total);
 
-            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','periodo_padrao'));
+            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
 
         }
 

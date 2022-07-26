@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="col-lg-4 col-md-4 col-sm-12">
-                    <div class="card card-stats">
+                    <div class="card card-stats" id="cloud_card">
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12">
@@ -188,6 +188,8 @@
         var APP_URL = {!! json_encode(url('/')) !!};
         var tamanho = 0.02;
 
+        $('#cloud_card').loader('show');
+
         fetch(APP_URL+'/nuvem-palavras/words', {
             method: 'GET', 
             headers: {
@@ -200,7 +202,7 @@
             
             let words = [];
 
-            $('body').loader('hide');
+            $('#cloud_card').loader('hide');
             const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {

@@ -98,7 +98,7 @@
     </div> 
     <div class="row">
         <div class="col-lg-4 col-md-4 col-sm-6">
-            <div class="card card-stats">
+            <div class="card card-stats" id='cloud_card'>
                 <div class="card-body ">
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -150,7 +150,7 @@
 <script>
     $(document).ready(function() {
 
-        $('body').loader('show');
+        $('#cloud_card').loader('show');
 
         var APP_URL = {!! json_encode(url('/')) !!};
         var tamanho = 0.02;
@@ -167,7 +167,7 @@
             
             let words = [];
 
-            $('body').loader('hide');
+            $('#cloud_card').loader('hide');
             const _token = $('meta[name="csrf-token"]').attr('content');
 
             Object.entries(response).forEach(element => {
