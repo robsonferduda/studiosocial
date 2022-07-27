@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use File;
-use DOMPDF;
+use Barryvdh\DomPDF\Facade\Pdf as DOMPDF;
 use App\Configs;
 use App\Rule;
 use App\FbPost;
@@ -1321,6 +1321,8 @@ class RelatorioController extends Controller
         }
 
         $nome_arquivo = date('YmdHis').".pdf";
+
+        
 
         $pdf = DOMPDF::loadView('relatorios/pdf/gerador', compact('dados', 'charts' ,'rule','dt_inicial','dt_final','nome','relatorios','page_break'));
         return $pdf->download($nome_arquivo);
