@@ -5,7 +5,7 @@
         <p style="color: #eb8e06; margin: 0; margin-top: -3px;">{{ session('cliente')['nome'] }}</p>        
     </div>
     <div style="width: 15%; float: right; text-align: right;">
-        <img style="width: 90%" src="{{ url('img/studio_social.png') }}"/>
+        <img style="width: 90%" src="{{ public_path('img/studio_social.png') }}"/>
     </div>
 </div> 
 <div style="clear:both">
