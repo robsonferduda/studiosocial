@@ -386,29 +386,29 @@ class RelatorioController extends Controller
               ->whereIn('tipo', ['FB_COMMENT','FB_PAGE_POST','FB_PAGE_POST_COMMENT','FB_POSTS'])
               ->where('client_id', $this->client_id)
               ->whereBetween('date', [$this->data_inicial, $this->data_final])
-              ->when($rule, function ($q) use($rule){
-                return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+              ->when($rule, function ($q) use($rule, $tabela){
+                return $q->join('rule_message','rule_message.message_id','=',"$tabela.id")->where('rule_message.rule_id',$rule);
               })
-             ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
+             ->select("$tabela.id",'sentiment')->distinct()->get();
 
 
         $media_instagram = DB::table($tabela)
                             ->whereIn('tipo', ['IG_POSTS','IG_COMMENT'])
                             ->where('client_id', $this->client_id)
                             ->whereBetween('date', [$this->data_inicial, $this->data_final])
-                            ->when($rule, function ($q) use($rule){
-                              return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+                            ->when($rule, function ($q) use($rule, $tabela){
+                              return $q->join('rule_message','rule_message.message_id','=',"$tabela.id")->where('rule_message.rule_id',$rule);
                             })
-                            ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
+                            ->select("$tabela.id",'sentiment')->distinct()->get();
 
         $media_twitter = DB::table($tabela)
                           ->where('tipo', 'TWEETS')
                           ->where('client_id', $this->client_id)
                           ->whereBetween('date', [$this->data_inicial, $this->data_final])
-                          ->when($rule, function ($q) use($rule){
-                            return $q->join('rule_message','rule_message.message_id','=','medias_materialized_rule_filtered_vw.id')->where('rule_message.rule_id',$rule);
+                          ->when($rule, function ($q) use($rule, $tabela){
+                            return $q->join('rule_message','rule_message.message_id','=',"$tabela.id")->where('rule_message.rule_id',$rule);
                           })
-                         ->select('medias_materialized_rule_filtered_vw.id','sentiment')->distinct()->get();
+                         ->select("$tabela.id",'sentiment')->distinct()->get();
 
         foreach($media_facebook as $facebook){
           $facebook_positivo = ($facebook->sentiment == 1) ? $facebook_positivo + 1 : $facebook_positivo;
