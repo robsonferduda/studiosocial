@@ -125,11 +125,9 @@ class HomeController extends Controller
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
         ->select('id')
-        ->orderBy('id', 'DESC')
-        ->take(10000)
         ->count();
 
-        $media_twitter = round(($twitter_total )/30, 1);
+        $media_twitter = round(($twitter_total )/30, 1);      
 
         if($u->hasRole('administradores')){
 
@@ -137,8 +135,8 @@ class HomeController extends Controller
             $clientes = Client::count();
 
             $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-            $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
-
+            $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
+         
             return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','media_instagram','media_facebook'));
 
         }else{
@@ -147,7 +145,7 @@ class HomeController extends Controller
                                     'data_final'   => Carbon::now()->format('d/m/Y'));
 
             $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-            $terms = Term::with('mediasTwitter')->with('medias')->where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
+            $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
             $totais = array('total_insta' => $ig_comments_total + $ig_post_total,
                             'total_face' => $fb_comments_total + $fb_post_total + $fb_page_post_total + $fb_page_post_comment_total,
