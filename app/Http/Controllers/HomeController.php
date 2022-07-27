@@ -125,6 +125,8 @@ class HomeController extends Controller
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
         ->select('id')
+        ->orderBy('id', 'DESC')
+        ->take(10000)
         ->count();
 
         $media_twitter = round(($twitter_total )/30, 1);
