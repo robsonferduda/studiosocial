@@ -32,9 +32,10 @@
                 </thead>
                 <tbody>
                     @foreach($dados as $reaction)
+                    @dd(public_path('img/icon/'.$reaction->name.'.png'))
                         <tr>
                             <td>{{ $reaction->name }}</td>
-                            <td class="center"><img src="{{ public_path("img/icon/$reaction->name.png") }}"></td>
+                            <td class="center"><img src="{{ public_path('img/icon/'.$reaction->name.'.png') }}"></td>
                             <td class="center">{{ $reaction->count }}</td>
                         </tr>
                     @endforeach
