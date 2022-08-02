@@ -98,80 +98,69 @@ class RelatorioController extends Controller
     }
 
     public function getDadosEvolucaoDiaria()
-    {
-        if($this->rule_id){
+    {       
+        $rule = $this->rule_id;
 
-          $rules = Rule::when($this->rule_id > 0, function($query){
-            return $query->where('id', $this->rule_id);
-          })->where('client_id', $this->client_id)->get();
-
-          foreach($rules as $rule) {
-
-            for ($i=0; $i < $this->periodo; $i++) {
-
-              $data = $this->data_inicial->addDay()->format('Y-m-d');
-              $data_formatada = $this->data_inicial->format('d/m/Y');
-
-              //Total de sentimentos do Twitter
-              $total_positivos = $rule->twPosts()->where('sentiment',1)->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos = $rule->twPosts()->where('sentiment',-1)->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros = $rule->twPosts()->where('sentiment',0)->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              //Total de sentimentos do facebook
-              $total_positivos += $rule->fbPosts()->where('sentiment',1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbPosts()->where('sentiment',-1)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbPosts()->where('sentiment',0)->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              $total_positivos += $rule->fbPagePosts()->where('sentiment',1)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbPagePosts()->where('sentiment',-1)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbPagePosts()->where('sentiment',0)->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              $total_positivos += $rule->fbPagePostsComments()->where('sentiment',1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbPagePostsComments()->where('sentiment',-1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbPagePostsComments()->where('sentiment',0)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              $total_positivos += $rule->fbComments()->where('sentiment',1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->fbComments()->where('sentiment',-1)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->fbComments()->where('sentiment',0)->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              //Total de sentimentos do Instagram
-              $total_positivos += $rule->igPosts()->where('sentiment',1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->igPosts()->where('sentiment',-1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->igPosts()->where('sentiment',0)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              $total_positivos += $rule->igComments()->where('sentiment',1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_negativos += $rule->igComments()->where('sentiment',-1)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-              $total_neutros += $rule->igComments()->where('sentiment',0)->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-              $datas[] = $data;
-              $datas_formatadas[] = $data_formatada;
-              $dados_positivos[] = $total_positivos;
-              $dados_negativos[] = $total_negativos;
-              $dados_neutros[] = $total_neutros;
-            }
-          }
-
+        if($rule) {
+          $tabela = 'medias_materialized_rule_filtered_vw';
         }else{
-
-          for ($i=0; $i < $this->periodo; $i++) {
-
-            $data = $this->data_inicial->addDay()->format('Y-m-d');
-            $data_formatada = $this->data_inicial->format('d/m/Y');
-
-            //Total de sentimentos do Twitter
-            $total_positivos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $total_negativos = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',-1)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-            $total_neutros   = MediaTwitter::where('client_id',$this->client_id)->where('sentiment',0)->whereBetween('created_tweet_at',[$data.' 00:00:00',$data.' 23:23:59'])->count();
-
-            $datas[] = $data;
-            $datas_formatadas[] = $data_formatada;
-            $dados_positivos[] = $total_positivos;
-            $dados_negativos[] = $total_negativos;
-            $dados_neutros[] = $total_neutros;
-          }
-
+          $tabela = 'medias_materialized_filtered_vw';
         }
 
+
+        for ($i=0; $i < $this->periodo; $i++) {
+
+          $data = $this->data_inicial->addDay()->format('Y-m-d');
+          $data_formatada = $this->data_inicial->format('d/m/Y');
+
+          $total_positivos = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->where('sentiment', 1)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                  })
+                  ->where('rule_message.rule_id',$rule);                 
+                })
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");
+          
+          $total_negativos = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->where('sentiment', -1)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                    
+                  })
+                  ->where('rule_message.rule_id',$rule);
+                })
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");   
+                
+          $total_neutros = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->where('sentiment', 0)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                  })
+                  ->where('rule_message.rule_id',$rule);
+                })
+                ->select("$tabela.id", "$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");      
+
+          $datas[] = $data;
+          $datas_formatadas[] = $data_formatada;
+          $dados_positivos[] = $total_positivos;
+          $dados_negativos[] = $total_negativos;
+          $dados_neutros[] = $total_neutros;
+  
+        }      
+      
         $dados = array('data' => $datas,
                       'data_formatada' => $datas_formatadas,
                       'dados_positivos' => $dados_positivos,
@@ -183,10 +172,11 @@ class RelatorioController extends Controller
 
     public function evolucaoDiariaPdf(Request $request)
     {
+        $this->rule_id = $request->regra;
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $dados = $this->getDadosEvolucaoDiaria();
         $chart = $this->getGraficoEvolucaoDiaria($dados);
-        $rule = Rule::find($request->regra);
+        
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
         $nome = "Relatório de Evolução Diária";
