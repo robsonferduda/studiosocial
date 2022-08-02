@@ -213,7 +213,7 @@ class RelatorioController extends Controller
 
     public function getDadosEvolucaoRedeSocial()
     {
-      if($this->rule_id){
+      //if($this->rule_id){
 
         $rules = Rule::when($this->rule_id > 0, function($query){
           return $query->where('id', $this->rule_id);
@@ -246,7 +246,7 @@ class RelatorioController extends Controller
             $dados_instagram[] = $total_instagram_posts + $total_instagram_comments + $total_facebook_page_posts_comments;
           }
         }
-
+        /*
       }else{
 
         for ($i=0; $i < $this->periodo; $i++) {
@@ -280,7 +280,7 @@ class RelatorioController extends Controller
           $dados_instagram[] = Media::where('client_id',$this->client_id)->whereBetween('timestamp',[$data.' 00:00:00',$data.' 23:23:59'])->count() + $ig_comments_total;
         }
 
-      }
+      }*/
 
       $dados = array('data' => $datas,
                       'data_formatada' => $datas_formatadas,
