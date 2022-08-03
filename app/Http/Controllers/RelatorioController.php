@@ -214,13 +214,15 @@ class RelatorioController extends Controller
     {
       //if($this->rule_id){
 
-        $rules = Rule::when($this->rule_id > 0, function($query){
-          return $query->where('id', $this->rule_id);
-        })->where('client_id', $this->client_id)->get();
+        $rule = $this->rule_id;
 
-        foreach($rules as $rule) {
+        if($rule) {
+          $tabela = 'medias_materialized_rule_filtered_vw';
+        }else{
+          $tabela = 'medias_materialized_filtered_vw';
+        }
 
-          for ($i=0; $i < $this->periodo; $i++) {
+        for ($i=0; $i < $this->periodo; $i++) {
 
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
@@ -244,7 +246,7 @@ class RelatorioController extends Controller
             $dados_facebook[] = $total_facebook_posts + $total_facebook_comments + $total_facebook_page_posts;
             $dados_instagram[] = $total_instagram_posts + $total_instagram_comments + $total_facebook_page_posts_comments;
           }
-        }
+        
         /*
       }else{
 
@@ -674,7 +676,7 @@ class RelatorioController extends Controller
     {
         $carbon = new Carbon();
 
-        if($periodo == 0){
+        if($periodo == 0 or $pedido == 'custom'){
 
           $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
           $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
@@ -1253,8 +1255,10 @@ class RelatorioController extends Controller
         $this->rule_id = $request->regra;
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $rule = Rule::find($request->regra);
+
         $dt_inicial = $request->data_inicial;
         $dt_final = $request->data_final;
+
         $relatorios = $request->relatorios;
         $nome = "Relatório de Redes Sociais";
         $page_break = 0;
