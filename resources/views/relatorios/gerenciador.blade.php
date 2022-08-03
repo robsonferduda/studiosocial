@@ -102,6 +102,10 @@
             periodo = $(this).val();          
         });
 
+        $(".dt_periodo").focusin(function(){
+            $("#periodo").val("custom");
+        });
+
         $(".btn-relatorio").click(function(){
 
             relatorios = [];
