@@ -235,8 +235,7 @@ class RelatorioController extends Controller
                   })
                   ->where('rule_message.rule_id',$rule);                 
                 })
-                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
-                ->count();
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");
           
           $total_negativos = DB::table($tabela)
                 ->where('client_id', $this->client_id)
@@ -249,8 +248,7 @@ class RelatorioController extends Controller
                   })
                   ->where('rule_message.rule_id',$rule);
                 })
-                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
-                ->count(); 
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");
                 
           $total_neutros = DB::table($tabela)
                 ->where('client_id', $this->client_id)
@@ -262,8 +260,7 @@ class RelatorioController extends Controller
                   })
                   ->where('rule_message.rule_id',$rule);
                 })
-                ->select("$tabela.id", "$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
-                ->count();   
+                ->select("$tabela.id", "$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod"); 
 
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
