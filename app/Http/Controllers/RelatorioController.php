@@ -76,27 +76,6 @@ class RelatorioController extends Controller
 
 
     //INÍCIO Métodos do Relatório de Evolução Diária
-
-    public function evolucaoDiaria()
-    {
-      $rules = $this->rules;
-      $periodo_padrao = $this->periodo_padrao;
-      $periodo_relatorio = $this->retornaDataPeriodo();
-      $mensagem = "Volume diário de mensagens dividido por sentimentos";
-
-      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
-    }
-
-    public function getEvolucaoDiaria(Request $request)
-    {
-        $dados = array();
-        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
-        $this->rule_id = $request->regra;
-        $dados = $this->getDadosEvolucaoDiaria();
-
-        return response()->json($dados);
-    }
-
     public function getDadosEvolucaoDiaria()
     {       
         $rule = $this->rule_id;
@@ -191,6 +170,16 @@ class RelatorioController extends Controller
 
     //INÍCIO Métodos do Relatório de Redes Sociais
 
+    public function evolucaoDiaria()
+    {
+      $rules = $this->rules;
+      $periodo_padrao = $this->periodo_padrao;
+      $periodo_relatorio = $this->retornaDataPeriodo();
+      $mensagem = "Volume diário de mensagens dividido por sentimentos";
+
+      return view('relatorios/evolucao-diaria', compact('rules','periodo_relatorio','periodo_padrao','mensagem'));
+    }
+
     public function evolucaoRedesSociais()
     {
       $rules = $this->rules;
@@ -207,6 +196,16 @@ class RelatorioController extends Controller
         $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
         $this->rule_id = $request->regra;
         $dados = $this->getDadosEvolucaoRedeSocial();
+
+        return response()->json($dados);
+    }
+
+    public function getEvolucaoDiaria(Request $request)
+    {
+        $dados = array();
+        $this->geraDataPeriodo($request->periodo, $request->data_inicial, $request->data_final);
+        $this->rule_id = $request->regra;
+        $dados = $this->getDadosEvolucaoDiaria();
 
         return response()->json($dados);
     }
@@ -992,7 +991,7 @@ class RelatorioController extends Controller
           },
           title: {
             display: true,
-            text: 'Evolução Diária',
+            text: 'Evolução por Rede Social',
             fontSize: 12,
           },
           scales: {
