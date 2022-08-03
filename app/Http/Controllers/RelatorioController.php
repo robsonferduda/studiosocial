@@ -662,7 +662,7 @@ class RelatorioController extends Controller
     {
         $carbon = new Carbon();
 
-        if($periodo == 0 or $pedido == 'custom'){
+        if($periodo == 0 or $periodo == 'custom'){
 
           $data_inicial = $carbon->createFromFormat('d/m/Y', $data_inicial);
           $data_final = $carbon->createFromFormat('d/m/Y', $data_final);
