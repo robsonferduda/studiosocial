@@ -213,6 +213,9 @@ class RelatorioController extends Controller
     public function getDadosEvolucaoRedeSocial()
     {
         $rule = $this->rule_id;
+        $tipo_twitter = ['TWEETS'];
+        $tipo_facebook = ['FB_COMMENT','FB_PAGE_POST','FB_PAGE_POST_COMMENT','FB_POSTS'];
+        $tipo_instagram = ['IG_COMMENT','IG_POSTS'];
 
         if($rule) {
           $tabela = 'medias_materialized_rule_filtered_vw';
@@ -224,10 +227,11 @@ class RelatorioController extends Controller
 
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
-
+            
             $total_twitter = DB::table($tabela)
                 ->where('client_id', $this->client_id)
                 ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->whereIn('tipo',$tipo_twitter)
                 ->when($rule, function ($q) use($rule, $tabela){
                     $q->join('rule_message', function($join) use ($tabela){
                     $join->on('rule_message.message_id','=',"$tabela.id")
@@ -240,6 +244,7 @@ class RelatorioController extends Controller
           $total_facebook = DB::table($tabela)
                 ->where('client_id', $this->client_id)
                 ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->whereIn('tipo',$tipo_facebook)
                 ->when($rule, function ($q) use($rule, $tabela){
                     $q->join('rule_message', function($join) use ($tabela){
                     $join->on('rule_message.message_id','=',"$tabela.id")
@@ -253,6 +258,7 @@ class RelatorioController extends Controller
           $total_instagram = DB::table($tabela)
                 ->where('client_id', $this->client_id)
                 ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->whereIn('tipo',$tipo_instagram)
                 ->when($rule, function ($q) use($rule, $tabela){
                     $q->join('rule_message', function($join) use ($tabela){
                     $join->on('rule_message.message_id','=',"$tabela.id")
