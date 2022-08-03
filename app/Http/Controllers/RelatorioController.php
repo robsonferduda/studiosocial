@@ -237,7 +237,7 @@ class RelatorioController extends Controller
                 })
                 ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");
           
-          $total_negativos = DB::table($tabela)
+          $total_facebook = DB::table($tabela)
                 ->where('client_id', $this->client_id)
                 ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
                 ->when($rule, function ($q) use($rule, $tabela){
@@ -250,7 +250,7 @@ class RelatorioController extends Controller
                 })
                 ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod");
                 
-          $total_neutros = DB::table($tabela)
+          $total_instagram = DB::table($tabela)
                 ->where('client_id', $this->client_id)
                 ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
                 ->when($rule, function ($q) use($rule, $tabela){
