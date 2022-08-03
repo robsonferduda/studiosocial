@@ -225,24 +225,51 @@ class RelatorioController extends Controller
             $data = $this->data_inicial->addDay()->format('Y-m-d');
             $data_formatada = $this->data_inicial->format('d/m/Y');
 
-            //Total de sentimentos do Twitter
-            $total_twitter = $rule->twPosts()->whereBetween('created_tweet_at',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-            //Total de sentimentos do facebook
-            $total_facebook_posts = $rule->fbPosts()->whereBetween('tagged_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-            $total_facebook_comments = $rule->fbComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-            $total_facebook_page_posts = $rule->fbPagePosts()->whereBetween('updated_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-            $total_facebook_page_posts_comments = $rule->fbPagePostsComments()->whereBetween('created_time',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-
-            //Total de sentimentos do Instagram
-            $total_instagram_posts = $rule->igPosts()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
-            $total_instagram_comments = $rule->igComments()->whereBetween('timestamp',["{$data} 00:00:00","{$data} 23:23:59"])->count();
+            $total_twitter = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                  })
+                  ->where('rule_message.rule_id',$rule);                 
+                })
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
+                ->count();
+          
+          $total_negativos = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                    
+                  })
+                  ->where('rule_message.rule_id',$rule);
+                })
+                ->select("$tabela.id","$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
+                ->count(); 
+                
+          $total_neutros = DB::table($tabela)
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', ["{$data} 00:00:00", "{$data} 23:23:59"])
+                ->when($rule, function ($q) use($rule, $tabela){
+                    $q->join('rule_message', function($join) use ($tabela){
+                    $join->on('rule_message.message_id','=',"$tabela.id")
+                    ->on('rule_message.rules_type','=',"$tabela.tipo_cod");
+                  })
+                  ->where('rule_message.rule_id',$rule);
+                })
+                ->select("$tabela.id", "$tabela.tipo_cod")->distinct()->count("$tabela.id","$tabela.tipo_cod")
+                ->count();   
 
             $datas[] = $data;
             $datas_formatadas[] = $data_formatada;
             $dados_twitter[] = $total_twitter;
-            $dados_facebook[] = $total_facebook_posts + $total_facebook_comments + $total_facebook_page_posts;
-            $dados_instagram[] = $total_instagram_posts + $total_instagram_comments + $total_facebook_page_posts_comments;
+            $dados_facebook[] = $total_facebook;
+            $dados_instagram[] = $total_instagram;
       }
       
       $dados = array('data' => $datas,
