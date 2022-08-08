@@ -82,6 +82,8 @@ Route::post('relatorios/pdf/influenciadores','RelatorioController@influenciadore
 Route::post('relatorios/pdf/localizacao','RelatorioController@localizacaoPdf');
 Route::post('relatorios/pdf/gerador','RelatorioController@geradorPdf');
 
+Route::post('site/contato','SiteController@email');
+
 Route::get('pdf','RelatorioController@pdf');
 
 Route::get('perfil','UserController@perfil');
