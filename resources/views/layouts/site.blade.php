@@ -23,6 +23,7 @@
   <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -230,7 +231,10 @@
     <div class="footer-top">
       <div class="container">
         <div class="row">
-
+          <a href="https://api.whatsapp.com/send?phone=554832230590&text=Olá! Seja bem-vindo a Studio Social! Deixe sua mensagem que responderemos em seguida." style="position:fixed;width:60px;height:60px;bottom:60px;right:40px;background-color:#25d366;color:#FFF;border-radius:50px;text-align:center;font-size:30px;box-shadow: 1px 1px 2px #888;
+          z-index:1000;" target="_blank">
+        <i style="margin-top:16px" class="fa fa-whatsapp"></i>
+        </a>
  
 
         </div>
