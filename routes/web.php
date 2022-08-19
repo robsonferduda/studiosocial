@@ -8,7 +8,7 @@ use App\FbPagePost;
 use App\Media;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@site');
 Route::get('site', 'HomeController@site');
 Route::get('/home', 'HomeController@index');
 Route::get('/politica-de-privacidade', function () { return view('politica-de-privacidade'); });
