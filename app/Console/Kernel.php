@@ -20,6 +20,9 @@ class Kernel extends ConsoleKernel
         Commands\NotificacaoCron::class,
         Commands\TwitterCron::class,
         Commands\MediaViewCron::class,
+        Commands\FbHashtagCron::class,
+        Commands\FbTermCron::class,
+        Commands\RuleCron::class,
     ];
 
     protected function schedule(Schedule $schedule)
@@ -30,15 +33,18 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('twitter:cron')->hourly();
 
+        $schedule->command('fbhashtag:cron')->everyThreeHours();
+
+        $schedule->command('fbterm:cron')->everyThreeHours();
+
+        $schedule->command('rule:cron')->everyFourHours();
+
         $schedule->call(function () {
             (new IGHashTag())->pullMedias();
             (new IGMention())->pullMedias();
             (new TwitterCollect())->pullMedias();
             (new FBMention())->pullMedias();
             (new FBFeed())->pullMedias();
-            (new FbTerm())->runJob();
-            (new FbHashtag())->runJob();
-            (new Rule())->runJob();
             (new FBFeed())->fetchPostCount();
 
         })->hourly()->between('4:00', '23:00');
