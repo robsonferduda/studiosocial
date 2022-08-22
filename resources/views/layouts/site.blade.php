@@ -78,10 +78,10 @@
     <div class="container">
       <div class="row gy-4">
         <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <h1>Melhore seus resultados com base em suas redes sociais</h1>
-          <h2>Nós coletamos, analisamos e fornecemos valor aos dados vindos das Redes Sociais</h2>
+          <h1>Monitoramento de Performance de Redes Sociais</h1>
+          <h2>As Redes Sociais têm um papel muito importante na identificação de tendências e avaliação de desempenho da sua marca e seu negócio junto ao seu público consumidor</h2>
           <div>
-            <a href="#about" class="btn-get-started scrollto">Veja como</a>
+            <a href="#about" class="btn-get-started scrollto">Saiba Mais</a>
           </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img">
@@ -105,33 +105,32 @@
             <img src="assets/img/details-1.png" class="img-fluid" alt="" data-aos="zoom-in">
           </div>
           <div class="col-lg-6 pt-5 pt-lg-0">
-            <h3 data-aos="fade-up">Coleta e Análise de Dados</h3>
+            <h3 data-aos="fade-up">Inteligência e Análise de Dados para a sua marca</h3>
             <p data-aos="fade-up" data-aos-delay="100">
-              As redes sociais tem um papel muito importante na identificação de movimentos e tendências,
-              permitindo uma análise profunda e conhecimento do seu negócio.
+              Acompanhe com facilidade e autonomia os seus indicadores em tempo real e tenha acesso a informações que contribuirão para sua tomada de decisão.
             </p>
             <div class="row">
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <i class='bx bxs-bell-ring'></i>
-                <h4>Notificações</h4>
-                <p>Receba notificações personalizadas diretamente em seu email</p>
+                <i class='fa fa-bell'></i>
+                <h4>NOTIFICAÇÕES</h4>
+                <p>Receba notificações automáticas de acordo com os termos de sua preferência</p>
               </div>
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <i class="bx bxs-data"></i>
-                <h4>Base de Dados</h4>
-                <p>Crie sua própria base de dados com as coletas de suas redes sociais</p>
+                <i class="fa fa-lightbulb-o"></i>
+                <h4>INSIGHTS</h4>
+                <p>Analise os Dados de maneira intuitiva e obtenha insights sobre o tipo de conteúdo que seu público quer ver</p>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="100">
-                <i class="bx bxl-facebook-square"></i>
-                <h4>Conecte suas redes sociais</h4>
-                <p>Melhore seus resultados forcecendo acesso aos seus dados mediante login social</p>
+                <i class="fa fa-shield"></i>
+                <h4>SEGURANÇA</h4>
+                <p>Os seus Dados são armazenados na nuvem permitindo acesso remoto e em tempo real</p>
               </div>
               <div class="col-md-6" data-aos="fade-up" data-aos-delay="200">
-                <i class='bx bxs-time'></i>
-                <h4>Eventos Programados</h4>
-                <p>Programe coletas e envio de dados a qualquer momento</p>
+                <i class='fa fa-line-chart'></i>
+                <h4>MONITORAMENTO INTEGRADO</h4>
+                <p>Gerencie as métricas e indicadores das principais redes sociais em uma única plataforma</p>
               </div>
             </div>
           </div>
@@ -145,20 +144,17 @@
       <div class="container" data-aos="fade-up">
 
         <div class="section-title">
-          <h2>Serviços</h2>
-          <p>Coletas e monitoramento para redes sociais</p>
+          <p>Coletas e Monitoramento de Redes Sociais</p>
         </div>
 
         <div class="row">
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="100">
             <div class="icon-box">
-              <div class="icon"><i class='bx bxs-pie-chart-alt-2'></i></div>
-              <h4 class="title"><a href="">Gráficos</a></h4>
-              <p class="description">Gere gráficos comparativos para facilitar as análises</p>
+              <div class="icon"><i class='fa fa-cogs'></i></div>
+              <h4 class="title"><a href="">Inteligência Artificial </a></h4>
+              <p class="description">Classificação das coletas de forma automática – positiva, neutra ou negativa</p>
             </div>
           </div>
-
-
 
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box">
@@ -170,17 +166,17 @@
 
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="400">
             <div class="icon-box">
-              <div class="icon"><i class="bx bxs-like bx-tada-hover"></i></div>
-              <h4 class="title"><a href="">Reações</a></h4>
-              <p class="description">Descubra quem reagiu as mensagens relacionadas à sua marca ou empresa</p>
+              <div class="icon"><i class="fa fa-cloud"></i></div>
+              <h4 class="title"><a href="">Nuvem de Palavras</a></h4>
+              <p class="description">Perceba os termos mais citados</p>
             </div>
           </div>
 
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="200">
             <div class="icon-box">
-              <div class="icon"><i class="bx bx-file"></i></div>
-              <h4 class="title"><a href="">Relatórios</a></h4>
-              <p class="description">Geração de relatórios personalizados de acordo com suas necessidades</p>
+              <div class="icon"><i class="bx bxs-pie-chart-alt-2"></i></div>
+              <h4 class="title"><a href="">Gráficos</a></h4>
+              <p class="description">Gere gráficos comparativos para facilitar as análises</p>
             </div>
           </div>
 
