@@ -34,6 +34,18 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+    @production
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-H5Z0P8VMCC"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+    
+            gtag('config', 'G-H5Z0P8VMCC');
+        </script>
+    @endproduction
+
 </head>
 
 <body>
@@ -84,7 +96,7 @@
 
   <main id="main">
 
-    @yield('content') 
+    @yield('content')
 
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
@@ -148,7 +160,7 @@
             </div>
           </div>
 
-          
+
 
           <div class="col-md-6 col-lg-3 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="300">
             <div class="icon-box">
@@ -235,7 +247,7 @@
           z-index:1000;" target="_blank">
         <i style="margin-top:16px" class="fa fa-whatsapp"></i>
         </a>
- 
+
 
         </div>
       </div>
@@ -246,7 +258,7 @@
         &copy; Copyright <strong><span>Studiosocial</span></strong>. All Rights Reserved
       </div>
       <div class="credits">
-        
+
       </div>
     </div>
   </footer><!-- End Footer -->
