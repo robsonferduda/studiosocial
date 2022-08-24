@@ -108,7 +108,8 @@ class BoletimController extends Controller
                             array('nome' => 'Tobias Markert', 'email' => 'tobias.markert@zurichairportbrasil.com'),
                             array('nome' => 'Vanessa Bezerra', 'email' => 'vanessa.bezerra@zurichairportbrasil.com'),
                             array('nome' => 'Wilson', 'email' => 'wilson.victer@zurichairportbrasil.com'),
-                            array('nome' => 'Danilo Sesiki' , 'email' => 'danilo.sesiki@zurichairportbrasil.com')
+                            array('nome' => 'Danilo Sesiki' , 'email' => 'danilo.sesiki@zurichairportbrasil.com'),
+                            array('nome' => 'Jurídico Zurich' , 'email' => 'juridico@zurichairportbrasil.com')
                         );
         }
 
