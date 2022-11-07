@@ -51,7 +51,7 @@ class FbHashtag implements ShouldQueue
                 ->when($last, function ($q) use ($last){
                     return $q->where('updated_time', '>=', $last->created_at->subDay()->toDateString());
                 })
-                ->where('updated_at', '<', Carbon::now()->subDays(7)->toDateString())
+                ->where('updated_at', '>', Carbon::now()->subDays(7)->toDateString())
                 ->get();
         $hashtag->pagePosts()->syncWithoutDetaching($posts->pluck('id')->toArray());
 
@@ -63,7 +63,7 @@ class FbHashtag implements ShouldQueue
                 ->when($last_comment, function ($q) use ($last_comment){
                     return $q->where('created_time', '>=', $last_comment->created_at->subDay()->toDateString());
                 })
-                ->where('updated_at', '<', Carbon::now()->subDays(7)->toDateString())
+                ->where('updated_at', '>', Carbon::now()->subDays(7)->toDateString())
                 ->get();
         $hashtag->pagePostsComments()->syncWithoutDetaching($comments->pluck('id')->toArray());
 
