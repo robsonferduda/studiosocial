@@ -730,37 +730,29 @@ class RelatorioController extends Controller
 
     public function getGraficoWordCloud()
     {
+  
       $rule = $this->rule_id;
 
-      $rules = Rule::when(!empty($rule), function($query) use ($rule){
-          return $query->where('id', $rule);
-      })->where('client_id', $this->client_id)->get();
+      if($rule) {
+        $tabela = 'medias_materialized_rule_filtered_vw';
+      }else{
+        $tabela = 'medias_materialized_filtered_vw';
+      }
 
       $text = '';
 
-      foreach($rules as $rule) {
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
 
-          $dt_inicial = $this->data_inicial->format('Y-m-d');
-          $dt_final = $this->data_final->format('Y-m-d');
+      $medias = DB::table($tabela)              
+              ->where('client_id', $this->client_id)
+              ->whereBetween('date', [$dt_inicial, $dt_final])
+              ->when($rule, function ($q) use($rule, $tabela){
+                return $q->join('rule_message','rule_message.message_id','=',"$tabela.id")->where('rule_message.rule_id',$rule);
+              })
+             ->pluck('text')->toArray();
 
-          $igPosts = $rule->igPosts()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('caption')->toArray();
-          $igComments = $rule->igComments()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-          $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
-          $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-          $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
-          $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
-          $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-
-          $textig = $this->concatenateSanitizeText($igPosts);
-          $textigc = $this->concatenateSanitizeText($igComments);
-          $textfb = $this->concatenateSanitizeText($fbPosts);
-          $textfbc = $this->concatenateSanitizeText($fbComments);
-          $texttw = $this->concatenateSanitizeText($twPosts);
-          $textfpp = $this->concatenateSanitizeText($fbPagePost);
-          $textfppc = $this->concatenateSanitizeText($fbPagePostComments);
-
-          $text .= ' '.$textig.' '.$textigc.' '.$textfb.' '.$textfbc.' '.$texttw.' '.$textfpp.' '.$textfppc;
-      }
+      $text = $this->concatenateSanitizeText($medias);
 
       $wordcloud_text = WordCloudText::create([
           'text' => $text
