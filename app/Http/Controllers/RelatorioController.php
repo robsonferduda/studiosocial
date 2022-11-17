@@ -517,58 +517,27 @@ class RelatorioController extends Controller
 
       $lista_hastags = array();
 
-      if(!empty($rule)) {
-
-
-        $rules = Rule::when(!empty($rule), function($query) use ($rule){
-          return $query->where('id', $rule);
-        })->where('client_id', $this->client_id)->get();
-
-        foreach($rules as $rule) {
-
-          $medias = array();
-
-          $igPosts = $rule->igPosts()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('caption')->toArray();
-          $igComments = $rule->igComments()->whereBetween('timestamp', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-          $fbPosts = $rule->fbPosts()->whereBetween('tagged_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
-          $fbComments = $rule->fbComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-          $twPosts = $rule->twPosts()->whereBetween('created_tweet_at', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('full_text')->toArray();
-          $fbPagePost = $rule->fbPagePosts()->whereBetween('updated_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('message')->toArray();
-          $fbPagePostComments = $rule->fbPagePostsComments()->whereBetween('created_time', ["{$dt_inicial} 00:00:00","{$dt_final} 23:59:59"])->pluck('text')->toArray();
-
-          foreach ($igPosts as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($igComments as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($fbPosts as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($fbComments as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($twPosts as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($fbPagePost as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-          foreach ($fbPagePostComments as $media) {
-            $lista_hastags = Utils::getHashtags($media, $lista_hastags);
-          }
-
-        }
-
+      if($rule) {
+        $tabela = 'medias_materialized_rule_filtered_vw';
+      }else{
+        $tabela = 'medias_materialized_filtered_vw';
       }
 
+      $dt_inicial = $this->data_inicial->format('Y-m-d');
+      $dt_final = $this->data_final->format('Y-m-d');
 
+      $medias = DB::table($tabela)              
+              ->where('client_id', $this->client_id)
+              ->whereBetween('date', [$dt_inicial, $dt_final])
+              ->when($rule, function ($q) use($rule, $tabela){
+                return $q->join('rule_message','rule_message.message_id','=',"$tabela.id")->where('rule_message.rule_id',$rule);
+              })
+             ->pluck('text')->toArray();
+  
+      foreach ($medias as $media) {
+          $lista_hastags = Utils::getHashtags($media, $lista_hastags);
+      }
+  
       return $lista_hastags;
     }
 
