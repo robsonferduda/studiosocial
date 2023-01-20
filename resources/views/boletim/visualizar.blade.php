@@ -25,11 +25,7 @@
                 <div class="card-header">
                     <div class="row">
                         <div class="col-md-8">
-                            @if($boletim->id_cliente == 452)
-                                <img src="https://studiosocial.app/img/logo_offshore.jpg">
-                            @else
-                                <img src="https://studiosocial.app/img/logo_zurich.png">
-                            @endif
+                            <img src="https://studiosocial.app/img/{{ $boletim->cliente->logo }}">
                         </div>
                     </div>
                 </div>
