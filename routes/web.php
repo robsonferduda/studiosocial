@@ -19,7 +19,8 @@ Auth::routes();
 Route::get('auditoria','AuditoriaController@index');
 Route::get('auditoria/detalhes/{id}','AuditoriaController@show');
 
-Route::get('boletins','BoletimController@index');
+Route::match(array('GET', 'POST'),'boletins','BoletimController@index');
+
 Route::get('boletim/{id}','BoletimController@detalhes');
 Route::get('boletim/{id}/enviar','BoletimController@enviar');
 Route::get('boletim/{id}/outlook','BoletimController@outlook');

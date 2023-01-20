@@ -17,6 +17,22 @@
                 @include('layouts.mensagens')
             </div>
             <div class="col-md-12">
+                {!! Form::open(['id' => 'frm_social_search', 'class' => 'form-horizontal', 'url' => ['boletins']]) !!}
+                    <div class="form-group m-3 w-70">
+                        <div class="row">
+                            <div class="col-md-2 col-sm-6">
+                                <div class="form-group">
+                                    <label>Data de Criação</label>
+                                    <input type="text" class="form-control datepicker" name="data" required="true" value=""" placeholder="__/__/____">
+                                </div>
+                            </div>
+                            <div class="col-md-3 checkbox-radios mb-0 mt-3">
+                                <button type="submit" id="btn-find" class="btn btn-primary mb-3"><i class="fa fa-search"></i> Buscar</button>
+                            </div>
+                        </div>     
+                    </div>
+                {!! Form::close() !!} 
+
                 <table class="table table-hover">
                     <thead class="">
                         <tr>

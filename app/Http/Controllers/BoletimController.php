@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use Mail;
+use Carbon\Carbon;
 use App\Boletim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,9 +18,16 @@ class BoletimController extends Controller
         Session::put('url','boletins');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', date('Y-m-d'))->orderBy('data','DESC')->paginate(50);
+        $carbon = new Carbon();
+
+        if($request->data){
+            $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', $carbon->createFromFormat('d/m/Y', $request->data)->format('Y-m-d'))->orderBy('data','DESC')->get();
+        }else{
+            $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', date('Y-m-d'))->orderBy('data','DESC')->get();
+        }
+        
         return view('boletim/index',compact('boletins'));
     }
 
