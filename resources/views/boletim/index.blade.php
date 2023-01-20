@@ -23,7 +23,7 @@
                             <div class="col-md-2 col-sm-6">
                                 <div class="form-group">
                                     <label>Data de Criação</label>
-                                    <input type="text" class="form-control datepicker" name="data" required="true" value="{{ date("y-m-d") }}" placeholder="__/__/____">
+                                    <input type="text" class="form-control datepicker" name="data" required="true" value="{{ date("d-m-Y") }}" placeholder="__/__/____">
                                 </div>
                             </div>
                             <div class="col-md-3 checkbox-radios mb-0 mt-3">
