@@ -19,7 +19,7 @@ class BoletimController extends Controller
 
     public function index()
     {
-        $boletins = Boletim::whereIn('id_cliente',[30,443,452])->orderBy('data','DESC')->paginate(50);
+        $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', date('Y-m-d'))->orderBy('data','DESC')->paginate(50);
         return view('boletim/index',compact('boletins'));
     }
 
