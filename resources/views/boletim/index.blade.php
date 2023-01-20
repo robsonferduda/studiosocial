@@ -34,11 +34,7 @@
                                 <td class="center">{{ $boletim->id }}</td>
                                 <td class="center">{{ Carbon\Carbon::parse($boletim->data)->format('d/m/Y H:i') }}</td>
                                 <td>
-                                    @if($boletim->id_cliente == 452)
-                                        Offshore
-                                    @else
-                                        Zurich Airport
-                                    @endif
+                                    {{ $boletim->cliente->nome }}
                                 </td>
                                 <td>{{ $boletim->titulo }}</td>
                                 <td class="text-center">

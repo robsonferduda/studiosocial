@@ -4,17 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Boletim extends Model
+class Cliente extends Model
 {
     const UPDATED_AT = null;
     
     protected $connection = 'mysql';
-    protected $table = 'app_boletins';
+    protected $table = 'app_clientes';
 
     protected $fillable = ['status_envio'];
-
-    public function cliente()
-    {
-        return $this->hasOne(Cliente::class, 'id', 'id_cliente');
-    } 
 }
