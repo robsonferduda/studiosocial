@@ -32,8 +32,8 @@
                             </label>
                             @foreach($lista_email as $key => $email)
                                 <label class="form-check-label d-block mb-3 txt-black">
-                                    <input class="form-check-input" type="checkbox" name="emails[]" value="{{ $email['email'] }}" checked="checked">
-                                        {{ $email['nome'] }} ({{ $email['email'] }})
+                                    <input class="form-check-input" type="checkbox" name="emails[]" value="{{ $email }}" checked="checked">
+                                        {{ $email }}
                                     <span class="form-check-sign"></span>
                                 </label>
                             @endforeach
