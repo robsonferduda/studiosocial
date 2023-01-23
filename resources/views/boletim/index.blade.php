@@ -20,6 +20,17 @@
                 {!! Form::open(['id' => 'frm_social_search', 'class' => 'form-horizontal', 'url' => ['boletins']]) !!}
                     <div class="form-group m-3 w-70">
                         <div class="row">
+                            <div class="col-lg-5 col-md-5 mb-2">
+                                <div class="form-group">
+                                    <label>Cliente</label>
+                                    <select class="form-control select2" name="cliente" id="cliente">
+                                        <option value="">Selecione uma cliente</option>
+                                        @foreach($clientes as $cliente)
+                                            <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                             <div class="col-md-2 col-sm-6">
                                 <div class="form-group">
                                     <label>Data de Criação</label>
@@ -50,7 +61,7 @@
                                 <td class="center">{{ $boletim->id }}</td>
                                 <td class="center">{{ Carbon\Carbon::parse($boletim->data)->format('d/m/Y H:i') }}</td>
                                 <td>
-                                    {{ $boletim->cliente->nome }}
+                                    {{ $boletim->nome }}
                                 </td>
                                 <td>{{ $boletim->titulo }}</td>
                                 <td class="text-center">

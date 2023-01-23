@@ -26,7 +26,7 @@
   <link href="{{ asset('css/inputTags.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/bootstrap-multiselect.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/bootstrap-duallistbox.css') }}" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
   @yield('style')
 </head>

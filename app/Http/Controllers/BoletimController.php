@@ -6,6 +6,7 @@ use Auth;
 use Mail;
 use Carbon\Carbon;
 use App\Boletim;
+use App\Cliente;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -21,14 +22,23 @@ class BoletimController extends Controller
     public function index(Request $request)
     {
         $carbon = new Carbon();
+        $clientes = Cliente::where('ativo','y')->orderBy('nome')->get();
+        if($request->data){ $data = $carbon->createFromFormat('d/m/Y', $request->data)->format('Y-m-d'); } else { $data = date('Y-m-d'); }
 
-        if($request->data){
-            $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', $carbon->createFromFormat('d/m/Y', $request->data)->format('Y-m-d'))->orderBy('data','DESC')->get();
-        }else{
-            $boletins = Boletim::whereIn('id_cliente',[30,443,452])->where('data', date('Y-m-d'))->orderBy('data','DESC')->get();
-        }
-        
-        return view('boletim/index',compact('boletins'));
+        $query = Boletim::query();
+
+        $query->select('app_boletins.id','data','titulo','nome','status_envio');
+
+        $query->join('app_clientes', 'app_clientes.id' , '=', 'app_boletins.id_cliente')->orderBy('nome','ASC');
+
+        $query->when(request('cliente'), function ($q) {
+            return $q->where('id_cliente', request('cliente'));
+        });
+
+        $query->where('data', $data);
+        $boletins = $query->get();
+
+        return view('boletim/index',compact('boletins','clientes'));
     }
 
     public function detalhes($id)
@@ -62,6 +72,8 @@ class BoletimController extends Controller
         $emails = $boletim->cliente->listaemails;
 
         $lista = explode(",",$emails);
+
+        $lista_email[] = 'robsonferduda@gmail.com';
 
         for ($i=0; $i < count($lista); $i++) { 
             $lista_email[] = trim($lista[$i]);
