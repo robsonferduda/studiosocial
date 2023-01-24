@@ -24,8 +24,8 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-8">
-                            <img src="https://studiosocial.app/img/{{ $boletim->cliente->logo }}">
+                        <div class="col-md-3">
+                            <img src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                         </div>
                     </div>
                 </div>
@@ -258,7 +258,10 @@
                                     
                             @endif
                         @endforeach
-                    </div>        
+                    </div> 
+                    <div style="width: 50%; margin: 0 auto; text-align: center;">
+                        <img src="https://studiosocial.app/img/logo_studio.jpg">
+                    </div>       
                 </div>
             </div>
         </div>

@@ -18,7 +18,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <img src="https://studiosocial.app/img/{{ $boletim->cliente->logo }}">
+                        <img src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
+                    </td>
+                    <td>
+
                     </td>
                 </tr>
             </tbody>
