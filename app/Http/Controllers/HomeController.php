@@ -129,7 +129,7 @@ class HomeController extends Controller
 
         $media_twitter = round(($twitter_total )/30, 1);      
 
-        if($u->hasRole('administradores')){
+        if($u->hasRole('administradores') or $u->hasRole('boletim')){
 
             $users = User::whereNull('client_id')->count();
             $clientes = Client::count();
