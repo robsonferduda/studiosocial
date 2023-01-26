@@ -120,7 +120,7 @@
                     </a>
                   </li>
                 @endpermission
-                @role('administradores')
+                @role('administradores|boletim')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
                     <a href="{{ url('boletins') }}">
                     <i class="fa fa-file-o"></i>
