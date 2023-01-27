@@ -28,7 +28,9 @@
                             <img class="w-50" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                         </div>
                         <div class="col-md-6 pull-right">
-                            <img class="w-25" style="position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                            @if($boletim->cliente->exibir_logo == 'y')
+                                <img class="w-25" style="position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                            @endif
                         </div>  
                     </div>
                 </div>
