@@ -21,7 +21,9 @@
                         <img style="width: 40%;" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                     </td>
                     <td style="width: 50%; text-align: right;">
-                        <img style="width: 25%; position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                        @if($boletim->cliente->exibir_logo)
+                            <img style="width: 25%; position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                        @endif
                     </td>
                 </tr>
             </tbody>
