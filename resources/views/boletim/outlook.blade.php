@@ -18,10 +18,10 @@
             <tbody>
                 <tr>
                     <td>
-                        <img style="width: 50%;" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
+                        <img style="width: 70%;" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                     </td>
                     <td>
-                        <img style="width: 50%;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                        <img style="width: 25%; position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
                     </td>
                 </tr>
             </tbody>
