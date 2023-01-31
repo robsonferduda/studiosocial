@@ -57,7 +57,7 @@ class LoginController extends Controller
             //Neste bloco, realiza a lógica para gravar o id_cliente na sessão
             $u = User::find(Auth::user()->id);
 
-            if($u->hasRole('administradores')){
+            if($u->hasRole('administradores') or $u->hasRole('boletim')){
 
                 $id_cliente_padrao = Configs::where('key', 'cliente_padrao')->first()->value;
                 $flag_regras = (Configs::where('key', 'flag_regras')->first()) ? Configs::where('key', 'flag_regras')->first()->value : 0;

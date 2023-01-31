@@ -17,17 +17,23 @@
         <table>
             <tbody>
                 <tr>
-                    <td>
-                        <img src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
+                    <td style="width: 50%;">
+                        <img style="width: 40%;" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                     </td>
-                    <td>
-
+                    <td style="width: 50%; text-align: right;">
+                        @if($boletim->cliente->exibir_logo == 'y')
+                            <img style="width: 25%; position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                        @endif
                     </td>
                 </tr>
             </tbody>
         </table>
         <div style="text-align: right;">
-            <span>Foram encontradas {{ count($dados) }} notícias</span>
+            @if(count($dados) > 1)
+                <span>Foram encontradas {{ count($dados) }} notícias</span>
+            @else
+                <span>Foi encontrada {{ count($dados) }} notícia</span>
+            @endif
         </div>  
         <div style="text-align: right; margin-top: 5px;">
             <span><a href="{{ url('boletim/'.$boletim->id.'/visualizar') }}">Clique aqui</a> para ver o boletim no navegador</span>
@@ -312,10 +318,6 @@
 
                 @endif
             @endforeach
-        
-        <div style="width: 50%; margin: 0 auto; text-align: center;">
-            <img src="https://studiosocial.app/img/logo_studio.jpg">
-        </div>
     </div> 
   </body>
 </html>

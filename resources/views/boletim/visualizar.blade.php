@@ -24,14 +24,23 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-3">
-                            <img src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
+                        <div class="col-md-6">
+                            <img class="w-50" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
                         </div>
+                        <div class="col-md-6 pull-right">
+                            @if($boletim->cliente->exibir_logo == 'y')
+                                <img class="w-25" style="position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                            @endif
+                        </div>  
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="col-md-12">
-                        <span class="pull-right mr-3">Foram encontradas {{ count($dados) }} notícias</span>
+                        @if(count($dados) > 1)
+                            <span class="pull-right mr-3">Foram encontradas {{ count($dados) }} notícias</span>
+                        @else
+                            <span class="pull-right mr-3">Foi encontrada {{ count($dados) }} notícia</span>
+                        @endif
                         @php
                             $area = "";
                             $tipo = "";
@@ -258,10 +267,7 @@
                                     
                             @endif
                         @endforeach
-                    </div> 
-                    <div style="width: 50%; margin: 0 auto; text-align: center;">
-                        <img src="https://studiosocial.app/img/logo_studio.jpg">
-                    </div>       
+                    </div>      
                 </div>
             </div>
         </div>
