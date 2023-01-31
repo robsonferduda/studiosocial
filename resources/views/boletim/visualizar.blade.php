@@ -48,6 +48,7 @@
                             $flag = false;
                         @endphp
                         @foreach($dados as $key => $noticia)
+
                             @if($noticia->area != null)
 
                                 @if($noticia->area != $area and $flag)
@@ -261,7 +262,7 @@
                                 @endif
 
                                 @php
-                                    $area = $noticia->area;
+                                    
                                     $tipo = $noticia->clipagem;
                                 @endphp
                                     
