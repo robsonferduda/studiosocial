@@ -262,7 +262,6 @@
                                 @endif
 
                                 @php
-                                    
                                     $tipo = $noticia->clipagem;
                                 @endphp
                                     
