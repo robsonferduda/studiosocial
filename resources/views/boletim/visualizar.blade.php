@@ -155,7 +155,7 @@
 
                             @else
 
-                                @if($noticia->clipagem != $tipo or($noticia->clipagem == $tipo and $noticia->area != $area))
+                                @if($noticia->clipagem != $tipo)
                                     @switch($noticia->clipagem)
                                         @case('web')
                                             @php
