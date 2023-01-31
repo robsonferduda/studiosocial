@@ -270,8 +270,6 @@ class BoletimController extends Controller
                 
         $sql = implode(" UNION DISTINCT ",$sql);				
         $sql .= " ORDER BY ordem ASC, clipagem DESC, data DESC";
-
-        dd($sql);
         
         $dados = DB::connection('mysql')->select($sql);
 
