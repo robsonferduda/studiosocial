@@ -50,6 +50,7 @@
                             $flag = false;
                         @endphp
                         @foreach($dados as $key => $noticia)
+                        
                             @if($noticia->area != null)
 
                                 @if($noticia->area != $area and $flag)
@@ -166,7 +167,7 @@
 
                             @else
 
-                                @if($noticia->clipagem != $tipo or($noticia->clipagem == $tipo and $noticia->area != $area))
+                                @if($noticia->clipagem != $tipo)
                                     @switch($noticia->clipagem)
                                         @case('web')
                                             @php
