@@ -3,7 +3,9 @@
 <head>
     <title>Boletim Digital</title>
     <meta charset="utf-8" />
-    <meta name="description" content="www.clipagens.com.br"/>
+    <meta name="description" content="{{ $boletim->titulo }}"/>
+    <meta name="url" content="www.clipagens.com.br"/>
+    <meta name="author" content="Studio Clipagem">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet" />

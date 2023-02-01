@@ -52,8 +52,8 @@ class BoletimController extends Controller
     public function visualizar($id)
     {   
         $boletim = Boletim::where('id', $id)->first();
-        $dados = $this->getDadosBoletim($id);        
-    
+        $dados = $this->getDadosBoletim($id);   
+            
         return view('boletim/visualizar', compact('boletim', 'dados'));
     }
 
