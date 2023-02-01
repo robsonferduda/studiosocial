@@ -14,7 +14,7 @@
 </head> 
 <body style="background: #f7f7f7; font-family: Tahoma, Arial,sans-serif; font-size: 12px; padding-top: 20px; padding-bottom: 20px;">
     <div style="width: 800px; margin: 0 auto; background: white; padding: 10px 20px; margin-top: 30px;">
-        <table>
+        <table style="width: 100%;">
             <tbody>
                 <tr>
                     <td style="width: 50%;">
