@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <title>Boletim Digital</title>
+    <title>{{ $boletim->titulo }}</title>
     <meta charset="utf-8" />
     <meta name="description" content="{{ $boletim->titulo }}"/>
     <meta name="url" content="www.clipagens.com.br"/>
