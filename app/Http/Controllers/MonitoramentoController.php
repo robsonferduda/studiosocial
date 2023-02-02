@@ -76,6 +76,7 @@ class MonitoramentoController extends Controller
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
         ->select('id')
+        ->distinct()
         ->count();
 
         $ig_total = $mediaModel::where(function($query) {
@@ -85,12 +86,14 @@ class MonitoramentoController extends Controller
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
         ->select('id')
+        ->distinct()
         ->count();
 
         $twitter_total = $mediaModel::where('tipo', 'TWEETS')
         ->where('client_id', $this->client_id)
         ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:23:59'])
         ->select('id')
+        ->distinct()
         ->count();
                                               
         $totais = array('total_insta' => $ig_total, 
