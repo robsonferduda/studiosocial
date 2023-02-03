@@ -17,13 +17,8 @@
         <table style="width: 100%;">
             <tbody>
                 <tr>
-                    <td style="width: 50%;">
-                        <img style="width: 40%;" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
-                    </td>
-                    <td style="width: 50%; text-align: right;">
-                        @if($boletim->cliente->exibir_logo == 'y')
-                            <img style="width: 25%; position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpg') }}">
-                        @endif
+                    <td>
+                        <img src="{{ asset('img/banner/'.$boletim->cliente->logo ) }}">
                     </td>
                 </tr>
             </tbody>
