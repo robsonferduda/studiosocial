@@ -28,14 +28,18 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row">
-                        <div class="col-md-6">
-                            <img class="w-50" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
-                        </div>
-                        <div class="col-md-6 pull-right">
-                            @if($boletim->cliente->exibir_logo == 'y')
-                                <img class="w-25" style="position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
-                            @endif
-                        </div>  
+                        @if($boletim->cliente->fl_banner == "y")
+                            <img src="{{ asset('img/banner/'.$boletim->cliente->logo ) }}">
+                        @else
+                            <div class="col-md-6">
+                                <img class="w-50" src="{{ asset('img/logos/'.$boletim->cliente->logo ) }}">
+                            </div>
+                            <div class="col-md-6 pull-right">
+                                @if($boletim->cliente->exibir_logo == 'y')
+                                    <img class="w-25" style="position: absolute; bottom: 40px; right: 45px;" src="{{ asset('img/logo_studio_clipagem.jpeg') }}">
+                                @endif
+                            </div>  
+                        @endif
                     </div>
                 </div>
                 <div class="card-body">

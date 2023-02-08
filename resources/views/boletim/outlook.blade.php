@@ -20,7 +20,7 @@
             <table width="800px;" style="width: 800px;">
                 <tbody>
                     <tr>
-                        @if($boletim->cliente->fl_banner = "y")
+                        @if($boletim->cliente->fl_banner == "y")
                             <td>
                                 <img src="{{ asset('img/banner/'.$boletim->cliente->logo ) }}">
                             </td>
