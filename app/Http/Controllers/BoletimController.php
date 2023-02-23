@@ -154,7 +154,8 @@ class BoletimController extends Controller
 
         if(!empty($idsTV)){
 
-            $idsTVIn = implode(",",$idsTV);
+            $idsTVIn = trim(implode(",",$idsTV));
+            $idsTVIn = ($idsTVIn) ? $idsTVIn : 0;
 
             $sql[] = "( SELECT 
                                 tv.id as id,
@@ -185,7 +186,9 @@ class BoletimController extends Controller
 
         if(!empty($idsRadio)){
 
-            $idsRadioIn = implode(",",$idsRadio);
+            $idsRadioIn = trim(implode(",",$idsRadio));
+            $idsRadioIn = ($idsRadioIn) ? $idsRadioIn : 0;
+
             $sql[] = "(SELECT 
                             radio.id as id,
                             CONCAT('','') as titulo, 
@@ -213,7 +216,10 @@ class BoletimController extends Controller
         }
 
         if(!empty($idsJornal)){
-            $idsJornalIn = implode(",",$idsJornal);
+
+            $idsJornalIn = trim(implode(",",$idsJornal));
+            $idsJornalIn = ($idsJornalIn) ? $idsJornalIn : 0;
+
             $sql[] = "(SELECT
                             jornal.id as id, 
                             jornal.titulo as titulo, 
@@ -241,7 +247,10 @@ class BoletimController extends Controller
         }
 
         if(!empty($idsWeb)){
-            $idsWebIn = implode(",",$idsWeb);
+
+            $idsWebIn = trim(implode(",",$idsWeb));
+            $idsWebIn = ($idsWebIn) ? $idsWebIn : 0;
+
             $sql[] = "(SELECT 
                             web.id as id, 
                             web.titulo as titulo, 
