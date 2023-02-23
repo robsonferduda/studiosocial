@@ -73,7 +73,7 @@ class BoletimController extends Controller
 
         $lista = explode(",",$emails);
 
-        $lista_email[] = 'robsonferduda@gmail.com';
+        //$lista_email[] = 'robsonferduda@gmail.com';
 
         for ($i=0; $i < count($lista); $i++) { 
             $lista_email[] = trim($lista[$i]);
