@@ -235,7 +235,7 @@
                                 @if($noticia->INFO2)
                                     <p style="margin-bottom: 0px;"><strong>Programa:</strong> {{ $noticia->INFO2 }}</p>
                                 @endif
-                                <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ ($noticia->segundos) ? gmdate("H:i:s", $noticia->segundos : 'Não especificado')}}</p>
+                                <p style="margin-bottom: 0px;"><strong>Duração:</strong> {{ ($noticia->segundos) ? gmdate("H:i:s", $noticia->segundos) : 'Não especificado' }}</p>
                                 <p style="margin-bottom: 0px;"><strong>Sinopse:</strong> {!! $sinopse = strip_tags(str_replace('Sinopse 1 - ', '', $noticia->sinopse)) !!}</p>
 
                                 @php 
