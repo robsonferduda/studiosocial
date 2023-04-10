@@ -297,6 +297,8 @@ class BoletimController extends Controller
             ],
         ]);
 
+        ini_set('default_socket_timeout', 10);
+
         foreach($dados as $key => $noticia){
 
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
