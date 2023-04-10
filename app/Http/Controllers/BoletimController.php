@@ -290,6 +290,13 @@ class BoletimController extends Controller
         
         $dados = DB::connection('mysql')->select($sql);
 
+        stream_context_set_default( [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ]);
+
         foreach($dados as $key => $noticia){
 
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
