@@ -302,7 +302,7 @@ class BoletimController extends Controller
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
 
                 $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpg';
-                $header_response = get_headers($url, 1);
+                $header_response = @get_headers($url, 1);
 
                 if(strpos( $header_response[0], "404" ) !== false){
                     $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg';
