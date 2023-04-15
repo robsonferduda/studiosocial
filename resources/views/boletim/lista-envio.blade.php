@@ -30,6 +30,11 @@
                                     TODOS
                                 <span class="form-check-sign"></span>
                             </label>
+                            <label class="form-check-label d-block mb-3 txt-black">
+                                <input class="form-check-input" type="checkbox" name="emails[]" value="robsonferduda@gmail.com">
+                                    robsonferduda@gmail.com (Marcar somente em caso de testes)
+                                <span class="form-check-sign"></span>
+                            </label>
                             @foreach($lista_email as $key => $email)
                                 <label class="form-check-label d-block mb-3 txt-black">
                                     <input class="form-check-input" type="checkbox" name="emails[]" value="{{ $email }}" checked="checked">
