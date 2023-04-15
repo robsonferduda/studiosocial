@@ -14,3 +14,8 @@ npm-debug.log
 yarn-error.log
 composer.lock
 __pycache__/
+.htaccess
+/public/.user.ini
+/public/error.log
+/public/php.ini
+error_log
