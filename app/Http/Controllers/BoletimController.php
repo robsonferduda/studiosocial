@@ -290,16 +290,19 @@ class BoletimController extends Controller
         
         $dados = DB::connection('mysql')->select($sql);
 
-        stream_context_set_default( [
-            'ssl' => [
-                'verify_peer' => false,
-                'verify_peer_name' => false,
-            ],
-        ]);
-
-        ini_set('default_socket_timeout', 10);
-
         foreach($dados as $key => $noticia){
+
+            if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
+
+                if(file_exists(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg')){
+                    $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg';
+                }else{
+                    $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg';
+                }
+
+                $dados[$key]->url = $url;    
+            } 
+
             
             /*
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
@@ -314,8 +317,6 @@ class BoletimController extends Controller
                 $dados[$key]->url = $url;    
             }      
             */ 
-
-            $dados[$key]->url = "";
         }        
 
         return $dados;
