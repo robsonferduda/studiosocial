@@ -27,15 +27,13 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth', ['except' => [
-            //'site'
-        //]]);
+        $this->middleware('auth', ['except' => [
+            'site','index'
+        ]]);
 
         if(!Auth::user() or Auth::user()->email == 'boletim@studioclipagem.com.br')
         {
-
             $clienteSession = ['id' => 0, 'nome' => "Cliente não selecionado"];
-
         }else{
 
             $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
@@ -167,7 +165,7 @@ class HomeController extends Controller
 
             }
         }else{
-            return view('dashboard_nula');
+            return redirect('boletins');
         }
 
     }

@@ -120,6 +120,16 @@
                     </a>
                   </li>
                 @endpermission
+                @if(Session::get('user') == 'boletim@studioclipagem.com.br')
+                
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
+                    <a href="{{ url('boletins') }}">
+                    <i class="fa fa-file-o"></i>
+                    <p>Boletins</p>
+                    </a>
+                  </li>
+               
+                @endif
                 @role('administradores|boletim')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'boletins') ? 'active' : '' }}">
                     <a href="{{ url('boletins') }}">
