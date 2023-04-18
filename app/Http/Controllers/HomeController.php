@@ -27,30 +27,38 @@ class HomeController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth', ['except' => [
-            'site'
-        ]]);
+        //$this->middleware('auth', ['except' => [
+            //'site'
+        //]]);
 
-        $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
-        if($cliente)
-            $clienteSession = ['id' => $cliente->id, 'nome' => $cliente->name];
-        else
+        if(!Auth::user() or Auth::user()->email == 'boletim@studioclipagem.com.br')
+        {
+
             $clienteSession = ['id' => 0, 'nome' => "Cliente não selecionado"];
 
-        Session::put('cliente', session('cliente') ? session('cliente') : $clienteSession);
+        }else{
 
-        $this->client_id = session('cliente')['id'];
+            $cliente = Client::where('id',Configs::where('key', 'cliente_padrao')->first()->value)->first();
+            if($cliente)
+                $clienteSession = ['id' => $cliente->id, 'nome' => $cliente->name];
+            else
+                $clienteSession = ['id' => 0, 'nome' => "Cliente não selecionado"];
 
-        Session::put('url','home');
+            Session::put('cliente', session('cliente') ? session('cliente') : $clienteSession);
 
-        $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
+            $this->client_id = session('cliente')['id'];
 
-        $this->flag_regras = Session::get('flag_regras');
+            Session::put('url','home');
 
-        if($this->flag_regras) {
-            $this->mediaModel = new MediaMaterializedRuleFilteredVw();
-        } else {
-            $this->mediaModel = new MediaMaterializedFilteredVw();
+            $this->periodo_padrao = Configs::where('key', 'periodo_padrao')->first()->value;
+
+            $this->flag_regras = Session::get('flag_regras');
+
+            if($this->flag_regras) {
+                $this->mediaModel = new MediaMaterializedRuleFilteredVw();
+            } else {
+                $this->mediaModel = new MediaMaterializedFilteredVw();
+            }
         }
 
     }
@@ -63,96 +71,103 @@ class HomeController extends Controller
 
     public function index()
     {
-        $totais = array();
-        $users = null;
-        $clientes = null;
-        $periodo_relatorio = null;
-        $periodo_padrao = $this->periodo_padrao;
-        $data_inicial = Carbon::now()->subDays($this->periodo_padrao - 1)->format('Y-m-d');
-        $data_final = Carbon::now()->format('Y-m-d');
 
-        $u = User::find(Auth::user()->id);
+        if(Auth::user())
+        {
 
-        $mediaModel = $this->mediaModel;
+            $totais = array();
+            $users = null;
+            $clientes = null;
+            $periodo_relatorio = null;
+            $periodo_padrao = $this->periodo_padrao;
+            $data_inicial = Carbon::now()->subDays($this->periodo_padrao - 1)->format('Y-m-d');
+            $data_final = Carbon::now()->format('Y-m-d');
 
-        $ig_comments_total = $mediaModel::where('tipo', 'IG_COMMENT')
+            $u = User::find(Auth::user()->id);
+
+            $mediaModel = $this->mediaModel;
+
+            $ig_comments_total = $mediaModel::where('tipo', 'IG_COMMENT')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $ig_post_total = $mediaModel::where('tipo', 'IG_POSTS')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $media_instagram = round(($ig_post_total + $ig_comments_total)/30, 1);
+
+            $fb_comments_total = $mediaModel::where('tipo', 'FB_COMMENT')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $fb_post_total = $mediaModel::where('tipo', 'FB_POSTS')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $fb_page_post_total = $mediaModel::where('tipo', 'FB_PAGE_POST')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $fb_page_post_comment_total = $mediaModel::where('tipo', 'FB_PAGE_POST_COMMENT')
+                ->where('client_id', $this->client_id)
+                ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
+                ->select('id')
+                ->distinct()
+                ->count();
+
+            $media_facebook = round(($fb_post_total + $fb_page_post_total + $fb_page_post_comment_total  + $fb_comments_total)/30, 1);
+
+            $twitter_total = $mediaModel::where('tipo', 'TWEETS')
             ->where('client_id', $this->client_id)
             ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
             ->select('id')
-            ->distinct()
             ->count();
 
-        $ig_post_total = $mediaModel::where('tipo', 'IG_POSTS')
-            ->where('client_id', $this->client_id)
-            ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-            ->select('id')
-            ->distinct()
-            ->count();
+            $media_twitter = round(($twitter_total )/30, 1);      
 
-        $media_instagram = round(($ig_post_total + $ig_comments_total)/30, 1);
+            if($u->hasRole('administradores') or $u->hasRole('boletim')){
 
-        $fb_comments_total = $mediaModel::where('tipo', 'FB_COMMENT')
-            ->where('client_id', $this->client_id)
-            ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-            ->select('id')
-            ->distinct()
-            ->count();
+                $users = User::whereNull('client_id')->count();
+                $clientes = Client::count();
 
-        $fb_post_total = $mediaModel::where('tipo', 'FB_POSTS')
-            ->where('client_id', $this->client_id)
-            ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-            ->select('id')
-            ->distinct()
-            ->count();
+                $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
+                $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
+            
+                return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','media_instagram','media_facebook'));
 
-        $fb_page_post_total = $mediaModel::where('tipo', 'FB_PAGE_POST')
-            ->where('client_id', $this->client_id)
-            ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-            ->select('id')
-            ->distinct()
-            ->count();
+            }else{
 
-        $fb_page_post_comment_total = $mediaModel::where('tipo', 'FB_PAGE_POST_COMMENT')
-            ->where('client_id', $this->client_id)
-            ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-            ->select('id')
-            ->distinct()
-            ->count();
+                $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays(7)->format('d/m/Y'),
+                                        'data_final'   => Carbon::now()->format('d/m/Y'));
 
-        $media_facebook = round(($fb_post_total + $fb_page_post_total + $fb_page_post_comment_total  + $fb_comments_total)/30, 1);
+                $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
+                $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
 
-        $twitter_total = $mediaModel::where('tipo', 'TWEETS')
-        ->where('client_id', $this->client_id)
-        ->whereBetween('date', [$data_inicial.' 00:00:00',$data_final.' 23:59:59'])
-        ->select('id')
-        ->count();
+                $totais = array('total_insta' => $ig_comments_total + $ig_post_total,
+                                'total_face' => $fb_comments_total + $fb_post_total + $fb_page_post_total + $fb_page_post_comment_total,
+                                'total_twitter' => $twitter_total);
 
-        $media_twitter = round(($twitter_total )/30, 1);      
+                return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
 
-        if($u->hasRole('administradores') or $u->hasRole('boletim')){
-
-            $users = User::whereNull('client_id')->count();
-            $clientes = Client::count();
-
-            $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-            $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
-         
-            return view('index', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','media_twitter','media_instagram','media_facebook'));
-
+            }
         }else{
-
-            $periodo_relatorio = array('data_inicial' => Carbon::now()->subDays(7)->format('d/m/Y'),
-                                    'data_final'   => Carbon::now()->format('d/m/Y'));
-
-            $hashtags = Hashtag::where('client_id', $this->client_id)->where('is_active',true)->orderBy('hashtag')->get();
-            $terms = Term::where('client_id', $this->client_id)->where('is_active',true)->orderBy('term')->get();
-
-            $totais = array('total_insta' => $ig_comments_total + $ig_post_total,
-                            'total_face' => $fb_comments_total + $fb_post_total + $fb_page_post_total + $fb_page_post_comment_total,
-                            'total_twitter' => $twitter_total);
-
-            return view('dashboard_cliente', compact('users','clientes','totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
-
+            return view('dashboard_nula');
         }
 
     }
