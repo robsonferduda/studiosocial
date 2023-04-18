@@ -15,7 +15,7 @@ class BoletimController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['detalhes','enviar','visualizar']]);
+        //$this->middleware('auth', ['except' => ['detalhes','enviar','visualizar']]);
         Session::put('url','boletins');
     }
 
