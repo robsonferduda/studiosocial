@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use App\Email;
 use App\Client;
 use Laracasts\Flash\Flash;
@@ -28,6 +29,30 @@ class EmailController extends Controller
         $email->save();
         
         return redirect('client/emails/'.$email->client->id);
+    }
+
+    public function teste()
+    {
+        $data = array();
+
+        try{
+            $mail_status = Mail::send('boletim.teste', $data, function($message) {
+            $message->to('robsonferduda@gmail.com')
+            ->subject('Boletim de Clipagens');
+                $message->from('boletins@clipagens.com.br','Studio Clipagem');
+            });
+
+            $msg = "Email enviado com sucesso";
+            $tipo = "success";
+        }
+        catch (\Exception $e) {
+            $msg = "Erro ao enviar para o endereço especificado";
+            $tipo = "error";
+
+            dd($e);
+        }
+
+        dd($msg);
     }
 
     public function store(EmailRequest $request)

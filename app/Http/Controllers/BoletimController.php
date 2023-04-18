@@ -292,6 +292,8 @@ class BoletimController extends Controller
 
         foreach($dados as $key => $noticia){
 
+            /*
+
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
 
                 if(file_exists(env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg')){
@@ -303,20 +305,19 @@ class BoletimController extends Controller
                 $dados[$key]->url = $url;    
             } 
 
+            */
             
-            /*
             if($noticia->clipagem == 'web' or $noticia->clipagem == 'jornal'){
 
                 $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpg';
                 $header_response = @get_headers($url, 1);
 
-                if(strpos( $header_response[0], "404" ) !== false){
+                if(strpos( $header_response[0], "404" ) !== false or strpos( $header_response[0], "301" ) !== false){
                     $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpeg';
                 } 
 
                 $dados[$key]->url = $url;    
             }      
-            */ 
         }        
 
         return $dados;
