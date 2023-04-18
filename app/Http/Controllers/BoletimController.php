@@ -46,15 +46,15 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);    
         
-        if(Auth::user()){
+        //if(Auth::user()){
 
             return view('boletim/detalhes', compact('boletim', 'dados'));
 
-        }else{
+        //}else{
 
-            return redirect('boletim/'.$id.'/visualizar');
+            //return redirect('boletim/'.$id.'/visualizar');
 
-        }
+        //}
     }
 
     public function visualizar($id)
