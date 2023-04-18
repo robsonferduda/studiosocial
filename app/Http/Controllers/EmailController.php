@@ -42,17 +42,13 @@ class EmailController extends Controller
                 $message->from('boletins@clipagens.com.br','Studio Clipagem');
             });
 
-            $msg = "Email enviado com sucesso";
-            $tipo = "success";
         }
         catch (\Exception $e) {
             $msg = "Erro ao enviar para o endereço especificado";
             $tipo = "error";
-
-            dd($e);
         }
 
-        dd($msg);
+        dd($mail_status);
     }
 
     public function store(EmailRequest $request)
