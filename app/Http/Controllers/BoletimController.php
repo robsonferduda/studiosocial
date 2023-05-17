@@ -310,6 +310,8 @@ class BoletimController extends Controller
                 $url = env('FILE_URL').$noticia->clipagem.'/arquivo'.$noticia->id.'_1.jpg';
                 $header_response = @get_headers($url, 1);
 
+                dd(strpos( $header_response[0], "404" ) !== false or strpos( $header_response[0], "301" ) !== false);
+
                 dd($header_response);
 
                 if(strpos( $header_response[0], "404" ) !== false or strpos( $header_response[0], "301" ) !== false){
