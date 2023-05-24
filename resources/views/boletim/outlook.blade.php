@@ -54,7 +54,7 @@
                     $tipo_formatado = "";
                 @endphp
                 @foreach($dados as $key => $noticia)
-                    @if($noticia->area != null)
+                    @if($noticia->area != null and $boletim->cliente->tem_filtro_areas == "y")
 
                         @if($noticia->area != $area)
                             <table style="border-bottom: 1px solid #2196f3; width: 100%; margin-bottom: 8px;">

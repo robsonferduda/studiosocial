@@ -30,7 +30,7 @@
                     $flag = false;
                 @endphp
                 @foreach($dados as $key => $noticia)
-                    @if($noticia->area != null)
+                    @if($noticia->area != null and $boletim->cliente->tem_filtro_areas == "y")
 
                         @if($noticia->area != $area and $flag)
                             </div>
