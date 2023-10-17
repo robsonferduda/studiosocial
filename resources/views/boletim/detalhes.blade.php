@@ -30,6 +30,9 @@
                     $flag = false;
                 @endphp
                 @foreach($dados as $key => $noticia)
+
+                    @if($boletim->cliente->tem_filtro_areas == "n") @php $noticia->area = null @endphp @endif
+
                     @if($noticia->area != null)
 
                         @if($noticia->area != $area and $flag)
