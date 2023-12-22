@@ -48,7 +48,7 @@ class BoletimController extends Controller
         
         //if(Auth::user()){
 
-            if($boletim->id_cliente == 373 or $boletim->id_cliente == 534)
+            if($boletim->id_cliente == 373)
                 return view('boletim/brde-detalhes', compact('boletim', 'dados'));
             else
                 return view('boletim/detalhes', compact('boletim', 'dados'));
@@ -65,7 +65,7 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);   
 
-        if($boletim->id_cliente == 373 or $boletim->id_cliente == 534)
+        if($boletim->id_cliente == 373)
             return view('boletim/brde-visualizar', compact('boletim', 'dados'));
         else
             return view('boletim/visualizar', compact('boletim', 'dados'));
