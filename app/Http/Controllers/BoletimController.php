@@ -48,7 +48,10 @@ class BoletimController extends Controller
         
         //if(Auth::user()){
 
-            return view('boletim/detalhes', compact('boletim', 'dados'));
+            if($boletim->id_cliente == 373 or $boletim->id_cliente == 534)
+                return view('boletim/brde-detalhes', compact('boletim', 'dados'));
+            else
+                return view('boletim/detalhes', compact('boletim', 'dados'));
 
         //}else{
 
@@ -61,8 +64,11 @@ class BoletimController extends Controller
     {   
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);   
-            
-        return view('boletim/visualizar', compact('boletim', 'dados'));
+
+        if($boletim->id_cliente == 373 or $boletim->id_cliente == 534)
+            return view('boletim/brde-visualizar', compact('boletim', 'dados'));
+        else
+            return view('boletim/visualizar', compact('boletim', 'dados'));
     }
 
     public function outlook($id)
@@ -286,7 +292,11 @@ class BoletimController extends Controller
         }
                 
         $sql = implode(" UNION DISTINCT ",$sql);				
-        $sql .= " ORDER BY ordem ASC, clipagem DESC, data DESC";
+        
+        if($boletim->id_cliente == 373 or $boletim->id_cliente == 534)
+            $sql .= " ORDER BY uf DESC, ordem ASC, clipagem DESC, data DESC";
+        else    
+            $sql .= " ORDER BY ordem ASC, clipagem DESC, data DESC";
         
         $dados = DB::connection('mysql')->select($sql);
 
