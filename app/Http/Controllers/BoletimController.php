@@ -76,7 +76,10 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $id)->first();
         $dados = $this->getDadosBoletim($id);    
             
-        return view('boletim/outlook', compact('boletim', 'dados'));
+        if($boletim->id_cliente == 373)
+            return view('boletim/brde-outlook', compact('boletim', 'dados'));
+        else
+            return view('boletim/outlook', compact('boletim', 'dados'));
     }
 
     public function enviar($id)
@@ -101,6 +104,13 @@ class BoletimController extends Controller
         $boletim = Boletim::where('id', $request->id)->first();
         $dados = $this->getDadosBoletim($request->id);   
         $logs = array();
+        $template = "";
+
+        if($boletim->id_cliente == 373)
+            $template = "boletim.brde-outlook";
+        else
+            $template = "boletim.outlook";
+
         
         $data = array("dados"=> $dados, "boletim" => $boletim);
         $emails = $request->emails;
@@ -108,7 +118,7 @@ class BoletimController extends Controller
         for ($i=0; $i < count($emails); $i++) { 
 
             try{
-                $nail_status = Mail::send('boletim.outlook', $data, function($message) use ($emails, $i) {
+                $nail_status = Mail::send($template, $data, function($message) use ($emails, $i) {
                 $message->to($emails[$i])
                 ->subject('Boletim de Clipagens');
                     $message->from('boletins@clipagens.com.br','Studio Clipagem');
