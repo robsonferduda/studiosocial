@@ -95,7 +95,7 @@
                             <div style="text-transform: uppercase; font-weight: 600;">
                                 <table>
                                     <tr>
-                                    <td><img class="icone" src="https://studiosocial.app/img/map.png"></td>
+                                    <td><img class="icone" src="https://boletim.studioclipagem.com.br/img/map.png"></td>
                                     <td><p>{!! $uf_extenso !!}</p></td>
                                     </tr>
                                 </table> 
