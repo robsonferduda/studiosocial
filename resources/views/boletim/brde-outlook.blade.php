@@ -97,7 +97,7 @@
                                 <table style="margin-left: -10px;">
                                     <tr>
                                     <td><img class="icone" style="margin-left: -10px;" src="https://boletim.studioclipagem.com.br/img/map.png"></td>
-                                    <td><p>{!! $uf_extenso !!}</p></td>
+                                    <td><p style="color: #03a9f4;">{!! $uf_extenso !!}</p></td>
                                     </tr>
                                 </table> 
                                 </div>
@@ -141,7 +141,7 @@
                                     @endphp
                                 @break                                    
                             @endswitch
-                            <div style="text-transform: uppercase; font-weight: 600;">
+                            <div style="text-transform: uppercase; font-weight: 600; padding: 1px 8px;">
                             <table>
                                 <tr>
                                 <td><img class="icone" src="https://studiosocial.app/img/icone_{{ $icone }}.png"></td>
@@ -153,7 +153,7 @@
 
                         @if($noticia->clipagem == 'tv')
                             
-                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px; padding-left: 9px;">
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
                                 @if($noticia->INFO2)
@@ -172,7 +172,7 @@
 
                         @elseif($noticia->clipagem == 'radio')
 
-                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px; padding-left: 9px;">
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Emissora:</strong> {{ $noticia->INFO1 }}</p>
                                 @if($noticia->INFO2)
@@ -191,8 +191,8 @@
                         
                         @elseif($noticia->clipagem == 'web')
 
-                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
-                                <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px; padding-left: 9px;">
+                                <p style="margin-bottom: 0px; margin-top: 0px;"><strong>{{ $noticia->titulo }}</strong> </p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Veículo:</strong> {{ $noticia->INFO1 }}</p>
                                 @if($noticia->INFO2)
@@ -211,8 +211,8 @@
 
                         @else
 
-                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px;">
-                                <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Título:</strong> {{ $noticia->titulo }}</p>
+                            <div style="border-bottom: 1px solid #e3e3e3; margin-bottom: 10px; padding-bottom: 10px; line-height: 17px; padding-left: 9px;">
+                                <p style="margin-bottom: 0px; margin-top: 0px;"><strong>{{ $noticia->titulo }}</strong></p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Data:</strong> {{ date('d/m/Y', strtotime($noticia->data)) }}</p>
                                 <p style="margin-bottom: 0px; margin-top: 0px;"><strong>Veículo:</strong> {{ $noticia->INFO1 }}</p>
                                 @if($noticia->INFO2)
