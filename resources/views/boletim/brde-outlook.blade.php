@@ -93,12 +93,14 @@
                     @if($noticia->uf != $uf)
                         <div class="px-3 py-2 mb-3" style="">
                             <div style="text-transform: uppercase; font-weight: 600; border-bottom: 1px solid #52c9ff;">
+                                <div style="margin-left: -10px;">
                                 <table style="margin-left: -10px;">
                                     <tr>
                                     <td><img class="icone" style="margin-left: -10px;" src="https://boletim.studioclipagem.com.br/img/map.png"></td>
                                     <td><p>{!! $uf_extenso !!}</p></td>
                                     </tr>
                                 </table> 
+                                </div>
                             </div>
                         @php
                             $flag_uf = true;
