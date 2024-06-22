@@ -87,8 +87,10 @@ class LoginController extends Controller
 
                     if(!Session::get('cliente')){
                         $cliente = Client::find($id_cliente_padrao);
-                        $cliente_session = array('id' => $cliente->id, 'nome' => $cliente->name);
-                        Session::put('cliente', $cliente_session);
+                        if($cliente){
+                            $cliente_session = array('id' => $cliente->id, 'nome' => $cliente->name);
+                            Session::put('cliente', $cliente_session);
+                        }
                     }
 
                 }else{

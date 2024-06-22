@@ -21,6 +21,10 @@ class BoletimController extends Controller
 
     public function index(Request $request)
     {
+        if(Session::get('user') != 'boletim@studioclipagem.com.br' ){
+            return redirect('login');
+        }
+
         $carbon = new Carbon();
         $clientes = Cliente::where('ativo','y')->orderBy('nome')->get();
         if($request->data){ $data = $carbon->createFromFormat('d/m/Y', $request->data)->format('Y-m-d'); } else { $data = date('Y-m-d'); }
