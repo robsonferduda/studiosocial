@@ -28,6 +28,7 @@
   <link href="{{ asset('css/bootstrap-duallistbox.css') }}" rel="stylesheet" />
   <link href="{{ asset('css/select2.min.css') }}" rel="stylesheet" />
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+  <link href="{{ asset('css/dropzone.min.css') }}" rel="stylesheet" />
   @yield('style')
 </head>
 
@@ -151,6 +152,14 @@
                     <a href="{{ url('facebook-paginas') }}">
                     <i class="fa fa-at" aria-hidden="true"></i>
                     <p>Facebook Páginas</p>
+                    </a>
+                  </li>
+                @endrole
+                @role('administradores')
+                  <li class="{{ (Session::has('url') and Session::get('url') == 'importar') ? 'active' : '' }}">
+                    <a href="{{ url('importar') }}">
+                    <i class="fa fa-download"></i>
+                    <p>Importar</p>
                     </a>
                   </li>
                 @endrole
@@ -313,6 +322,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
   <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
   <script src="{{ asset('js/jquery-ui.min.js') }}"></script>
+  <script src="{{ asset('js/dropzone.js') }}"></script>
   <script>
     function setFormValidation(id) {
       $(id).validate({

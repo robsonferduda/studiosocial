@@ -46,6 +46,10 @@ Route::post('configuracoes/flag-regras/atualizar','ConfiguracoesController@atual
 Route::post('configuracoes/cliente/selecionar','ConfiguracoesController@selecionarCliente');
 Route::post('configuracoes/periodo/selecionar','ConfiguracoesController@selecionarPeriodo');
 
+Route::get('importar','ImportarKnewinController@importar');
+Route::post('importar/upload','ImportarKnewinController@upload');
+Route::post('importar/processar','ImportarKnewinController@processar');
+
 Route::get('email/teste','EmailController@teste');
 Route::get('email/situacao/{id}','EmailController@atualizarSituacao');
 
