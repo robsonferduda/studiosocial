@@ -23,6 +23,11 @@ class IGHashTag{
 
         foreach ($clients as $client) {
 
+            if($client->id == 34){
+
+                dd($client->fbAccounts);
+            }
+
             foreach ($client->fbAccounts as $fbAccount) {
 
                 foreach ($fbAccount->fbPages as $fbPage) {
