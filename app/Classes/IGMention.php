@@ -57,6 +57,8 @@ class IGMention{
         
                             $medias = $ig_mention->getMentions($params);
 
+                            dd($medias);
+
                             if($medias['data']){
                                               
                                 foreach ($medias['data'] as $media) {
