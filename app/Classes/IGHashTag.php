@@ -25,11 +25,6 @@ class IGHashTag{
 
             foreach ($client->fbAccounts as $fbAccount) {
 
-                if($client->id == 34){
-
-                    dd($fbAccount->fbPages);
-                }
-
                 foreach ($fbAccount->fbPages as $fbPage) {
 
                     if(isset($fbPage->igPage)){
