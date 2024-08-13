@@ -50,6 +50,9 @@ Route::get('importar','ImportarKnewinController@importar');
 Route::post('importar/upload','ImportarKnewinController@upload');
 Route::post('importar/processar','ImportarKnewinController@processar');
 
+Route::get('octoparse','OctoparseController@index');
+Route::post('octoparse/importar','OctoparseController@importar');
+
 Route::get('email/teste','EmailController@teste');
 Route::get('email/situacao/{id}','EmailController@atualizarSituacao');
 

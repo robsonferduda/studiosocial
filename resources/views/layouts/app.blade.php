@@ -163,6 +163,14 @@
                     </a>
                   </li>
                 @endrole
+                @role('administradores')
+                <li class="{{ (Session::has('url') and Session::get('url') == 'octoparse') ? 'active' : '' }}">
+                  <a href="{{ url('octoparse') }}">
+                  <i class="fa fa-plug"></i>
+                  <p>Octoparse</p>
+                  </a>
+                </li>
+              @endrole
                 <hr/>
                 @role('administradores')
                   <li class="{{ (Session::has('url') and Session::get('url') == 'configuracoes') ? 'active' : '' }}">
