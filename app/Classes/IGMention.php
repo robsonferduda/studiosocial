@@ -56,41 +56,44 @@ class IGMention{
                             ];
         
                             $medias = $ig_mention->getMentions($params);
+
+                            if($medias['data']){
                                               
-                            foreach ($medias['data'] as $media) {
+                                foreach ($medias['data'] as $media) {
 
-                                $date_created = new \DateTime($media['timestamp']);
+                                    $date_created = new \DateTime($media['timestamp']);
 
-                                $strtotime_date_created =  strtotime($date_created->format('Y-m-d'));
-                                $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
+                                    $strtotime_date_created =  strtotime($date_created->format('Y-m-d'));
+                                    $strtotime_date_yesterday =  strtotime(\Carbon\Carbon::now()->subDay()->format('Y-m-d'));
+                                    
+                                    if($strtotime_date_created < $strtotime_date_yesterday) {
+                                        $medias_buffer[] = $media;
+                                        $medias_limit_not_ordered++;
+                                    } else {
+                                    
+                                        $media = Media::updateOrCreate(
+                                            [
+                                                'media_id' => $media['id'],
+                                                'client_id' => $client->id
+                                            ],    
+                                            [
+                                                'caption' => isset($media['caption']) ? $media['caption']: null,
+                                                'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
+                                                'media_product_type' => isset($media['media_product_type']) ? $media['media_product_type']: null,                    
+                                                'like_count' => isset($media['like_count']) ? $media['like_count']: null,
+                                                'media_type' => isset($media['media_type']) ? $media['media_type']: null,
+                                                'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
+                                                'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
+                                                'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
+                                                'username' =>  isset($media['username']) ? $media['username']: null,
+                                                'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                        
+                                                'mentioned' => 'S'
+                                            ]);                                  
+                                        $medias_limit_not_ordered = 0;
+                                    }                           
+                                }   
+                            }         
                                 
-                                if($strtotime_date_created < $strtotime_date_yesterday) {
-                                    $medias_buffer[] = $media;
-                                    $medias_limit_not_ordered++;
-                                } else {
-                                 
-                                    $media = Media::updateOrCreate(
-                                        [
-                                            'media_id' => $media['id'],
-                                            'client_id' => $client->id
-                                        ],    
-                                        [
-                                            'caption' => isset($media['caption']) ? $media['caption']: null,
-                                            'comments_count' => isset($media['comments_count']) ? $media['comments_count']: null,
-                                            'media_product_type' => isset($media['media_product_type']) ? $media['media_product_type']: null,                    
-                                            'like_count' => isset($media['like_count']) ? $media['like_count']: null,
-                                            'media_type' => isset($media['media_type']) ? $media['media_type']: null,
-                                            'media_url' => isset($media['media_url']) ? $media['media_url'] : null,
-                                            'timestamp' =>  isset($media['timestamp']) ? $media['timestamp']: null,
-                                            'permalink' =>  isset($media['permalink']) ? $media['permalink']: null,
-                                            'username' =>  isset($media['username']) ? $media['username']: null,
-                                            'video_title' =>  isset($media['video_title']) ? $media['video_title']: null,                                        
-                                            'mentioned' => 'S'
-                                        ]);                                  
-                                    $medias_limit_not_ordered = 0;
-                                }                           
-                            }            
-                               
                             $after = $ig_mention->getAfter($medias);
         
                         } while($ig_mention->hasAfter($medias) && ($strtotime_date_created >= $strtotime_date_yesterday) && $medias_limit_not_ordered <= 5);
