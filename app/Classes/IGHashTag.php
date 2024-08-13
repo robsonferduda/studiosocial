@@ -23,11 +23,6 @@ class IGHashTag{
 
         foreach ($clients as $client) {
 
-            if($client->id == 34){
-
-                dd($client->fbAccounts);
-            }
-
             foreach ($client->fbAccounts as $fbAccount) {
 
                 foreach ($fbAccount->fbPages as $fbPage) {
@@ -38,6 +33,11 @@ class IGHashTag{
                         $id_user_id = $fbPage->igPage->page_id;
 
                         $hashtags = $client->hashtags()->where('social_media_id', SocialMedia::INSTAGRAM)->where('is_active',true)->get();
+
+                        if($client->id == 34){
+
+                            dd($hashtags);
+                        }
 
                         foreach ($hashtags as $hashtag) {
 
