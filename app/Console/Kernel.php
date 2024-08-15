@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
         Commands\FbHashtagCron::class,
         Commands\FbTermCron::class,
         Commands\RuleCron::class,
+        Commands\OctoparseCron::class,
     ];
 
     protected function schedule(Schedule $schedule)
@@ -32,6 +33,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('media_view:cron')->everyThirtyMinutes();
 
         $schedule->command('twitter:cron')->hourly();
+
+        $schedule->command('octoparse:cron')->everyFourMinutes();
 
         $schedule->command('fbhashtag:cron')->everyThreeHours();
 
