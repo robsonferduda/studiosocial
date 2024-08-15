@@ -20,7 +20,7 @@
                 @include('layouts.mensagens')
             </div>
             <div class="row">
-                <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-12 col-sm-12 ml-3">
                     <h6>Coletas realizadas hoje</h6>
                     @forelse($coletas as $key => $coleta)
                         <p>{{ $coleta->created_at }}:<strong>{{ $coleta->total_coletado }}</strong></p>
