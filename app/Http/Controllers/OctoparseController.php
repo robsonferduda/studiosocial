@@ -119,7 +119,7 @@ class OctoparseController extends Controller
 
         }
 
-        $coleta = array("total_coletado", $total_inserido);
+        $coleta = array("total_coletado" => $total_inserido);
         ColetaOctoparse::create($coleta);
 
         Flash::success('<i class="fa fa-check"></i> Foram inseridos '.$total_inserido.' novos registros');
