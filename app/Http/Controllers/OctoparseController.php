@@ -102,7 +102,7 @@ class OctoparseController extends Controller
                 $total_inserido++;
 
                 $dado->fl_importacao = true;
-                $dados->save();
+                $dado->save();
             }
 
             /*
