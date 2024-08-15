@@ -100,6 +100,9 @@ class OctoparseController extends Controller
                 $result = MediaTwitter::create($tweet);
                 $result->hashtags()->syncWithoutDetaching(181);
                 $total_inserido++;
+
+                $dado->fl_importacao = true;
+                $dados->save();
             }
 
             /*

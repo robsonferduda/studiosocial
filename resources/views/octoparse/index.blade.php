@@ -20,16 +20,12 @@
                 @include('layouts.mensagens')
             </div>
             <div class="row">
-                <div class="col-lg-12 col-sm-12">
+                <div class="col-lg-4 col-sm-4">
                     {!! Form::open(['id' => 'frm-pautas', 'class' => 'form-horizontal', 'url' => ['octoparse/importar']]) !!}
                         <div class="form-group m-3 w-70">
                             <div class="row">
-                                
-                            </div>
-                            
-                            <div class="row">
                                 <div class="col-md-12 center">
-                                    <button type="submit" id="btn-find" class="btn btn-primary mt-4"><i class="fa fa-download"></i> Importar</button>
+                                    <button type="submit" id="btn-find" class="btn btn-primary mt-4"><i class="fa fa-download"></i> Importar Manualmente</button>
                                 </div>
                             </div>
                         </div>
@@ -38,7 +34,7 @@
                
             </div>
             <div class="row">
-                <div class="col-lg-12 col-sm-12 ml-3">
+                <div class="col-lg-8 col-sm-8 ml-3">
                     <h6>Coletas realizadas hoje</h6>
                     @forelse($coletas as $key => $coleta)
                         <p>{{ date('d/m/Y H:i:s', strtotime($coleta->created_at)) }}: <span><strong>{{ $coleta->total_coletado }}</strong></span></p>
