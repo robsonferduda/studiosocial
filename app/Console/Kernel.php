@@ -34,7 +34,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('twitter:cron')->hourly();
 
-        $schedule->command('octoparse:cron')->everyFourMinutes();
+        $schedule->command('octoparse:cron')->hourly();
 
         $schedule->command('fbhashtag:cron')->everyThreeHours();
 
