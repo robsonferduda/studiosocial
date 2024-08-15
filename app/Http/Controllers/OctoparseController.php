@@ -81,6 +81,8 @@ class OctoparseController extends Controller
         $dados = Octoparse::whereBetween('uct_time', ['2024-08-12 00:00:00', '2024-12-31 23:59:59'])->where('fl_importacao', false)->get();
         $total_inserido = 0;
 
+        dd($dados);
+
         foreach ($dados as $key => $dado) {
             
             $id = explode("/",$dado->tweet_website)[5];

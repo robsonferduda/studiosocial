@@ -10,6 +10,6 @@ class Octoparse extends Model
     protected $connection = 'mysql_coleta';
     protected $table = 'twitter';
 
-    protected $fillable = [""];
+    protected $fillable = ["fl_importacao"];
 
 }
