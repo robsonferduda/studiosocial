@@ -10,6 +10,6 @@ class ColetaOctoparse extends Model
     use SoftDeletes;
 
     protected $table = 'octoparse';
-    protected $fillable = ['id'];
+    protected $fillable = ['total_coletado'];
 
 }
