@@ -17,6 +17,7 @@ use App\FbPost;
 use App\MediaFilteredVw;
 use App\MediaRuleFilteredVw;
 use App\MediaTwitter;
+use App\ColetaOctoparse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laracasts\Flash\Flash;
@@ -68,12 +69,15 @@ class OctoparseController extends Controller
 
     public function index()
     {
-        return view('octoparse/index');
+        $hoje = date("Y-m-d");
+
+        $coletas = ColetaOctoparse::whereBetween('cteated_at', [$hoje.' 00:00:00', $hoje.' 23:59:59']);
+        return view('octoparse/index', compact('coletas'));
     }
 
     public function importar()
     {
-        $dados = Octoparse::whereBetween('uct_time', ['2024-08-12 00:00:00', '2024-08-13 23:59:59'])->get();
+        $dados = Octoparse::whereBetween('uct_time', ['2024-08-12 00:00:00', '2024-08-13 23:59:59'])->where('fl_importacao', false)->get();
         $total_inserido = 0;
 
         foreach ($dados as $key => $dado) {
@@ -114,6 +118,9 @@ class OctoparseController extends Controller
             */
 
         }
+
+        $coleta = array("total_coletado", $total_inserido);
+        ColetaOctoparse::create($coleta);
 
         Flash::success('<i class="fa fa-check"></i> Foram inseridos '.$total_inserido.' novos registros');
 

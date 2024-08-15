@@ -21,6 +21,16 @@
             </div>
             <div class="row">
                 <div class="col-lg-12 col-sm-12">
+                    <h6>Coletas realizadas hoje</h6>
+                    @forelse($coletas as $key => $coleta)
+                        <p>{{ $coleta->created_at }}:<strong>{{ $coleta->total_coletado }}</strong></p>
+                    @empty
+                        <p class="text-danger">Nenhuma coleta realizada hoje</p>
+                    @endforelse
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
                     {!! Form::open(['id' => 'frm-pautas', 'class' => 'form-horizontal', 'url' => ['octoparse/importar']]) !!}
                         <div class="form-group m-3 w-70">
                             <div class="row">
