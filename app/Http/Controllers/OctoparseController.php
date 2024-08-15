@@ -78,7 +78,7 @@ class OctoparseController extends Controller
 
     public function importar()
     {
-        $dados = Octoparse::whereBetween('uct_time', ['2024-08-12 00:00:00', '2024-08-13 23:59:59'])->where('fl_importacao', false)->get();
+        $dados = Octoparse::whereBetween('uct_time', ['2024-08-12 00:00:00', '2024-12-31 23:59:59'])->where('fl_importacao', false)->get();
         $total_inserido = 0;
 
         foreach ($dados as $key => $dado) {
