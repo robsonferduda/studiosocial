@@ -71,9 +71,7 @@ class OctoparseController extends Controller
     {
         $hoje = date("Y-m-d");
 
-        $coletas = ColetaOctoparse::whereBetween('created_at', [$hoje.' 00:00:00', $hoje.' 23:59:59']);
-
-dd($coletas);
+        $coletas = ColetaOctoparse::whereBetween('created_at', [$hoje.' 00:00:00', $hoje.' 23:59:59'])->get();
 
         return view('octoparse/index', compact('coletas'));
     }
