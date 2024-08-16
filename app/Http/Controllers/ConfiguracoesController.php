@@ -19,6 +19,7 @@ class ConfiguracoesController extends Controller
     public function index()
     {
         $cliente = Client::find(Configs::where('key','cliente_padrao')->first()->value);
+        
         $periodo = Configs::where('key','periodo_padrao')->first()->value;
         $flag_regras = Configs::where('key','flag_regras')->first()->value;
 
