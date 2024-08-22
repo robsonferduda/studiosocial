@@ -31,6 +31,7 @@
             <div class="col-md-12">
                 <div class="row mb-5">
                     <div class="col-md-12 box-paginas">
+                        <p>Para adicionar novas páginas, realize a busca por termo e, na listagem de páginas, selecione a opção <strong>Adicionar</strong></p>
                         {{-- <ul class="pagination justify-content-between" style="display: none">
                             <li class="page-item" style="font-size:20px">
                                 <a href="#" class='previou' data-previou="" rel="prev" aria-label="@lang('pagination.previous')"><i class="fa fa-arrow-left" aria-hidden="true"></i></a>                                
