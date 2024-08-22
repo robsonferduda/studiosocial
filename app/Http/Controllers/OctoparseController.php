@@ -101,9 +101,10 @@ class OctoparseController extends Controller
                 $result->hashtags()->syncWithoutDetaching(181);
                 $total_inserido++;
 
-                $dado->fl_importacao = true;
-                $dado->save();
             }
+
+            $dado->fl_importacao = true;
+            $dado->save();
 
             /*
 

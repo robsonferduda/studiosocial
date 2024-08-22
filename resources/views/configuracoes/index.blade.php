@@ -30,7 +30,7 @@
                         <tr>
                             <td>Cliente Padrão</td>
                             <td>Seleciona o cliente padrão ao logar no sistema</td>
-                            <td><span class="cliente_atual">{{ $cliente->name }}</span></td>
+                            <td><span class="cliente_atual">{{ ($cliente) ? $cliente->name : 'Nenhum cliente selecionado' }}</span></td>
                             <td><a title="Editar" class="btn btn-primary btn-link btn-icon config_cliente"><i class="fa fa-edit fa-2x"></i></a></td>
                         </tr>
                         <tr>
