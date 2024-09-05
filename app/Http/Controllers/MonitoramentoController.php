@@ -36,6 +36,7 @@ class MonitoramentoController extends Controller
                                    'data_final'   => Carbon::now()->format('d/m/Y'));
 
         $ig_comments_total = 0;
+        $total_tiktok = 0;
 
         if($this->flag_regras) {
             $mediaModel = new MediaRuleFilteredVw();
@@ -98,7 +99,8 @@ class MonitoramentoController extends Controller
                                               
         $totais = array('total_insta' => $ig_total, 
                         'total_face' =>  $fb_total,
-                        'total_twitter' =>  $twitter_total);
+                        'total_twitter' =>  $twitter_total,
+                        'total_tiktok' => $total_tiktok);
 
         return view('monitoramento/index', compact('totais','hashtags','terms','periodo_relatorio','periodo_padrao'));
     }

@@ -21,7 +21,7 @@
             <div class="row">                
                 <div class="col-lg-6 col-md-6">
                     <div class="row">
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
                             <div class="card card-stats">
                                 <div class="card-body ">
                                     <div class="row">
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                         </div>   
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
                             <div class="card card-stats">
                                 <div class="card-body ">
                                     <div class="row">
@@ -57,7 +57,7 @@
                                 </div>
                             </div>
                         </div>   
-                        <div class="col-lg-4 col-md-4 col-sm-4">
+                        <div class="col-lg-3 col-md-3 col-sm-12">
                             <div class="card card-stats">
                                 <div class="card-body ">
                                     <div class="row">
@@ -69,6 +69,24 @@
                                         <div class="col-7 col-md-8 mt-3">
                                             <div class="numbers">
                                                 <p class="card-title"><a href="{{ url('monitoramento/media/twitter') }}">{{ $totais['total_twitter'] }}</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <div class="card card-stats">
+                                <div class="card-body ">
+                                    <div class="row">
+                                        <div class="col-5 col-md-4">
+                                            <div class="icon-big text-center icon-warning">
+                                                <img src="{{ asset('img/icon/tiktok.png') }}" >
+                                            </div>
+                                        </div>
+                                        <div class="col-7 col-md-8 mt-3">
+                                            <div class="numbers">
+                                                <p class="card-title"><a href="{{ url('monitoramento/media/tiktok') }}">{{ $totais['total_tiktok'] }}</a></p>
                                             </div>
                                         </div>
                                     </div>
