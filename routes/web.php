@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@site');
 Route::get('site', 'HomeController@site');
+Route::get('print', 'HomeController@print');
 Route::get('/home', 'HomeController@index');
 Route::get('/politica-de-privacidade', function () { return view('politica-de-privacidade'); });
 Route::get('/termos-de-servico', function () { return view('termos-de-servico'); });

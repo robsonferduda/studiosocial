@@ -28,7 +28,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth', ['except' => [
-            'site','index'
+            'site','index','print'
         ]]);
 
         if(!Auth::user() or Auth::user()->email == 'boletim@studioclipagem.com.br')
@@ -59,6 +59,49 @@ class HomeController extends Controller
             }
         }
 
+    }
+
+    public function print()
+    {
+        $sql = "SELECT id, link_arquivo FROM app_web WHERE id_knewin < 1000000 AND id = 1628227";
+
+        $dados = DB::connection('mysql')->select($sql);
+
+        $total = 0;
+        $exportadas = 0;
+        $erros = 0;
+
+        foreach ($dados as $key => $dado) {
+
+                $url = "https://studioclipagem.com.br/arrumar_print_web.php?id=".$dado->id;
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+
+                $response = curl_exec($ch);
+
+                $chave = 'Não';
+
+                if ($response !== '' && str_contains($response, $chave)) {
+                    
+                   $erros += 1;
+
+                }else{
+
+                    $exportadas += 1;
+
+                    $update_sql = "UPDATE app_web SET link_arquivo = 'baixado' WHERE id = ".$dado->id;
+                    DB::connection('mysql')->select($update_sql);
+                   
+                }
+
+                $total += 1;
+
+                curl_close($ch);
+        }
+
+        echo "Foram realizadas $total extrações de print, com $erros erros e $exportadas exportações bem-sucedidas";
     }
 
 
