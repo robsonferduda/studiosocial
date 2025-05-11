@@ -63,7 +63,7 @@ class HomeController extends Controller
 
     public function print()
     {
-        $sql = "SELECT id, link_arquivo FROM app_web WHERE id_knewin < 1000000 AND id = 1628227";
+        $sql = "SELECT id, link_arquivo FROM app_web WHERE id_knewin < 1000000";
 
         $dados = DB::connection('mysql')->select($sql);
 
